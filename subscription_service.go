@@ -26,52 +26,52 @@ type SubscriptionService struct {
 
 // SubscriptionCreateParams parameters
 type SubscriptionCreateParams struct {
-      Amount string `json:"amount,omitempty"`
-        Count string `json:"count,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        DayOfMonth string `json:"day_of_month,omitempty"`
-        EndDate string `json:"end_date,omitempty"`
-        Interval string `json:"interval,omitempty"`
-        IntervalUnit string `json:"interval_unit,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        Count string `url:",omitempty",json:"count,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        DayOfMonth string `url:",omitempty",json:"day_of_month,omitempty"`
+        EndDate string `url:",omitempty",json:"end_date,omitempty"`
+        Interval string `url:",omitempty",json:"interval,omitempty"`
+        IntervalUnit string `url:",omitempty",json:"interval_unit,omitempty"`
         Links struct {
-      Mandate string `json:"mandate,omitempty"`
+      Mandate string `url:",omitempty",json:"mandate,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Month string `json:"month,omitempty"`
-        Name string `json:"name,omitempty"`
-        PaymentReference string `json:"payment_reference,omitempty"`
-        StartDate string `json:"start_date,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Month string `url:",omitempty",json:"month,omitempty"`
+        Name string `url:",omitempty",json:"name,omitempty"`
+        PaymentReference string `url:",omitempty",json:"payment_reference,omitempty"`
+        StartDate string `url:",omitempty",json:"start_date,omitempty"`
         
     }
 // SubscriptionCreateResult parameters
 type SubscriptionCreateResult struct {
       Subscriptions struct {
-      Amount string `json:"amount,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        DayOfMonth string `json:"day_of_month,omitempty"`
-        EndDate string `json:"end_date,omitempty"`
-        Id string `json:"id,omitempty"`
-        Interval string `json:"interval,omitempty"`
-        IntervalUnit string `json:"interval_unit,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        DayOfMonth string `url:",omitempty",json:"day_of_month,omitempty"`
+        EndDate string `url:",omitempty",json:"end_date,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
+        Interval string `url:",omitempty",json:"interval,omitempty"`
+        IntervalUnit string `url:",omitempty",json:"interval_unit,omitempty"`
         Links struct {
-      Mandate string `json:"mandate,omitempty"`
+      Mandate string `url:",omitempty",json:"mandate,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Month string `json:"month,omitempty"`
-        Name string `json:"name,omitempty"`
-        PaymentReference string `json:"payment_reference,omitempty"`
-        StartDate string `json:"start_date,omitempty"`
-        Status string `json:"status,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Month string `url:",omitempty",json:"month,omitempty"`
+        Name string `url:",omitempty",json:"name,omitempty"`
+        PaymentReference string `url:",omitempty",json:"payment_reference,omitempty"`
+        StartDate string `url:",omitempty",json:"start_date,omitempty"`
+        Status string `url:",omitempty",json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `json:"amount,omitempty"`
-        ChargeDate string `json:"charge_date,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
         
-    } `json:"upcoming_payments,omitempty"`
+    } `url:",omitempty",json:"upcoming_payments,omitempty"`
         
-    } `json:"subscriptions,omitempty"`
+    } `url:",omitempty",json:"subscriptions,omitempty"`
         
     }
 
@@ -137,57 +137,57 @@ func (s *SubscriptionService) Create(
 
 // SubscriptionListParams parameters
 type SubscriptionListParams struct {
-      After string `json:"after,omitempty"`
-        Before string `json:"before,omitempty"`
+      After string `url:",omitempty",json:"after,omitempty"`
+        Before string `url:",omitempty",json:"before,omitempty"`
         CreatedAt struct {
-      Gt string `json:"gt,omitempty"`
-        Gte string `json:"gte,omitempty"`
-        Lt string `json:"lt,omitempty"`
-        Lte string `json:"lte,omitempty"`
+      Gt string `url:",omitempty",json:"gt,omitempty"`
+        Gte string `url:",omitempty",json:"gte,omitempty"`
+        Lt string `url:",omitempty",json:"lt,omitempty"`
+        Lte string `url:",omitempty",json:"lte,omitempty"`
         
-    } `json:"created_at,omitempty"`
-        Customer string `json:"customer,omitempty"`
-        Limit string `json:"limit,omitempty"`
-        Mandate string `json:"mandate,omitempty"`
+    } `url:",omitempty",json:"created_at,omitempty"`
+        Customer string `url:",omitempty",json:"customer,omitempty"`
+        Limit string `url:",omitempty",json:"limit,omitempty"`
+        Mandate string `url:",omitempty",json:"mandate,omitempty"`
         
     }
 // SubscriptionListResult parameters
 type SubscriptionListResult struct {
       Meta struct {
       Cursors struct {
-      After string `json:"after,omitempty"`
-        Before string `json:"before,omitempty"`
+      After string `url:",omitempty",json:"after,omitempty"`
+        Before string `url:",omitempty",json:"before,omitempty"`
         
-    } `json:"cursors,omitempty"`
-        Limit int `json:"limit,omitempty"`
+    } `url:",omitempty",json:"cursors,omitempty"`
+        Limit int `url:",omitempty",json:"limit,omitempty"`
         
-    } `json:"meta,omitempty"`
+    } `url:",omitempty",json:"meta,omitempty"`
         Subscriptions []struct {
-      Amount string `json:"amount,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        DayOfMonth string `json:"day_of_month,omitempty"`
-        EndDate string `json:"end_date,omitempty"`
-        Id string `json:"id,omitempty"`
-        Interval string `json:"interval,omitempty"`
-        IntervalUnit string `json:"interval_unit,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        DayOfMonth string `url:",omitempty",json:"day_of_month,omitempty"`
+        EndDate string `url:",omitempty",json:"end_date,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
+        Interval string `url:",omitempty",json:"interval,omitempty"`
+        IntervalUnit string `url:",omitempty",json:"interval_unit,omitempty"`
         Links struct {
-      Mandate string `json:"mandate,omitempty"`
+      Mandate string `url:",omitempty",json:"mandate,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Month string `json:"month,omitempty"`
-        Name string `json:"name,omitempty"`
-        PaymentReference string `json:"payment_reference,omitempty"`
-        StartDate string `json:"start_date,omitempty"`
-        Status string `json:"status,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Month string `url:",omitempty",json:"month,omitempty"`
+        Name string `url:",omitempty",json:"name,omitempty"`
+        PaymentReference string `url:",omitempty",json:"payment_reference,omitempty"`
+        StartDate string `url:",omitempty",json:"start_date,omitempty"`
+        Status string `url:",omitempty",json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `json:"amount,omitempty"`
-        ChargeDate string `json:"charge_date,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
         
-    } `json:"upcoming_payments,omitempty"`
+    } `url:",omitempty",json:"upcoming_payments,omitempty"`
         
-    } `json:"subscriptions,omitempty"`
+    } `url:",omitempty",json:"subscriptions,omitempty"`
         
     }
 
@@ -252,31 +252,31 @@ func (s *SubscriptionService) List(
 // SubscriptionGetResult parameters
 type SubscriptionGetResult struct {
       Subscriptions struct {
-      Amount string `json:"amount,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        DayOfMonth string `json:"day_of_month,omitempty"`
-        EndDate string `json:"end_date,omitempty"`
-        Id string `json:"id,omitempty"`
-        Interval string `json:"interval,omitempty"`
-        IntervalUnit string `json:"interval_unit,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        DayOfMonth string `url:",omitempty",json:"day_of_month,omitempty"`
+        EndDate string `url:",omitempty",json:"end_date,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
+        Interval string `url:",omitempty",json:"interval,omitempty"`
+        IntervalUnit string `url:",omitempty",json:"interval_unit,omitempty"`
         Links struct {
-      Mandate string `json:"mandate,omitempty"`
+      Mandate string `url:",omitempty",json:"mandate,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Month string `json:"month,omitempty"`
-        Name string `json:"name,omitempty"`
-        PaymentReference string `json:"payment_reference,omitempty"`
-        StartDate string `json:"start_date,omitempty"`
-        Status string `json:"status,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Month string `url:",omitempty",json:"month,omitempty"`
+        Name string `url:",omitempty",json:"name,omitempty"`
+        PaymentReference string `url:",omitempty",json:"payment_reference,omitempty"`
+        StartDate string `url:",omitempty",json:"start_date,omitempty"`
+        Status string `url:",omitempty",json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `json:"amount,omitempty"`
-        ChargeDate string `json:"charge_date,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
         
-    } `json:"upcoming_payments,omitempty"`
+    } `url:",omitempty",json:"upcoming_payments,omitempty"`
         
-    } `json:"subscriptions,omitempty"`
+    } `url:",omitempty",json:"subscriptions,omitempty"`
         
     }
 
@@ -336,39 +336,39 @@ func (s *SubscriptionService) Get(
 
 // SubscriptionUpdateParams parameters
 type SubscriptionUpdateParams struct {
-      Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Name string `json:"name,omitempty"`
-        PaymentReference string `json:"payment_reference,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Name string `url:",omitempty",json:"name,omitempty"`
+        PaymentReference string `url:",omitempty",json:"payment_reference,omitempty"`
         
     }
 // SubscriptionUpdateResult parameters
 type SubscriptionUpdateResult struct {
       Subscriptions struct {
-      Amount string `json:"amount,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        DayOfMonth string `json:"day_of_month,omitempty"`
-        EndDate string `json:"end_date,omitempty"`
-        Id string `json:"id,omitempty"`
-        Interval string `json:"interval,omitempty"`
-        IntervalUnit string `json:"interval_unit,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        DayOfMonth string `url:",omitempty",json:"day_of_month,omitempty"`
+        EndDate string `url:",omitempty",json:"end_date,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
+        Interval string `url:",omitempty",json:"interval,omitempty"`
+        IntervalUnit string `url:",omitempty",json:"interval_unit,omitempty"`
         Links struct {
-      Mandate string `json:"mandate,omitempty"`
+      Mandate string `url:",omitempty",json:"mandate,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Month string `json:"month,omitempty"`
-        Name string `json:"name,omitempty"`
-        PaymentReference string `json:"payment_reference,omitempty"`
-        StartDate string `json:"start_date,omitempty"`
-        Status string `json:"status,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Month string `url:",omitempty",json:"month,omitempty"`
+        Name string `url:",omitempty",json:"name,omitempty"`
+        PaymentReference string `url:",omitempty",json:"payment_reference,omitempty"`
+        StartDate string `url:",omitempty",json:"start_date,omitempty"`
+        Status string `url:",omitempty",json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `json:"amount,omitempty"`
-        ChargeDate string `json:"charge_date,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
         
-    } `json:"upcoming_payments,omitempty"`
+    } `url:",omitempty",json:"upcoming_payments,omitempty"`
         
-    } `json:"subscriptions,omitempty"`
+    } `url:",omitempty",json:"subscriptions,omitempty"`
         
     }
 
@@ -436,37 +436,37 @@ func (s *SubscriptionService) Update(
 
 // SubscriptionCancelParams parameters
 type SubscriptionCancelParams struct {
-      Metadata map[string]interface{} `json:"metadata,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
         
     }
 // SubscriptionCancelResult parameters
 type SubscriptionCancelResult struct {
       Subscriptions struct {
-      Amount string `json:"amount,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        DayOfMonth string `json:"day_of_month,omitempty"`
-        EndDate string `json:"end_date,omitempty"`
-        Id string `json:"id,omitempty"`
-        Interval string `json:"interval,omitempty"`
-        IntervalUnit string `json:"interval_unit,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        DayOfMonth string `url:",omitempty",json:"day_of_month,omitempty"`
+        EndDate string `url:",omitempty",json:"end_date,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
+        Interval string `url:",omitempty",json:"interval,omitempty"`
+        IntervalUnit string `url:",omitempty",json:"interval_unit,omitempty"`
         Links struct {
-      Mandate string `json:"mandate,omitempty"`
+      Mandate string `url:",omitempty",json:"mandate,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Month string `json:"month,omitempty"`
-        Name string `json:"name,omitempty"`
-        PaymentReference string `json:"payment_reference,omitempty"`
-        StartDate string `json:"start_date,omitempty"`
-        Status string `json:"status,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Month string `url:",omitempty",json:"month,omitempty"`
+        Name string `url:",omitempty",json:"name,omitempty"`
+        PaymentReference string `url:",omitempty",json:"payment_reference,omitempty"`
+        StartDate string `url:",omitempty",json:"start_date,omitempty"`
+        Status string `url:",omitempty",json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `json:"amount,omitempty"`
-        ChargeDate string `json:"charge_date,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
         
-    } `json:"upcoming_payments,omitempty"`
+    } `url:",omitempty",json:"upcoming_payments,omitempty"`
         
-    } `json:"subscriptions,omitempty"`
+    } `url:",omitempty",json:"subscriptions,omitempty"`
         
     }
 

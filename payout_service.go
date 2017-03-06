@@ -26,49 +26,49 @@ type PayoutService struct {
 
 // PayoutListParams parameters
 type PayoutListParams struct {
-      After string `json:"after,omitempty"`
-        Before string `json:"before,omitempty"`
+      After string `url:",omitempty",json:"after,omitempty"`
+        Before string `url:",omitempty",json:"before,omitempty"`
         CreatedAt struct {
-      Gt string `json:"gt,omitempty"`
-        Gte string `json:"gte,omitempty"`
-        Lt string `json:"lt,omitempty"`
-        Lte string `json:"lte,omitempty"`
+      Gt string `url:",omitempty",json:"gt,omitempty"`
+        Gte string `url:",omitempty",json:"gte,omitempty"`
+        Lt string `url:",omitempty",json:"lt,omitempty"`
+        Lte string `url:",omitempty",json:"lte,omitempty"`
         
-    } `json:"created_at,omitempty"`
-        Creditor string `json:"creditor,omitempty"`
-        CreditorBankAccount string `json:"creditor_bank_account,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Limit string `json:"limit,omitempty"`
-        Status string `json:"status,omitempty"`
+    } `url:",omitempty",json:"created_at,omitempty"`
+        Creditor string `url:",omitempty",json:"creditor,omitempty"`
+        CreditorBankAccount string `url:",omitempty",json:"creditor_bank_account,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Limit string `url:",omitempty",json:"limit,omitempty"`
+        Status string `url:",omitempty",json:"status,omitempty"`
         
     }
 // PayoutListResult parameters
 type PayoutListResult struct {
       Meta struct {
       Cursors struct {
-      After string `json:"after,omitempty"`
-        Before string `json:"before,omitempty"`
+      After string `url:",omitempty",json:"after,omitempty"`
+        Before string `url:",omitempty",json:"before,omitempty"`
         
-    } `json:"cursors,omitempty"`
-        Limit int `json:"limit,omitempty"`
+    } `url:",omitempty",json:"cursors,omitempty"`
+        Limit int `url:",omitempty",json:"limit,omitempty"`
         
-    } `json:"meta,omitempty"`
+    } `url:",omitempty",json:"meta,omitempty"`
         Payouts []struct {
-      Amount string `json:"amount,omitempty"`
-        ArrivalDate string `json:"arrival_date,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        DeductedFees string `json:"deducted_fees,omitempty"`
-        Id string `json:"id,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        ArrivalDate string `url:",omitempty",json:"arrival_date,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        DeductedFees string `url:",omitempty",json:"deducted_fees,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Creditor string `json:"creditor,omitempty"`
-        CreditorBankAccount string `json:"creditor_bank_account,omitempty"`
+      Creditor string `url:",omitempty",json:"creditor,omitempty"`
+        CreditorBankAccount string `url:",omitempty",json:"creditor_bank_account,omitempty"`
         
-    } `json:"links,omitempty"`
-        Reference string `json:"reference,omitempty"`
-        Status string `json:"status,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Reference string `url:",omitempty",json:"reference,omitempty"`
+        Status string `url:",omitempty",json:"status,omitempty"`
         
-    } `json:"payouts,omitempty"`
+    } `url:",omitempty",json:"payouts,omitempty"`
         
     }
 
@@ -133,21 +133,21 @@ func (s *PayoutService) List(
 // PayoutGetResult parameters
 type PayoutGetResult struct {
       Payouts struct {
-      Amount string `json:"amount,omitempty"`
-        ArrivalDate string `json:"arrival_date,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        DeductedFees string `json:"deducted_fees,omitempty"`
-        Id string `json:"id,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        ArrivalDate string `url:",omitempty",json:"arrival_date,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        DeductedFees string `url:",omitempty",json:"deducted_fees,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Creditor string `json:"creditor,omitempty"`
-        CreditorBankAccount string `json:"creditor_bank_account,omitempty"`
+      Creditor string `url:",omitempty",json:"creditor,omitempty"`
+        CreditorBankAccount string `url:",omitempty",json:"creditor_bank_account,omitempty"`
         
-    } `json:"links,omitempty"`
-        Reference string `json:"reference,omitempty"`
-        Status string `json:"status,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Reference string `url:",omitempty",json:"reference,omitempty"`
+        Status string `url:",omitempty",json:"status,omitempty"`
         
-    } `json:"payouts,omitempty"`
+    } `url:",omitempty",json:"payouts,omitempty"`
         
     }
 

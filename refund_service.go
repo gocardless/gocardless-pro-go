@@ -26,31 +26,31 @@ type RefundService struct {
 
 // RefundCreateParams parameters
 type RefundCreateParams struct {
-      Amount string `json:"amount,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
         Links struct {
-      Payment string `json:"payment,omitempty"`
+      Payment string `url:",omitempty",json:"payment,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Reference string `json:"reference,omitempty"`
-        TotalAmountConfirmation string `json:"total_amount_confirmation,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Reference string `url:",omitempty",json:"reference,omitempty"`
+        TotalAmountConfirmation string `url:",omitempty",json:"total_amount_confirmation,omitempty"`
         
     }
 // RefundCreateResult parameters
 type RefundCreateResult struct {
       Refunds struct {
-      Amount string `json:"amount,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Id string `json:"id,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Payment string `json:"payment,omitempty"`
+      Payment string `url:",omitempty",json:"payment,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Reference string `json:"reference,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Reference string `url:",omitempty",json:"reference,omitempty"`
         
-    } `json:"refunds,omitempty"`
+    } `url:",omitempty",json:"refunds,omitempty"`
         
     }
 
@@ -135,43 +135,43 @@ func (s *RefundService) Create(
 
 // RefundListParams parameters
 type RefundListParams struct {
-      After string `json:"after,omitempty"`
-        Before string `json:"before,omitempty"`
+      After string `url:",omitempty",json:"after,omitempty"`
+        Before string `url:",omitempty",json:"before,omitempty"`
         CreatedAt struct {
-      Gt string `json:"gt,omitempty"`
-        Gte string `json:"gte,omitempty"`
-        Lt string `json:"lt,omitempty"`
-        Lte string `json:"lte,omitempty"`
+      Gt string `url:",omitempty",json:"gt,omitempty"`
+        Gte string `url:",omitempty",json:"gte,omitempty"`
+        Lt string `url:",omitempty",json:"lt,omitempty"`
+        Lte string `url:",omitempty",json:"lte,omitempty"`
         
-    } `json:"created_at,omitempty"`
-        Limit string `json:"limit,omitempty"`
-        Payment string `json:"payment,omitempty"`
+    } `url:",omitempty",json:"created_at,omitempty"`
+        Limit string `url:",omitempty",json:"limit,omitempty"`
+        Payment string `url:",omitempty",json:"payment,omitempty"`
         
     }
 // RefundListResult parameters
 type RefundListResult struct {
       Meta struct {
       Cursors struct {
-      After string `json:"after,omitempty"`
-        Before string `json:"before,omitempty"`
+      After string `url:",omitempty",json:"after,omitempty"`
+        Before string `url:",omitempty",json:"before,omitempty"`
         
-    } `json:"cursors,omitempty"`
-        Limit int `json:"limit,omitempty"`
+    } `url:",omitempty",json:"cursors,omitempty"`
+        Limit int `url:",omitempty",json:"limit,omitempty"`
         
-    } `json:"meta,omitempty"`
+    } `url:",omitempty",json:"meta,omitempty"`
         Refunds []struct {
-      Amount string `json:"amount,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Id string `json:"id,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Payment string `json:"payment,omitempty"`
+      Payment string `url:",omitempty",json:"payment,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Reference string `json:"reference,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Reference string `url:",omitempty",json:"reference,omitempty"`
         
-    } `json:"refunds,omitempty"`
+    } `url:",omitempty",json:"refunds,omitempty"`
         
     }
 
@@ -236,18 +236,18 @@ func (s *RefundService) List(
 // RefundGetResult parameters
 type RefundGetResult struct {
       Refunds struct {
-      Amount string `json:"amount,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Id string `json:"id,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Payment string `json:"payment,omitempty"`
+      Payment string `url:",omitempty",json:"payment,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Reference string `json:"reference,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Reference string `url:",omitempty",json:"reference,omitempty"`
         
-    } `json:"refunds,omitempty"`
+    } `url:",omitempty",json:"refunds,omitempty"`
         
     }
 
@@ -307,24 +307,24 @@ func (s *RefundService) Get(
 
 // RefundUpdateParams parameters
 type RefundUpdateParams struct {
-      Metadata map[string]interface{} `json:"metadata,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
         
     }
 // RefundUpdateResult parameters
 type RefundUpdateResult struct {
       Refunds struct {
-      Amount string `json:"amount,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Id string `json:"id,omitempty"`
+      Amount string `url:",omitempty",json:"amount,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Payment string `json:"payment,omitempty"`
+      Payment string `url:",omitempty",json:"payment,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
-        Reference string `json:"reference,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+        Reference string `url:",omitempty",json:"reference,omitempty"`
         
-    } `json:"refunds,omitempty"`
+    } `url:",omitempty",json:"refunds,omitempty"`
         
     }
 

@@ -26,39 +26,39 @@ type CustomerBankAccountService struct {
 
 // CustomerBankAccountCreateParams parameters
 type CustomerBankAccountCreateParams struct {
-      AccountHolderName string `json:"account_holder_name,omitempty"`
-        AccountNumber string `json:"account_number,omitempty"`
-        BankCode string `json:"bank_code,omitempty"`
-        BranchCode string `json:"branch_code,omitempty"`
-        CountryCode string `json:"country_code,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Iban string `json:"iban,omitempty"`
+      AccountHolderName string `url:",omitempty",json:"account_holder_name,omitempty"`
+        AccountNumber string `url:",omitempty",json:"account_number,omitempty"`
+        BankCode string `url:",omitempty",json:"bank_code,omitempty"`
+        BranchCode string `url:",omitempty",json:"branch_code,omitempty"`
+        CountryCode string `url:",omitempty",json:"country_code,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Iban string `url:",omitempty",json:"iban,omitempty"`
         Links struct {
-      Customer string `json:"customer,omitempty"`
-        CustomerBankAccountToken string `json:"customer_bank_account_token,omitempty"`
+      Customer string `url:",omitempty",json:"customer,omitempty"`
+        CustomerBankAccountToken string `url:",omitempty",json:"customer_bank_account_token,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
         
     }
 // CustomerBankAccountCreateResult parameters
 type CustomerBankAccountCreateResult struct {
       CustomerBankAccounts struct {
-      AccountHolderName string `json:"account_holder_name,omitempty"`
-        AccountNumberEnding string `json:"account_number_ending,omitempty"`
-        BankName string `json:"bank_name,omitempty"`
-        CountryCode string `json:"country_code,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Enabled bool `json:"enabled,omitempty"`
-        Id string `json:"id,omitempty"`
+      AccountHolderName string `url:",omitempty",json:"account_holder_name,omitempty"`
+        AccountNumberEnding string `url:",omitempty",json:"account_number_ending,omitempty"`
+        BankName string `url:",omitempty",json:"bank_name,omitempty"`
+        CountryCode string `url:",omitempty",json:"country_code,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Enabled bool `url:",omitempty",json:"enabled,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Customer string `json:"customer,omitempty"`
+      Customer string `url:",omitempty",json:"customer,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
         
-    } `json:"customer_bank_accounts,omitempty"`
+    } `url:",omitempty",json:"customer_bank_accounts,omitempty"`
         
     }
 
@@ -139,47 +139,47 @@ func (s *CustomerBankAccountService) Create(
 
 // CustomerBankAccountListParams parameters
 type CustomerBankAccountListParams struct {
-      After string `json:"after,omitempty"`
-        Before string `json:"before,omitempty"`
+      After string `url:",omitempty",json:"after,omitempty"`
+        Before string `url:",omitempty",json:"before,omitempty"`
         CreatedAt struct {
-      Gt string `json:"gt,omitempty"`
-        Gte string `json:"gte,omitempty"`
-        Lt string `json:"lt,omitempty"`
-        Lte string `json:"lte,omitempty"`
+      Gt string `url:",omitempty",json:"gt,omitempty"`
+        Gte string `url:",omitempty",json:"gte,omitempty"`
+        Lt string `url:",omitempty",json:"lt,omitempty"`
+        Lte string `url:",omitempty",json:"lte,omitempty"`
         
-    } `json:"created_at,omitempty"`
-        Customer string `json:"customer,omitempty"`
-        Enabled bool `json:"enabled,omitempty"`
-        Limit string `json:"limit,omitempty"`
+    } `url:",omitempty",json:"created_at,omitempty"`
+        Customer string `url:",omitempty",json:"customer,omitempty"`
+        Enabled bool `url:",omitempty",json:"enabled,omitempty"`
+        Limit string `url:",omitempty",json:"limit,omitempty"`
         
     }
 // CustomerBankAccountListResult parameters
 type CustomerBankAccountListResult struct {
       CustomerBankAccounts []struct {
-      AccountHolderName string `json:"account_holder_name,omitempty"`
-        AccountNumberEnding string `json:"account_number_ending,omitempty"`
-        BankName string `json:"bank_name,omitempty"`
-        CountryCode string `json:"country_code,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Enabled bool `json:"enabled,omitempty"`
-        Id string `json:"id,omitempty"`
+      AccountHolderName string `url:",omitempty",json:"account_holder_name,omitempty"`
+        AccountNumberEnding string `url:",omitempty",json:"account_number_ending,omitempty"`
+        BankName string `url:",omitempty",json:"bank_name,omitempty"`
+        CountryCode string `url:",omitempty",json:"country_code,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Enabled bool `url:",omitempty",json:"enabled,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Customer string `json:"customer,omitempty"`
+      Customer string `url:",omitempty",json:"customer,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
         
-    } `json:"customer_bank_accounts,omitempty"`
+    } `url:",omitempty",json:"customer_bank_accounts,omitempty"`
         Meta struct {
       Cursors struct {
-      After string `json:"after,omitempty"`
-        Before string `json:"before,omitempty"`
+      After string `url:",omitempty",json:"after,omitempty"`
+        Before string `url:",omitempty",json:"before,omitempty"`
         
-    } `json:"cursors,omitempty"`
-        Limit int `json:"limit,omitempty"`
+    } `url:",omitempty",json:"cursors,omitempty"`
+        Limit int `url:",omitempty",json:"limit,omitempty"`
         
-    } `json:"meta,omitempty"`
+    } `url:",omitempty",json:"meta,omitempty"`
         
     }
 
@@ -244,21 +244,21 @@ func (s *CustomerBankAccountService) List(
 // CustomerBankAccountGetResult parameters
 type CustomerBankAccountGetResult struct {
       CustomerBankAccounts struct {
-      AccountHolderName string `json:"account_holder_name,omitempty"`
-        AccountNumberEnding string `json:"account_number_ending,omitempty"`
-        BankName string `json:"bank_name,omitempty"`
-        CountryCode string `json:"country_code,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Enabled bool `json:"enabled,omitempty"`
-        Id string `json:"id,omitempty"`
+      AccountHolderName string `url:",omitempty",json:"account_holder_name,omitempty"`
+        AccountNumberEnding string `url:",omitempty",json:"account_number_ending,omitempty"`
+        BankName string `url:",omitempty",json:"bank_name,omitempty"`
+        CountryCode string `url:",omitempty",json:"country_code,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Enabled bool `url:",omitempty",json:"enabled,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Customer string `json:"customer,omitempty"`
+      Customer string `url:",omitempty",json:"customer,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
         
-    } `json:"customer_bank_accounts,omitempty"`
+    } `url:",omitempty",json:"customer_bank_accounts,omitempty"`
         
     }
 
@@ -318,27 +318,27 @@ func (s *CustomerBankAccountService) Get(
 
 // CustomerBankAccountUpdateParams parameters
 type CustomerBankAccountUpdateParams struct {
-      Metadata map[string]interface{} `json:"metadata,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
         
     }
 // CustomerBankAccountUpdateResult parameters
 type CustomerBankAccountUpdateResult struct {
       CustomerBankAccounts struct {
-      AccountHolderName string `json:"account_holder_name,omitempty"`
-        AccountNumberEnding string `json:"account_number_ending,omitempty"`
-        BankName string `json:"bank_name,omitempty"`
-        CountryCode string `json:"country_code,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Enabled bool `json:"enabled,omitempty"`
-        Id string `json:"id,omitempty"`
+      AccountHolderName string `url:",omitempty",json:"account_holder_name,omitempty"`
+        AccountNumberEnding string `url:",omitempty",json:"account_number_ending,omitempty"`
+        BankName string `url:",omitempty",json:"bank_name,omitempty"`
+        CountryCode string `url:",omitempty",json:"country_code,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Enabled bool `url:",omitempty",json:"enabled,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Customer string `json:"customer,omitempty"`
+      Customer string `url:",omitempty",json:"customer,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
         
-    } `json:"customer_bank_accounts,omitempty"`
+    } `url:",omitempty",json:"customer_bank_accounts,omitempty"`
         
     }
 
@@ -408,21 +408,21 @@ func (s *CustomerBankAccountService) Update(
 // CustomerBankAccountDisableResult parameters
 type CustomerBankAccountDisableResult struct {
       CustomerBankAccounts struct {
-      AccountHolderName string `json:"account_holder_name,omitempty"`
-        AccountNumberEnding string `json:"account_number_ending,omitempty"`
-        BankName string `json:"bank_name,omitempty"`
-        CountryCode string `json:"country_code,omitempty"`
-        CreatedAt string `json:"created_at,omitempty"`
-        Currency string `json:"currency,omitempty"`
-        Enabled bool `json:"enabled,omitempty"`
-        Id string `json:"id,omitempty"`
+      AccountHolderName string `url:",omitempty",json:"account_holder_name,omitempty"`
+        AccountNumberEnding string `url:",omitempty",json:"account_number_ending,omitempty"`
+        BankName string `url:",omitempty",json:"bank_name,omitempty"`
+        CountryCode string `url:",omitempty",json:"country_code,omitempty"`
+        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
+        Currency string `url:",omitempty",json:"currency,omitempty"`
+        Enabled bool `url:",omitempty",json:"enabled,omitempty"`
+        Id string `url:",omitempty",json:"id,omitempty"`
         Links struct {
-      Customer string `json:"customer,omitempty"`
+      Customer string `url:",omitempty",json:"customer,omitempty"`
         
-    } `json:"links,omitempty"`
-        Metadata map[string]interface{} `json:"metadata,omitempty"`
+    } `url:",omitempty",json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
         
-    } `json:"customer_bank_accounts,omitempty"`
+    } `url:",omitempty",json:"customer_bank_accounts,omitempty"`
         
     }
 

@@ -26,21 +26,21 @@ type BankDetailsLookupService struct {
 
 // BankDetailsLookupCreateParams parameters
 type BankDetailsLookupCreateParams struct {
-      AccountNumber string `json:"account_number,omitempty"`
-        BankCode string `json:"bank_code,omitempty"`
-        BranchCode string `json:"branch_code,omitempty"`
-        CountryCode string `json:"country_code,omitempty"`
-        Iban string `json:"iban,omitempty"`
+      AccountNumber string `url:",omitempty",json:"account_number,omitempty"`
+        BankCode string `url:",omitempty",json:"bank_code,omitempty"`
+        BranchCode string `url:",omitempty",json:"branch_code,omitempty"`
+        CountryCode string `url:",omitempty",json:"country_code,omitempty"`
+        Iban string `url:",omitempty",json:"iban,omitempty"`
         
     }
 // BankDetailsLookupCreateResult parameters
 type BankDetailsLookupCreateResult struct {
       BankDetailsLookups struct {
-      AvailableDebitSchemes []string `json:"available_debit_schemes,omitempty"`
-        BankName string `json:"bank_name,omitempty"`
-        Bic string `json:"bic,omitempty"`
+      AvailableDebitSchemes []string `url:",omitempty",json:"available_debit_schemes,omitempty"`
+        BankName string `url:",omitempty",json:"bank_name,omitempty"`
+        Bic string `url:",omitempty",json:"bic,omitempty"`
         
-    } `json:"bank_details_lookups,omitempty"`
+    } `url:",omitempty",json:"bank_details_lookups,omitempty"`
         
     }
 
