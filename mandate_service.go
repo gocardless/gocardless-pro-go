@@ -27,35 +27,35 @@ type MandateService struct {
 // MandateCreateParams parameters
 type MandateCreateParams struct {
       Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        CustomerBankAccount string `url:",omitempty",json:"customer_bank_account,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Scheme string `url:",omitempty",json:"scheme,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Scheme string `url:",omitempty" json:"scheme,omitempty"`
         
     }
 // MandateCreateResult parameters
 type MandateCreateResult struct {
       Mandates struct {
-      CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Customer string `url:",omitempty",json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty",json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty",json:"new_mandate,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Customer string `url:",omitempty" json:"customer,omitempty"`
+        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty",json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty",json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Scheme string `url:",omitempty",json:"scheme,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
+        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Scheme string `url:",omitempty" json:"scheme,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"mandates,omitempty"`
+    } `url:",omitempty" json:"mandates,omitempty"`
         
     }
 
@@ -121,52 +121,52 @@ func (s *MandateService) Create(
 
 // MandateListParams parameters
 type MandateListParams struct {
-      After string `url:",omitempty",json:"after,omitempty"`
-        Before string `url:",omitempty",json:"before,omitempty"`
+      After string `url:",omitempty" json:"after,omitempty"`
+        Before string `url:",omitempty" json:"before,omitempty"`
         CreatedAt struct {
-      Gt string `url:",omitempty",json:"gt,omitempty"`
-        Gte string `url:",omitempty",json:"gte,omitempty"`
-        Lt string `url:",omitempty",json:"lt,omitempty"`
-        Lte string `url:",omitempty",json:"lte,omitempty"`
+      Gt string `url:",omitempty" json:"gt,omitempty"`
+        Gte string `url:",omitempty" json:"gte,omitempty"`
+        Lt string `url:",omitempty" json:"lt,omitempty"`
+        Lte string `url:",omitempty" json:"lte,omitempty"`
         
-    } `url:",omitempty",json:"created_at,omitempty"`
-        Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Customer string `url:",omitempty",json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty",json:"customer_bank_account,omitempty"`
-        Limit string `url:",omitempty",json:"limit,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Status []string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"created_at,omitempty"`
+        Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Customer string `url:",omitempty" json:"customer,omitempty"`
+        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Status []string `url:",omitempty" json:"status,omitempty"`
         
     }
 // MandateListResult parameters
 type MandateListResult struct {
       Mandates []struct {
-      CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Customer string `url:",omitempty",json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty",json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty",json:"new_mandate,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Customer string `url:",omitempty" json:"customer,omitempty"`
+        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty",json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty",json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Scheme string `url:",omitempty",json:"scheme,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
+        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Scheme string `url:",omitempty" json:"scheme,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"mandates,omitempty"`
+    } `url:",omitempty" json:"mandates,omitempty"`
         Meta struct {
       Cursors struct {
-      After string `url:",omitempty",json:"after,omitempty"`
-        Before string `url:",omitempty",json:"before,omitempty"`
+      After string `url:",omitempty" json:"after,omitempty"`
+        Before string `url:",omitempty" json:"before,omitempty"`
         
-    } `url:",omitempty",json:"cursors,omitempty"`
-        Limit int `url:",omitempty",json:"limit,omitempty"`
+    } `url:",omitempty" json:"cursors,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         
-    } `url:",omitempty",json:"meta,omitempty"`
+    } `url:",omitempty" json:"meta,omitempty"`
         
     }
 
@@ -231,23 +231,23 @@ func (s *MandateService) List(
 // MandateGetResult parameters
 type MandateGetResult struct {
       Mandates struct {
-      CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Customer string `url:",omitempty",json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty",json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty",json:"new_mandate,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Customer string `url:",omitempty" json:"customer,omitempty"`
+        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty",json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty",json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Scheme string `url:",omitempty",json:"scheme,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
+        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Scheme string `url:",omitempty" json:"scheme,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"mandates,omitempty"`
+    } `url:",omitempty" json:"mandates,omitempty"`
         
     }
 
@@ -307,29 +307,29 @@ func (s *MandateService) Get(
 
 // MandateUpdateParams parameters
 type MandateUpdateParams struct {
-      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
         
     }
 // MandateUpdateResult parameters
 type MandateUpdateResult struct {
       Mandates struct {
-      CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Customer string `url:",omitempty",json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty",json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty",json:"new_mandate,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Customer string `url:",omitempty" json:"customer,omitempty"`
+        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty",json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty",json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Scheme string `url:",omitempty",json:"scheme,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
+        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Scheme string `url:",omitempty" json:"scheme,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"mandates,omitempty"`
+    } `url:",omitempty" json:"mandates,omitempty"`
         
     }
 
@@ -397,29 +397,29 @@ func (s *MandateService) Update(
 
 // MandateCancelParams parameters
 type MandateCancelParams struct {
-      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
         
     }
 // MandateCancelResult parameters
 type MandateCancelResult struct {
       Mandates struct {
-      CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Customer string `url:",omitempty",json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty",json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty",json:"new_mandate,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Customer string `url:",omitempty" json:"customer,omitempty"`
+        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty",json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty",json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Scheme string `url:",omitempty",json:"scheme,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
+        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Scheme string `url:",omitempty" json:"scheme,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"mandates,omitempty"`
+    } `url:",omitempty" json:"mandates,omitempty"`
         
     }
 
@@ -492,29 +492,29 @@ func (s *MandateService) Cancel(
 
 // MandateReinstateParams parameters
 type MandateReinstateParams struct {
-      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
         
     }
 // MandateReinstateResult parameters
 type MandateReinstateResult struct {
       Mandates struct {
-      CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Customer string `url:",omitempty",json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty",json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty",json:"new_mandate,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Customer string `url:",omitempty" json:"customer,omitempty"`
+        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty",json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty",json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Scheme string `url:",omitempty",json:"scheme,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
+        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Scheme string `url:",omitempty" json:"scheme,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"mandates,omitempty"`
+    } `url:",omitempty" json:"mandates,omitempty"`
         
     }
 

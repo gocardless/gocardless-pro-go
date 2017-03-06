@@ -26,41 +26,41 @@ type PaymentService struct {
 
 // PaymentCreateParams parameters
 type PaymentCreateParams struct {
-      Amount string `url:",omitempty",json:"amount,omitempty"`
-        AppFee string `url:",omitempty",json:"app_fee,omitempty"`
-        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
-        Currency string `url:",omitempty",json:"currency,omitempty"`
-        Description string `url:",omitempty",json:"description,omitempty"`
+      Amount string `url:",omitempty" json:"amount,omitempty"`
+        AppFee string `url:",omitempty" json:"app_fee,omitempty"`
+        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+        Currency string `url:",omitempty" json:"currency,omitempty"`
+        Description string `url:",omitempty" json:"description,omitempty"`
         Links struct {
-      Mandate string `url:",omitempty",json:"mandate,omitempty"`
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
         
     }
 // PaymentCreateResult parameters
 type PaymentCreateResult struct {
       Payments struct {
-      Amount string `url:",omitempty",json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty",json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Currency string `url:",omitempty",json:"currency,omitempty"`
-        Description string `url:",omitempty",json:"description,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      Amount string `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Currency string `url:",omitempty" json:"currency,omitempty"`
+        Description string `url:",omitempty" json:"description,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Mandate string `url:",omitempty",json:"mandate,omitempty"`
-        Payout string `url:",omitempty",json:"payout,omitempty"`
-        Subscription string `url:",omitempty",json:"subscription,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Mandate string `url:",omitempty" json:"mandate,omitempty"`
+        Payout string `url:",omitempty" json:"payout,omitempty"`
+        Subscription string `url:",omitempty" json:"subscription,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"payments,omitempty"`
+    } `url:",omitempty" json:"payments,omitempty"`
         
     }
 
@@ -132,55 +132,55 @@ func (s *PaymentService) Create(
 
 // PaymentListParams parameters
 type PaymentListParams struct {
-      After string `url:",omitempty",json:"after,omitempty"`
-        Before string `url:",omitempty",json:"before,omitempty"`
+      After string `url:",omitempty" json:"after,omitempty"`
+        Before string `url:",omitempty" json:"before,omitempty"`
         CreatedAt struct {
-      Gt string `url:",omitempty",json:"gt,omitempty"`
-        Gte string `url:",omitempty",json:"gte,omitempty"`
-        Lt string `url:",omitempty",json:"lt,omitempty"`
-        Lte string `url:",omitempty",json:"lte,omitempty"`
+      Gt string `url:",omitempty" json:"gt,omitempty"`
+        Gte string `url:",omitempty" json:"gte,omitempty"`
+        Lt string `url:",omitempty" json:"lt,omitempty"`
+        Lte string `url:",omitempty" json:"lte,omitempty"`
         
-    } `url:",omitempty",json:"created_at,omitempty"`
-        Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Currency string `url:",omitempty",json:"currency,omitempty"`
-        Customer string `url:",omitempty",json:"customer,omitempty"`
-        Limit string `url:",omitempty",json:"limit,omitempty"`
-        Mandate string `url:",omitempty",json:"mandate,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
-        Subscription string `url:",omitempty",json:"subscription,omitempty"`
+    } `url:",omitempty" json:"created_at,omitempty"`
+        Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Currency string `url:",omitempty" json:"currency,omitempty"`
+        Customer string `url:",omitempty" json:"customer,omitempty"`
+        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Mandate string `url:",omitempty" json:"mandate,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
+        Subscription string `url:",omitempty" json:"subscription,omitempty"`
         
     }
 // PaymentListResult parameters
 type PaymentListResult struct {
       Meta struct {
       Cursors struct {
-      After string `url:",omitempty",json:"after,omitempty"`
-        Before string `url:",omitempty",json:"before,omitempty"`
+      After string `url:",omitempty" json:"after,omitempty"`
+        Before string `url:",omitempty" json:"before,omitempty"`
         
-    } `url:",omitempty",json:"cursors,omitempty"`
-        Limit int `url:",omitempty",json:"limit,omitempty"`
+    } `url:",omitempty" json:"cursors,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         
-    } `url:",omitempty",json:"meta,omitempty"`
+    } `url:",omitempty" json:"meta,omitempty"`
         Payments []struct {
-      Amount string `url:",omitempty",json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty",json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Currency string `url:",omitempty",json:"currency,omitempty"`
-        Description string `url:",omitempty",json:"description,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      Amount string `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Currency string `url:",omitempty" json:"currency,omitempty"`
+        Description string `url:",omitempty" json:"description,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Mandate string `url:",omitempty",json:"mandate,omitempty"`
-        Payout string `url:",omitempty",json:"payout,omitempty"`
-        Subscription string `url:",omitempty",json:"subscription,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Mandate string `url:",omitempty" json:"mandate,omitempty"`
+        Payout string `url:",omitempty" json:"payout,omitempty"`
+        Subscription string `url:",omitempty" json:"subscription,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"payments,omitempty"`
+    } `url:",omitempty" json:"payments,omitempty"`
         
     }
 
@@ -245,25 +245,25 @@ func (s *PaymentService) List(
 // PaymentGetResult parameters
 type PaymentGetResult struct {
       Payments struct {
-      Amount string `url:",omitempty",json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty",json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Currency string `url:",omitempty",json:"currency,omitempty"`
-        Description string `url:",omitempty",json:"description,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      Amount string `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Currency string `url:",omitempty" json:"currency,omitempty"`
+        Description string `url:",omitempty" json:"description,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Mandate string `url:",omitempty",json:"mandate,omitempty"`
-        Payout string `url:",omitempty",json:"payout,omitempty"`
-        Subscription string `url:",omitempty",json:"subscription,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Mandate string `url:",omitempty" json:"mandate,omitempty"`
+        Payout string `url:",omitempty" json:"payout,omitempty"`
+        Subscription string `url:",omitempty" json:"subscription,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"payments,omitempty"`
+    } `url:",omitempty" json:"payments,omitempty"`
         
     }
 
@@ -323,31 +323,31 @@ func (s *PaymentService) Get(
 
 // PaymentUpdateParams parameters
 type PaymentUpdateParams struct {
-      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
         
     }
 // PaymentUpdateResult parameters
 type PaymentUpdateResult struct {
       Payments struct {
-      Amount string `url:",omitempty",json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty",json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Currency string `url:",omitempty",json:"currency,omitempty"`
-        Description string `url:",omitempty",json:"description,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      Amount string `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Currency string `url:",omitempty" json:"currency,omitempty"`
+        Description string `url:",omitempty" json:"description,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Mandate string `url:",omitempty",json:"mandate,omitempty"`
-        Payout string `url:",omitempty",json:"payout,omitempty"`
-        Subscription string `url:",omitempty",json:"subscription,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Mandate string `url:",omitempty" json:"mandate,omitempty"`
+        Payout string `url:",omitempty" json:"payout,omitempty"`
+        Subscription string `url:",omitempty" json:"subscription,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"payments,omitempty"`
+    } `url:",omitempty" json:"payments,omitempty"`
         
     }
 
@@ -415,31 +415,31 @@ func (s *PaymentService) Update(
 
 // PaymentCancelParams parameters
 type PaymentCancelParams struct {
-      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
         
     }
 // PaymentCancelResult parameters
 type PaymentCancelResult struct {
       Payments struct {
-      Amount string `url:",omitempty",json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty",json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Currency string `url:",omitempty",json:"currency,omitempty"`
-        Description string `url:",omitempty",json:"description,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      Amount string `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Currency string `url:",omitempty" json:"currency,omitempty"`
+        Description string `url:",omitempty" json:"description,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Mandate string `url:",omitempty",json:"mandate,omitempty"`
-        Payout string `url:",omitempty",json:"payout,omitempty"`
-        Subscription string `url:",omitempty",json:"subscription,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Mandate string `url:",omitempty" json:"mandate,omitempty"`
+        Payout string `url:",omitempty" json:"payout,omitempty"`
+        Subscription string `url:",omitempty" json:"subscription,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"payments,omitempty"`
+    } `url:",omitempty" json:"payments,omitempty"`
         
     }
 
@@ -512,31 +512,31 @@ func (s *PaymentService) Cancel(
 
 // PaymentRetryParams parameters
 type PaymentRetryParams struct {
-      Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
         
     }
 // PaymentRetryResult parameters
 type PaymentRetryResult struct {
       Payments struct {
-      Amount string `url:",omitempty",json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty",json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty",json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty",json:"created_at,omitempty"`
-        Currency string `url:",omitempty",json:"currency,omitempty"`
-        Description string `url:",omitempty",json:"description,omitempty"`
-        Id string `url:",omitempty",json:"id,omitempty"`
+      Amount string `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+        Currency string `url:",omitempty" json:"currency,omitempty"`
+        Description string `url:",omitempty" json:"description,omitempty"`
+        Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
-      Creditor string `url:",omitempty",json:"creditor,omitempty"`
-        Mandate string `url:",omitempty",json:"mandate,omitempty"`
-        Payout string `url:",omitempty",json:"payout,omitempty"`
-        Subscription string `url:",omitempty",json:"subscription,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+        Mandate string `url:",omitempty" json:"mandate,omitempty"`
+        Payout string `url:",omitempty" json:"payout,omitempty"`
+        Subscription string `url:",omitempty" json:"subscription,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty",json:"metadata,omitempty"`
-        Reference string `url:",omitempty",json:"reference,omitempty"`
-        Status string `url:",omitempty",json:"status,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+        Reference string `url:",omitempty" json:"reference,omitempty"`
+        Status string `url:",omitempty" json:"status,omitempty"`
         
-    } `url:",omitempty",json:"payments,omitempty"`
+    } `url:",omitempty" json:"payments,omitempty"`
         
     }
 

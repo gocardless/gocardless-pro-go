@@ -26,30 +26,30 @@ type MandatePdfService struct {
 
 // MandatePdfCreateParams parameters
 type MandatePdfCreateParams struct {
-      AccountHolderName string `url:",omitempty",json:"account_holder_name,omitempty"`
-        AccountNumber string `url:",omitempty",json:"account_number,omitempty"`
-        BankCode string `url:",omitempty",json:"bank_code,omitempty"`
-        Bic string `url:",omitempty",json:"bic,omitempty"`
-        BranchCode string `url:",omitempty",json:"branch_code,omitempty"`
-        CountryCode string `url:",omitempty",json:"country_code,omitempty"`
-        Iban string `url:",omitempty",json:"iban,omitempty"`
+      AccountHolderName string `url:",omitempty" json:"account_holder_name,omitempty"`
+        AccountNumber string `url:",omitempty" json:"account_number,omitempty"`
+        BankCode string `url:",omitempty" json:"bank_code,omitempty"`
+        Bic string `url:",omitempty" json:"bic,omitempty"`
+        BranchCode string `url:",omitempty" json:"branch_code,omitempty"`
+        CountryCode string `url:",omitempty" json:"country_code,omitempty"`
+        Iban string `url:",omitempty" json:"iban,omitempty"`
         Links struct {
-      Mandate string `url:",omitempty",json:"mandate,omitempty"`
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
         
-    } `url:",omitempty",json:"links,omitempty"`
-        MandateReference string `url:",omitempty",json:"mandate_reference,omitempty"`
-        Scheme string `url:",omitempty",json:"scheme,omitempty"`
-        SignatureDate string `url:",omitempty",json:"signature_date,omitempty"`
-        SwedishIdentityNumber string `url:",omitempty",json:"swedish_identity_number,omitempty"`
+    } `url:",omitempty" json:"links,omitempty"`
+        MandateReference string `url:",omitempty" json:"mandate_reference,omitempty"`
+        Scheme string `url:",omitempty" json:"scheme,omitempty"`
+        SignatureDate string `url:",omitempty" json:"signature_date,omitempty"`
+        SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
         
     }
 // MandatePdfCreateResult parameters
 type MandatePdfCreateResult struct {
       MandatePdfs struct {
-      ExpiresAt string `url:",omitempty",json:"expires_at,omitempty"`
-        Url string `url:",omitempty",json:"url,omitempty"`
+      ExpiresAt string `url:",omitempty" json:"expires_at,omitempty"`
+        Url string `url:",omitempty" json:"url,omitempty"`
         
-    } `url:",omitempty",json:"mandate_pdfs,omitempty"`
+    } `url:",omitempty" json:"mandate_pdfs,omitempty"`
         
     }
 
