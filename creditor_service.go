@@ -151,7 +151,7 @@ type CreditorListParams struct {
         Lte string `url:",omitempty" json:"lte,omitempty"`
         
     } `url:",omitempty" json:"created_at,omitempty"`
-        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         
     }
 // CreditorListResult parameters

@@ -150,7 +150,7 @@ type CustomerBankAccountListParams struct {
     } `url:",omitempty" json:"created_at,omitempty"`
         Customer string `url:",omitempty" json:"customer,omitempty"`
         Enabled bool `url:",omitempty" json:"enabled,omitempty"`
-        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         
     }
 // CustomerBankAccountListResult parameters

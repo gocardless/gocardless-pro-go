@@ -37,7 +37,7 @@ type EventListParams struct {
         
     } `url:",omitempty" json:"created_at,omitempty"`
         Include string `url:",omitempty" json:"include,omitempty"`
-        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         Mandate string `url:",omitempty" json:"mandate,omitempty"`
         ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
         Payment string `url:",omitempty" json:"payment,omitempty"`

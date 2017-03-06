@@ -26,8 +26,8 @@ type PaymentService struct {
 
 // PaymentCreateParams parameters
 type PaymentCreateParams struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
-        AppFee string `url:",omitempty" json:"app_fee,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+        AppFee int `url:",omitempty" json:"app_fee,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
         Description string `url:",omitempty" json:"description,omitempty"`
@@ -42,8 +42,8 @@ type PaymentCreateParams struct {
 // PaymentCreateResult parameters
 type PaymentCreateResult struct {
       Payments struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
@@ -144,7 +144,7 @@ type PaymentListParams struct {
         Creditor string `url:",omitempty" json:"creditor,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
         Customer string `url:",omitempty" json:"customer,omitempty"`
-        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         Mandate string `url:",omitempty" json:"mandate,omitempty"`
         Status string `url:",omitempty" json:"status,omitempty"`
         Subscription string `url:",omitempty" json:"subscription,omitempty"`
@@ -162,8 +162,8 @@ type PaymentListResult struct {
         
     } `url:",omitempty" json:"meta,omitempty"`
         Payments []struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
@@ -245,8 +245,8 @@ func (s *PaymentService) List(
 // PaymentGetResult parameters
 type PaymentGetResult struct {
       Payments struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
@@ -329,8 +329,8 @@ type PaymentUpdateParams struct {
 // PaymentUpdateResult parameters
 type PaymentUpdateResult struct {
       Payments struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
@@ -421,8 +421,8 @@ type PaymentCancelParams struct {
 // PaymentCancelResult parameters
 type PaymentCancelResult struct {
       Payments struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
@@ -518,8 +518,8 @@ type PaymentRetryParams struct {
 // PaymentRetryResult parameters
 type PaymentRetryResult struct {
       Payments struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded string `url:",omitempty" json:"amount_refunded,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`

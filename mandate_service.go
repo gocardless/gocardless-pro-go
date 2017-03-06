@@ -133,7 +133,7 @@ type MandateListParams struct {
         Creditor string `url:",omitempty" json:"creditor,omitempty"`
         Customer string `url:",omitempty" json:"customer,omitempty"`
         CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         Reference string `url:",omitempty" json:"reference,omitempty"`
         Status []string `url:",omitempty" json:"status,omitempty"`
         

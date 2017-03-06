@@ -38,7 +38,7 @@ type PayoutListParams struct {
         Creditor string `url:",omitempty" json:"creditor,omitempty"`
         CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
-        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         Status string `url:",omitempty" json:"status,omitempty"`
         
     }
@@ -54,11 +54,11 @@ type PayoutListResult struct {
         
     } `url:",omitempty" json:"meta,omitempty"`
         Payouts []struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         ArrivalDate string `url:",omitempty" json:"arrival_date,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
-        DeductedFees string `url:",omitempty" json:"deducted_fees,omitempty"`
+        DeductedFees int `url:",omitempty" json:"deducted_fees,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
@@ -133,11 +133,11 @@ func (s *PayoutService) List(
 // PayoutGetResult parameters
 type PayoutGetResult struct {
       Payouts struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         ArrivalDate string `url:",omitempty" json:"arrival_date,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
-        DeductedFees string `url:",omitempty" json:"deducted_fees,omitempty"`
+        DeductedFees int `url:",omitempty" json:"deducted_fees,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
         Links struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`

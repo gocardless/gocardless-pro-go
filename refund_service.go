@@ -26,20 +26,20 @@ type RefundService struct {
 
 // RefundCreateParams parameters
 type RefundCreateParams struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         Links struct {
       Payment string `url:",omitempty" json:"payment,omitempty"`
         
     } `url:",omitempty" json:"links,omitempty"`
         Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
         Reference string `url:",omitempty" json:"reference,omitempty"`
-        TotalAmountConfirmation string `url:",omitempty" json:"total_amount_confirmation,omitempty"`
+        TotalAmountConfirmation int `url:",omitempty" json:"total_amount_confirmation,omitempty"`
         
     }
 // RefundCreateResult parameters
 type RefundCreateResult struct {
       Refunds struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
@@ -144,7 +144,7 @@ type RefundListParams struct {
         Lte string `url:",omitempty" json:"lte,omitempty"`
         
     } `url:",omitempty" json:"created_at,omitempty"`
-        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         Payment string `url:",omitempty" json:"payment,omitempty"`
         
     }
@@ -160,7 +160,7 @@ type RefundListResult struct {
         
     } `url:",omitempty" json:"meta,omitempty"`
         Refunds []struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
@@ -236,7 +236,7 @@ func (s *RefundService) List(
 // RefundGetResult parameters
 type RefundGetResult struct {
       Refunds struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
@@ -313,7 +313,7 @@ type RefundUpdateParams struct {
 // RefundUpdateResult parameters
 type RefundUpdateResult struct {
       Refunds struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`

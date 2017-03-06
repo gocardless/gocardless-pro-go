@@ -26,12 +26,12 @@ type SubscriptionService struct {
 
 // SubscriptionCreateParams parameters
 type SubscriptionCreateParams struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
-        Count string `url:",omitempty" json:"count,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+        Count int `url:",omitempty" json:"count,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
-        DayOfMonth string `url:",omitempty" json:"day_of_month,omitempty"`
+        DayOfMonth int `url:",omitempty" json:"day_of_month,omitempty"`
         EndDate string `url:",omitempty" json:"end_date,omitempty"`
-        Interval string `url:",omitempty" json:"interval,omitempty"`
+        Interval int `url:",omitempty" json:"interval,omitempty"`
         IntervalUnit string `url:",omitempty" json:"interval_unit,omitempty"`
         Links struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
@@ -47,13 +47,13 @@ type SubscriptionCreateParams struct {
 // SubscriptionCreateResult parameters
 type SubscriptionCreateResult struct {
       Subscriptions struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
-        DayOfMonth string `url:",omitempty" json:"day_of_month,omitempty"`
+        DayOfMonth int `url:",omitempty" json:"day_of_month,omitempty"`
         EndDate string `url:",omitempty" json:"end_date,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
-        Interval string `url:",omitempty" json:"interval,omitempty"`
+        Interval int `url:",omitempty" json:"interval,omitempty"`
         IntervalUnit string `url:",omitempty" json:"interval_unit,omitempty"`
         Links struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
@@ -66,7 +66,7 @@ type SubscriptionCreateResult struct {
         StartDate string `url:",omitempty" json:"start_date,omitempty"`
         Status string `url:",omitempty" json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         
     } `url:",omitempty" json:"upcoming_payments,omitempty"`
@@ -147,7 +147,7 @@ type SubscriptionListParams struct {
         
     } `url:",omitempty" json:"created_at,omitempty"`
         Customer string `url:",omitempty" json:"customer,omitempty"`
-        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         Mandate string `url:",omitempty" json:"mandate,omitempty"`
         
     }
@@ -163,13 +163,13 @@ type SubscriptionListResult struct {
         
     } `url:",omitempty" json:"meta,omitempty"`
         Subscriptions []struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
-        DayOfMonth string `url:",omitempty" json:"day_of_month,omitempty"`
+        DayOfMonth int `url:",omitempty" json:"day_of_month,omitempty"`
         EndDate string `url:",omitempty" json:"end_date,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
-        Interval string `url:",omitempty" json:"interval,omitempty"`
+        Interval int `url:",omitempty" json:"interval,omitempty"`
         IntervalUnit string `url:",omitempty" json:"interval_unit,omitempty"`
         Links struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
@@ -182,7 +182,7 @@ type SubscriptionListResult struct {
         StartDate string `url:",omitempty" json:"start_date,omitempty"`
         Status string `url:",omitempty" json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         
     } `url:",omitempty" json:"upcoming_payments,omitempty"`
@@ -252,13 +252,13 @@ func (s *SubscriptionService) List(
 // SubscriptionGetResult parameters
 type SubscriptionGetResult struct {
       Subscriptions struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
-        DayOfMonth string `url:",omitempty" json:"day_of_month,omitempty"`
+        DayOfMonth int `url:",omitempty" json:"day_of_month,omitempty"`
         EndDate string `url:",omitempty" json:"end_date,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
-        Interval string `url:",omitempty" json:"interval,omitempty"`
+        Interval int `url:",omitempty" json:"interval,omitempty"`
         IntervalUnit string `url:",omitempty" json:"interval_unit,omitempty"`
         Links struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
@@ -271,7 +271,7 @@ type SubscriptionGetResult struct {
         StartDate string `url:",omitempty" json:"start_date,omitempty"`
         Status string `url:",omitempty" json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         
     } `url:",omitempty" json:"upcoming_payments,omitempty"`
@@ -344,13 +344,13 @@ type SubscriptionUpdateParams struct {
 // SubscriptionUpdateResult parameters
 type SubscriptionUpdateResult struct {
       Subscriptions struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
-        DayOfMonth string `url:",omitempty" json:"day_of_month,omitempty"`
+        DayOfMonth int `url:",omitempty" json:"day_of_month,omitempty"`
         EndDate string `url:",omitempty" json:"end_date,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
-        Interval string `url:",omitempty" json:"interval,omitempty"`
+        Interval int `url:",omitempty" json:"interval,omitempty"`
         IntervalUnit string `url:",omitempty" json:"interval_unit,omitempty"`
         Links struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
@@ -363,7 +363,7 @@ type SubscriptionUpdateResult struct {
         StartDate string `url:",omitempty" json:"start_date,omitempty"`
         Status string `url:",omitempty" json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         
     } `url:",omitempty" json:"upcoming_payments,omitempty"`
@@ -442,13 +442,13 @@ type SubscriptionCancelParams struct {
 // SubscriptionCancelResult parameters
 type SubscriptionCancelResult struct {
       Subscriptions struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
         Currency string `url:",omitempty" json:"currency,omitempty"`
-        DayOfMonth string `url:",omitempty" json:"day_of_month,omitempty"`
+        DayOfMonth int `url:",omitempty" json:"day_of_month,omitempty"`
         EndDate string `url:",omitempty" json:"end_date,omitempty"`
         Id string `url:",omitempty" json:"id,omitempty"`
-        Interval string `url:",omitempty" json:"interval,omitempty"`
+        Interval int `url:",omitempty" json:"interval,omitempty"`
         IntervalUnit string `url:",omitempty" json:"interval_unit,omitempty"`
         Links struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
@@ -461,7 +461,7 @@ type SubscriptionCancelResult struct {
         StartDate string `url:",omitempty" json:"start_date,omitempty"`
         Status string `url:",omitempty" json:"status,omitempty"`
         UpcomingPayments []struct {
-      Amount string `url:",omitempty" json:"amount,omitempty"`
+      Amount int `url:",omitempty" json:"amount,omitempty"`
         ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
         
     } `url:",omitempty" json:"upcoming_payments,omitempty"`

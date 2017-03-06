@@ -135,7 +135,7 @@ type CreditorBankAccountListParams struct {
     } `url:",omitempty" json:"created_at,omitempty"`
         Creditor string `url:",omitempty" json:"creditor,omitempty"`
         Enabled bool `url:",omitempty" json:"enabled,omitempty"`
-        Limit string `url:",omitempty" json:"limit,omitempty"`
+        Limit int `url:",omitempty" json:"limit,omitempty"`
         
     }
 // CreditorBankAccountListResult parameters
