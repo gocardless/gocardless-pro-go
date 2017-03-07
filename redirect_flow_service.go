@@ -265,7 +265,7 @@ func (s *RedirectFlowService) Complete(
 
   var buf bytes.Buffer
   err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-    "redirect_flows": p,
+    "data": p,
   })
   if err != nil {
     return nil, err

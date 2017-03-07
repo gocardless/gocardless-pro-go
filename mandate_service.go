@@ -445,7 +445,7 @@ func (s *MandateService) Cancel(
 
   var buf bytes.Buffer
   err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-    "mandates": p,
+    "data": p,
   })
   if err != nil {
     return nil, err
@@ -547,7 +547,7 @@ func (s *MandateService) Reinstate(
 
   var buf bytes.Buffer
   err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-    "mandates": p,
+    "data": p,
   })
   if err != nil {
     return nil, err

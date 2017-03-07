@@ -493,7 +493,7 @@ func (s *SubscriptionService) Cancel(
 
   var buf bytes.Buffer
   err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-    "subscriptions": p,
+    "data": p,
   })
   if err != nil {
     return nil, err

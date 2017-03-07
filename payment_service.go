@@ -465,7 +465,7 @@ func (s *PaymentService) Cancel(
 
   var buf bytes.Buffer
   err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-    "payments": p,
+    "data": p,
   })
   if err != nil {
     return nil, err
@@ -568,7 +568,7 @@ func (s *PaymentService) Retry(
 
   var buf bytes.Buffer
   err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-    "payments": p,
+    "data": p,
   })
   if err != nil {
     return nil, err
