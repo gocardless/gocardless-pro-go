@@ -24,61 +24,71 @@ type PayoutService struct {
 }
 
 
+// Payout model
+type Payout struct {
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+      ArrivalDate string `url:",omitempty" json:"arrival_date,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Currency string `url:",omitempty" json:"currency,omitempty"`
+      DeductedFees int `url:",omitempty" json:"deducted_fees,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+      CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      Status string `url:",omitempty" json:"status,omitempty"`
+      }
+
+
+
 
 // PayoutListParams parameters
 type PayoutListParams struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        CreatedAt struct {
+      Before string `url:",omitempty" json:"before,omitempty"`
+      CreatedAt struct {
       Gt string `url:",omitempty" json:"gt,omitempty"`
-        Gte string `url:",omitempty" json:"gte,omitempty"`
-        Lt string `url:",omitempty" json:"lt,omitempty"`
-        Lte string `url:",omitempty" json:"lte,omitempty"`
-        
-    } `url:",omitempty" json:"created_at,omitempty"`
-        Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    }
+      Gte string `url:",omitempty" json:"gte,omitempty"`
+      Lt string `url:",omitempty" json:"lt,omitempty"`
+      Lte string `url:",omitempty" json:"lte,omitempty"`
+      } `url:",omitempty" json:"created_at,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+      CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
+      Currency string `url:",omitempty" json:"currency,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      Status string `url:",omitempty" json:"status,omitempty"`
+      }
 // PayoutListResult parameters
 type PayoutListResult struct {
       Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        
-    } `url:",omitempty" json:"cursors,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        
-    } `url:",omitempty" json:"meta,omitempty"`
-        Payouts []struct {
+      Before string `url:",omitempty" json:"before,omitempty"`
+      } `url:",omitempty" json:"cursors,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      } `url:",omitempty" json:"meta,omitempty"`
+      Payouts []struct {
       Amount int `url:",omitempty" json:"amount,omitempty"`
-        ArrivalDate string `url:",omitempty" json:"arrival_date,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        DeductedFees int `url:",omitempty" json:"deducted_fees,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
+      ArrivalDate string `url:",omitempty" json:"arrival_date,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Currency string `url:",omitempty" json:"currency,omitempty"`
+      DeductedFees int `url:",omitempty" json:"deducted_fees,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"payouts,omitempty"`
-        
-    }
+      CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      Status string `url:",omitempty" json:"status,omitempty"`
+      } `url:",omitempty" json:"payouts,omitempty"`
+      }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // payouts.
 func (s *PayoutService) List(ctx context.Context, p PayoutListParams) (*PayoutListResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/payouts",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payouts",))
   if err != nil {
     return nil, err
   }
@@ -133,32 +143,15 @@ func (s *PayoutService) List(ctx context.Context, p PayoutListParams) (*PayoutLi
 
 // PayoutGetResult parameters
 type PayoutGetResult struct {
-      Payouts struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-        ArrivalDate string `url:",omitempty" json:"arrival_date,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        DeductedFees int `url:",omitempty" json:"deducted_fees,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"payouts,omitempty"`
-        
-    }
+      Payouts Payout `url:",omitempty" json:"payouts,omitempty"`
+      }
 
 // Get
 // Retrieves the details of a single payout. For an example of how to reconcile
 // the transactions in a payout, see [this
 // guide](#events-reconciling-payouts-with-events).
 func (s *PayoutService) Get(ctx context.Context,identity string) (*PayoutGetResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/payouts/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payouts/%v",
       identity,))
   if err != nil {
     return nil, err

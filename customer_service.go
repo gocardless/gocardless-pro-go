@@ -24,54 +24,55 @@ type CustomerService struct {
 }
 
 
+// Customer model
+type Customer struct {
+      AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
+      AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
+      AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
+      City string `url:",omitempty" json:"city,omitempty"`
+      CompanyName string `url:",omitempty" json:"company_name,omitempty"`
+      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Email string `url:",omitempty" json:"email,omitempty"`
+      FamilyName string `url:",omitempty" json:"family_name,omitempty"`
+      GivenName string `url:",omitempty" json:"given_name,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Language string `url:",omitempty" json:"language,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
+      Region string `url:",omitempty" json:"region,omitempty"`
+      SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
+      }
+
+
+
 
 // CustomerCreateParams parameters
 type CustomerCreateParams struct {
       AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-        AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-        AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-        City string `url:",omitempty" json:"city,omitempty"`
-        CompanyName string `url:",omitempty" json:"company_name,omitempty"`
-        CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-        Email string `url:",omitempty" json:"email,omitempty"`
-        FamilyName string `url:",omitempty" json:"family_name,omitempty"`
-        GivenName string `url:",omitempty" json:"given_name,omitempty"`
-        Language string `url:",omitempty" json:"language,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-        Region string `url:",omitempty" json:"region,omitempty"`
-        SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
-        
-    }
+      AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
+      AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
+      City string `url:",omitempty" json:"city,omitempty"`
+      CompanyName string `url:",omitempty" json:"company_name,omitempty"`
+      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
+      Email string `url:",omitempty" json:"email,omitempty"`
+      FamilyName string `url:",omitempty" json:"family_name,omitempty"`
+      GivenName string `url:",omitempty" json:"given_name,omitempty"`
+      Language string `url:",omitempty" json:"language,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
+      Region string `url:",omitempty" json:"region,omitempty"`
+      SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
+      }
 // CustomerCreateResult parameters
 type CustomerCreateResult struct {
-      Customers struct {
-      AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-        AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-        AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-        City string `url:",omitempty" json:"city,omitempty"`
-        CompanyName string `url:",omitempty" json:"company_name,omitempty"`
-        CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Email string `url:",omitempty" json:"email,omitempty"`
-        FamilyName string `url:",omitempty" json:"family_name,omitempty"`
-        GivenName string `url:",omitempty" json:"given_name,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Language string `url:",omitempty" json:"language,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-        Region string `url:",omitempty" json:"region,omitempty"`
-        SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
-        
-    } `url:",omitempty" json:"customers,omitempty"`
-        
-    }
+      Customers Customer `url:",omitempty" json:"customers,omitempty"`
+      }
 
 // Create
 // Creates a new customer object.
 func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams) (*CustomerCreateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/customers",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers",))
   if err != nil {
     return nil, err
   }
@@ -131,56 +132,49 @@ func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams) (*
 // CustomerListParams parameters
 type CustomerListParams struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        CreatedAt struct {
+      Before string `url:",omitempty" json:"before,omitempty"`
+      CreatedAt struct {
       Gt string `url:",omitempty" json:"gt,omitempty"`
-        Gte string `url:",omitempty" json:"gte,omitempty"`
-        Lt string `url:",omitempty" json:"lt,omitempty"`
-        Lte string `url:",omitempty" json:"lte,omitempty"`
-        
-    } `url:",omitempty" json:"created_at,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        
-    }
+      Gte string `url:",omitempty" json:"gte,omitempty"`
+      Lt string `url:",omitempty" json:"lt,omitempty"`
+      Lte string `url:",omitempty" json:"lte,omitempty"`
+      } `url:",omitempty" json:"created_at,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      }
 // CustomerListResult parameters
 type CustomerListResult struct {
       Customers []struct {
       AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-        AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-        AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-        City string `url:",omitempty" json:"city,omitempty"`
-        CompanyName string `url:",omitempty" json:"company_name,omitempty"`
-        CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Email string `url:",omitempty" json:"email,omitempty"`
-        FamilyName string `url:",omitempty" json:"family_name,omitempty"`
-        GivenName string `url:",omitempty" json:"given_name,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Language string `url:",omitempty" json:"language,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-        Region string `url:",omitempty" json:"region,omitempty"`
-        SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
-        
-    } `url:",omitempty" json:"customers,omitempty"`
-        Meta struct {
+      AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
+      AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
+      City string `url:",omitempty" json:"city,omitempty"`
+      CompanyName string `url:",omitempty" json:"company_name,omitempty"`
+      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Email string `url:",omitempty" json:"email,omitempty"`
+      FamilyName string `url:",omitempty" json:"family_name,omitempty"`
+      GivenName string `url:",omitempty" json:"given_name,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Language string `url:",omitempty" json:"language,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
+      Region string `url:",omitempty" json:"region,omitempty"`
+      SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
+      } `url:",omitempty" json:"customers,omitempty"`
+      Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        
-    } `url:",omitempty" json:"cursors,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        
-    } `url:",omitempty" json:"meta,omitempty"`
-        
-    }
+      Before string `url:",omitempty" json:"before,omitempty"`
+      } `url:",omitempty" json:"cursors,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      } `url:",omitempty" json:"meta,omitempty"`
+      }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // customers.
 func (s *CustomerService) List(ctx context.Context, p CustomerListParams) (*CustomerListResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/customers",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers",))
   if err != nil {
     return nil, err
   }
@@ -235,33 +229,13 @@ func (s *CustomerService) List(ctx context.Context, p CustomerListParams) (*Cust
 
 // CustomerGetResult parameters
 type CustomerGetResult struct {
-      Customers struct {
-      AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-        AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-        AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-        City string `url:",omitempty" json:"city,omitempty"`
-        CompanyName string `url:",omitempty" json:"company_name,omitempty"`
-        CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Email string `url:",omitempty" json:"email,omitempty"`
-        FamilyName string `url:",omitempty" json:"family_name,omitempty"`
-        GivenName string `url:",omitempty" json:"given_name,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Language string `url:",omitempty" json:"language,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-        Region string `url:",omitempty" json:"region,omitempty"`
-        SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
-        
-    } `url:",omitempty" json:"customers,omitempty"`
-        
-    }
+      Customers Customer `url:",omitempty" json:"customers,omitempty"`
+      }
 
 // Get
 // Retrieves the details of an existing customer.
 func (s *CustomerService) Get(ctx context.Context,identity string) (*CustomerGetResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/customers/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers/%v",
       identity,))
   if err != nil {
     return nil, err
@@ -314,51 +288,30 @@ func (s *CustomerService) Get(ctx context.Context,identity string) (*CustomerGet
 // CustomerUpdateParams parameters
 type CustomerUpdateParams struct {
       AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-        AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-        AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-        City string `url:",omitempty" json:"city,omitempty"`
-        CompanyName string `url:",omitempty" json:"company_name,omitempty"`
-        CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-        Email string `url:",omitempty" json:"email,omitempty"`
-        FamilyName string `url:",omitempty" json:"family_name,omitempty"`
-        GivenName string `url:",omitempty" json:"given_name,omitempty"`
-        Language string `url:",omitempty" json:"language,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-        Region string `url:",omitempty" json:"region,omitempty"`
-        SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
-        
-    }
+      AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
+      AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
+      City string `url:",omitempty" json:"city,omitempty"`
+      CompanyName string `url:",omitempty" json:"company_name,omitempty"`
+      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
+      Email string `url:",omitempty" json:"email,omitempty"`
+      FamilyName string `url:",omitempty" json:"family_name,omitempty"`
+      GivenName string `url:",omitempty" json:"given_name,omitempty"`
+      Language string `url:",omitempty" json:"language,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
+      Region string `url:",omitempty" json:"region,omitempty"`
+      SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
+      }
 // CustomerUpdateResult parameters
 type CustomerUpdateResult struct {
-      Customers struct {
-      AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-        AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-        AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-        City string `url:",omitempty" json:"city,omitempty"`
-        CompanyName string `url:",omitempty" json:"company_name,omitempty"`
-        CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Email string `url:",omitempty" json:"email,omitempty"`
-        FamilyName string `url:",omitempty" json:"family_name,omitempty"`
-        GivenName string `url:",omitempty" json:"given_name,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Language string `url:",omitempty" json:"language,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-        Region string `url:",omitempty" json:"region,omitempty"`
-        SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
-        
-    } `url:",omitempty" json:"customers,omitempty"`
-        
-    }
+      Customers Customer `url:",omitempty" json:"customers,omitempty"`
+      }
 
 // Update
 // Updates a customer object. Supports all of the fields supported when creating
 // a customer.
 func (s *CustomerService) Update(ctx context.Context,identity string, p CustomerUpdateParams) (*CustomerUpdateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/customers/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers/%v",
       identity,))
   if err != nil {
     return nil, err

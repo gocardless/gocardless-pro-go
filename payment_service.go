@@ -24,46 +24,46 @@ type PaymentService struct {
 }
 
 
+// Payment model
+type Payment struct {
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+      AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
+      ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Currency string `url:",omitempty" json:"currency,omitempty"`
+      Description string `url:",omitempty" json:"description,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
+      Payout string `url:",omitempty" json:"payout,omitempty"`
+      Subscription string `url:",omitempty" json:"subscription,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      Status string `url:",omitempty" json:"status,omitempty"`
+      }
+
+
+
 
 // PaymentCreateParams parameters
 type PaymentCreateParams struct {
       Amount int `url:",omitempty" json:"amount,omitempty"`
-        AppFee int `url:",omitempty" json:"app_fee,omitempty"`
-        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Links struct {
+      AppFee int `url:",omitempty" json:"app_fee,omitempty"`
+      ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+      Currency string `url:",omitempty" json:"currency,omitempty"`
+      Description string `url:",omitempty" json:"description,omitempty"`
+      Links struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        
-    }
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      }
 // PaymentCreateResult parameters
 type PaymentCreateResult struct {
-      Payments struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        Payout string `url:",omitempty" json:"payout,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"payments,omitempty"`
-        
-    }
+      Payments Payment `url:",omitempty" json:"payments,omitempty"`
+      }
 
 // Create
 // <a name="mandate_is_inactive"></a>Creates a new payment object.
@@ -74,8 +74,7 @@ type PaymentCreateResult struct {
 // be created against mandates with status of: `pending_customer_approval`,
 // `pending_submission`, `submitted`, and `active`.
 func (s *PaymentService) Create(ctx context.Context, p PaymentCreateParams) (*PaymentCreateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/payments",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments",))
   if err != nil {
     return nil, err
   }
@@ -135,63 +134,55 @@ func (s *PaymentService) Create(ctx context.Context, p PaymentCreateParams) (*Pa
 // PaymentListParams parameters
 type PaymentListParams struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        CreatedAt struct {
+      Before string `url:",omitempty" json:"before,omitempty"`
+      CreatedAt struct {
       Gt string `url:",omitempty" json:"gt,omitempty"`
-        Gte string `url:",omitempty" json:"gte,omitempty"`
-        Lt string `url:",omitempty" json:"lt,omitempty"`
-        Lte string `url:",omitempty" json:"lte,omitempty"`
-        
-    } `url:",omitempty" json:"created_at,omitempty"`
-        Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    }
+      Gte string `url:",omitempty" json:"gte,omitempty"`
+      Lt string `url:",omitempty" json:"lt,omitempty"`
+      Lte string `url:",omitempty" json:"lte,omitempty"`
+      } `url:",omitempty" json:"created_at,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+      Currency string `url:",omitempty" json:"currency,omitempty"`
+      Customer string `url:",omitempty" json:"customer,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
+      Status string `url:",omitempty" json:"status,omitempty"`
+      Subscription string `url:",omitempty" json:"subscription,omitempty"`
+      }
 // PaymentListResult parameters
 type PaymentListResult struct {
       Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        
-    } `url:",omitempty" json:"cursors,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        
-    } `url:",omitempty" json:"meta,omitempty"`
-        Payments []struct {
+      Before string `url:",omitempty" json:"before,omitempty"`
+      } `url:",omitempty" json:"cursors,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      } `url:",omitempty" json:"meta,omitempty"`
+      Payments []struct {
       Amount int `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
+      AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
+      ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Currency string `url:",omitempty" json:"currency,omitempty"`
+      Description string `url:",omitempty" json:"description,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        Payout string `url:",omitempty" json:"payout,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"payments,omitempty"`
-        
-    }
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
+      Payout string `url:",omitempty" json:"payout,omitempty"`
+      Subscription string `url:",omitempty" json:"subscription,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      Status string `url:",omitempty" json:"status,omitempty"`
+      } `url:",omitempty" json:"payments,omitempty"`
+      }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // payments.
 func (s *PaymentService) List(ctx context.Context, p PaymentListParams) (*PaymentListResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/payments",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments",))
   if err != nil {
     return nil, err
   }
@@ -246,34 +237,13 @@ func (s *PaymentService) List(ctx context.Context, p PaymentListParams) (*Paymen
 
 // PaymentGetResult parameters
 type PaymentGetResult struct {
-      Payments struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        Payout string `url:",omitempty" json:"payout,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"payments,omitempty"`
-        
-    }
+      Payments Payment `url:",omitempty" json:"payments,omitempty"`
+      }
 
 // Get
 // Retrieves the details of a single existing payment.
 func (s *PaymentService) Get(ctx context.Context,identity string) (*PaymentGetResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/payments/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments/%v",
       identity,))
   if err != nil {
     return nil, err
@@ -326,38 +296,16 @@ func (s *PaymentService) Get(ctx context.Context,identity string) (*PaymentGetRe
 // PaymentUpdateParams parameters
 type PaymentUpdateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        
-    }
+      }
 // PaymentUpdateResult parameters
 type PaymentUpdateResult struct {
-      Payments struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        Payout string `url:",omitempty" json:"payout,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"payments,omitempty"`
-        
-    }
+      Payments Payment `url:",omitempty" json:"payments,omitempty"`
+      }
 
 // Update
 // Updates a payment object. This accepts only the metadata parameter.
 func (s *PaymentService) Update(ctx context.Context,identity string, p PaymentUpdateParams) (*PaymentUpdateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/payments/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments/%v",
       identity,))
   if err != nil {
     return nil, err
@@ -418,32 +366,11 @@ func (s *PaymentService) Update(ctx context.Context,identity string, p PaymentUp
 // PaymentCancelParams parameters
 type PaymentCancelParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        
-    }
+      }
 // PaymentCancelResult parameters
 type PaymentCancelResult struct {
-      Payments struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        Payout string `url:",omitempty" json:"payout,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"payments,omitempty"`
-        
-    }
+      Payments Payment `url:",omitempty" json:"payments,omitempty"`
+      }
 
 // Cancel
 // Cancels the payment if it has not already been submitted to the banks. Any
@@ -453,8 +380,7 @@ type PaymentCancelResult struct {
 // This will fail with a `cancellation_failed` error
 // unless the payment's status is `pending_submission`.
 func (s *PaymentService) Cancel(ctx context.Context,identity string, p PaymentCancelParams) (*PaymentCancelResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/payments/%v/actions/cancel",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments/%v/actions/cancel",
       identity,))
   if err != nil {
     return nil, err
@@ -515,32 +441,11 @@ func (s *PaymentService) Cancel(ctx context.Context,identity string, p PaymentCa
 // PaymentRetryParams parameters
 type PaymentRetryParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        
-    }
+      }
 // PaymentRetryResult parameters
 type PaymentRetryResult struct {
-      Payments struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-        AmountRefunded int `url:",omitempty" json:"amount_refunded,omitempty"`
-        ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        Payout string `url:",omitempty" json:"payout,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"payments,omitempty"`
-        
-    }
+      Payments Payment `url:",omitempty" json:"payments,omitempty"`
+      }
 
 // Retry
 // <a name="retry_failed"></a>Retries a failed payment if the underlying mandate
@@ -556,8 +461,7 @@ type PaymentRetryResult struct {
 // Payments can be
 // retried up to 3 times.
 func (s *PaymentService) Retry(ctx context.Context,identity string, p PaymentRetryParams) (*PaymentRetryResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/payments/%v/actions/retry",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments/%v/actions/retry",
       identity,))
   if err != nil {
     return nil, err

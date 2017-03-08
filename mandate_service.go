@@ -24,47 +24,46 @@ type MandateService struct {
 }
 
 
+// Mandate model
+type Mandate struct {
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+      Customer string `url:",omitempty" json:"customer,omitempty"`
+      CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+      NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
+      PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      Scheme string `url:",omitempty" json:"scheme,omitempty"`
+      Status string `url:",omitempty" json:"status,omitempty"`
+      }
+
+
+
 
 // MandateCreateParams parameters
 type MandateCreateParams struct {
       Links struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        
-    }
+      CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      Scheme string `url:",omitempty" json:"scheme,omitempty"`
+      }
 // MandateCreateResult parameters
 type MandateCreateResult struct {
-      Mandates struct {
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"mandates,omitempty"`
-        
-    }
+      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
+      }
 
 // Create
 // Creates a new mandate object.
 func (s *MandateService) Create(ctx context.Context, p MandateCreateParams) (*MandateCreateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/mandates",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates",))
   if err != nil {
     return nil, err
   }
@@ -124,60 +123,52 @@ func (s *MandateService) Create(ctx context.Context, p MandateCreateParams) (*Ma
 // MandateListParams parameters
 type MandateListParams struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        CreatedAt struct {
+      Before string `url:",omitempty" json:"before,omitempty"`
+      CreatedAt struct {
       Gt string `url:",omitempty" json:"gt,omitempty"`
-        Gte string `url:",omitempty" json:"gte,omitempty"`
-        Lt string `url:",omitempty" json:"lt,omitempty"`
-        Lte string `url:",omitempty" json:"lte,omitempty"`
-        
-    } `url:",omitempty" json:"created_at,omitempty"`
-        Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Status []string `url:",omitempty" json:"status,omitempty"`
-        
-    }
+      Gte string `url:",omitempty" json:"gte,omitempty"`
+      Lt string `url:",omitempty" json:"lt,omitempty"`
+      Lte string `url:",omitempty" json:"lte,omitempty"`
+      } `url:",omitempty" json:"created_at,omitempty"`
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+      Customer string `url:",omitempty" json:"customer,omitempty"`
+      CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      Status []string `url:",omitempty" json:"status,omitempty"`
+      }
 // MandateListResult parameters
 type MandateListResult struct {
       Mandates []struct {
       CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"mandates,omitempty"`
-        Meta struct {
+      Customer string `url:",omitempty" json:"customer,omitempty"`
+      CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+      NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
+      PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      Scheme string `url:",omitempty" json:"scheme,omitempty"`
+      Status string `url:",omitempty" json:"status,omitempty"`
+      } `url:",omitempty" json:"mandates,omitempty"`
+      Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        
-    } `url:",omitempty" json:"cursors,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        
-    } `url:",omitempty" json:"meta,omitempty"`
-        
-    }
+      Before string `url:",omitempty" json:"before,omitempty"`
+      } `url:",omitempty" json:"cursors,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      } `url:",omitempty" json:"meta,omitempty"`
+      }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // mandates.
 func (s *MandateService) List(ctx context.Context, p MandateListParams) (*MandateListResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/mandates",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates",))
   if err != nil {
     return nil, err
   }
@@ -232,32 +223,13 @@ func (s *MandateService) List(ctx context.Context, p MandateListParams) (*Mandat
 
 // MandateGetResult parameters
 type MandateGetResult struct {
-      Mandates struct {
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"mandates,omitempty"`
-        
-    }
+      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
+      }
 
 // Get
 // Retrieves the details of an existing mandate.
 func (s *MandateService) Get(ctx context.Context,identity string) (*MandateGetResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/mandates/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v",
       identity,))
   if err != nil {
     return nil, err
@@ -310,36 +282,16 @@ func (s *MandateService) Get(ctx context.Context,identity string) (*MandateGetRe
 // MandateUpdateParams parameters
 type MandateUpdateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        
-    }
+      }
 // MandateUpdateResult parameters
 type MandateUpdateResult struct {
-      Mandates struct {
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"mandates,omitempty"`
-        
-    }
+      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
+      }
 
 // Update
 // Updates a mandate object. This accepts only the metadata parameter.
 func (s *MandateService) Update(ctx context.Context,identity string, p MandateUpdateParams) (*MandateUpdateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/mandates/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v",
       identity,))
   if err != nil {
     return nil, err
@@ -400,30 +352,11 @@ func (s *MandateService) Update(ctx context.Context,identity string, p MandateUp
 // MandateCancelParams parameters
 type MandateCancelParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        
-    }
+      }
 // MandateCancelResult parameters
 type MandateCancelResult struct {
-      Mandates struct {
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"mandates,omitempty"`
-        
-    }
+      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
+      }
 
 // Cancel
 // Immediately cancels a mandate and all associated cancellable payments. Any
@@ -433,8 +366,7 @@ type MandateCancelResult struct {
 // This will fail with a `cancellation_failed` error if
 // the mandate is already cancelled.
 func (s *MandateService) Cancel(ctx context.Context,identity string, p MandateCancelParams) (*MandateCancelResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/mandates/%v/actions/cancel",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v/actions/cancel",
       identity,))
   if err != nil {
     return nil, err
@@ -495,30 +427,11 @@ func (s *MandateService) Cancel(ctx context.Context,identity string, p MandateCa
 // MandateReinstateParams parameters
 type MandateReinstateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        
-    }
+      }
 // MandateReinstateResult parameters
 type MandateReinstateResult struct {
-      Mandates struct {
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
-        PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        Status string `url:",omitempty" json:"status,omitempty"`
-        
-    } `url:",omitempty" json:"mandates,omitempty"`
-        
-    }
+      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
+      }
 
 // Reinstate
 // <a name="mandate_not_inactive"></a>Reinstates a cancelled or expired mandate
@@ -535,8 +448,7 @@ type MandateReinstateResult struct {
 // Mandates can be
 // resubmitted up to 3 times.
 func (s *MandateService) Reinstate(ctx context.Context,identity string, p MandateReinstateParams) (*MandateReinstateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/mandates/%v/actions/reinstate",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v/actions/reinstate",
       identity,))
   if err != nil {
     return nil, err

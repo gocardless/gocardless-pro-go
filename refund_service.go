@@ -24,36 +24,36 @@ type RefundService struct {
 }
 
 
+// Refund model
+type Refund struct {
+      Amount int `url:",omitempty" json:"amount,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Currency string `url:",omitempty" json:"currency,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
+      Payment string `url:",omitempty" json:"payment,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      }
+
+
+
 
 // RefundCreateParams parameters
 type RefundCreateParams struct {
       Amount int `url:",omitempty" json:"amount,omitempty"`
-        Links struct {
+      Links struct {
       Payment string `url:",omitempty" json:"payment,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        TotalAmountConfirmation int `url:",omitempty" json:"total_amount_confirmation,omitempty"`
-        
-    }
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      TotalAmountConfirmation int `url:",omitempty" json:"total_amount_confirmation,omitempty"`
+      }
 // RefundCreateResult parameters
 type RefundCreateResult struct {
-      Refunds struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Payment string `url:",omitempty" json:"payment,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        
-    } `url:",omitempty" json:"refunds,omitempty"`
-        
-    }
+      Refunds Refund `url:",omitempty" json:"refunds,omitempty"`
+      }
 
 // Create
 // Creates a new refund object.
@@ -77,8 +77,7 @@ type RefundCreateResult struct {
 // more refunds have already been created against the payment.
 // 
 func (s *RefundService) Create(ctx context.Context, p RefundCreateParams) (*RefundCreateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/refunds",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/refunds",))
   if err != nil {
     return nil, err
   }
@@ -138,51 +137,43 @@ func (s *RefundService) Create(ctx context.Context, p RefundCreateParams) (*Refu
 // RefundListParams parameters
 type RefundListParams struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        CreatedAt struct {
+      Before string `url:",omitempty" json:"before,omitempty"`
+      CreatedAt struct {
       Gt string `url:",omitempty" json:"gt,omitempty"`
-        Gte string `url:",omitempty" json:"gte,omitempty"`
-        Lt string `url:",omitempty" json:"lt,omitempty"`
-        Lte string `url:",omitempty" json:"lte,omitempty"`
-        
-    } `url:",omitempty" json:"created_at,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        Payment string `url:",omitempty" json:"payment,omitempty"`
-        
-    }
+      Gte string `url:",omitempty" json:"gte,omitempty"`
+      Lt string `url:",omitempty" json:"lt,omitempty"`
+      Lte string `url:",omitempty" json:"lte,omitempty"`
+      } `url:",omitempty" json:"created_at,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      Payment string `url:",omitempty" json:"payment,omitempty"`
+      }
 // RefundListResult parameters
 type RefundListResult struct {
       Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        
-    } `url:",omitempty" json:"cursors,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        
-    } `url:",omitempty" json:"meta,omitempty"`
-        Refunds []struct {
+      Before string `url:",omitempty" json:"before,omitempty"`
+      } `url:",omitempty" json:"cursors,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      } `url:",omitempty" json:"meta,omitempty"`
+      Refunds []struct {
       Amount int `url:",omitempty" json:"amount,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Currency string `url:",omitempty" json:"currency,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
       Payment string `url:",omitempty" json:"payment,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        
-    } `url:",omitempty" json:"refunds,omitempty"`
-        
-    }
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      Reference string `url:",omitempty" json:"reference,omitempty"`
+      } `url:",omitempty" json:"refunds,omitempty"`
+      }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // refunds.
 func (s *RefundService) List(ctx context.Context, p RefundListParams) (*RefundListResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/refunds",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/refunds",))
   if err != nil {
     return nil, err
   }
@@ -237,27 +228,13 @@ func (s *RefundService) List(ctx context.Context, p RefundListParams) (*RefundLi
 
 // RefundGetResult parameters
 type RefundGetResult struct {
-      Refunds struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Payment string `url:",omitempty" json:"payment,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        
-    } `url:",omitempty" json:"refunds,omitempty"`
-        
-    }
+      Refunds Refund `url:",omitempty" json:"refunds,omitempty"`
+      }
 
 // Get
 // Retrieves all details for a single refund
 func (s *RefundService) Get(ctx context.Context,identity string) (*RefundGetResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/refunds/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/refunds/%v",
       identity,))
   if err != nil {
     return nil, err
@@ -310,31 +287,16 @@ func (s *RefundService) Get(ctx context.Context,identity string) (*RefundGetResu
 // RefundUpdateParams parameters
 type RefundUpdateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        
-    }
+      }
 // RefundUpdateResult parameters
 type RefundUpdateResult struct {
-      Refunds struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Currency string `url:",omitempty" json:"currency,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Payment string `url:",omitempty" json:"payment,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        Reference string `url:",omitempty" json:"reference,omitempty"`
-        
-    } `url:",omitempty" json:"refunds,omitempty"`
-        
-    }
+      Refunds Refund `url:",omitempty" json:"refunds,omitempty"`
+      }
 
 // Update
 // Updates a refund object.
 func (s *RefundService) Update(ctx context.Context,identity string, p RefundUpdateParams) (*RefundUpdateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/refunds/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/refunds/%v",
       identity,))
   if err != nil {
     return nil, err

@@ -24,63 +24,61 @@ type RedirectFlowService struct {
 }
 
 
+// RedirectFlow model
+type RedirectFlow struct {
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Description string `url:",omitempty" json:"description,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
+      Creditor string `url:",omitempty" json:"creditor,omitempty"`
+      Customer string `url:",omitempty" json:"customer,omitempty"`
+      CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      RedirectUrl string `url:",omitempty" json:"redirect_url,omitempty"`
+      Scheme string `url:",omitempty" json:"scheme,omitempty"`
+      SessionToken string `url:",omitempty" json:"session_token,omitempty"`
+      SuccessRedirectUrl string `url:",omitempty" json:"success_redirect_url,omitempty"`
+      }
+
+
+
 
 // RedirectFlowCreateParams parameters
 type RedirectFlowCreateParams struct {
       Description string `url:",omitempty" json:"description,omitempty"`
-        Links struct {
+      Links struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        PrefilledCustomer struct {
+      } `url:",omitempty" json:"links,omitempty"`
+      PrefilledCustomer struct {
       AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-        AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-        AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-        City string `url:",omitempty" json:"city,omitempty"`
-        CompanyName string `url:",omitempty" json:"company_name,omitempty"`
-        CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-        Email string `url:",omitempty" json:"email,omitempty"`
-        FamilyName string `url:",omitempty" json:"family_name,omitempty"`
-        GivenName string `url:",omitempty" json:"given_name,omitempty"`
-        Language string `url:",omitempty" json:"language,omitempty"`
-        PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-        Region string `url:",omitempty" json:"region,omitempty"`
-        SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
-        
-    } `url:",omitempty" json:"prefilled_customer,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        SessionToken string `url:",omitempty" json:"session_token,omitempty"`
-        SuccessRedirectUrl string `url:",omitempty" json:"success_redirect_url,omitempty"`
-        
-    }
+      AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
+      AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
+      City string `url:",omitempty" json:"city,omitempty"`
+      CompanyName string `url:",omitempty" json:"company_name,omitempty"`
+      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
+      Email string `url:",omitempty" json:"email,omitempty"`
+      FamilyName string `url:",omitempty" json:"family_name,omitempty"`
+      GivenName string `url:",omitempty" json:"given_name,omitempty"`
+      Language string `url:",omitempty" json:"language,omitempty"`
+      PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
+      Region string `url:",omitempty" json:"region,omitempty"`
+      SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
+      } `url:",omitempty" json:"prefilled_customer,omitempty"`
+      Scheme string `url:",omitempty" json:"scheme,omitempty"`
+      SessionToken string `url:",omitempty" json:"session_token,omitempty"`
+      SuccessRedirectUrl string `url:",omitempty" json:"success_redirect_url,omitempty"`
+      }
 // RedirectFlowCreateResult parameters
 type RedirectFlowCreateResult struct {
-      RedirectFlows struct {
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        RedirectUrl string `url:",omitempty" json:"redirect_url,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        SessionToken string `url:",omitempty" json:"session_token,omitempty"`
-        SuccessRedirectUrl string `url:",omitempty" json:"success_redirect_url,omitempty"`
-        
-    } `url:",omitempty" json:"redirect_flows,omitempty"`
-        
-    }
+      RedirectFlows RedirectFlow `url:",omitempty" json:"redirect_flows,omitempty"`
+      }
 
 // Create
 // Creates a redirect flow object which can then be used to redirect your
 // customer to the GoCardless hosted payment pages.
 func (s *RedirectFlowService) Create(ctx context.Context, p RedirectFlowCreateParams) (*RedirectFlowCreateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/redirect_flows",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/redirect_flows",))
   if err != nil {
     return nil, err
   }
@@ -139,31 +137,13 @@ func (s *RedirectFlowService) Create(ctx context.Context, p RedirectFlowCreatePa
 
 // RedirectFlowGetResult parameters
 type RedirectFlowGetResult struct {
-      RedirectFlows struct {
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        RedirectUrl string `url:",omitempty" json:"redirect_url,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        SessionToken string `url:",omitempty" json:"session_token,omitempty"`
-        SuccessRedirectUrl string `url:",omitempty" json:"success_redirect_url,omitempty"`
-        
-    } `url:",omitempty" json:"redirect_flows,omitempty"`
-        
-    }
+      RedirectFlows RedirectFlow `url:",omitempty" json:"redirect_flows,omitempty"`
+      }
 
 // Get
 // Returns all details about a single redirect flow
 func (s *RedirectFlowService) Get(ctx context.Context,identity string) (*RedirectFlowGetResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/redirect_flows/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/redirect_flows/%v",
       identity,))
   if err != nil {
     return nil, err
@@ -216,29 +196,11 @@ func (s *RedirectFlowService) Get(ctx context.Context,identity string) (*Redirec
 // RedirectFlowCompleteParams parameters
 type RedirectFlowCompleteParams struct {
       SessionToken string `url:",omitempty" json:"session_token,omitempty"`
-        
-    }
+      }
 // RedirectFlowCompleteResult parameters
 type RedirectFlowCompleteResult struct {
-      RedirectFlows struct {
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-        Customer string `url:",omitempty" json:"customer,omitempty"`
-        CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        RedirectUrl string `url:",omitempty" json:"redirect_url,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        SessionToken string `url:",omitempty" json:"session_token,omitempty"`
-        SuccessRedirectUrl string `url:",omitempty" json:"success_redirect_url,omitempty"`
-        
-    } `url:",omitempty" json:"redirect_flows,omitempty"`
-        
-    }
+      RedirectFlows RedirectFlow `url:",omitempty" json:"redirect_flows,omitempty"`
+      }
 
 // Complete
 // This creates a [customer](#core-endpoints-customers), [customer bank
@@ -253,8 +215,7 @@ type RedirectFlowCompleteResult struct {
 // error if the `session_token` differs to the one supplied when the redirect
 // flow was created.
 func (s *RedirectFlowService) Complete(ctx context.Context,identity string, p RedirectFlowCompleteParams) (*RedirectFlowCompleteResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/redirect_flows/%v/actions/complete",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/redirect_flows/%v/actions/complete",
       identity,))
   if err != nil {
     return nil, err

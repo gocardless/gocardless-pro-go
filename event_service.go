@@ -24,79 +24,100 @@ type EventService struct {
 }
 
 
+// Event model
+type Event struct {
+      Action string `url:",omitempty" json:"action,omitempty"`
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Details struct {
+      Cause string `url:",omitempty" json:"cause,omitempty"`
+      Description string `url:",omitempty" json:"description,omitempty"`
+      Origin string `url:",omitempty" json:"origin,omitempty"`
+      ReasonCode string `url:",omitempty" json:"reason_code,omitempty"`
+      Scheme string `url:",omitempty" json:"scheme,omitempty"`
+      } `url:",omitempty" json:"details,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
+      NewCustomerBankAccount string `url:",omitempty" json:"new_customer_bank_account,omitempty"`
+      NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
+      Organisation string `url:",omitempty" json:"organisation,omitempty"`
+      ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
+      Payment string `url:",omitempty" json:"payment,omitempty"`
+      Payout string `url:",omitempty" json:"payout,omitempty"`
+      PreviousCustomerBankAccount string `url:",omitempty" json:"previous_customer_bank_account,omitempty"`
+      Refund string `url:",omitempty" json:"refund,omitempty"`
+      Subscription string `url:",omitempty" json:"subscription,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
+      }
+
+
+
 
 // EventListParams parameters
 type EventListParams struct {
       Action string `url:",omitempty" json:"action,omitempty"`
-        After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        CreatedAt struct {
+      After string `url:",omitempty" json:"after,omitempty"`
+      Before string `url:",omitempty" json:"before,omitempty"`
+      CreatedAt struct {
       Gt string `url:",omitempty" json:"gt,omitempty"`
-        Gte string `url:",omitempty" json:"gte,omitempty"`
-        Lt string `url:",omitempty" json:"lt,omitempty"`
-        Lte string `url:",omitempty" json:"lte,omitempty"`
-        
-    } `url:",omitempty" json:"created_at,omitempty"`
-        Include string `url:",omitempty" json:"include,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
-        Payment string `url:",omitempty" json:"payment,omitempty"`
-        Payout string `url:",omitempty" json:"payout,omitempty"`
-        Refund string `url:",omitempty" json:"refund,omitempty"`
-        ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    }
+      Gte string `url:",omitempty" json:"gte,omitempty"`
+      Lt string `url:",omitempty" json:"lt,omitempty"`
+      Lte string `url:",omitempty" json:"lte,omitempty"`
+      } `url:",omitempty" json:"created_at,omitempty"`
+      Include string `url:",omitempty" json:"include,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
+      ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
+      Payment string `url:",omitempty" json:"payment,omitempty"`
+      Payout string `url:",omitempty" json:"payout,omitempty"`
+      Refund string `url:",omitempty" json:"refund,omitempty"`
+      ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
+      Subscription string `url:",omitempty" json:"subscription,omitempty"`
+      }
 // EventListResult parameters
 type EventListResult struct {
       Events []struct {
       Action string `url:",omitempty" json:"action,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Details struct {
+      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      Details struct {
       Cause string `url:",omitempty" json:"cause,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Origin string `url:",omitempty" json:"origin,omitempty"`
-        ReasonCode string `url:",omitempty" json:"reason_code,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        
-    } `url:",omitempty" json:"details,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
+      Description string `url:",omitempty" json:"description,omitempty"`
+      Origin string `url:",omitempty" json:"origin,omitempty"`
+      ReasonCode string `url:",omitempty" json:"reason_code,omitempty"`
+      Scheme string `url:",omitempty" json:"scheme,omitempty"`
+      } `url:",omitempty" json:"details,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Links struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        NewCustomerBankAccount string `url:",omitempty" json:"new_customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-        Organisation string `url:",omitempty" json:"organisation,omitempty"`
-        ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
-        Payment string `url:",omitempty" json:"payment,omitempty"`
-        Payout string `url:",omitempty" json:"payout,omitempty"`
-        PreviousCustomerBankAccount string `url:",omitempty" json:"previous_customer_bank_account,omitempty"`
-        Refund string `url:",omitempty" json:"refund,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
-        
-    } `url:",omitempty" json:"events,omitempty"`
-        Meta struct {
+      NewCustomerBankAccount string `url:",omitempty" json:"new_customer_bank_account,omitempty"`
+      NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
+      Organisation string `url:",omitempty" json:"organisation,omitempty"`
+      ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
+      Payment string `url:",omitempty" json:"payment,omitempty"`
+      Payout string `url:",omitempty" json:"payout,omitempty"`
+      PreviousCustomerBankAccount string `url:",omitempty" json:"previous_customer_bank_account,omitempty"`
+      Refund string `url:",omitempty" json:"refund,omitempty"`
+      Subscription string `url:",omitempty" json:"subscription,omitempty"`
+      } `url:",omitempty" json:"links,omitempty"`
+      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
+      } `url:",omitempty" json:"events,omitempty"`
+      Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
-        Before string `url:",omitempty" json:"before,omitempty"`
-        
-    } `url:",omitempty" json:"cursors,omitempty"`
-        Limit int `url:",omitempty" json:"limit,omitempty"`
-        
-    } `url:",omitempty" json:"meta,omitempty"`
-        
-    }
+      Before string `url:",omitempty" json:"before,omitempty"`
+      } `url:",omitempty" json:"cursors,omitempty"`
+      Limit int `url:",omitempty" json:"limit,omitempty"`
+      } `url:",omitempty" json:"meta,omitempty"`
+      }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // events.
 func (s *EventService) List(ctx context.Context, p EventListParams) (*EventListResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/events",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/events",))
   if err != nil {
     return nil, err
   }
@@ -151,43 +172,13 @@ func (s *EventService) List(ctx context.Context, p EventListParams) (*EventListR
 
 // EventGetResult parameters
 type EventGetResult struct {
-      Events struct {
-      Action string `url:",omitempty" json:"action,omitempty"`
-        CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-        Details struct {
-      Cause string `url:",omitempty" json:"cause,omitempty"`
-        Description string `url:",omitempty" json:"description,omitempty"`
-        Origin string `url:",omitempty" json:"origin,omitempty"`
-        ReasonCode string `url:",omitempty" json:"reason_code,omitempty"`
-        Scheme string `url:",omitempty" json:"scheme,omitempty"`
-        
-    } `url:",omitempty" json:"details,omitempty"`
-        Id string `url:",omitempty" json:"id,omitempty"`
-        Links struct {
-      Mandate string `url:",omitempty" json:"mandate,omitempty"`
-        NewCustomerBankAccount string `url:",omitempty" json:"new_customer_bank_account,omitempty"`
-        NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-        Organisation string `url:",omitempty" json:"organisation,omitempty"`
-        ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
-        Payment string `url:",omitempty" json:"payment,omitempty"`
-        Payout string `url:",omitempty" json:"payout,omitempty"`
-        PreviousCustomerBankAccount string `url:",omitempty" json:"previous_customer_bank_account,omitempty"`
-        Refund string `url:",omitempty" json:"refund,omitempty"`
-        Subscription string `url:",omitempty" json:"subscription,omitempty"`
-        
-    } `url:",omitempty" json:"links,omitempty"`
-        Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-        ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
-        
-    } `url:",omitempty" json:"events,omitempty"`
-        
-    }
+      Events Event `url:",omitempty" json:"events,omitempty"`
+      }
 
 // Get
 // Retrieves the details of a single event.
 func (s *EventService) Get(ctx context.Context,identity string) (*EventGetResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/events/%v",
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/events/%v",
       identity,))
   if err != nil {
     return nil, err

@@ -24,26 +24,28 @@ type BankDetailsLookupService struct {
 }
 
 
+// BankDetailsLookup model
+type BankDetailsLookup struct {
+      AvailableDebitSchemes []string `url:",omitempty" json:"available_debit_schemes,omitempty"`
+      BankName string `url:",omitempty" json:"bank_name,omitempty"`
+      Bic string `url:",omitempty" json:"bic,omitempty"`
+      }
+
+
+
 
 // BankDetailsLookupCreateParams parameters
 type BankDetailsLookupCreateParams struct {
       AccountNumber string `url:",omitempty" json:"account_number,omitempty"`
-        BankCode string `url:",omitempty" json:"bank_code,omitempty"`
-        BranchCode string `url:",omitempty" json:"branch_code,omitempty"`
-        CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-        Iban string `url:",omitempty" json:"iban,omitempty"`
-        
-    }
+      BankCode string `url:",omitempty" json:"bank_code,omitempty"`
+      BranchCode string `url:",omitempty" json:"branch_code,omitempty"`
+      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
+      Iban string `url:",omitempty" json:"iban,omitempty"`
+      }
 // BankDetailsLookupCreateResult parameters
 type BankDetailsLookupCreateResult struct {
-      BankDetailsLookups struct {
-      AvailableDebitSchemes []string `url:",omitempty" json:"available_debit_schemes,omitempty"`
-        BankName string `url:",omitempty" json:"bank_name,omitempty"`
-        Bic string `url:",omitempty" json:"bic,omitempty"`
-        
-    } `url:",omitempty" json:"bank_details_lookups,omitempty"`
-        
-    }
+      BankDetailsLookups BankDetailsLookup `url:",omitempty" json:"bank_details_lookups,omitempty"`
+      }
 
 // Create
 // Performs a bank details lookup.
@@ -60,8 +62,7 @@ type BankDetailsLookupCreateResult struct {
 // modulus or reachability checking but not for payment
 // collection, please get in touch.
 func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLookupCreateParams) (*BankDetailsLookupCreateResult, error) {
-  uri, err := url.Parse(fmt.Sprintf(
-      s.endpoint + "/bank_details_lookups",))
+  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/bank_details_lookups",))
   if err != nil {
     return nil, err
   }
