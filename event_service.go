@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type EventService struct {
@@ -93,9 +94,7 @@ type EventListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // events.
-func (s *EventService) List(
-  ctx context.Context,
-  p EventListParams) (*EventListResult, error) {
+func (s *EventService) List(ctx context.Context, p EventListParams) (*EventListResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/events",))
   if err != nil {
@@ -124,24 +123,26 @@ func (s *EventService) List(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *EventListResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.EventListResult, nil
@@ -184,9 +185,7 @@ type EventGetResult struct {
 
 // Get
 // Retrieves the details of a single event.
-func (s *EventService) Get(
-  ctx context.Context,
-  identity string) (*EventGetResult, error) {
+func (s *EventService) Get(ctx context.Context,identity string) (*EventGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/events/%v",
       identity,))
@@ -212,24 +211,26 @@ func (s *EventService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *EventGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.EventGetResult, nil

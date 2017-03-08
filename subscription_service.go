@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type SubscriptionService struct {
@@ -77,9 +78,7 @@ type SubscriptionCreateResult struct {
 
 // Create
 // Creates a new subscription object
-func (s *SubscriptionService) Create(
-  ctx context.Context,
-  p SubscriptionCreateParams) (*SubscriptionCreateResult, error) {
+func (s *SubscriptionService) Create(ctx context.Context, p SubscriptionCreateParams) (*SubscriptionCreateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/subscriptions",))
   if err != nil {
@@ -105,30 +104,33 @@ func (s *SubscriptionService) Create(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *SubscriptionCreateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.SubscriptionCreateResult, nil
@@ -194,9 +196,7 @@ type SubscriptionListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // subscriptions.
-func (s *SubscriptionService) List(
-  ctx context.Context,
-  p SubscriptionListParams) (*SubscriptionListResult, error) {
+func (s *SubscriptionService) List(ctx context.Context, p SubscriptionListParams) (*SubscriptionListResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/subscriptions",))
   if err != nil {
@@ -225,24 +225,26 @@ func (s *SubscriptionService) List(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *SubscriptionListResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.SubscriptionListResult, nil
@@ -282,9 +284,7 @@ type SubscriptionGetResult struct {
 
 // Get
 // Retrieves the details of a single subscription.
-func (s *SubscriptionService) Get(
-  ctx context.Context,
-  identity string) (*SubscriptionGetResult, error) {
+func (s *SubscriptionService) Get(ctx context.Context,identity string) (*SubscriptionGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/subscriptions/%v",
       identity,))
@@ -310,24 +310,26 @@ func (s *SubscriptionService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *SubscriptionGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.SubscriptionGetResult, nil
@@ -374,10 +376,7 @@ type SubscriptionUpdateResult struct {
 
 // Update
 // Updates a subscription object.
-func (s *SubscriptionService) Update(
-  ctx context.Context,
-  identity string,
-  p SubscriptionUpdateParams) (*SubscriptionUpdateResult, error) {
+func (s *SubscriptionService) Update(ctx context.Context,identity string, p SubscriptionUpdateParams) (*SubscriptionUpdateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/subscriptions/%v",
       identity,))
@@ -404,30 +403,33 @@ func (s *SubscriptionService) Update(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *SubscriptionUpdateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.SubscriptionUpdateResult, nil
@@ -478,10 +480,7 @@ type SubscriptionCancelResult struct {
 // This will fail with a
 // cancellation_failed error if the subscription is already cancelled or
 // finished.
-func (s *SubscriptionService) Cancel(
-  ctx context.Context,
-  identity string,
-  p SubscriptionCancelParams) (*SubscriptionCancelResult, error) {
+func (s *SubscriptionService) Cancel(ctx context.Context,identity string, p SubscriptionCancelParams) (*SubscriptionCancelResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/subscriptions/%v/actions/cancel",
       identity,))
@@ -508,30 +507,33 @@ func (s *SubscriptionService) Cancel(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *SubscriptionCancelResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.SubscriptionCancelResult, nil

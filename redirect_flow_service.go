@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type RedirectFlowService struct {
@@ -77,9 +78,7 @@ type RedirectFlowCreateResult struct {
 // Create
 // Creates a redirect flow object which can then be used to redirect your
 // customer to the GoCardless hosted payment pages.
-func (s *RedirectFlowService) Create(
-  ctx context.Context,
-  p RedirectFlowCreateParams) (*RedirectFlowCreateResult, error) {
+func (s *RedirectFlowService) Create(ctx context.Context, p RedirectFlowCreateParams) (*RedirectFlowCreateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/redirect_flows",))
   if err != nil {
@@ -105,30 +104,33 @@ func (s *RedirectFlowService) Create(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *RedirectFlowCreateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.RedirectFlowCreateResult, nil
@@ -159,9 +161,7 @@ type RedirectFlowGetResult struct {
 
 // Get
 // Returns all details about a single redirect flow
-func (s *RedirectFlowService) Get(
-  ctx context.Context,
-  identity string) (*RedirectFlowGetResult, error) {
+func (s *RedirectFlowService) Get(ctx context.Context,identity string) (*RedirectFlowGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/redirect_flows/%v",
       identity,))
@@ -187,24 +187,26 @@ func (s *RedirectFlowService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *RedirectFlowGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.RedirectFlowGetResult, nil
@@ -250,10 +252,7 @@ type RedirectFlowCompleteResult struct {
 // integration has already completed this flow. It will return a `bad_request`
 // error if the `session_token` differs to the one supplied when the redirect
 // flow was created.
-func (s *RedirectFlowService) Complete(
-  ctx context.Context,
-  identity string,
-  p RedirectFlowCompleteParams) (*RedirectFlowCompleteResult, error) {
+func (s *RedirectFlowService) Complete(ctx context.Context,identity string, p RedirectFlowCompleteParams) (*RedirectFlowCompleteResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/redirect_flows/%v/actions/complete",
       identity,))
@@ -280,30 +279,33 @@ func (s *RedirectFlowService) Complete(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *RedirectFlowCompleteResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.RedirectFlowCompleteResult, nil

@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type CreditorService struct {
@@ -82,9 +83,7 @@ type CreditorCreateResult struct {
 
 // Create
 // Creates a new creditor.
-func (s *CreditorService) Create(
-  ctx context.Context,
-  p CreditorCreateParams) (*CreditorCreateResult, error) {
+func (s *CreditorService) Create(ctx context.Context, p CreditorCreateParams) (*CreditorCreateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/creditors",))
   if err != nil {
@@ -110,30 +109,33 @@ func (s *CreditorService) Create(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CreditorCreateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CreditorCreateResult, nil
@@ -209,9 +211,7 @@ type CreditorListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // creditors.
-func (s *CreditorService) List(
-  ctx context.Context,
-  p CreditorListParams) (*CreditorListResult, error) {
+func (s *CreditorService) List(ctx context.Context, p CreditorListParams) (*CreditorListResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/creditors",))
   if err != nil {
@@ -240,24 +240,26 @@ func (s *CreditorService) List(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CreditorListResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CreditorListResult, nil
@@ -311,10 +313,7 @@ type CreditorGetResult struct {
 
 // Get
 // Retrieves the details of an existing creditor.
-func (s *CreditorService) Get(
-  ctx context.Context,
-  identity string,
-  p CreditorGetParams) (*CreditorGetResult, error) {
+func (s *CreditorService) Get(ctx context.Context,identity string, p CreditorGetParams) (*CreditorGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/creditors/%v",
       identity,))
@@ -344,24 +343,26 @@ func (s *CreditorService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CreditorGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CreditorGetResult, nil
@@ -432,10 +433,7 @@ type CreditorUpdateResult struct {
 // Update
 // Updates a creditor object. Supports all of the fields supported when creating
 // a creditor.
-func (s *CreditorService) Update(
-  ctx context.Context,
-  identity string,
-  p CreditorUpdateParams) (*CreditorUpdateResult, error) {
+func (s *CreditorService) Update(ctx context.Context,identity string, p CreditorUpdateParams) (*CreditorUpdateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/creditors/%v",
       identity,))
@@ -462,30 +460,33 @@ func (s *CreditorService) Update(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CreditorUpdateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CreditorUpdateResult, nil

@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type RefundService struct {
@@ -75,9 +76,7 @@ type RefundCreateResult struct {
 // - `number_of_refunds_exceeded` if five or
 // more refunds have already been created against the payment.
 // 
-func (s *RefundService) Create(
-  ctx context.Context,
-  p RefundCreateParams) (*RefundCreateResult, error) {
+func (s *RefundService) Create(ctx context.Context, p RefundCreateParams) (*RefundCreateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/refunds",))
   if err != nil {
@@ -103,30 +102,33 @@ func (s *RefundService) Create(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *RefundCreateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.RefundCreateResult, nil
@@ -178,9 +180,7 @@ type RefundListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // refunds.
-func (s *RefundService) List(
-  ctx context.Context,
-  p RefundListParams) (*RefundListResult, error) {
+func (s *RefundService) List(ctx context.Context, p RefundListParams) (*RefundListResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/refunds",))
   if err != nil {
@@ -209,24 +209,26 @@ func (s *RefundService) List(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *RefundListResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.RefundListResult, nil
@@ -253,9 +255,7 @@ type RefundGetResult struct {
 
 // Get
 // Retrieves all details for a single refund
-func (s *RefundService) Get(
-  ctx context.Context,
-  identity string) (*RefundGetResult, error) {
+func (s *RefundService) Get(ctx context.Context,identity string) (*RefundGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/refunds/%v",
       identity,))
@@ -281,24 +281,26 @@ func (s *RefundService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *RefundGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.RefundGetResult, nil
@@ -330,10 +332,7 @@ type RefundUpdateResult struct {
 
 // Update
 // Updates a refund object.
-func (s *RefundService) Update(
-  ctx context.Context,
-  identity string,
-  p RefundUpdateParams) (*RefundUpdateResult, error) {
+func (s *RefundService) Update(ctx context.Context,identity string, p RefundUpdateParams) (*RefundUpdateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/refunds/%v",
       identity,))
@@ -360,30 +359,33 @@ func (s *RefundService) Update(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *RefundUpdateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.RefundUpdateResult, nil

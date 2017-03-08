@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type MandateService struct {
@@ -61,9 +62,7 @@ type MandateCreateResult struct {
 
 // Create
 // Creates a new mandate object.
-func (s *MandateService) Create(
-  ctx context.Context,
-  p MandateCreateParams) (*MandateCreateResult, error) {
+func (s *MandateService) Create(ctx context.Context, p MandateCreateParams) (*MandateCreateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/mandates",))
   if err != nil {
@@ -89,30 +88,33 @@ func (s *MandateService) Create(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *MandateCreateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.MandateCreateResult, nil
@@ -173,9 +175,7 @@ type MandateListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // mandates.
-func (s *MandateService) List(
-  ctx context.Context,
-  p MandateListParams) (*MandateListResult, error) {
+func (s *MandateService) List(ctx context.Context, p MandateListParams) (*MandateListResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/mandates",))
   if err != nil {
@@ -204,24 +204,26 @@ func (s *MandateService) List(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *MandateListResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.MandateListResult, nil
@@ -253,9 +255,7 @@ type MandateGetResult struct {
 
 // Get
 // Retrieves the details of an existing mandate.
-func (s *MandateService) Get(
-  ctx context.Context,
-  identity string) (*MandateGetResult, error) {
+func (s *MandateService) Get(ctx context.Context,identity string) (*MandateGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/mandates/%v",
       identity,))
@@ -281,24 +281,26 @@ func (s *MandateService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *MandateGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.MandateGetResult, nil
@@ -335,10 +337,7 @@ type MandateUpdateResult struct {
 
 // Update
 // Updates a mandate object. This accepts only the metadata parameter.
-func (s *MandateService) Update(
-  ctx context.Context,
-  identity string,
-  p MandateUpdateParams) (*MandateUpdateResult, error) {
+func (s *MandateService) Update(ctx context.Context,identity string, p MandateUpdateParams) (*MandateUpdateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/mandates/%v",
       identity,))
@@ -365,30 +364,33 @@ func (s *MandateService) Update(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *MandateUpdateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.MandateUpdateResult, nil
@@ -430,10 +432,7 @@ type MandateCancelResult struct {
 // 
 // This will fail with a `cancellation_failed` error if
 // the mandate is already cancelled.
-func (s *MandateService) Cancel(
-  ctx context.Context,
-  identity string,
-  p MandateCancelParams) (*MandateCancelResult, error) {
+func (s *MandateService) Cancel(ctx context.Context,identity string, p MandateCancelParams) (*MandateCancelResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/mandates/%v/actions/cancel",
       identity,))
@@ -460,30 +459,33 @@ func (s *MandateService) Cancel(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *MandateCancelResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.MandateCancelResult, nil
@@ -532,10 +534,7 @@ type MandateReinstateResult struct {
 // 
 // Mandates can be
 // resubmitted up to 3 times.
-func (s *MandateService) Reinstate(
-  ctx context.Context,
-  identity string,
-  p MandateReinstateParams) (*MandateReinstateResult, error) {
+func (s *MandateService) Reinstate(ctx context.Context,identity string, p MandateReinstateParams) (*MandateReinstateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/mandates/%v/actions/reinstate",
       identity,))
@@ -562,30 +561,33 @@ func (s *MandateService) Reinstate(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *MandateReinstateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.MandateReinstateResult, nil

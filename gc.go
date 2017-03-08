@@ -47,54 +47,67 @@ func New(token string, opts ...Option) (*Service, error) {
   s.BankDetailsLookups = &BankDetailsLookupService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.Creditors = &CreditorService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.CreditorBankAccounts = &CreditorBankAccountService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.Customers = &CustomerService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.CustomerBankAccounts = &CustomerBankAccountService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.Events = &EventService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.Mandates = &MandateService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.MandatePdfs = &MandatePdfService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.Payments = &PaymentService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.Payouts = &PayoutService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.RedirectFlows = &RedirectFlowService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.Refunds = &RefundService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   s.Subscriptions = &SubscriptionService{
     token: token,
     endpoint: o.endpoint,
+    client: o.client,
   }
   return s, nil
 }

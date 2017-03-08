@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type MandatePdfService struct {
@@ -66,9 +67,7 @@ type MandatePdfCreateResult struct {
 // 639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes#Partial_ISO_639_table)
 // language code. Supported languages are Dutch, English, French, German,
 // Italian, Portuguese, Spanish and Swedish.
-func (s *MandatePdfService) Create(
-  ctx context.Context,
-  p MandatePdfCreateParams) (*MandatePdfCreateResult, error) {
+func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams) (*MandatePdfCreateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/mandate_pdfs",))
   if err != nil {
@@ -94,30 +93,33 @@ func (s *MandatePdfService) Create(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *MandatePdfCreateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.MandatePdfCreateResult, nil

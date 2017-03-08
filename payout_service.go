@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type PayoutService struct {
@@ -75,9 +76,7 @@ type PayoutListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // payouts.
-func (s *PayoutService) List(
-  ctx context.Context,
-  p PayoutListParams) (*PayoutListResult, error) {
+func (s *PayoutService) List(ctx context.Context, p PayoutListParams) (*PayoutListResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/payouts",))
   if err != nil {
@@ -106,24 +105,26 @@ func (s *PayoutService) List(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *PayoutListResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.PayoutListResult, nil
@@ -155,9 +156,7 @@ type PayoutGetResult struct {
 // Retrieves the details of a single payout. For an example of how to reconcile
 // the transactions in a payout, see [this
 // guide](#events-reconciling-payouts-with-events).
-func (s *PayoutService) Get(
-  ctx context.Context,
-  identity string) (*PayoutGetResult, error) {
+func (s *PayoutService) Get(ctx context.Context,identity string) (*PayoutGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/payouts/%v",
       identity,))
@@ -183,24 +182,26 @@ func (s *PayoutService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *PayoutGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.PayoutGetResult, nil

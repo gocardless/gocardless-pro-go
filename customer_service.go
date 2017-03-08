@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type CustomerService struct {
@@ -68,9 +69,7 @@ type CustomerCreateResult struct {
 
 // Create
 // Creates a new customer object.
-func (s *CustomerService) Create(
-  ctx context.Context,
-  p CustomerCreateParams) (*CustomerCreateResult, error) {
+func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams) (*CustomerCreateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/customers",))
   if err != nil {
@@ -96,30 +95,33 @@ func (s *CustomerService) Create(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CustomerCreateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CustomerCreateResult, nil
@@ -176,9 +178,7 @@ type CustomerListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // customers.
-func (s *CustomerService) List(
-  ctx context.Context,
-  p CustomerListParams) (*CustomerListResult, error) {
+func (s *CustomerService) List(ctx context.Context, p CustomerListParams) (*CustomerListResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/customers",))
   if err != nil {
@@ -207,24 +207,26 @@ func (s *CustomerService) List(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CustomerListResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CustomerListResult, nil
@@ -257,9 +259,7 @@ type CustomerGetResult struct {
 
 // Get
 // Retrieves the details of an existing customer.
-func (s *CustomerService) Get(
-  ctx context.Context,
-  identity string) (*CustomerGetResult, error) {
+func (s *CustomerService) Get(ctx context.Context,identity string) (*CustomerGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/customers/%v",
       identity,))
@@ -285,24 +285,26 @@ func (s *CustomerService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CustomerGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CustomerGetResult, nil
@@ -354,10 +356,7 @@ type CustomerUpdateResult struct {
 // Update
 // Updates a customer object. Supports all of the fields supported when creating
 // a customer.
-func (s *CustomerService) Update(
-  ctx context.Context,
-  identity string,
-  p CustomerUpdateParams) (*CustomerUpdateResult, error) {
+func (s *CustomerService) Update(ctx context.Context,identity string, p CustomerUpdateParams) (*CustomerUpdateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/customers/%v",
       identity,))
@@ -384,30 +383,33 @@ func (s *CustomerService) Update(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CustomerUpdateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CustomerUpdateResult, nil

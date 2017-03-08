@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type PaymentService struct {
@@ -72,9 +73,7 @@ type PaymentCreateResult struct {
 // [mandate](#core-endpoints-mandates) is cancelled or has failed. Payments can
 // be created against mandates with status of: `pending_customer_approval`,
 // `pending_submission`, `submitted`, and `active`.
-func (s *PaymentService) Create(
-  ctx context.Context,
-  p PaymentCreateParams) (*PaymentCreateResult, error) {
+func (s *PaymentService) Create(ctx context.Context, p PaymentCreateParams) (*PaymentCreateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/payments",))
   if err != nil {
@@ -100,30 +99,33 @@ func (s *PaymentService) Create(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *PaymentCreateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.PaymentCreateResult, nil
@@ -187,9 +189,7 @@ type PaymentListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // payments.
-func (s *PaymentService) List(
-  ctx context.Context,
-  p PaymentListParams) (*PaymentListResult, error) {
+func (s *PaymentService) List(ctx context.Context, p PaymentListParams) (*PaymentListResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/payments",))
   if err != nil {
@@ -218,24 +218,26 @@ func (s *PaymentService) List(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *PaymentListResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.PaymentListResult, nil
@@ -269,9 +271,7 @@ type PaymentGetResult struct {
 
 // Get
 // Retrieves the details of a single existing payment.
-func (s *PaymentService) Get(
-  ctx context.Context,
-  identity string) (*PaymentGetResult, error) {
+func (s *PaymentService) Get(ctx context.Context,identity string) (*PaymentGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/payments/%v",
       identity,))
@@ -297,24 +297,26 @@ func (s *PaymentService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *PaymentGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.PaymentGetResult, nil
@@ -353,10 +355,7 @@ type PaymentUpdateResult struct {
 
 // Update
 // Updates a payment object. This accepts only the metadata parameter.
-func (s *PaymentService) Update(
-  ctx context.Context,
-  identity string,
-  p PaymentUpdateParams) (*PaymentUpdateResult, error) {
+func (s *PaymentService) Update(ctx context.Context,identity string, p PaymentUpdateParams) (*PaymentUpdateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/payments/%v",
       identity,))
@@ -383,30 +382,33 @@ func (s *PaymentService) Update(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *PaymentUpdateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.PaymentUpdateResult, nil
@@ -450,10 +452,7 @@ type PaymentCancelResult struct {
 // 
 // This will fail with a `cancellation_failed` error
 // unless the payment's status is `pending_submission`.
-func (s *PaymentService) Cancel(
-  ctx context.Context,
-  identity string,
-  p PaymentCancelParams) (*PaymentCancelResult, error) {
+func (s *PaymentService) Cancel(ctx context.Context,identity string, p PaymentCancelParams) (*PaymentCancelResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/payments/%v/actions/cancel",
       identity,))
@@ -480,30 +479,33 @@ func (s *PaymentService) Cancel(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *PaymentCancelResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.PaymentCancelResult, nil
@@ -553,10 +555,7 @@ type PaymentRetryResult struct {
 // 
 // Payments can be
 // retried up to 3 times.
-func (s *PaymentService) Retry(
-  ctx context.Context,
-  identity string,
-  p PaymentRetryParams) (*PaymentRetryResult, error) {
+func (s *PaymentService) Retry(ctx context.Context,identity string, p PaymentRetryParams) (*PaymentRetryResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/payments/%v/actions/retry",
       identity,))
@@ -583,30 +582,33 @@ func (s *PaymentService) Retry(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *PaymentRetryResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.PaymentRetryResult, nil

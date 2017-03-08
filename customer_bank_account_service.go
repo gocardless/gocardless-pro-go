@@ -14,6 +14,7 @@ import (
 
 var _ = query.Values
 var _ = bytes.NewBuffer
+var _ = json.NewDecoder
 
 
 type CustomerBankAccountService struct {
@@ -79,9 +80,7 @@ type CustomerBankAccountCreateResult struct {
 //
 // For more information on the different fields required in each country, see
 // [local bank details](#appendix-local-bank-details).
-func (s *CustomerBankAccountService) Create(
-  ctx context.Context,
-  p CustomerBankAccountCreateParams) (*CustomerBankAccountCreateResult, error) {
+func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankAccountCreateParams) (*CustomerBankAccountCreateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/customer_bank_accounts",))
   if err != nil {
@@ -107,30 +106,33 @@ func (s *CustomerBankAccountService) Create(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CustomerBankAccountCreateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CustomerBankAccountCreateResult, nil
@@ -186,9 +188,7 @@ type CustomerBankAccountListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your bank
 // accounts.
-func (s *CustomerBankAccountService) List(
-  ctx context.Context,
-  p CustomerBankAccountListParams) (*CustomerBankAccountListResult, error) {
+func (s *CustomerBankAccountService) List(ctx context.Context, p CustomerBankAccountListParams) (*CustomerBankAccountListResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/customer_bank_accounts",))
   if err != nil {
@@ -217,24 +217,26 @@ func (s *CustomerBankAccountService) List(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CustomerBankAccountListResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CustomerBankAccountListResult, nil
@@ -264,9 +266,7 @@ type CustomerBankAccountGetResult struct {
 
 // Get
 // Retrieves the details of an existing bank account.
-func (s *CustomerBankAccountService) Get(
-  ctx context.Context,
-  identity string) (*CustomerBankAccountGetResult, error) {
+func (s *CustomerBankAccountService) Get(ctx context.Context,identity string) (*CustomerBankAccountGetResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/customer_bank_accounts/%v",
       identity,))
@@ -292,24 +292,26 @@ func (s *CustomerBankAccountService) Get(
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CustomerBankAccountGetResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CustomerBankAccountGetResult, nil
@@ -345,10 +347,7 @@ type CustomerBankAccountUpdateResult struct {
 // Update
 // Updates a customer bank account object. Only the metadata parameter is
 // allowed.
-func (s *CustomerBankAccountService) Update(
-  ctx context.Context,
-  identity string,
-  p CustomerBankAccountUpdateParams) (*CustomerBankAccountUpdateResult, error) {
+func (s *CustomerBankAccountService) Update(ctx context.Context,identity string, p CustomerBankAccountUpdateParams) (*CustomerBankAccountUpdateResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/customer_bank_accounts/%v",
       identity,))
@@ -375,30 +374,33 @@ func (s *CustomerBankAccountService) Update(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CustomerBankAccountUpdateResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CustomerBankAccountUpdateResult, nil
@@ -435,9 +437,7 @@ type CustomerBankAccountDisableResult struct {
 // 
 // A disabled bank account can be re-enabled by creating a
 // new bank account resource with the same details.
-func (s *CustomerBankAccountService) Disable(
-  ctx context.Context,
-  identity string) (*CustomerBankAccountDisableResult, error) {
+func (s *CustomerBankAccountService) Disable(ctx context.Context,identity string) (*CustomerBankAccountDisableResult, error) {
   uri, err := url.Parse(fmt.Sprintf(
       s.endpoint + "/customer_bank_accounts/%v/actions/disable",
       identity,))
@@ -457,30 +457,33 @@ func (s *CustomerBankAccountService) Disable(
   req.Header.Set("Authorization", "Bearer "+s.token)
   req.Header.Set("GoCardless-Version", "2015-07-06")
   req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
 
   client := s.client
   if client == nil {
     client = http.DefaultClient
   }
 
-  res, err := client.Do(req)
-  if err != nil {
-    return nil, err
-  }
-  defer res.Body.Close()
-
   var result struct {
     *CustomerBankAccountDisableResult
-    Err *APIError `json:"error"`
   }
 
-  err = json.NewDecoder(res.Body).Decode(&result)
+  try(3, func() error {
+      res, err := client.Do(req)
+      if err != nil {
+        return err
+      }
+      defer res.Body.Close()
+
+      err = responseErr(res)
+      if err != nil {
+        return err
+      }
+
+      return nil
+  })
   if err != nil {
     return nil, err
-  }
-
-  if result.Err != nil {
-    return nil, result.Err
   }
 
   return result.CustomerBankAccountDisableResult, nil
