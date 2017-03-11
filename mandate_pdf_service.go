@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// MandatePdfService manages mandate_pdfs
 type MandatePdfService struct {
   endpoint string
   token string
@@ -50,10 +53,6 @@ type MandatePdfCreateParams struct {
       SignatureDate string `url:",omitempty" json:"signature_date,omitempty"`
       SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
       }
-// MandatePdfCreateResult parameters
-type MandatePdfCreateResult struct {
-      MandatePdfs MandatePdf `url:",omitempty" json:"mandate_pdfs,omitempty"`
-      }
 
 // Create
 // Generates a PDF mandate and returns its temporary URL.
@@ -68,7 +67,7 @@ type MandatePdfCreateResult struct {
 // 639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes#Partial_ISO_639_table)
 // language code. Supported languages are Dutch, English, French, German,
 // Italian, Portuguese, Spanish and Swedish.
-func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams) (*MandatePdfCreateResult, error) {
+func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams) (*MandatePdf,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandate_pdfs",))
   if err != nil {
     return nil, err
@@ -101,10 +100,11 @@ func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams
   }
 
   var result struct {
-    *MandatePdfCreateResult
+    Err *APIError `json:"error"`
+MandatePdf *MandatePdf `json:"mandate_pdfs"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -116,12 +116,25 @@ func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.MandatePdfCreateResult, nil
+if result.MandatePdf == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.MandatePdf, nil
 }
 

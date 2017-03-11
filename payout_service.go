@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// PayoutService manages payouts
 type PayoutService struct {
   endpoint string
   token string
@@ -58,8 +61,7 @@ type PayoutListParams struct {
       Currency string `url:",omitempty" json:"currency,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       Status string `url:",omitempty" json:"status,omitempty"`
-      }
-// PayoutListResult parameters
+      }// PayoutListResult response including pagination metadata
 type PayoutListResult struct {
       Meta struct {
       Cursors struct {
@@ -84,10 +86,11 @@ type PayoutListResult struct {
       } `url:",omitempty" json:"payouts,omitempty"`
       }
 
+
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // payouts.
-func (s *PayoutService) List(ctx context.Context, p PayoutListParams) (*PayoutListResult, error) {
+func (s *PayoutService) List(ctx context.Context, p PayoutListParams) (*PayoutListResult,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payouts",))
   if err != nil {
     return nil, err
@@ -116,10 +119,11 @@ func (s *PayoutService) List(ctx context.Context, p PayoutListParams) (*PayoutLi
   }
 
   var result struct {
-    *PayoutListResult
+    Err *APIError `json:"error"`
+*PayoutListResult
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -131,26 +135,35 @@ func (s *PayoutService) List(ctx context.Context, p PayoutListParams) (*PayoutLi
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
+if result.PayoutListResult == nil {
+    return nil, errors.New("missing result")
+  }
+
   return result.PayoutListResult, nil
 }
 
 
-// PayoutGetResult parameters
-type PayoutGetResult struct {
-      Payouts Payout `url:",omitempty" json:"payouts,omitempty"`
-      }
 
 // Get
 // Retrieves the details of a single payout. For an example of how to reconcile
 // the transactions in a payout, see [this
 // guide](#events-reconciling-payouts-with-events).
-func (s *PayoutService) Get(ctx context.Context,identity string) (*PayoutGetResult, error) {
+func (s *PayoutService) Get(ctx context.Context,identity string) (*Payout,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payouts/%v",
       identity,))
   if err != nil {
@@ -176,10 +189,11 @@ func (s *PayoutService) Get(ctx context.Context,identity string) (*PayoutGetResu
   }
 
   var result struct {
-    *PayoutGetResult
+    Err *APIError `json:"error"`
+Payout *Payout `json:"payouts"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -191,12 +205,25 @@ func (s *PayoutService) Get(ctx context.Context,identity string) (*PayoutGetResu
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.PayoutGetResult, nil
+if result.Payout == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Payout, nil
 }
 

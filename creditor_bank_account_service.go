@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// CreditorBankAccountService manages creditor_bank_accounts
 type CreditorBankAccountService struct {
   endpoint string
   token string
@@ -58,14 +61,10 @@ type CreditorBankAccountCreateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
       SetAsDefaultPayoutAccount bool `url:",omitempty" json:"set_as_default_payout_account,omitempty"`
       }
-// CreditorBankAccountCreateResult parameters
-type CreditorBankAccountCreateResult struct {
-      CreditorBankAccounts CreditorBankAccount `url:",omitempty" json:"creditor_bank_accounts,omitempty"`
-      }
 
 // Create
 // Creates a new creditor bank account object.
-func (s *CreditorBankAccountService) Create(ctx context.Context, p CreditorBankAccountCreateParams) (*CreditorBankAccountCreateResult, error) {
+func (s *CreditorBankAccountService) Create(ctx context.Context, p CreditorBankAccountCreateParams) (*CreditorBankAccount,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/creditor_bank_accounts",))
   if err != nil {
     return nil, err
@@ -98,10 +97,11 @@ func (s *CreditorBankAccountService) Create(ctx context.Context, p CreditorBankA
   }
 
   var result struct {
-    *CreditorBankAccountCreateResult
+    Err *APIError `json:"error"`
+CreditorBankAccount *CreditorBankAccount `json:"creditor_bank_accounts"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -113,13 +113,26 @@ func (s *CreditorBankAccountService) Create(ctx context.Context, p CreditorBankA
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.CreditorBankAccountCreateResult, nil
+if result.CreditorBankAccount == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.CreditorBankAccount, nil
 }
 
 
@@ -136,8 +149,7 @@ type CreditorBankAccountListParams struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
       Enabled bool `url:",omitempty" json:"enabled,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      }
-// CreditorBankAccountListResult parameters
+      }// CreditorBankAccountListResult response including pagination metadata
 type CreditorBankAccountListResult struct {
       CreditorBankAccounts []struct {
       AccountHolderName string `url:",omitempty" json:"account_holder_name,omitempty"`
@@ -162,10 +174,11 @@ type CreditorBankAccountListResult struct {
       } `url:",omitempty" json:"meta,omitempty"`
       }
 
+
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // creditor bank accounts.
-func (s *CreditorBankAccountService) List(ctx context.Context, p CreditorBankAccountListParams) (*CreditorBankAccountListResult, error) {
+func (s *CreditorBankAccountService) List(ctx context.Context, p CreditorBankAccountListParams) (*CreditorBankAccountListResult,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/creditor_bank_accounts",))
   if err != nil {
     return nil, err
@@ -194,10 +207,11 @@ func (s *CreditorBankAccountService) List(ctx context.Context, p CreditorBankAcc
   }
 
   var result struct {
-    *CreditorBankAccountListResult
+    Err *APIError `json:"error"`
+*CreditorBankAccountListResult
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -209,24 +223,33 @@ func (s *CreditorBankAccountService) List(ctx context.Context, p CreditorBankAcc
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
+if result.CreditorBankAccountListResult == nil {
+    return nil, errors.New("missing result")
+  }
+
   return result.CreditorBankAccountListResult, nil
 }
 
 
-// CreditorBankAccountGetResult parameters
-type CreditorBankAccountGetResult struct {
-      CreditorBankAccounts CreditorBankAccount `url:",omitempty" json:"creditor_bank_accounts,omitempty"`
-      }
 
 // Get
 // Retrieves the details of an existing creditor bank account.
-func (s *CreditorBankAccountService) Get(ctx context.Context,identity string) (*CreditorBankAccountGetResult, error) {
+func (s *CreditorBankAccountService) Get(ctx context.Context,identity string) (*CreditorBankAccount,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/creditor_bank_accounts/%v",
       identity,))
   if err != nil {
@@ -252,10 +275,11 @@ func (s *CreditorBankAccountService) Get(ctx context.Context,identity string) (*
   }
 
   var result struct {
-    *CreditorBankAccountGetResult
+    Err *APIError `json:"error"`
+CreditorBankAccount *CreditorBankAccount `json:"creditor_bank_accounts"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -267,20 +291,29 @@ func (s *CreditorBankAccountService) Get(ctx context.Context,identity string) (*
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.CreditorBankAccountGetResult, nil
+if result.CreditorBankAccount == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.CreditorBankAccount, nil
 }
 
 
-// CreditorBankAccountDisableResult parameters
-type CreditorBankAccountDisableResult struct {
-      CreditorBankAccounts CreditorBankAccount `url:",omitempty" json:"creditor_bank_accounts,omitempty"`
-      }
 
 // Disable
 // Immediately disables the bank account, no money can be paid out to a disabled
@@ -291,7 +324,7 @@ type CreditorBankAccountDisableResult struct {
 // 
 // A disabled bank account can be re-enabled
 // by creating a new bank account resource with the same details.
-func (s *CreditorBankAccountService) Disable(ctx context.Context,identity string) (*CreditorBankAccountDisableResult, error) {
+func (s *CreditorBankAccountService) Disable(ctx context.Context,identity string) (*CreditorBankAccount,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/creditor_bank_accounts/%v/actions/disable",
       identity,))
   if err != nil {
@@ -318,10 +351,11 @@ func (s *CreditorBankAccountService) Disable(ctx context.Context,identity string
   }
 
   var result struct {
-    *CreditorBankAccountDisableResult
+    Err *APIError `json:"error"`
+CreditorBankAccount *CreditorBankAccount `json:"creditor_bank_accounts"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -333,12 +367,25 @@ func (s *CreditorBankAccountService) Disable(ctx context.Context,identity string
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.CreditorBankAccountDisableResult, nil
+if result.CreditorBankAccount == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.CreditorBankAccount, nil
 }
 

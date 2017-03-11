@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// CustomerService manages customers
 type CustomerService struct {
   endpoint string
   token string
@@ -64,14 +67,10 @@ type CustomerCreateParams struct {
       Region string `url:",omitempty" json:"region,omitempty"`
       SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
       }
-// CustomerCreateResult parameters
-type CustomerCreateResult struct {
-      Customers Customer `url:",omitempty" json:"customers,omitempty"`
-      }
 
 // Create
 // Creates a new customer object.
-func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams) (*CustomerCreateResult, error) {
+func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams) (*Customer,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers",))
   if err != nil {
     return nil, err
@@ -104,10 +103,11 @@ func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams) (*
   }
 
   var result struct {
-    *CustomerCreateResult
+    Err *APIError `json:"error"`
+Customer *Customer `json:"customers"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -119,13 +119,26 @@ func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams) (*
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.CustomerCreateResult, nil
+if result.Customer == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Customer, nil
 }
 
 
@@ -140,8 +153,7 @@ type CustomerListParams struct {
       Lte string `url:",omitempty" json:"lte,omitempty"`
       } `url:",omitempty" json:"created_at,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      }
-// CustomerListResult parameters
+      }// CustomerListResult response including pagination metadata
 type CustomerListResult struct {
       Customers []struct {
       AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
@@ -170,10 +182,11 @@ type CustomerListResult struct {
       } `url:",omitempty" json:"meta,omitempty"`
       }
 
+
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // customers.
-func (s *CustomerService) List(ctx context.Context, p CustomerListParams) (*CustomerListResult, error) {
+func (s *CustomerService) List(ctx context.Context, p CustomerListParams) (*CustomerListResult,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers",))
   if err != nil {
     return nil, err
@@ -202,10 +215,11 @@ func (s *CustomerService) List(ctx context.Context, p CustomerListParams) (*Cust
   }
 
   var result struct {
-    *CustomerListResult
+    Err *APIError `json:"error"`
+*CustomerListResult
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -217,24 +231,33 @@ func (s *CustomerService) List(ctx context.Context, p CustomerListParams) (*Cust
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
+if result.CustomerListResult == nil {
+    return nil, errors.New("missing result")
+  }
+
   return result.CustomerListResult, nil
 }
 
 
-// CustomerGetResult parameters
-type CustomerGetResult struct {
-      Customers Customer `url:",omitempty" json:"customers,omitempty"`
-      }
 
 // Get
 // Retrieves the details of an existing customer.
-func (s *CustomerService) Get(ctx context.Context,identity string) (*CustomerGetResult, error) {
+func (s *CustomerService) Get(ctx context.Context,identity string) (*Customer,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers/%v",
       identity,))
   if err != nil {
@@ -260,10 +283,11 @@ func (s *CustomerService) Get(ctx context.Context,identity string) (*CustomerGet
   }
 
   var result struct {
-    *CustomerGetResult
+    Err *APIError `json:"error"`
+Customer *Customer `json:"customers"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -275,13 +299,26 @@ func (s *CustomerService) Get(ctx context.Context,identity string) (*CustomerGet
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.CustomerGetResult, nil
+if result.Customer == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Customer, nil
 }
 
 
@@ -302,15 +339,11 @@ type CustomerUpdateParams struct {
       Region string `url:",omitempty" json:"region,omitempty"`
       SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
       }
-// CustomerUpdateResult parameters
-type CustomerUpdateResult struct {
-      Customers Customer `url:",omitempty" json:"customers,omitempty"`
-      }
 
 // Update
 // Updates a customer object. Supports all of the fields supported when creating
 // a customer.
-func (s *CustomerService) Update(ctx context.Context,identity string, p CustomerUpdateParams) (*CustomerUpdateResult, error) {
+func (s *CustomerService) Update(ctx context.Context,identity string, p CustomerUpdateParams) (*Customer,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers/%v",
       identity,))
   if err != nil {
@@ -344,10 +377,11 @@ func (s *CustomerService) Update(ctx context.Context,identity string, p Customer
   }
 
   var result struct {
-    *CustomerUpdateResult
+    Err *APIError `json:"error"`
+Customer *Customer `json:"customers"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -359,12 +393,25 @@ func (s *CustomerService) Update(ctx context.Context,identity string, p Customer
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.CustomerUpdateResult, nil
+if result.Customer == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Customer, nil
 }
 

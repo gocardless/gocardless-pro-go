@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// CreditorService manages creditors
 type CreditorService struct {
   endpoint string
   token string
@@ -76,14 +79,10 @@ type CreditorCreateParams struct {
       PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
       Region string `url:",omitempty" json:"region,omitempty"`
       }
-// CreditorCreateResult parameters
-type CreditorCreateResult struct {
-      Creditors Creditor `url:",omitempty" json:"creditors,omitempty"`
-      }
 
 // Create
 // Creates a new creditor.
-func (s *CreditorService) Create(ctx context.Context, p CreditorCreateParams) (*CreditorCreateResult, error) {
+func (s *CreditorService) Create(ctx context.Context, p CreditorCreateParams) (*Creditor,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/creditors",))
   if err != nil {
     return nil, err
@@ -116,10 +115,11 @@ func (s *CreditorService) Create(ctx context.Context, p CreditorCreateParams) (*
   }
 
   var result struct {
-    *CreditorCreateResult
+    Err *APIError `json:"error"`
+Creditor *Creditor `json:"creditors"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -131,13 +131,26 @@ func (s *CreditorService) Create(ctx context.Context, p CreditorCreateParams) (*
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.CreditorCreateResult, nil
+if result.Creditor == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Creditor, nil
 }
 
 
@@ -152,8 +165,7 @@ type CreditorListParams struct {
       Lte string `url:",omitempty" json:"lte,omitempty"`
       } `url:",omitempty" json:"created_at,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      }
-// CreditorListResult parameters
+      }// CreditorListResult response including pagination metadata
 type CreditorListResult struct {
       Creditors []struct {
       AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
@@ -199,10 +211,11 @@ type CreditorListResult struct {
       } `url:",omitempty" json:"meta,omitempty"`
       }
 
+
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // creditors.
-func (s *CreditorService) List(ctx context.Context, p CreditorListParams) (*CreditorListResult, error) {
+func (s *CreditorService) List(ctx context.Context, p CreditorListParams) (*CreditorListResult,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/creditors",))
   if err != nil {
     return nil, err
@@ -231,10 +244,11 @@ func (s *CreditorService) List(ctx context.Context, p CreditorListParams) (*Cred
   }
 
   var result struct {
-    *CreditorListResult
+    Err *APIError `json:"error"`
+*CreditorListResult
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -246,10 +260,23 @@ func (s *CreditorService) List(ctx context.Context, p CreditorListParams) (*Cred
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
+  }
+
+if result.CreditorListResult == nil {
+    return nil, errors.New("missing result")
   }
 
   return result.CreditorListResult, nil
@@ -258,14 +285,10 @@ func (s *CreditorService) List(ctx context.Context, p CreditorListParams) (*Cred
 
 // CreditorGetParams parameters
 type CreditorGetParams map[string]interface{}
-// CreditorGetResult parameters
-type CreditorGetResult struct {
-      Creditors Creditor `url:",omitempty" json:"creditors,omitempty"`
-      }
 
 // Get
 // Retrieves the details of an existing creditor.
-func (s *CreditorService) Get(ctx context.Context,identity string, p CreditorGetParams) (*CreditorGetResult, error) {
+func (s *CreditorService) Get(ctx context.Context,identity string, p CreditorGetParams) (*Creditor,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/creditors/%v",
       identity,))
   if err != nil {
@@ -295,10 +318,11 @@ func (s *CreditorService) Get(ctx context.Context,identity string, p CreditorGet
   }
 
   var result struct {
-    *CreditorGetResult
+    Err *APIError `json:"error"`
+Creditor *Creditor `json:"creditors"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -310,13 +334,26 @@ func (s *CreditorService) Get(ctx context.Context,identity string, p CreditorGet
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.CreditorGetResult, nil
+if result.Creditor == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Creditor, nil
 }
 
 
@@ -336,15 +373,11 @@ type CreditorUpdateParams struct {
       PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
       Region string `url:",omitempty" json:"region,omitempty"`
       }
-// CreditorUpdateResult parameters
-type CreditorUpdateResult struct {
-      Creditors Creditor `url:",omitempty" json:"creditors,omitempty"`
-      }
 
 // Update
 // Updates a creditor object. Supports all of the fields supported when creating
 // a creditor.
-func (s *CreditorService) Update(ctx context.Context,identity string, p CreditorUpdateParams) (*CreditorUpdateResult, error) {
+func (s *CreditorService) Update(ctx context.Context,identity string, p CreditorUpdateParams) (*Creditor,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/creditors/%v",
       identity,))
   if err != nil {
@@ -378,10 +411,11 @@ func (s *CreditorService) Update(ctx context.Context,identity string, p Creditor
   }
 
   var result struct {
-    *CreditorUpdateResult
+    Err *APIError `json:"error"`
+Creditor *Creditor `json:"creditors"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -393,12 +427,25 @@ func (s *CreditorService) Update(ctx context.Context,identity string, p Creditor
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.CreditorUpdateResult, nil
+if result.Creditor == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Creditor, nil
 }
 

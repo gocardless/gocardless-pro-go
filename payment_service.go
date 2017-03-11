@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// PaymentService manages payments
 type PaymentService struct {
   endpoint string
   token string
@@ -60,10 +63,6 @@ type PaymentCreateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
       Reference string `url:",omitempty" json:"reference,omitempty"`
       }
-// PaymentCreateResult parameters
-type PaymentCreateResult struct {
-      Payments Payment `url:",omitempty" json:"payments,omitempty"`
-      }
 
 // Create
 // <a name="mandate_is_inactive"></a>Creates a new payment object.
@@ -73,7 +72,7 @@ type PaymentCreateResult struct {
 // [mandate](#core-endpoints-mandates) is cancelled or has failed. Payments can
 // be created against mandates with status of: `pending_customer_approval`,
 // `pending_submission`, `submitted`, and `active`.
-func (s *PaymentService) Create(ctx context.Context, p PaymentCreateParams) (*PaymentCreateResult, error) {
+func (s *PaymentService) Create(ctx context.Context, p PaymentCreateParams) (*Payment,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments",))
   if err != nil {
     return nil, err
@@ -106,10 +105,11 @@ func (s *PaymentService) Create(ctx context.Context, p PaymentCreateParams) (*Pa
   }
 
   var result struct {
-    *PaymentCreateResult
+    Err *APIError `json:"error"`
+Payment *Payment `json:"payments"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -121,13 +121,26 @@ func (s *PaymentService) Create(ctx context.Context, p PaymentCreateParams) (*Pa
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.PaymentCreateResult, nil
+if result.Payment == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Payment, nil
 }
 
 
@@ -148,8 +161,7 @@ type PaymentListParams struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
       Status string `url:",omitempty" json:"status,omitempty"`
       Subscription string `url:",omitempty" json:"subscription,omitempty"`
-      }
-// PaymentListResult parameters
+      }// PaymentListResult response including pagination metadata
 type PaymentListResult struct {
       Meta struct {
       Cursors struct {
@@ -178,10 +190,11 @@ type PaymentListResult struct {
       } `url:",omitempty" json:"payments,omitempty"`
       }
 
+
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // payments.
-func (s *PaymentService) List(ctx context.Context, p PaymentListParams) (*PaymentListResult, error) {
+func (s *PaymentService) List(ctx context.Context, p PaymentListParams) (*PaymentListResult,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments",))
   if err != nil {
     return nil, err
@@ -210,10 +223,11 @@ func (s *PaymentService) List(ctx context.Context, p PaymentListParams) (*Paymen
   }
 
   var result struct {
-    *PaymentListResult
+    Err *APIError `json:"error"`
+*PaymentListResult
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -225,24 +239,33 @@ func (s *PaymentService) List(ctx context.Context, p PaymentListParams) (*Paymen
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
+if result.PaymentListResult == nil {
+    return nil, errors.New("missing result")
+  }
+
   return result.PaymentListResult, nil
 }
 
 
-// PaymentGetResult parameters
-type PaymentGetResult struct {
-      Payments Payment `url:",omitempty" json:"payments,omitempty"`
-      }
 
 // Get
 // Retrieves the details of a single existing payment.
-func (s *PaymentService) Get(ctx context.Context,identity string) (*PaymentGetResult, error) {
+func (s *PaymentService) Get(ctx context.Context,identity string) (*Payment,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments/%v",
       identity,))
   if err != nil {
@@ -268,10 +291,11 @@ func (s *PaymentService) Get(ctx context.Context,identity string) (*PaymentGetRe
   }
 
   var result struct {
-    *PaymentGetResult
+    Err *APIError `json:"error"`
+Payment *Payment `json:"payments"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -283,13 +307,26 @@ func (s *PaymentService) Get(ctx context.Context,identity string) (*PaymentGetRe
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.PaymentGetResult, nil
+if result.Payment == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Payment, nil
 }
 
 
@@ -297,14 +334,10 @@ func (s *PaymentService) Get(ctx context.Context,identity string) (*PaymentGetRe
 type PaymentUpdateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
       }
-// PaymentUpdateResult parameters
-type PaymentUpdateResult struct {
-      Payments Payment `url:",omitempty" json:"payments,omitempty"`
-      }
 
 // Update
 // Updates a payment object. This accepts only the metadata parameter.
-func (s *PaymentService) Update(ctx context.Context,identity string, p PaymentUpdateParams) (*PaymentUpdateResult, error) {
+func (s *PaymentService) Update(ctx context.Context,identity string, p PaymentUpdateParams) (*Payment,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments/%v",
       identity,))
   if err != nil {
@@ -338,10 +371,11 @@ func (s *PaymentService) Update(ctx context.Context,identity string, p PaymentUp
   }
 
   var result struct {
-    *PaymentUpdateResult
+    Err *APIError `json:"error"`
+Payment *Payment `json:"payments"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -353,23 +387,32 @@ func (s *PaymentService) Update(ctx context.Context,identity string, p PaymentUp
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.PaymentUpdateResult, nil
+if result.Payment == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Payment, nil
 }
 
 
 // PaymentCancelParams parameters
 type PaymentCancelParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      }
-// PaymentCancelResult parameters
-type PaymentCancelResult struct {
-      Payments Payment `url:",omitempty" json:"payments,omitempty"`
       }
 
 // Cancel
@@ -379,7 +422,7 @@ type PaymentCancelResult struct {
 // 
 // This will fail with a `cancellation_failed` error
 // unless the payment's status is `pending_submission`.
-func (s *PaymentService) Cancel(ctx context.Context,identity string, p PaymentCancelParams) (*PaymentCancelResult, error) {
+func (s *PaymentService) Cancel(ctx context.Context,identity string, p PaymentCancelParams) (*Payment,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments/%v/actions/cancel",
       identity,))
   if err != nil {
@@ -413,10 +456,11 @@ func (s *PaymentService) Cancel(ctx context.Context,identity string, p PaymentCa
   }
 
   var result struct {
-    *PaymentCancelResult
+    Err *APIError `json:"error"`
+Payment *Payment `json:"payments"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -428,23 +472,32 @@ func (s *PaymentService) Cancel(ctx context.Context,identity string, p PaymentCa
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.PaymentCancelResult, nil
+if result.Payment == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Payment, nil
 }
 
 
 // PaymentRetryParams parameters
 type PaymentRetryParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      }
-// PaymentRetryResult parameters
-type PaymentRetryResult struct {
-      Payments Payment `url:",omitempty" json:"payments,omitempty"`
       }
 
 // Retry
@@ -460,7 +513,7 @@ type PaymentRetryResult struct {
 // 
 // Payments can be
 // retried up to 3 times.
-func (s *PaymentService) Retry(ctx context.Context,identity string, p PaymentRetryParams) (*PaymentRetryResult, error) {
+func (s *PaymentService) Retry(ctx context.Context,identity string, p PaymentRetryParams) (*Payment,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payments/%v/actions/retry",
       identity,))
   if err != nil {
@@ -494,10 +547,11 @@ func (s *PaymentService) Retry(ctx context.Context,identity string, p PaymentRet
   }
 
   var result struct {
-    *PaymentRetryResult
+    Err *APIError `json:"error"`
+Payment *Payment `json:"payments"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -509,12 +563,25 @@ func (s *PaymentService) Retry(ctx context.Context,identity string, p PaymentRet
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.PaymentRetryResult, nil
+if result.Payment == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Payment, nil
 }
 

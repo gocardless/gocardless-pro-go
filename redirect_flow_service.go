@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// RedirectFlowService manages redirect_flows
 type RedirectFlowService struct {
   endpoint string
   token string
@@ -69,15 +72,11 @@ type RedirectFlowCreateParams struct {
       SessionToken string `url:",omitempty" json:"session_token,omitempty"`
       SuccessRedirectUrl string `url:",omitempty" json:"success_redirect_url,omitempty"`
       }
-// RedirectFlowCreateResult parameters
-type RedirectFlowCreateResult struct {
-      RedirectFlows RedirectFlow `url:",omitempty" json:"redirect_flows,omitempty"`
-      }
 
 // Create
 // Creates a redirect flow object which can then be used to redirect your
 // customer to the GoCardless hosted payment pages.
-func (s *RedirectFlowService) Create(ctx context.Context, p RedirectFlowCreateParams) (*RedirectFlowCreateResult, error) {
+func (s *RedirectFlowService) Create(ctx context.Context, p RedirectFlowCreateParams) (*RedirectFlow,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/redirect_flows",))
   if err != nil {
     return nil, err
@@ -110,10 +109,11 @@ func (s *RedirectFlowService) Create(ctx context.Context, p RedirectFlowCreatePa
   }
 
   var result struct {
-    *RedirectFlowCreateResult
+    Err *APIError `json:"error"`
+RedirectFlow *RedirectFlow `json:"redirect_flows"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -125,24 +125,33 @@ func (s *RedirectFlowService) Create(ctx context.Context, p RedirectFlowCreatePa
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.RedirectFlowCreateResult, nil
+if result.RedirectFlow == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.RedirectFlow, nil
 }
 
 
-// RedirectFlowGetResult parameters
-type RedirectFlowGetResult struct {
-      RedirectFlows RedirectFlow `url:",omitempty" json:"redirect_flows,omitempty"`
-      }
 
 // Get
 // Returns all details about a single redirect flow
-func (s *RedirectFlowService) Get(ctx context.Context,identity string) (*RedirectFlowGetResult, error) {
+func (s *RedirectFlowService) Get(ctx context.Context,identity string) (*RedirectFlow,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/redirect_flows/%v",
       identity,))
   if err != nil {
@@ -168,10 +177,11 @@ func (s *RedirectFlowService) Get(ctx context.Context,identity string) (*Redirec
   }
 
   var result struct {
-    *RedirectFlowGetResult
+    Err *APIError `json:"error"`
+RedirectFlow *RedirectFlow `json:"redirect_flows"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -183,23 +193,32 @@ func (s *RedirectFlowService) Get(ctx context.Context,identity string) (*Redirec
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.RedirectFlowGetResult, nil
+if result.RedirectFlow == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.RedirectFlow, nil
 }
 
 
 // RedirectFlowCompleteParams parameters
 type RedirectFlowCompleteParams struct {
       SessionToken string `url:",omitempty" json:"session_token,omitempty"`
-      }
-// RedirectFlowCompleteResult parameters
-type RedirectFlowCompleteResult struct {
-      RedirectFlows RedirectFlow `url:",omitempty" json:"redirect_flows,omitempty"`
       }
 
 // Complete
@@ -214,7 +233,7 @@ type RedirectFlowCompleteResult struct {
 // integration has already completed this flow. It will return a `bad_request`
 // error if the `session_token` differs to the one supplied when the redirect
 // flow was created.
-func (s *RedirectFlowService) Complete(ctx context.Context,identity string, p RedirectFlowCompleteParams) (*RedirectFlowCompleteResult, error) {
+func (s *RedirectFlowService) Complete(ctx context.Context,identity string, p RedirectFlowCompleteParams) (*RedirectFlow,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/redirect_flows/%v/actions/complete",
       identity,))
   if err != nil {
@@ -248,10 +267,11 @@ func (s *RedirectFlowService) Complete(ctx context.Context,identity string, p Re
   }
 
   var result struct {
-    *RedirectFlowCompleteResult
+    Err *APIError `json:"error"`
+RedirectFlow *RedirectFlow `json:"redirect_flows"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -263,12 +283,25 @@ func (s *RedirectFlowService) Complete(ctx context.Context,identity string, p Re
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.RedirectFlowCompleteResult, nil
+if result.RedirectFlow == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.RedirectFlow, nil
 }
 

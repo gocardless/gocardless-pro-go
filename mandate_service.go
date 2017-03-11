@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// MandateService manages mandates
 type MandateService struct {
   endpoint string
   token string
@@ -55,14 +58,10 @@ type MandateCreateParams struct {
       Reference string `url:",omitempty" json:"reference,omitempty"`
       Scheme string `url:",omitempty" json:"scheme,omitempty"`
       }
-// MandateCreateResult parameters
-type MandateCreateResult struct {
-      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
-      }
 
 // Create
 // Creates a new mandate object.
-func (s *MandateService) Create(ctx context.Context, p MandateCreateParams) (*MandateCreateResult, error) {
+func (s *MandateService) Create(ctx context.Context, p MandateCreateParams) (*Mandate,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates",))
   if err != nil {
     return nil, err
@@ -95,10 +94,11 @@ func (s *MandateService) Create(ctx context.Context, p MandateCreateParams) (*Ma
   }
 
   var result struct {
-    *MandateCreateResult
+    Err *APIError `json:"error"`
+Mandate *Mandate `json:"mandates"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -110,13 +110,26 @@ func (s *MandateService) Create(ctx context.Context, p MandateCreateParams) (*Ma
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.MandateCreateResult, nil
+if result.Mandate == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Mandate, nil
 }
 
 
@@ -136,8 +149,7 @@ type MandateListParams struct {
       Limit int `url:",omitempty" json:"limit,omitempty"`
       Reference string `url:",omitempty" json:"reference,omitempty"`
       Status []string `url:",omitempty" json:"status,omitempty"`
-      }
-// MandateListResult parameters
+      }// MandateListResult response including pagination metadata
 type MandateListResult struct {
       Mandates []struct {
       CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
@@ -164,10 +176,11 @@ type MandateListResult struct {
       } `url:",omitempty" json:"meta,omitempty"`
       }
 
+
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // mandates.
-func (s *MandateService) List(ctx context.Context, p MandateListParams) (*MandateListResult, error) {
+func (s *MandateService) List(ctx context.Context, p MandateListParams) (*MandateListResult,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates",))
   if err != nil {
     return nil, err
@@ -196,10 +209,11 @@ func (s *MandateService) List(ctx context.Context, p MandateListParams) (*Mandat
   }
 
   var result struct {
-    *MandateListResult
+    Err *APIError `json:"error"`
+*MandateListResult
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -211,24 +225,33 @@ func (s *MandateService) List(ctx context.Context, p MandateListParams) (*Mandat
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
+if result.MandateListResult == nil {
+    return nil, errors.New("missing result")
+  }
+
   return result.MandateListResult, nil
 }
 
 
-// MandateGetResult parameters
-type MandateGetResult struct {
-      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
-      }
 
 // Get
 // Retrieves the details of an existing mandate.
-func (s *MandateService) Get(ctx context.Context,identity string) (*MandateGetResult, error) {
+func (s *MandateService) Get(ctx context.Context,identity string) (*Mandate,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v",
       identity,))
   if err != nil {
@@ -254,10 +277,11 @@ func (s *MandateService) Get(ctx context.Context,identity string) (*MandateGetRe
   }
 
   var result struct {
-    *MandateGetResult
+    Err *APIError `json:"error"`
+Mandate *Mandate `json:"mandates"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -269,13 +293,26 @@ func (s *MandateService) Get(ctx context.Context,identity string) (*MandateGetRe
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.MandateGetResult, nil
+if result.Mandate == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Mandate, nil
 }
 
 
@@ -283,14 +320,10 @@ func (s *MandateService) Get(ctx context.Context,identity string) (*MandateGetRe
 type MandateUpdateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
       }
-// MandateUpdateResult parameters
-type MandateUpdateResult struct {
-      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
-      }
 
 // Update
 // Updates a mandate object. This accepts only the metadata parameter.
-func (s *MandateService) Update(ctx context.Context,identity string, p MandateUpdateParams) (*MandateUpdateResult, error) {
+func (s *MandateService) Update(ctx context.Context,identity string, p MandateUpdateParams) (*Mandate,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v",
       identity,))
   if err != nil {
@@ -324,10 +357,11 @@ func (s *MandateService) Update(ctx context.Context,identity string, p MandateUp
   }
 
   var result struct {
-    *MandateUpdateResult
+    Err *APIError `json:"error"`
+Mandate *Mandate `json:"mandates"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -339,23 +373,32 @@ func (s *MandateService) Update(ctx context.Context,identity string, p MandateUp
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.MandateUpdateResult, nil
+if result.Mandate == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Mandate, nil
 }
 
 
 // MandateCancelParams parameters
 type MandateCancelParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      }
-// MandateCancelResult parameters
-type MandateCancelResult struct {
-      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
       }
 
 // Cancel
@@ -365,7 +408,7 @@ type MandateCancelResult struct {
 // 
 // This will fail with a `cancellation_failed` error if
 // the mandate is already cancelled.
-func (s *MandateService) Cancel(ctx context.Context,identity string, p MandateCancelParams) (*MandateCancelResult, error) {
+func (s *MandateService) Cancel(ctx context.Context,identity string, p MandateCancelParams) (*Mandate,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v/actions/cancel",
       identity,))
   if err != nil {
@@ -399,10 +442,11 @@ func (s *MandateService) Cancel(ctx context.Context,identity string, p MandateCa
   }
 
   var result struct {
-    *MandateCancelResult
+    Err *APIError `json:"error"`
+Mandate *Mandate `json:"mandates"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -414,23 +458,32 @@ func (s *MandateService) Cancel(ctx context.Context,identity string, p MandateCa
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.MandateCancelResult, nil
+if result.Mandate == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Mandate, nil
 }
 
 
 // MandateReinstateParams parameters
 type MandateReinstateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      }
-// MandateReinstateResult parameters
-type MandateReinstateResult struct {
-      Mandates Mandate `url:",omitempty" json:"mandates,omitempty"`
       }
 
 // Reinstate
@@ -447,7 +500,7 @@ type MandateReinstateResult struct {
 // 
 // Mandates can be
 // resubmitted up to 3 times.
-func (s *MandateService) Reinstate(ctx context.Context,identity string, p MandateReinstateParams) (*MandateReinstateResult, error) {
+func (s *MandateService) Reinstate(ctx context.Context,identity string, p MandateReinstateParams) (*Mandate,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v/actions/reinstate",
       identity,))
   if err != nil {
@@ -481,10 +534,11 @@ func (s *MandateService) Reinstate(ctx context.Context,identity string, p Mandat
   }
 
   var result struct {
-    *MandateReinstateResult
+    Err *APIError `json:"error"`
+Mandate *Mandate `json:"mandates"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -496,12 +550,25 @@ func (s *MandateService) Reinstate(ctx context.Context,identity string, p Mandat
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.MandateReinstateResult, nil
+if result.Mandate == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Mandate, nil
 }
 

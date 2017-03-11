@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// EventService manages events
 type EventService struct {
   endpoint string
   token string
@@ -75,8 +78,7 @@ type EventListParams struct {
       Refund string `url:",omitempty" json:"refund,omitempty"`
       ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
       Subscription string `url:",omitempty" json:"subscription,omitempty"`
-      }
-// EventListResult parameters
+      }// EventListResult response including pagination metadata
 type EventListResult struct {
       Events []struct {
       Action string `url:",omitempty" json:"action,omitempty"`
@@ -113,10 +115,11 @@ type EventListResult struct {
       } `url:",omitempty" json:"meta,omitempty"`
       }
 
+
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // events.
-func (s *EventService) List(ctx context.Context, p EventListParams) (*EventListResult, error) {
+func (s *EventService) List(ctx context.Context, p EventListParams) (*EventListResult,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/events",))
   if err != nil {
     return nil, err
@@ -145,10 +148,11 @@ func (s *EventService) List(ctx context.Context, p EventListParams) (*EventListR
   }
 
   var result struct {
-    *EventListResult
+    Err *APIError `json:"error"`
+*EventListResult
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -160,24 +164,33 @@ func (s *EventService) List(ctx context.Context, p EventListParams) (*EventListR
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
+if result.EventListResult == nil {
+    return nil, errors.New("missing result")
+  }
+
   return result.EventListResult, nil
 }
 
 
-// EventGetResult parameters
-type EventGetResult struct {
-      Events Event `url:",omitempty" json:"events,omitempty"`
-      }
 
 // Get
 // Retrieves the details of a single event.
-func (s *EventService) Get(ctx context.Context,identity string) (*EventGetResult, error) {
+func (s *EventService) Get(ctx context.Context,identity string) (*Event,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/events/%v",
       identity,))
   if err != nil {
@@ -203,10 +216,11 @@ func (s *EventService) Get(ctx context.Context,identity string) (*EventGetResult
   }
 
   var result struct {
-    *EventGetResult
+    Err *APIError `json:"error"`
+Event *Event `json:"events"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -218,12 +232,25 @@ func (s *EventService) Get(ctx context.Context,identity string) (*EventGetResult
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.EventGetResult, nil
+if result.Event == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Event, nil
 }
 

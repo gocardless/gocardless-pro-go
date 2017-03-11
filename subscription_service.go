@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// SubscriptionService manages subscriptions
 type SubscriptionService struct {
   endpoint string
   token string
@@ -70,14 +73,10 @@ type SubscriptionCreateParams struct {
       PaymentReference string `url:",omitempty" json:"payment_reference,omitempty"`
       StartDate string `url:",omitempty" json:"start_date,omitempty"`
       }
-// SubscriptionCreateResult parameters
-type SubscriptionCreateResult struct {
-      Subscriptions Subscription `url:",omitempty" json:"subscriptions,omitempty"`
-      }
 
 // Create
 // Creates a new subscription object
-func (s *SubscriptionService) Create(ctx context.Context, p SubscriptionCreateParams) (*SubscriptionCreateResult, error) {
+func (s *SubscriptionService) Create(ctx context.Context, p SubscriptionCreateParams) (*Subscription,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions",))
   if err != nil {
     return nil, err
@@ -110,10 +109,11 @@ func (s *SubscriptionService) Create(ctx context.Context, p SubscriptionCreatePa
   }
 
   var result struct {
-    *SubscriptionCreateResult
+    Err *APIError `json:"error"`
+Subscription *Subscription `json:"subscriptions"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -125,13 +125,26 @@ func (s *SubscriptionService) Create(ctx context.Context, p SubscriptionCreatePa
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.SubscriptionCreateResult, nil
+if result.Subscription == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Subscription, nil
 }
 
 
@@ -148,8 +161,7 @@ type SubscriptionListParams struct {
       Customer string `url:",omitempty" json:"customer,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
-      }
-// SubscriptionListResult parameters
+      }// SubscriptionListResult response including pagination metadata
 type SubscriptionListResult struct {
       Meta struct {
       Cursors struct {
@@ -183,10 +195,11 @@ type SubscriptionListResult struct {
       } `url:",omitempty" json:"subscriptions,omitempty"`
       }
 
+
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // subscriptions.
-func (s *SubscriptionService) List(ctx context.Context, p SubscriptionListParams) (*SubscriptionListResult, error) {
+func (s *SubscriptionService) List(ctx context.Context, p SubscriptionListParams) (*SubscriptionListResult,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions",))
   if err != nil {
     return nil, err
@@ -215,10 +228,11 @@ func (s *SubscriptionService) List(ctx context.Context, p SubscriptionListParams
   }
 
   var result struct {
-    *SubscriptionListResult
+    Err *APIError `json:"error"`
+*SubscriptionListResult
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -230,24 +244,33 @@ func (s *SubscriptionService) List(ctx context.Context, p SubscriptionListParams
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
+if result.SubscriptionListResult == nil {
+    return nil, errors.New("missing result")
+  }
+
   return result.SubscriptionListResult, nil
 }
 
 
-// SubscriptionGetResult parameters
-type SubscriptionGetResult struct {
-      Subscriptions Subscription `url:",omitempty" json:"subscriptions,omitempty"`
-      }
 
 // Get
 // Retrieves the details of a single subscription.
-func (s *SubscriptionService) Get(ctx context.Context,identity string) (*SubscriptionGetResult, error) {
+func (s *SubscriptionService) Get(ctx context.Context,identity string) (*Subscription,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions/%v",
       identity,))
   if err != nil {
@@ -273,10 +296,11 @@ func (s *SubscriptionService) Get(ctx context.Context,identity string) (*Subscri
   }
 
   var result struct {
-    *SubscriptionGetResult
+    Err *APIError `json:"error"`
+Subscription *Subscription `json:"subscriptions"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -288,13 +312,26 @@ func (s *SubscriptionService) Get(ctx context.Context,identity string) (*Subscri
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.SubscriptionGetResult, nil
+if result.Subscription == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Subscription, nil
 }
 
 
@@ -304,14 +341,10 @@ type SubscriptionUpdateParams struct {
       Name string `url:",omitempty" json:"name,omitempty"`
       PaymentReference string `url:",omitempty" json:"payment_reference,omitempty"`
       }
-// SubscriptionUpdateResult parameters
-type SubscriptionUpdateResult struct {
-      Subscriptions Subscription `url:",omitempty" json:"subscriptions,omitempty"`
-      }
 
 // Update
 // Updates a subscription object.
-func (s *SubscriptionService) Update(ctx context.Context,identity string, p SubscriptionUpdateParams) (*SubscriptionUpdateResult, error) {
+func (s *SubscriptionService) Update(ctx context.Context,identity string, p SubscriptionUpdateParams) (*Subscription,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions/%v",
       identity,))
   if err != nil {
@@ -345,10 +378,11 @@ func (s *SubscriptionService) Update(ctx context.Context,identity string, p Subs
   }
 
   var result struct {
-    *SubscriptionUpdateResult
+    Err *APIError `json:"error"`
+Subscription *Subscription `json:"subscriptions"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -360,23 +394,32 @@ func (s *SubscriptionService) Update(ctx context.Context,identity string, p Subs
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.SubscriptionUpdateResult, nil
+if result.Subscription == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Subscription, nil
 }
 
 
 // SubscriptionCancelParams parameters
 type SubscriptionCancelParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      }
-// SubscriptionCancelResult parameters
-type SubscriptionCancelResult struct {
-      Subscriptions Subscription `url:",omitempty" json:"subscriptions,omitempty"`
       }
 
 // Cancel
@@ -387,7 +430,7 @@ type SubscriptionCancelResult struct {
 // This will fail with a
 // cancellation_failed error if the subscription is already cancelled or
 // finished.
-func (s *SubscriptionService) Cancel(ctx context.Context,identity string, p SubscriptionCancelParams) (*SubscriptionCancelResult, error) {
+func (s *SubscriptionService) Cancel(ctx context.Context,identity string, p SubscriptionCancelParams) (*Subscription,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions/%v/actions/cancel",
       identity,))
   if err != nil {
@@ -421,10 +464,11 @@ func (s *SubscriptionService) Cancel(ctx context.Context,identity string, p Subs
   }
 
   var result struct {
-    *SubscriptionCancelResult
+    Err *APIError `json:"error"`
+Subscription *Subscription `json:"subscriptions"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -436,12 +480,25 @@ func (s *SubscriptionService) Cancel(ctx context.Context,identity string, p Subs
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.SubscriptionCancelResult, nil
+if result.Subscription == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Subscription, nil
 }
 

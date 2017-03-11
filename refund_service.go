@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// RefundService manages refunds
 type RefundService struct {
   endpoint string
   token string
@@ -50,10 +53,6 @@ type RefundCreateParams struct {
       Reference string `url:",omitempty" json:"reference,omitempty"`
       TotalAmountConfirmation int `url:",omitempty" json:"total_amount_confirmation,omitempty"`
       }
-// RefundCreateResult parameters
-type RefundCreateResult struct {
-      Refunds Refund `url:",omitempty" json:"refunds,omitempty"`
-      }
 
 // Create
 // Creates a new refund object.
@@ -76,7 +75,7 @@ type RefundCreateResult struct {
 // - `number_of_refunds_exceeded` if five or
 // more refunds have already been created against the payment.
 // 
-func (s *RefundService) Create(ctx context.Context, p RefundCreateParams) (*RefundCreateResult, error) {
+func (s *RefundService) Create(ctx context.Context, p RefundCreateParams) (*Refund,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/refunds",))
   if err != nil {
     return nil, err
@@ -109,10 +108,11 @@ func (s *RefundService) Create(ctx context.Context, p RefundCreateParams) (*Refu
   }
 
   var result struct {
-    *RefundCreateResult
+    Err *APIError `json:"error"`
+Refund *Refund `json:"refunds"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -124,13 +124,26 @@ func (s *RefundService) Create(ctx context.Context, p RefundCreateParams) (*Refu
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.RefundCreateResult, nil
+if result.Refund == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Refund, nil
 }
 
 
@@ -146,8 +159,7 @@ type RefundListParams struct {
       } `url:",omitempty" json:"created_at,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       Payment string `url:",omitempty" json:"payment,omitempty"`
-      }
-// RefundListResult parameters
+      }// RefundListResult response including pagination metadata
 type RefundListResult struct {
       Meta struct {
       Cursors struct {
@@ -169,10 +181,11 @@ type RefundListResult struct {
       } `url:",omitempty" json:"refunds,omitempty"`
       }
 
+
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // refunds.
-func (s *RefundService) List(ctx context.Context, p RefundListParams) (*RefundListResult, error) {
+func (s *RefundService) List(ctx context.Context, p RefundListParams) (*RefundListResult,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/refunds",))
   if err != nil {
     return nil, err
@@ -201,10 +214,11 @@ func (s *RefundService) List(ctx context.Context, p RefundListParams) (*RefundLi
   }
 
   var result struct {
-    *RefundListResult
+    Err *APIError `json:"error"`
+*RefundListResult
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -216,24 +230,33 @@ func (s *RefundService) List(ctx context.Context, p RefundListParams) (*RefundLi
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
+if result.RefundListResult == nil {
+    return nil, errors.New("missing result")
+  }
+
   return result.RefundListResult, nil
 }
 
 
-// RefundGetResult parameters
-type RefundGetResult struct {
-      Refunds Refund `url:",omitempty" json:"refunds,omitempty"`
-      }
 
 // Get
 // Retrieves all details for a single refund
-func (s *RefundService) Get(ctx context.Context,identity string) (*RefundGetResult, error) {
+func (s *RefundService) Get(ctx context.Context,identity string) (*Refund,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/refunds/%v",
       identity,))
   if err != nil {
@@ -259,10 +282,11 @@ func (s *RefundService) Get(ctx context.Context,identity string) (*RefundGetResu
   }
 
   var result struct {
-    *RefundGetResult
+    Err *APIError `json:"error"`
+Refund *Refund `json:"refunds"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -274,13 +298,26 @@ func (s *RefundService) Get(ctx context.Context,identity string) (*RefundGetResu
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.RefundGetResult, nil
+if result.Refund == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Refund, nil
 }
 
 
@@ -288,14 +325,10 @@ func (s *RefundService) Get(ctx context.Context,identity string) (*RefundGetResu
 type RefundUpdateParams struct {
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
       }
-// RefundUpdateResult parameters
-type RefundUpdateResult struct {
-      Refunds Refund `url:",omitempty" json:"refunds,omitempty"`
-      }
 
 // Update
 // Updates a refund object.
-func (s *RefundService) Update(ctx context.Context,identity string, p RefundUpdateParams) (*RefundUpdateResult, error) {
+func (s *RefundService) Update(ctx context.Context,identity string, p RefundUpdateParams) (*Refund,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/refunds/%v",
       identity,))
   if err != nil {
@@ -329,10 +362,11 @@ func (s *RefundService) Update(ctx context.Context,identity string, p RefundUpda
   }
 
   var result struct {
-    *RefundUpdateResult
+    Err *APIError `json:"error"`
+Refund *Refund `json:"refunds"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -344,12 +378,25 @@ func (s *RefundService) Update(ctx context.Context,identity string, p RefundUpda
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.RefundUpdateResult, nil
+if result.Refund == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.Refund, nil
 }
 

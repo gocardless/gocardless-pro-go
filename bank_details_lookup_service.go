@@ -4,6 +4,7 @@ import (
   "bytes"
   "context"
   "encoding/json"
+  "errors"
   "fmt"
   "io"
   "net/http"
@@ -15,8 +16,10 @@ import (
 var _ = query.Values
 var _ = bytes.NewBuffer
 var _ = json.NewDecoder
+var _ = errors.New
 
 
+// BankDetailsLookupService manages bank_details_lookups
 type BankDetailsLookupService struct {
   endpoint string
   token string
@@ -42,10 +45,6 @@ type BankDetailsLookupCreateParams struct {
       CountryCode string `url:",omitempty" json:"country_code,omitempty"`
       Iban string `url:",omitempty" json:"iban,omitempty"`
       }
-// BankDetailsLookupCreateResult parameters
-type BankDetailsLookupCreateResult struct {
-      BankDetailsLookups BankDetailsLookup `url:",omitempty" json:"bank_details_lookups,omitempty"`
-      }
 
 // Create
 // Performs a bank details lookup.
@@ -61,7 +60,7 @@ type BankDetailsLookupCreateResult struct {
 // on GoCardless for
 // modulus or reachability checking but not for payment
 // collection, please get in touch.
-func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLookupCreateParams) (*BankDetailsLookupCreateResult, error) {
+func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLookupCreateParams) (*BankDetailsLookup,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/bank_details_lookups",))
   if err != nil {
     return nil, err
@@ -94,10 +93,11 @@ func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLook
   }
 
   var result struct {
-    *BankDetailsLookupCreateResult
+    Err *APIError `json:"error"`
+BankDetailsLookup *BankDetailsLookup `json:"bank_details_lookups"`
   }
 
-  try(3, func() error {
+  err = try(3, func() error {
       res, err := client.Do(req)
       if err != nil {
         return err
@@ -109,12 +109,25 @@ func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLook
         return err
       }
 
+      err = json.NewDecoder(res.Body).Decode(&result)
+      if err != nil {
+        return err
+      }
+
+      if result.Err != nil {
+        return result.Err
+      }
+
       return nil
   })
   if err != nil {
     return nil, err
   }
 
-  return result.BankDetailsLookupCreateResult, nil
+if result.BankDetailsLookup == nil {
+    return nil, errors.New("missing result")
+  }
+
+  return result.BankDetailsLookup, nil
 }
 
