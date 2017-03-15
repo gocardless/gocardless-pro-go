@@ -58,6 +58,7 @@ type Subscription struct {
 // SubscriptionCreateParams parameters
 type SubscriptionCreateParams struct {
       Amount int `url:",omitempty" json:"amount,omitempty"`
+      AppFee int `url:",omitempty" json:"app_fee,omitempty"`
       Count int `url:",omitempty" json:"count,omitempty"`
       Currency string `url:",omitempty" json:"currency,omitempty"`
       DayOfMonth int `url:",omitempty" json:"day_of_month,omitempty"`
