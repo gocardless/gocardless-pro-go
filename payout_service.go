@@ -39,6 +39,7 @@ type Payout struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
       CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
       } `url:",omitempty" json:"links,omitempty"`
+      PayoutType string `url:",omitempty" json:"payout_type,omitempty"`
       Reference string `url:",omitempty" json:"reference,omitempty"`
       Status string `url:",omitempty" json:"status,omitempty"`
       }
@@ -81,6 +82,7 @@ type PayoutListResult struct {
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
       CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
       } `url:",omitempty" json:"links,omitempty"`
+      PayoutType string `url:",omitempty" json:"payout_type,omitempty"`
       Reference string `url:",omitempty" json:"reference,omitempty"`
       Status string `url:",omitempty" json:"status,omitempty"`
       } `url:",omitempty" json:"payouts,omitempty"`
