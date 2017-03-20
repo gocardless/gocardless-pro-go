@@ -149,32 +149,19 @@ type MandateListParams struct {
       Limit int `url:",omitempty" json:"limit,omitempty"`
       Reference string `url:",omitempty" json:"reference,omitempty"`
       Status []string `url:",omitempty" json:"status,omitempty"`
-      }// MandateListResult response including pagination metadata
+      }
+
+// MandateListResult response including pagination metadata
 type MandateListResult struct {
-      Mandates []struct {
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-      Customer string `url:",omitempty" json:"customer,omitempty"`
-      CustomerBankAccount string `url:",omitempty" json:"customer_bank_account,omitempty"`
-      NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-      } `url:",omitempty" json:"links,omitempty"`
-      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      NextPossibleChargeDate string `url:",omitempty" json:"next_possible_charge_date,omitempty"`
-      PaymentsRequireApproval bool `url:",omitempty" json:"payments_require_approval,omitempty"`
-      Reference string `url:",omitempty" json:"reference,omitempty"`
-      Scheme string `url:",omitempty" json:"scheme,omitempty"`
-      Status string `url:",omitempty" json:"status,omitempty"`
-      } `url:",omitempty" json:"mandates,omitempty"`
-      Meta struct {
+  Mandates []Mandate `json:"mandates"`
+  Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
       Before string `url:",omitempty" json:"before,omitempty"`
       } `url:",omitempty" json:"cursors,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      } `url:",omitempty" json:"meta,omitempty"`
-      }
+      } `json:"meta"`
+}
 
 
 // List

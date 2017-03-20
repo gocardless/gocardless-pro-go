@@ -159,27 +159,19 @@ type RefundListParams struct {
       } `url:",omitempty" json:"created_at,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       Payment string `url:",omitempty" json:"payment,omitempty"`
-      }// RefundListResult response including pagination metadata
+      }
+
+// RefundListResult response including pagination metadata
 type RefundListResult struct {
-      Meta struct {
+  Refunds []Refund `json:"refunds"`
+  Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
       Before string `url:",omitempty" json:"before,omitempty"`
       } `url:",omitempty" json:"cursors,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      } `url:",omitempty" json:"meta,omitempty"`
-      Refunds []struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-      Currency string `url:",omitempty" json:"currency,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Links struct {
-      Payment string `url:",omitempty" json:"payment,omitempty"`
-      } `url:",omitempty" json:"links,omitempty"`
-      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      Reference string `url:",omitempty" json:"reference,omitempty"`
-      } `url:",omitempty" json:"refunds,omitempty"`
-      }
+      } `json:"meta"`
+}
 
 
 // List

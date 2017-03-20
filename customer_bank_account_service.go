@@ -164,30 +164,19 @@ type CustomerBankAccountListParams struct {
       Customer string `url:",omitempty" json:"customer,omitempty"`
       Enabled bool `url:",omitempty" json:"enabled,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      }// CustomerBankAccountListResult response including pagination metadata
+      }
+
+// CustomerBankAccountListResult response including pagination metadata
 type CustomerBankAccountListResult struct {
-      CustomerBankAccounts []struct {
-      AccountHolderName string `url:",omitempty" json:"account_holder_name,omitempty"`
-      AccountNumberEnding string `url:",omitempty" json:"account_number_ending,omitempty"`
-      BankName string `url:",omitempty" json:"bank_name,omitempty"`
-      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-      Currency string `url:",omitempty" json:"currency,omitempty"`
-      Enabled bool `url:",omitempty" json:"enabled,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Links struct {
-      Customer string `url:",omitempty" json:"customer,omitempty"`
-      } `url:",omitempty" json:"links,omitempty"`
-      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      } `url:",omitempty" json:"customer_bank_accounts,omitempty"`
-      Meta struct {
+  CustomerBankAccounts []CustomerBankAccount `json:"customer_bank_accounts"`
+  Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
       Before string `url:",omitempty" json:"before,omitempty"`
       } `url:",omitempty" json:"cursors,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      } `url:",omitempty" json:"meta,omitempty"`
-      }
+      } `json:"meta"`
+}
 
 
 // List

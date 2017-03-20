@@ -78,42 +78,19 @@ type EventListParams struct {
       Refund string `url:",omitempty" json:"refund,omitempty"`
       ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
       Subscription string `url:",omitempty" json:"subscription,omitempty"`
-      }// EventListResult response including pagination metadata
+      }
+
+// EventListResult response including pagination metadata
 type EventListResult struct {
-      Events []struct {
-      Action string `url:",omitempty" json:"action,omitempty"`
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-      Details struct {
-      Cause string `url:",omitempty" json:"cause,omitempty"`
-      Description string `url:",omitempty" json:"description,omitempty"`
-      Origin string `url:",omitempty" json:"origin,omitempty"`
-      ReasonCode string `url:",omitempty" json:"reason_code,omitempty"`
-      Scheme string `url:",omitempty" json:"scheme,omitempty"`
-      } `url:",omitempty" json:"details,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Links struct {
-      Mandate string `url:",omitempty" json:"mandate,omitempty"`
-      NewCustomerBankAccount string `url:",omitempty" json:"new_customer_bank_account,omitempty"`
-      NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-      Organisation string `url:",omitempty" json:"organisation,omitempty"`
-      ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
-      Payment string `url:",omitempty" json:"payment,omitempty"`
-      Payout string `url:",omitempty" json:"payout,omitempty"`
-      PreviousCustomerBankAccount string `url:",omitempty" json:"previous_customer_bank_account,omitempty"`
-      Refund string `url:",omitempty" json:"refund,omitempty"`
-      Subscription string `url:",omitempty" json:"subscription,omitempty"`
-      } `url:",omitempty" json:"links,omitempty"`
-      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
-      } `url:",omitempty" json:"events,omitempty"`
-      Meta struct {
+  Events []Event `json:"events"`
+  Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
       Before string `url:",omitempty" json:"before,omitempty"`
       } `url:",omitempty" json:"cursors,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      } `url:",omitempty" json:"meta,omitempty"`
-      }
+      } `json:"meta"`
+}
 
 
 // List

@@ -62,31 +62,19 @@ type PayoutListParams struct {
       Currency string `url:",omitempty" json:"currency,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       Status string `url:",omitempty" json:"status,omitempty"`
-      }// PayoutListResult response including pagination metadata
+      }
+
+// PayoutListResult response including pagination metadata
 type PayoutListResult struct {
-      Meta struct {
+  Payouts []Payout `json:"payouts"`
+  Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
       Before string `url:",omitempty" json:"before,omitempty"`
       } `url:",omitempty" json:"cursors,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      } `url:",omitempty" json:"meta,omitempty"`
-      Payouts []struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-      ArrivalDate string `url:",omitempty" json:"arrival_date,omitempty"`
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-      Currency string `url:",omitempty" json:"currency,omitempty"`
-      DeductedFees int `url:",omitempty" json:"deducted_fees,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Links struct {
-      Creditor string `url:",omitempty" json:"creditor,omitempty"`
-      CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
-      } `url:",omitempty" json:"links,omitempty"`
-      PayoutType string `url:",omitempty" json:"payout_type,omitempty"`
-      Reference string `url:",omitempty" json:"reference,omitempty"`
-      Status string `url:",omitempty" json:"status,omitempty"`
-      } `url:",omitempty" json:"payouts,omitempty"`
-      }
+      } `json:"meta"`
+}
 
 
 // List

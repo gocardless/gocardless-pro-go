@@ -153,34 +153,19 @@ type CustomerListParams struct {
       Lte string `url:",omitempty" json:"lte,omitempty"`
       } `url:",omitempty" json:"created_at,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      }// CustomerListResult response including pagination metadata
+      }
+
+// CustomerListResult response including pagination metadata
 type CustomerListResult struct {
-      Customers []struct {
-      AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-      AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-      AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-      City string `url:",omitempty" json:"city,omitempty"`
-      CompanyName string `url:",omitempty" json:"company_name,omitempty"`
-      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-      Email string `url:",omitempty" json:"email,omitempty"`
-      FamilyName string `url:",omitempty" json:"family_name,omitempty"`
-      GivenName string `url:",omitempty" json:"given_name,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Language string `url:",omitempty" json:"language,omitempty"`
-      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-      Region string `url:",omitempty" json:"region,omitempty"`
-      SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
-      } `url:",omitempty" json:"customers,omitempty"`
-      Meta struct {
+  Customers []Customer `json:"customers"`
+  Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
       Before string `url:",omitempty" json:"before,omitempty"`
       } `url:",omitempty" json:"cursors,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      } `url:",omitempty" json:"meta,omitempty"`
-      }
+      } `json:"meta"`
+}
 
 
 // List

@@ -165,51 +165,19 @@ type CreditorListParams struct {
       Lte string `url:",omitempty" json:"lte,omitempty"`
       } `url:",omitempty" json:"created_at,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      }// CreditorListResult response including pagination metadata
+      }
+
+// CreditorListResult response including pagination metadata
 type CreditorListResult struct {
-      Creditors []struct {
-      AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-      AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-      AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-      City string `url:",omitempty" json:"city,omitempty"`
-      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Links struct {
-      DefaultEurPayoutAccount string `url:",omitempty" json:"default_eur_payout_account,omitempty"`
-      DefaultGbpPayoutAccount string `url:",omitempty" json:"default_gbp_payout_account,omitempty"`
-      DefaultSekPayoutAccount string `url:",omitempty" json:"default_sek_payout_account,omitempty"`
-      } `url:",omitempty" json:"links,omitempty"`
-      LogoUrl string `url:",omitempty" json:"logo_url,omitempty"`
-      Name string `url:",omitempty" json:"name,omitempty"`
-      PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-      Region string `url:",omitempty" json:"region,omitempty"`
-      SchemeIdentifiers []struct {
-      AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-      AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-      AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-      CanSpecifyMandateReference bool `url:",omitempty" json:"can_specify_mandate_reference,omitempty"`
-      City string `url:",omitempty" json:"city,omitempty"`
-      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-      Currency string `url:",omitempty" json:"currency,omitempty"`
-      Email string `url:",omitempty" json:"email,omitempty"`
-      MinimumAdvanceNotice int `url:",omitempty" json:"minimum_advance_notice,omitempty"`
-      Name string `url:",omitempty" json:"name,omitempty"`
-      PhoneNumber string `url:",omitempty" json:"phone_number,omitempty"`
-      PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-      Reference string `url:",omitempty" json:"reference,omitempty"`
-      Region string `url:",omitempty" json:"region,omitempty"`
-      Scheme string `url:",omitempty" json:"scheme,omitempty"`
-      } `url:",omitempty" json:"scheme_identifiers,omitempty"`
-      } `url:",omitempty" json:"creditors,omitempty"`
-      Meta struct {
+  Creditors []Creditor `json:"creditors"`
+  Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
       Before string `url:",omitempty" json:"before,omitempty"`
       } `url:",omitempty" json:"cursors,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      } `url:",omitempty" json:"meta,omitempty"`
-      }
+      } `json:"meta"`
+}
 
 
 // List

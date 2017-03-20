@@ -162,39 +162,19 @@ type SubscriptionListParams struct {
       Customer string `url:",omitempty" json:"customer,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
-      }// SubscriptionListResult response including pagination metadata
+      }
+
+// SubscriptionListResult response including pagination metadata
 type SubscriptionListResult struct {
-      Meta struct {
+  Subscriptions []Subscription `json:"subscriptions"`
+  Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
       Before string `url:",omitempty" json:"before,omitempty"`
       } `url:",omitempty" json:"cursors,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
-      } `url:",omitempty" json:"meta,omitempty"`
-      Subscriptions []struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-      Currency string `url:",omitempty" json:"currency,omitempty"`
-      DayOfMonth int `url:",omitempty" json:"day_of_month,omitempty"`
-      EndDate string `url:",omitempty" json:"end_date,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Interval int `url:",omitempty" json:"interval,omitempty"`
-      IntervalUnit string `url:",omitempty" json:"interval_unit,omitempty"`
-      Links struct {
-      Mandate string `url:",omitempty" json:"mandate,omitempty"`
-      } `url:",omitempty" json:"links,omitempty"`
-      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      Month string `url:",omitempty" json:"month,omitempty"`
-      Name string `url:",omitempty" json:"name,omitempty"`
-      PaymentReference string `url:",omitempty" json:"payment_reference,omitempty"`
-      StartDate string `url:",omitempty" json:"start_date,omitempty"`
-      Status string `url:",omitempty" json:"status,omitempty"`
-      UpcomingPayments []struct {
-      Amount int `url:",omitempty" json:"amount,omitempty"`
-      ChargeDate string `url:",omitempty" json:"charge_date,omitempty"`
-      } `url:",omitempty" json:"upcoming_payments,omitempty"`
-      } `url:",omitempty" json:"subscriptions,omitempty"`
-      }
+      } `json:"meta"`
+}
 
 
 // List

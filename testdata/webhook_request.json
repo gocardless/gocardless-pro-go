@@ -1,0 +1,1 @@
+{"events":[{"id":"EVTESTNE86TNZS","created_at":"2017-03-20T17:57:02.292Z","resource_type":"payments","action":"failed","links":{"payment":"index_ID_123"},"details":{"origin":"bank","cause":"test_failure","scheme":"sepa_core","reason_code":"TEST","description":"GoCardless has marked this payment as failed in sandbox to enable testing of payment failure webhooks."},"metadata":{}}]}
