@@ -61,6 +61,7 @@ type PayoutListParams struct {
       CreditorBankAccount string `url:",omitempty" json:"creditor_bank_account,omitempty"`
       Currency string `url:",omitempty" json:"currency,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
+      PayoutType string `url:",omitempty" json:"payout_type,omitempty"`
       Status string `url:",omitempty" json:"status,omitempty"`
       }
 
