@@ -162,7 +162,7 @@ type CustomerBankAccountListParams struct {
       Lte string `url:",omitempty" json:"lte,omitempty"`
       } `url:",omitempty" json:"created_at,omitempty"`
       Customer string `url:",omitempty" json:"customer,omitempty"`
-      Enabled bool `url:",omitempty" json:"enabled,omitempty"`
+      Enabled string `url:",omitempty" json:"enabled,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       }
 
