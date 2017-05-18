@@ -62,6 +62,7 @@ type Creditor struct {
       Region string `url:",omitempty" json:"region,omitempty"`
       Scheme string `url:",omitempty" json:"scheme,omitempty"`
       } `url:",omitempty" json:"scheme_identifiers,omitempty"`
+      VerificationStatus string `url:",omitempty" json:"verification_status,omitempty"`
       }
 
 
