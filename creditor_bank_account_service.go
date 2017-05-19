@@ -147,7 +147,7 @@ type CreditorBankAccountListParams struct {
       Lte string `url:",omitempty" json:"lte,omitempty"`
       } `url:",omitempty" json:"created_at,omitempty"`
       Creditor string `url:",omitempty" json:"creditor,omitempty"`
-      Enabled string `url:",omitempty" json:"enabled,omitempty"`
+      Enabled bool `url:",omitempty" json:"enabled,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       }
 
