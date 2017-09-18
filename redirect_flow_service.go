@@ -29,6 +29,7 @@ type RedirectFlowService struct {
 
 // RedirectFlow model
 type RedirectFlow struct {
+      ConfirmationUrl string `url:",omitempty" json:"confirmation_url,omitempty"`
       CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
       Description string `url:",omitempty" json:"description,omitempty"`
       Id string `url:",omitempty" json:"id,omitempty"`
