@@ -49,17 +49,15 @@ type BankDetailsLookupCreateParams struct {
 // Create
 // Performs a bank details lookup.
 // 
-// As part of the lookup a modulus check
-// and reachability check are performed.
+// As part of the lookup a modulus check and reachability check are performed.
 // 
-// Bank account details may be
-// supplied using [local details](#appendix-local-bank-details) or an IBAN.
-//
+// Bank account details may be supplied using [local
+// details](#appendix-local-bank-details) or an IBAN.
 // 
-// _Note:_ Usage of this endpoint is monitored. If your organisation relies
-// on GoCardless for
-// modulus or reachability checking but not for payment
-// collection, please get in touch.
+// _Note:_ Usage of this endpoint is monitored. If your organisation relies on
+// GoCardless for
+// modulus or reachability checking but not for payment collection, please get
+// in touch.
 func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLookupCreateParams) (*BankDetailsLookup,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/bank_details_lookups",))
   if err != nil {

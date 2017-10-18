@@ -65,18 +65,15 @@ type CustomerBankAccountCreateParams struct {
 // Create
 // Creates a new customer bank account object.
 // 
-// There are three different
-// ways to supply bank account details:
+// There are three different ways to supply bank account details:
 // 
-// - [Local
-// details](#appendix-local-bank-details)
+// - [Local details](#appendix-local-bank-details)
 // 
 // - IBAN
 // 
-// - [Customer Bank
-// Account Tokens](#javascript-flow-create-a-customer-bank-account-token)
+// - [Customer Bank Account
+// Tokens](#javascript-flow-create-a-customer-bank-account-token)
 // 
-//
 // For more information on the different fields required in each country, see
 // [local bank details](#appendix-local-bank-details).
 func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankAccountCreateParams) (*CustomerBankAccount,error) {
@@ -403,12 +400,11 @@ if result.CustomerBankAccount == nil {
 // Disable
 // Immediately cancels all associated mandates and cancellable payments.
 // 
-//
 // This will return a `disable_failed` error if the bank account has already
 // been disabled.
 // 
-// A disabled bank account can be re-enabled by creating a
-// new bank account resource with the same details.
+// A disabled bank account can be re-enabled by creating a new bank account
+// resource with the same details.
 func (s *CustomerBankAccountService) Disable(ctx context.Context,identity string) (*CustomerBankAccount,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customer_bank_accounts/%v/actions/disable",
       identity,))

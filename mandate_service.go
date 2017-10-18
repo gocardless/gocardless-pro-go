@@ -393,8 +393,8 @@ type MandateCancelParams struct {
 // metadata supplied to this endpoint will be stored on the mandate cancellation
 // event it causes.
 // 
-// This will fail with a `cancellation_failed` error if
-// the mandate is already cancelled.
+// This will fail with a `cancellation_failed` error if the mandate is already
+// cancelled.
 func (s *MandateService) Cancel(ctx context.Context,identity string, p MandateCancelParams) (*Mandate,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v/actions/cancel",
       identity,))
@@ -482,11 +482,10 @@ type MandateReinstateParams struct {
 // supplied to this endpoint will be stored on the `resubmission_requested`
 // event it causes.
 // 
-// This will fail with a `mandate_not_inactive` error if
-// the mandate is already being submitted, or is active.
+// This will fail with a `mandate_not_inactive` error if the mandate is already
+// being submitted, or is active.
 // 
-// Mandates can be
-// resubmitted up to 3 times.
+// Mandates can be resubmitted up to 3 times.
 func (s *MandateService) Reinstate(ctx context.Context,identity string, p MandateReinstateParams) (*Mandate,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates/%v/actions/reinstate",
       identity,))

@@ -408,9 +408,8 @@ type SubscriptionCancelParams struct {
 // it. Any metadata supplied to this endpoint will be stored on the payment
 // cancellation event it causes.
 // 
-// This will fail with a
-// cancellation_failed error if the subscription is already cancelled or
-// finished.
+// This will fail with a cancellation_failed error if the subscription is
+// already cancelled or finished.
 func (s *SubscriptionService) Cancel(ctx context.Context,identity string, p SubscriptionCancelParams) (*Subscription,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions/%v/actions/cancel",
       identity,))
