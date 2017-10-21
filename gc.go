@@ -7,8 +7,13 @@ import (
 )
 
 const (
+
+  // Live environment
   LiveEndpoint = "https://api.gocardless.com"
+
+  // Sandbox environment
   SandboxEndpoint = "https://api-sandbox.gocardless.com"
+
 )
 
 type Service struct {
