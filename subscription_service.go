@@ -318,6 +318,7 @@ if result.Subscription == nil {
 
 // SubscriptionUpdateParams parameters
 type SubscriptionUpdateParams struct {
+      Amount int `url:",omitempty" json:"amount,omitempty"`
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
       Name string `url:",omitempty" json:"name,omitempty"`
       PaymentReference string `url:",omitempty" json:"payment_reference,omitempty"`
@@ -325,6 +326,19 @@ type SubscriptionUpdateParams struct {
 
 // Update
 // Updates a subscription object.
+// 
+// This fails with:
+// 
+// - `subscription_not_active` if the subscription is no longer active.
+// 
+// - `subscription_already_ended` if the subscription has taken all payments.
+// 
+// - `mandate_payments_require_approval` if the amount is being changed and the
+// mandate requires approval.
+// 
+// - `exceeded_max_amendments` error if the amount is being changed and the
+//   subscription amount has already been changed 10 times.
+// 
 func (s *SubscriptionService) Update(ctx context.Context,identity string, p SubscriptionUpdateParams) (*Subscription,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions/%v",
       identity,))
