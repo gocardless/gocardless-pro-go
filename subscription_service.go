@@ -319,6 +319,7 @@ if result.Subscription == nil {
 // SubscriptionUpdateParams parameters
 type SubscriptionUpdateParams struct {
       Amount int `url:",omitempty" json:"amount,omitempty"`
+      AppFee int `url:",omitempty" json:"app_fee,omitempty"`
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
       Name string `url:",omitempty" json:"name,omitempty"`
       PaymentReference string `url:",omitempty" json:"payment_reference,omitempty"`
@@ -328,6 +329,9 @@ type SubscriptionUpdateParams struct {
 // Updates a subscription object.
 // 
 // This fails with:
+// 
+// - `validation_failed` if invalid data is provided when attempting to update a
+// subscription.
 // 
 // - `subscription_not_active` if the subscription is no longer active.
 // 
