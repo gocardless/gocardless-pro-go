@@ -47,9 +47,16 @@ type BankDetailsLookupCreateParams struct {
       }
 
 // Create
-// Performs a bank details lookup.
+// Performs a bank details lookup. As part of the lookup, a modulus check and
+// reachability check are performed.
 // 
-// As part of the lookup a modulus check and reachability check are performed.
+// If your request returns an [error](#api-usage-errors) or the
+// `available_debit_schemes`
+// attribute is an empty array, you will not be able to collect payments from
+// the
+// specified bank account. GoCardless may be able to collect payments from an
+// account
+// even if no `bic` is returned.
 // 
 // Bank account details may be supplied using [local
 // details](#appendix-local-bank-details) or an IBAN.
