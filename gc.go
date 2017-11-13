@@ -28,6 +28,7 @@ type Service struct {
   MandatePdfs *MandatePdfService
   Payments *PaymentService
   Payouts *PayoutService
+  PayoutItems *PayoutItemService
   RedirectFlows *RedirectFlowService
   Refunds *RefundService
   Subscriptions *SubscriptionService
@@ -95,6 +96,11 @@ func New(token string, opts ...Option) (*Service, error) {
     client: o.client,
   }
   s.Payouts = &PayoutService{
+    token: token,
+    endpoint: o.endpoint,
+    client: o.client,
+  }
+  s.PayoutItems = &PayoutItemService{
     token: token,
     endpoint: o.endpoint,
     client: o.client,
