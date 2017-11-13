@@ -53,6 +53,7 @@ type PayoutItemListResult struct {
   Meta struct {
       Cursors struct {
       After string `url:",omitempty" json:"after,omitempty"`
+      Before string `url:",omitempty" json:"before,omitempty"`
       } `url:",omitempty" json:"cursors,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       } `json:"meta"`
