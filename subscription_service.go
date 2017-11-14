@@ -162,6 +162,7 @@ type SubscriptionListParams struct {
       Customer string `url:",omitempty" json:"customer,omitempty"`
       Limit int `url:",omitempty" json:"limit,omitempty"`
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
+      Status []string `url:",omitempty" json:"status,omitempty"`
       }
 
 // SubscriptionListResult response including pagination metadata
