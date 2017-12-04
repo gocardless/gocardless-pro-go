@@ -341,8 +341,8 @@ type SubscriptionUpdateParams struct {
 // - `mandate_payments_require_approval` if the amount is being changed and the
 // mandate requires approval.
 // 
-// - `exceeded_max_amendments` error if the amount is being changed and the
-//   subscription amount has already been changed 10 times.
+// - `number_of_subscription_amendments_exceeded` error if the subscription
+// amount has already been changed 10 times.
 // 
 func (s *SubscriptionService) Update(ctx context.Context,identity string, p SubscriptionUpdateParams) (*Subscription,error) {
   uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions/%v",
