@@ -32,6 +32,7 @@ type Creditor struct {
       AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
       AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
       AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
+      CanCreateRefunds bool `url:",omitempty" json:"can_create_refunds,omitempty"`
       City string `url:",omitempty" json:"city,omitempty"`
       CountryCode string `url:",omitempty" json:"country_code,omitempty"`
       CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
@@ -331,6 +332,7 @@ type CreditorUpdateParams struct {
       AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
       AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
       AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
+      CanCreateRefunds bool `url:",omitempty" json:"can_create_refunds,omitempty"`
       City string `url:",omitempty" json:"city,omitempty"`
       CountryCode string `url:",omitempty" json:"country_code,omitempty"`
       Links struct {
