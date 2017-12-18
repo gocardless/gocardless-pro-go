@@ -61,6 +61,7 @@ type RedirectFlowCreateParams struct {
       City string `url:",omitempty" json:"city,omitempty"`
       CompanyName string `url:",omitempty" json:"company_name,omitempty"`
       CountryCode string `url:",omitempty" json:"country_code,omitempty"`
+      DanishIdentityNumber string `url:",omitempty" json:"danish_identity_number,omitempty"`
       Email string `url:",omitempty" json:"email,omitempty"`
       FamilyName string `url:",omitempty" json:"family_name,omitempty"`
       GivenName string `url:",omitempty" json:"given_name,omitempty"`

@@ -44,6 +44,7 @@ type MandatePdfCreateParams struct {
       Bic string `url:",omitempty" json:"bic,omitempty"`
       BranchCode string `url:",omitempty" json:"branch_code,omitempty"`
       CountryCode string `url:",omitempty" json:"country_code,omitempty"`
+      DanishIdentityNumber string `url:",omitempty" json:"danish_identity_number,omitempty"`
       Iban string `url:",omitempty" json:"iban,omitempty"`
       Links struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
