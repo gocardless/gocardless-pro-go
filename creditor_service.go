@@ -38,6 +38,7 @@ type Creditor struct {
       CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
       Id string `url:",omitempty" json:"id,omitempty"`
       Links struct {
+      DefaultDkkPayoutAccount string `url:",omitempty" json:"default_dkk_payout_account,omitempty"`
       DefaultEurPayoutAccount string `url:",omitempty" json:"default_eur_payout_account,omitempty"`
       DefaultGbpPayoutAccount string `url:",omitempty" json:"default_gbp_payout_account,omitempty"`
       DefaultSekPayoutAccount string `url:",omitempty" json:"default_sek_payout_account,omitempty"`
@@ -336,6 +337,7 @@ type CreditorUpdateParams struct {
       City string `url:",omitempty" json:"city,omitempty"`
       CountryCode string `url:",omitempty" json:"country_code,omitempty"`
       Links struct {
+      DefaultDkkPayoutAccount string `url:",omitempty" json:"default_dkk_payout_account,omitempty"`
       DefaultEurPayoutAccount string `url:",omitempty" json:"default_eur_payout_account,omitempty"`
       DefaultGbpPayoutAccount string `url:",omitempty" json:"default_gbp_payout_account,omitempty"`
       DefaultSekPayoutAccount string `url:",omitempty" json:"default_sek_payout_account,omitempty"`
