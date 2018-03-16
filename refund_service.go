@@ -34,6 +34,7 @@ type Refund struct {
       Currency string `url:",omitempty" json:"currency,omitempty"`
       Id string `url:",omitempty" json:"id,omitempty"`
       Links struct {
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
       Payment string `url:",omitempty" json:"payment,omitempty"`
       } `url:",omitempty" json:"links,omitempty"`
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
