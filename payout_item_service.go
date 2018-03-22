@@ -31,6 +31,7 @@ type PayoutItemService struct {
 type PayoutItem struct {
       Amount string `url:",omitempty" json:"amount,omitempty"`
       Links struct {
+      Mandate string `url:",omitempty" json:"mandate,omitempty"`
       Payment string `url:",omitempty" json:"payment,omitempty"`
       } `url:",omitempty" json:"links,omitempty"`
       Type string `url:",omitempty" json:"type,omitempty"`
