@@ -30,6 +30,7 @@ type SubscriptionService struct {
 // Subscription model
 type Subscription struct {
       Amount int `url:",omitempty" json:"amount,omitempty"`
+      AppFee int `url:",omitempty" json:"app_fee,omitempty"`
       CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
       Currency string `url:",omitempty" json:"currency,omitempty"`
       DayOfMonth int `url:",omitempty" json:"day_of_month,omitempty"`

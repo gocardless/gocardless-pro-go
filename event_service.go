@@ -31,6 +31,12 @@ type EventService struct {
 type Event struct {
       Action string `url:",omitempty" json:"action,omitempty"`
       CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
+      CustomerNotifications []struct {
+      Deadline string `url:",omitempty" json:"deadline,omitempty"`
+      Id string `url:",omitempty" json:"id,omitempty"`
+      Mandatory bool `url:",omitempty" json:"mandatory,omitempty"`
+      Type string `url:",omitempty" json:"type,omitempty"`
+      } `url:",omitempty" json:"customer_notifications,omitempty"`
       Details struct {
       Cause string `url:",omitempty" json:"cause,omitempty"`
       Description string `url:",omitempty" json:"description,omitempty"`

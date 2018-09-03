@@ -23,8 +23,11 @@ type Service struct {
   CreditorBankAccounts *CreditorBankAccountService
   Customers *CustomerService
   CustomerBankAccounts *CustomerBankAccountService
+  CustomerNotifications *CustomerNotificationService
   Events *EventService
   Mandates *MandateService
+  MandateImports *MandateImportService
+  MandateImportEntries *MandateImportEntryService
   MandatePdfs *MandatePdfService
   Payments *PaymentService
   Payouts *PayoutService
@@ -75,12 +78,27 @@ func New(token string, opts ...Option) (*Service, error) {
     endpoint: o.endpoint,
     client: o.client,
   }
+  s.CustomerNotifications = &CustomerNotificationService{
+    token: token,
+    endpoint: o.endpoint,
+    client: o.client,
+  }
   s.Events = &EventService{
     token: token,
     endpoint: o.endpoint,
     client: o.client,
   }
   s.Mandates = &MandateService{
+    token: token,
+    endpoint: o.endpoint,
+    client: o.client,
+  }
+  s.MandateImports = &MandateImportService{
+    token: token,
+    endpoint: o.endpoint,
+    client: o.client,
+  }
+  s.MandateImportEntries = &MandateImportEntryService{
     token: token,
     endpoint: o.endpoint,
     client: o.client,

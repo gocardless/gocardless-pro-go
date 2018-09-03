@@ -38,6 +38,7 @@ type Creditor struct {
       CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
       Id string `url:",omitempty" json:"id,omitempty"`
       Links struct {
+      DefaultAudPayoutAccount string `url:",omitempty" json:"default_aud_payout_account,omitempty"`
       DefaultDkkPayoutAccount string `url:",omitempty" json:"default_dkk_payout_account,omitempty"`
       DefaultEurPayoutAccount string `url:",omitempty" json:"default_eur_payout_account,omitempty"`
       DefaultGbpPayoutAccount string `url:",omitempty" json:"default_gbp_payout_account,omitempty"`
@@ -333,10 +334,10 @@ type CreditorUpdateParams struct {
       AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
       AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
       AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-      CanCreateRefunds bool `url:",omitempty" json:"can_create_refunds,omitempty"`
       City string `url:",omitempty" json:"city,omitempty"`
       CountryCode string `url:",omitempty" json:"country_code,omitempty"`
       Links struct {
+      DefaultAudPayoutAccount string `url:",omitempty" json:"default_aud_payout_account,omitempty"`
       DefaultDkkPayoutAccount string `url:",omitempty" json:"default_dkk_payout_account,omitempty"`
       DefaultEurPayoutAccount string `url:",omitempty" json:"default_eur_payout_account,omitempty"`
       DefaultGbpPayoutAccount string `url:",omitempty" json:"default_gbp_payout_account,omitempty"`
