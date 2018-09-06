@@ -42,6 +42,7 @@ type Creditor struct {
       DefaultDkkPayoutAccount string `url:",omitempty" json:"default_dkk_payout_account,omitempty"`
       DefaultEurPayoutAccount string `url:",omitempty" json:"default_eur_payout_account,omitempty"`
       DefaultGbpPayoutAccount string `url:",omitempty" json:"default_gbp_payout_account,omitempty"`
+      DefaultNzdPayoutAccount string `url:",omitempty" json:"default_nzd_payout_account,omitempty"`
       DefaultSekPayoutAccount string `url:",omitempty" json:"default_sek_payout_account,omitempty"`
       } `url:",omitempty" json:"links,omitempty"`
       LogoUrl string `url:",omitempty" json:"logo_url,omitempty"`
@@ -341,6 +342,7 @@ type CreditorUpdateParams struct {
       DefaultDkkPayoutAccount string `url:",omitempty" json:"default_dkk_payout_account,omitempty"`
       DefaultEurPayoutAccount string `url:",omitempty" json:"default_eur_payout_account,omitempty"`
       DefaultGbpPayoutAccount string `url:",omitempty" json:"default_gbp_payout_account,omitempty"`
+      DefaultNzdPayoutAccount string `url:",omitempty" json:"default_nzd_payout_account,omitempty"`
       DefaultSekPayoutAccount string `url:",omitempty" json:"default_sek_payout_account,omitempty"`
       } `url:",omitempty" json:"links,omitempty"`
       Name string `url:",omitempty" json:"name,omitempty"`
