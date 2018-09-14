@@ -43,6 +43,7 @@ type Customer struct {
       Id string `url:",omitempty" json:"id,omitempty"`
       Language string `url:",omitempty" json:"language,omitempty"`
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      PhoneNumber string `url:",omitempty" json:"phone_number,omitempty"`
       PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
       Region string `url:",omitempty" json:"region,omitempty"`
       SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
@@ -65,6 +66,7 @@ type CustomerCreateParams struct {
       GivenName string `url:",omitempty" json:"given_name,omitempty"`
       Language string `url:",omitempty" json:"language,omitempty"`
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      PhoneNumber string `url:",omitempty" json:"phone_number,omitempty"`
       PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
       Region string `url:",omitempty" json:"region,omitempty"`
       SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
@@ -323,6 +325,7 @@ type CustomerUpdateParams struct {
       GivenName string `url:",omitempty" json:"given_name,omitempty"`
       Language string `url:",omitempty" json:"language,omitempty"`
       Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
+      PhoneNumber string `url:",omitempty" json:"phone_number,omitempty"`
       PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
       Region string `url:",omitempty" json:"region,omitempty"`
       SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`

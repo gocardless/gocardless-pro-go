@@ -54,6 +54,7 @@ type MandatePdfCreateParams struct {
       Mandate string `url:",omitempty" json:"mandate,omitempty"`
       } `url:",omitempty" json:"links,omitempty"`
       MandateReference string `url:",omitempty" json:"mandate_reference,omitempty"`
+      PhoneNumber string `url:",omitempty" json:"phone_number,omitempty"`
       PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
       Region string `url:",omitempty" json:"region,omitempty"`
       Scheme string `url:",omitempty" json:"scheme,omitempty"`
