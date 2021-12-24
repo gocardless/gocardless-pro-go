@@ -1,16 +1,16 @@
 package gocardless
 
 import (
-  "bytes"
-  "context"
-  "encoding/json"
-  "errors"
-  "fmt"
-  "io"
-  "net/http"
-  "net/url"
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
 
-  "github.com/google/go-querystring/query"
+	"github.com/google/go-querystring/query"
 )
 
 var _ = query.Values
@@ -18,153 +18,182 @@ var _ = bytes.NewBuffer
 var _ = json.NewDecoder
 var _ = errors.New
 
-
 // MandatePdfService manages mandate_pdfs
 type MandatePdfService struct {
-  endpoint string
-  token string
-  client *http.Client
+	endpoint string
+	token    string
+	client   *http.Client
 }
-
 
 // MandatePdf model
 type MandatePdf struct {
-      ExpiresAt string `url:",omitempty" json:"expires_at,omitempty"`
-      Url string `url:",omitempty" json:"url,omitempty"`
-      }
-
-
-
+	ExpiresAt string `url:"expires_at,omitempty" json:"expires_at,omitempty"`
+	Url       string `url:"url,omitempty" json:"url,omitempty"`
+}
 
 // MandatePdfCreateParams parameters
 type MandatePdfCreateParams struct {
-      AccountHolderName string `url:",omitempty" json:"account_holder_name,omitempty"`
-      AccountNumber string `url:",omitempty" json:"account_number,omitempty"`
-      AddressLine1 string `url:",omitempty" json:"address_line1,omitempty"`
-      AddressLine2 string `url:",omitempty" json:"address_line2,omitempty"`
-      AddressLine3 string `url:",omitempty" json:"address_line3,omitempty"`
-      BankCode string `url:",omitempty" json:"bank_code,omitempty"`
-      Bic string `url:",omitempty" json:"bic,omitempty"`
-      BranchCode string `url:",omitempty" json:"branch_code,omitempty"`
-      City string `url:",omitempty" json:"city,omitempty"`
-      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-      DanishIdentityNumber string `url:",omitempty" json:"danish_identity_number,omitempty"`
-      Iban string `url:",omitempty" json:"iban,omitempty"`
-      Links struct {
-      Mandate string `url:",omitempty" json:"mandate,omitempty"`
-      } `url:",omitempty" json:"links,omitempty"`
-      MandateReference string `url:",omitempty" json:"mandate_reference,omitempty"`
-      PhoneNumber string `url:",omitempty" json:"phone_number,omitempty"`
-      PostalCode string `url:",omitempty" json:"postal_code,omitempty"`
-      Region string `url:",omitempty" json:"region,omitempty"`
-      Scheme string `url:",omitempty" json:"scheme,omitempty"`
-      SignatureDate string `url:",omitempty" json:"signature_date,omitempty"`
-      SwedishIdentityNumber string `url:",omitempty" json:"swedish_identity_number,omitempty"`
-      }
+	AccountHolderName    string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber        string `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountType          string `url:"account_type,omitempty" json:"account_type,omitempty"`
+	AddressLine1         string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2         string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3         string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	BankCode             string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	Bic                  string `url:"bic,omitempty" json:"bic,omitempty"`
+	BranchCode           string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	City                 string `url:"city,omitempty" json:"city,omitempty"`
+	CountryCode          string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber string `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Iban                 string `url:"iban,omitempty" json:"iban,omitempty"`
+	Links                struct {
+		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
+	} `url:"links,omitempty" json:"links,omitempty"`
+	MandateReference      string `url:"mandate_reference,omitempty" json:"mandate_reference,omitempty"`
+	PayerIpAddress        string `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
+	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string `url:"region,omitempty" json:"region,omitempty"`
+	Scheme                string `url:"scheme,omitempty" json:"scheme,omitempty"`
+	SignatureDate         string `url:"signature_date,omitempty" json:"signature_date,omitempty"`
+	SubscriptionAmount    int    `url:"subscription_amount,omitempty" json:"subscription_amount,omitempty"`
+	SubscriptionFrequency string `url:"subscription_frequency,omitempty" json:"subscription_frequency,omitempty"`
+	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+}
 
 // Create
 // Generates a PDF mandate and returns its temporary URL.
-// 
+//
 // Customer and bank account details can be left blank (for a blank mandate),
 // provided manually, or inferred from the ID of an existing
 // [mandate](#core-endpoints-mandates).
-// 
+//
 // By default, we'll generate PDF mandates in English.
-// 
+//
 // To generate a PDF mandate in another language, set the `Accept-Language`
 // header when creating the PDF mandate to the relevant [ISO
 // 639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code
 // supported for the scheme.
-// 
-// | Scheme           | Supported languages                                     
-//                                                                              
+//
+// | Scheme           | Supported languages
+//
 //       |
 // | :--------------- |
 // :-------------------------------------------------------------------------------------------------------------------------------------------
 // |
-// | Autogiro         | English (`en`), Swedish (`sv`)                          
-//                                                                              
+// | ACH              | English (`en`)
+//
 //       |
-// | Bacs             | English (`en`)                                          
-//                                                                              
+// | Autogiro         | English (`en`), Swedish (`sv`)
+//
 //       |
-// | Becs             | English (`en`)                                          
-//                                                                              
+// | Bacs             | English (`en`)
+//
 //       |
-// | Betalingsservice | Danish (`da`), English (`en`)                           
-//                                                                              
+// | BECS             | English (`en`)
+//
+//       |
+// | BECS NZ          | English (`en`)
+//
+//       |
+// | Betalingsservice | Danish (`da`), English (`en`)
+//
+//       |
+// | PAD              | English (`en`)
+//
 //       |
 // | SEPA Core        | Danish (`da`), Dutch (`nl`), English (`en`), French
 // (`fr`), German (`de`), Italian (`it`), Portuguese (`pt`), Spanish (`es`),
 // Swedish (`sv`) |
-func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams) (*MandatePdf,error) {
-  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandate_pdfs",))
-  if err != nil {
-    return nil, err
-  }
+func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams, opts ...RequestOption) (*MandatePdf, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandate_pdfs"))
+	if err != nil {
+		return nil, err
+	}
 
-  var body io.Reader
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
 
-  var buf bytes.Buffer
-  err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-    "mandate_pdfs": p,
-  })
-  if err != nil {
-    return nil, err
-  }
-  body = &buf
+	var body io.Reader
 
-  req, err := http.NewRequest("POST", uri.String(), body)
-  if err != nil {
-    return nil, err
-  }
-  req.WithContext(ctx)
-  req.Header.Set("Authorization", "Bearer "+s.token)
-  req.Header.Set("GoCardless-Version", "2015-07-06")
-  req.Header.Set("Content-Type", "application/json")
-  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"mandate_pdfs": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
 
-  client := s.client
-  if client == nil {
-    client = http.DefaultClient
-  }
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.token)
 
-  var result struct {
-    Err *APIError `json:"error"`
-MandatePdf *MandatePdf `json:"mandate_pdfs"`
-  }
+	req.Header.Set("GoCardless-Version", "2015-07-06")
 
-  err = try(3, func() error {
-      res, err := client.Do(req)
-      if err != nil {
-        return err
-      }
-      defer res.Body.Close()
+	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
 
-      err = responseErr(res)
-      if err != nil {
-        return err
-      }
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 
-      err = json.NewDecoder(res.Body).Decode(&result)
-      if err != nil {
-        return err
-      }
+	client := s.client
+	if client == nil {
+		client = http.DefaultClient
+	}
 
-      if result.Err != nil {
-        return result.Err
-      }
+	var result struct {
+		Err        *APIError   `json:"error"`
+		MandatePdf *MandatePdf `json:"mandate_pdfs"`
+	}
 
-      return nil
-  })
-  if err != nil {
-    return nil, err
-  }
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
 
-if result.MandatePdf == nil {
-    return nil, errors.New("missing result")
-  }
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
 
-  return result.MandatePdf, nil
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.MandatePdf == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.MandatePdf, nil
 }
-

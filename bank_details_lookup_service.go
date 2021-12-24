@@ -1,16 +1,16 @@
 package gocardless
 
 import (
-  "bytes"
-  "context"
-  "encoding/json"
-  "errors"
-  "fmt"
-  "io"
-  "net/http"
-  "net/url"
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
 
-  "github.com/google/go-querystring/query"
+	"github.com/google/go-querystring/query"
 )
 
 var _ = query.Values
@@ -18,38 +18,33 @@ var _ = bytes.NewBuffer
 var _ = json.NewDecoder
 var _ = errors.New
 
-
 // BankDetailsLookupService manages bank_details_lookups
 type BankDetailsLookupService struct {
-  endpoint string
-  token string
-  client *http.Client
+	endpoint string
+	token    string
+	client   *http.Client
 }
-
 
 // BankDetailsLookup model
 type BankDetailsLookup struct {
-      AvailableDebitSchemes []string `url:",omitempty" json:"available_debit_schemes,omitempty"`
-      BankName string `url:",omitempty" json:"bank_name,omitempty"`
-      Bic string `url:",omitempty" json:"bic,omitempty"`
-      }
-
-
-
+	AvailableDebitSchemes []string `url:"available_debit_schemes,omitempty" json:"available_debit_schemes,omitempty"`
+	BankName              string   `url:"bank_name,omitempty" json:"bank_name,omitempty"`
+	Bic                   string   `url:"bic,omitempty" json:"bic,omitempty"`
+}
 
 // BankDetailsLookupCreateParams parameters
 type BankDetailsLookupCreateParams struct {
-      AccountNumber string `url:",omitempty" json:"account_number,omitempty"`
-      BankCode string `url:",omitempty" json:"bank_code,omitempty"`
-      BranchCode string `url:",omitempty" json:"branch_code,omitempty"`
-      CountryCode string `url:",omitempty" json:"country_code,omitempty"`
-      Iban string `url:",omitempty" json:"iban,omitempty"`
-      }
+	AccountNumber string `url:"account_number,omitempty" json:"account_number,omitempty"`
+	BankCode      string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode    string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode   string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Iban          string `url:"iban,omitempty" json:"iban,omitempty"`
+}
 
 // Create
 // Performs a bank details lookup. As part of the lookup, a modulus check and
 // reachability check are performed.
-// 
+//
 // If your request returns an [error](#api-usage-errors) or the
 // `available_debit_schemes`
 // attribute is an empty array, you will not be able to collect payments from
@@ -57,82 +52,103 @@ type BankDetailsLookupCreateParams struct {
 // specified bank account. GoCardless may be able to collect payments from an
 // account
 // even if no `bic` is returned.
-// 
+//
 // Bank account details may be supplied using [local
 // details](#appendix-local-bank-details) or an IBAN.
-// 
+//
 // _Note:_ Usage of this endpoint is monitored. If your organisation relies on
 // GoCardless for
 // modulus or reachability checking but not for payment collection, please get
 // in touch.
-func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLookupCreateParams) (*BankDetailsLookup,error) {
-  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/bank_details_lookups",))
-  if err != nil {
-    return nil, err
-  }
+func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLookupCreateParams, opts ...RequestOption) (*BankDetailsLookup, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/bank_details_lookups"))
+	if err != nil {
+		return nil, err
+	}
 
-  var body io.Reader
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
 
-  var buf bytes.Buffer
-  err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-    "bank_details_lookups": p,
-  })
-  if err != nil {
-    return nil, err
-  }
-  body = &buf
+	var body io.Reader
 
-  req, err := http.NewRequest("POST", uri.String(), body)
-  if err != nil {
-    return nil, err
-  }
-  req.WithContext(ctx)
-  req.Header.Set("Authorization", "Bearer "+s.token)
-  req.Header.Set("GoCardless-Version", "2015-07-06")
-  req.Header.Set("Content-Type", "application/json")
-  req.Header.Set("Idempotency-Key", NewIdempotencyKey())
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"bank_details_lookups": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
 
-  client := s.client
-  if client == nil {
-    client = http.DefaultClient
-  }
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.token)
 
-  var result struct {
-    Err *APIError `json:"error"`
-BankDetailsLookup *BankDetailsLookup `json:"bank_details_lookups"`
-  }
+	req.Header.Set("GoCardless-Version", "2015-07-06")
 
-  err = try(3, func() error {
-      res, err := client.Do(req)
-      if err != nil {
-        return err
-      }
-      defer res.Body.Close()
+	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
 
-      err = responseErr(res)
-      if err != nil {
-        return err
-      }
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 
-      err = json.NewDecoder(res.Body).Decode(&result)
-      if err != nil {
-        return err
-      }
+	client := s.client
+	if client == nil {
+		client = http.DefaultClient
+	}
 
-      if result.Err != nil {
-        return result.Err
-      }
+	var result struct {
+		Err               *APIError          `json:"error"`
+		BankDetailsLookup *BankDetailsLookup `json:"bank_details_lookups"`
+	}
 
-      return nil
-  })
-  if err != nil {
-    return nil, err
-  }
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
 
-if result.BankDetailsLookup == nil {
-    return nil, errors.New("missing result")
-  }
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
 
-  return result.BankDetailsLookup, nil
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BankDetailsLookup == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BankDetailsLookup, nil
 }
-

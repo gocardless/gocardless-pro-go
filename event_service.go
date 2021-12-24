@@ -1,16 +1,16 @@
 package gocardless
 
 import (
-  "bytes"
-  "context"
-  "encoding/json"
-  "errors"
-  "fmt"
-  "io"
-  "net/http"
-  "net/url"
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
 
-  "github.com/google/go-querystring/query"
+	"github.com/google/go-querystring/query"
 )
 
 var _ = query.Values
@@ -18,222 +18,364 @@ var _ = bytes.NewBuffer
 var _ = json.NewDecoder
 var _ = errors.New
 
-
 // EventService manages events
 type EventService struct {
-  endpoint string
-  token string
-  client *http.Client
+	endpoint string
+	token    string
+	client   *http.Client
 }
-
 
 // Event model
 type Event struct {
-      Action string `url:",omitempty" json:"action,omitempty"`
-      CreatedAt string `url:",omitempty" json:"created_at,omitempty"`
-      CustomerNotifications []struct {
-      Deadline string `url:",omitempty" json:"deadline,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Mandatory bool `url:",omitempty" json:"mandatory,omitempty"`
-      Type string `url:",omitempty" json:"type,omitempty"`
-      } `url:",omitempty" json:"customer_notifications,omitempty"`
-      Details struct {
-      Cause string `url:",omitempty" json:"cause,omitempty"`
-      Description string `url:",omitempty" json:"description,omitempty"`
-      Origin string `url:",omitempty" json:"origin,omitempty"`
-      ReasonCode string `url:",omitempty" json:"reason_code,omitempty"`
-      Scheme string `url:",omitempty" json:"scheme,omitempty"`
-      } `url:",omitempty" json:"details,omitempty"`
-      Id string `url:",omitempty" json:"id,omitempty"`
-      Links struct {
-      Mandate string `url:",omitempty" json:"mandate,omitempty"`
-      NewCustomerBankAccount string `url:",omitempty" json:"new_customer_bank_account,omitempty"`
-      NewMandate string `url:",omitempty" json:"new_mandate,omitempty"`
-      Organisation string `url:",omitempty" json:"organisation,omitempty"`
-      ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
-      Payment string `url:",omitempty" json:"payment,omitempty"`
-      Payout string `url:",omitempty" json:"payout,omitempty"`
-      PreviousCustomerBankAccount string `url:",omitempty" json:"previous_customer_bank_account,omitempty"`
-      Refund string `url:",omitempty" json:"refund,omitempty"`
-      Subscription string `url:",omitempty" json:"subscription,omitempty"`
-      } `url:",omitempty" json:"links,omitempty"`
-      Metadata map[string]interface{} `url:",omitempty" json:"metadata,omitempty"`
-      ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
-      }
-
-
-
+	Action                string `url:"action,omitempty" json:"action,omitempty"`
+	CreatedAt             string `url:"created_at,omitempty" json:"created_at,omitempty"`
+	CustomerNotifications []struct {
+		Deadline  string `url:"deadline,omitempty" json:"deadline,omitempty"`
+		Id        string `url:"id,omitempty" json:"id,omitempty"`
+		Mandatory bool   `url:"mandatory,omitempty" json:"mandatory,omitempty"`
+		Type      string `url:"type,omitempty" json:"type,omitempty"`
+	} `url:"customer_notifications,omitempty" json:"customer_notifications,omitempty"`
+	Details struct {
+		BankAccountId    string `url:"bank_account_id,omitempty" json:"bank_account_id,omitempty"`
+		Cause            string `url:"cause,omitempty" json:"cause,omitempty"`
+		Currency         string `url:"currency,omitempty" json:"currency,omitempty"`
+		Description      string `url:"description,omitempty" json:"description,omitempty"`
+		NotRetriedReason string `url:"not_retried_reason,omitempty" json:"not_retried_reason,omitempty"`
+		Origin           string `url:"origin,omitempty" json:"origin,omitempty"`
+		Property         string `url:"property,omitempty" json:"property,omitempty"`
+		ReasonCode       string `url:"reason_code,omitempty" json:"reason_code,omitempty"`
+		Scheme           string `url:"scheme,omitempty" json:"scheme,omitempty"`
+		WillAttemptRetry bool   `url:"will_attempt_retry,omitempty" json:"will_attempt_retry,omitempty"`
+	} `url:"details,omitempty" json:"details,omitempty"`
+	Id    string `url:"id,omitempty" json:"id,omitempty"`
+	Links struct {
+		BankAuthorisation           string `url:"bank_authorisation,omitempty" json:"bank_authorisation,omitempty"`
+		BillingRequest              string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
+		BillingRequestFlow          string `url:"billing_request_flow,omitempty" json:"billing_request_flow,omitempty"`
+		Creditor                    string `url:"creditor,omitempty" json:"creditor,omitempty"`
+		Customer                    string `url:"customer,omitempty" json:"customer,omitempty"`
+		CustomerBankAccount         string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
+		InstalmentSchedule          string `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
+		Mandate                     string `url:"mandate,omitempty" json:"mandate,omitempty"`
+		MandateRequestMandate       string `url:"mandate_request_mandate,omitempty" json:"mandate_request_mandate,omitempty"`
+		NewCustomerBankAccount      string `url:"new_customer_bank_account,omitempty" json:"new_customer_bank_account,omitempty"`
+		NewMandate                  string `url:"new_mandate,omitempty" json:"new_mandate,omitempty"`
+		Organisation                string `url:"organisation,omitempty" json:"organisation,omitempty"`
+		ParentEvent                 string `url:"parent_event,omitempty" json:"parent_event,omitempty"`
+		PayerAuthorisation          string `url:"payer_authorisation,omitempty" json:"payer_authorisation,omitempty"`
+		Payment                     string `url:"payment,omitempty" json:"payment,omitempty"`
+		PaymentRequestPayment       string `url:"payment_request_payment,omitempty" json:"payment_request_payment,omitempty"`
+		Payout                      string `url:"payout,omitempty" json:"payout,omitempty"`
+		PreviousCustomerBankAccount string `url:"previous_customer_bank_account,omitempty" json:"previous_customer_bank_account,omitempty"`
+		Refund                      string `url:"refund,omitempty" json:"refund,omitempty"`
+		Subscription                string `url:"subscription,omitempty" json:"subscription,omitempty"`
+	} `url:"links,omitempty" json:"links,omitempty"`
+	Metadata     map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	ResourceType string                 `url:"resource_type,omitempty" json:"resource_type,omitempty"`
+}
 
 // EventListParams parameters
 type EventListParams struct {
-      Action string `url:",omitempty" json:"action,omitempty"`
-      After string `url:",omitempty" json:"after,omitempty"`
-      Before string `url:",omitempty" json:"before,omitempty"`
-      CreatedAt struct {
-      Gt string `url:",omitempty" json:"gt,omitempty"`
-      Gte string `url:",omitempty" json:"gte,omitempty"`
-      Lt string `url:",omitempty" json:"lt,omitempty"`
-      Lte string `url:",omitempty" json:"lte,omitempty"`
-      } `url:",omitempty" json:"created_at,omitempty"`
-      Include string `url:",omitempty" json:"include,omitempty"`
-      Limit int `url:",omitempty" json:"limit,omitempty"`
-      Mandate string `url:",omitempty" json:"mandate,omitempty"`
-      ParentEvent string `url:",omitempty" json:"parent_event,omitempty"`
-      Payment string `url:",omitempty" json:"payment,omitempty"`
-      Payout string `url:",omitempty" json:"payout,omitempty"`
-      Refund string `url:",omitempty" json:"refund,omitempty"`
-      ResourceType string `url:",omitempty" json:"resource_type,omitempty"`
-      Subscription string `url:",omitempty" json:"subscription,omitempty"`
-      }
+	Action         string `url:"action,omitempty" json:"action,omitempty"`
+	After          string `url:"after,omitempty" json:"after,omitempty"`
+	Before         string `url:"before,omitempty" json:"before,omitempty"`
+	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
+	CreatedAt      struct {
+		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
+	} `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Include            string `url:"include,omitempty" json:"include,omitempty"`
+	Limit              int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Mandate            string `url:"mandate,omitempty" json:"mandate,omitempty"`
+	ParentEvent        string `url:"parent_event,omitempty" json:"parent_event,omitempty"`
+	PayerAuthorisation string `url:"payer_authorisation,omitempty" json:"payer_authorisation,omitempty"`
+	Payment            string `url:"payment,omitempty" json:"payment,omitempty"`
+	Payout             string `url:"payout,omitempty" json:"payout,omitempty"`
+	Refund             string `url:"refund,omitempty" json:"refund,omitempty"`
+	ResourceType       string `url:"resource_type,omitempty" json:"resource_type,omitempty"`
+	Subscription       string `url:"subscription,omitempty" json:"subscription,omitempty"`
+}
 
 // EventListResult response including pagination metadata
 type EventListResult struct {
-  Events []Event `json:"events"`
-  Meta struct {
-      Cursors struct {
-      After string `url:",omitempty" json:"after,omitempty"`
-      Before string `url:",omitempty" json:"before,omitempty"`
-      } `url:",omitempty" json:"cursors,omitempty"`
-      Limit int `url:",omitempty" json:"limit,omitempty"`
-      } `json:"meta"`
+	Events []Event `json:"events"`
+	Meta   struct {
+		Cursors struct {
+			After  string `url:"after,omitempty" json:"after,omitempty"`
+			Before string `url:"before,omitempty" json:"before,omitempty"`
+		} `url:"cursors,omitempty" json:"cursors,omitempty"`
+		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
+	} `json:"meta"`
 }
-
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // events.
-func (s *EventService) List(ctx context.Context, p EventListParams) (*EventListResult,error) {
-  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/events",))
-  if err != nil {
-    return nil, err
-  }
+func (s *EventService) List(ctx context.Context, p EventListParams, opts ...RequestOption) (*EventListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/events"))
+	if err != nil {
+		return nil, err
+	}
 
-  var body io.Reader
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
 
-  v, err := query.Values(p)
-  if err != nil {
-    return nil, err
-  }
-  uri.RawQuery = v.Encode()
+	var body io.Reader
 
-  req, err := http.NewRequest("GET", uri.String(), body)
-  if err != nil {
-    return nil, err
-  }
-  req.WithContext(ctx)
-  req.Header.Set("Authorization", "Bearer "+s.token)
-  req.Header.Set("GoCardless-Version", "2015-07-06")
-  
+	v, err := query.Values(p)
+	if err != nil {
+		return nil, err
+	}
+	uri.RawQuery = v.Encode()
 
-  client := s.client
-  if client == nil {
-    client = http.DefaultClient
-  }
+	req, err := http.NewRequest("GET", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.token)
 
-  var result struct {
-    Err *APIError `json:"error"`
-*EventListResult
-  }
+	req.Header.Set("GoCardless-Version", "2015-07-06")
 
-  err = try(3, func() error {
-      res, err := client.Do(req)
-      if err != nil {
-        return err
-      }
-      defer res.Body.Close()
+	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
 
-      err = responseErr(res)
-      if err != nil {
-        return err
-      }
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 
-      err = json.NewDecoder(res.Body).Decode(&result)
-      if err != nil {
-        return err
-      }
+	client := s.client
+	if client == nil {
+		client = http.DefaultClient
+	}
 
-      if result.Err != nil {
-        return result.Err
-      }
+	var result struct {
+		Err *APIError `json:"error"`
+		*EventListResult
+	}
 
-      return nil
-  })
-  if err != nil {
-    return nil, err
-  }
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
 
-if result.EventListResult == nil {
-    return nil, errors.New("missing result")
-  }
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
 
-  return result.EventListResult, nil
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.EventListResult == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.EventListResult, nil
 }
 
+type EventListPagingIterator struct {
+	cursor   string
+	response *EventListResult
+	params   EventListParams
+	service  *EventService
+}
 
+func (c *EventListPagingIterator) Next() bool {
+	if c.cursor == "" && c.response != nil {
+		return false
+	}
+
+	return true
+}
+
+func (c *EventListPagingIterator) Value(ctx context.Context) (*EventListResult, error) {
+	if !c.Next() {
+		return c.response, nil
+	}
+
+	s := c.service
+	p := c.params
+	p.After = c.cursor
+
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/events"))
+
+	if err != nil {
+		return nil, err
+	}
+
+	var body io.Reader
+
+	v, err := query.Values(p)
+	if err != nil {
+		return nil, err
+	}
+	uri.RawQuery = v.Encode()
+
+	req, err := http.NewRequest("GET", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+
+	client := s.client
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err *APIError `json:"error"`
+		*EventListResult
+	}
+
+	err = try(3, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.EventListResult == nil {
+		return nil, errors.New("missing result")
+	}
+
+	c.response = result.EventListResult
+	c.cursor = c.response.Meta.Cursors.After
+	return c.response, nil
+}
+
+func (s *EventService) All(ctx context.Context, p EventListParams) *EventListPagingIterator {
+	return &EventListPagingIterator{
+		params:  p,
+		service: s,
+	}
+}
 
 // Get
 // Retrieves the details of a single event.
-func (s *EventService) Get(ctx context.Context,identity string) (*Event,error) {
-  uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/events/%v",
-      identity,))
-  if err != nil {
-    return nil, err
-  }
+func (s *EventService) Get(ctx context.Context, identity string, opts ...RequestOption) (*Event, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/events/%v",
+		identity))
+	if err != nil {
+		return nil, err
+	}
 
-  var body io.Reader
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
 
-  
+	var body io.Reader
 
-  req, err := http.NewRequest("GET", uri.String(), body)
-  if err != nil {
-    return nil, err
-  }
-  req.WithContext(ctx)
-  req.Header.Set("Authorization", "Bearer "+s.token)
-  req.Header.Set("GoCardless-Version", "2015-07-06")
-  
+	req, err := http.NewRequest("GET", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.token)
 
-  client := s.client
-  if client == nil {
-    client = http.DefaultClient
-  }
+	req.Header.Set("GoCardless-Version", "2015-07-06")
 
-  var result struct {
-    Err *APIError `json:"error"`
-Event *Event `json:"events"`
-  }
+	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
 
-  err = try(3, func() error {
-      res, err := client.Do(req)
-      if err != nil {
-        return err
-      }
-      defer res.Body.Close()
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 
-      err = responseErr(res)
-      if err != nil {
-        return err
-      }
+	client := s.client
+	if client == nil {
+		client = http.DefaultClient
+	}
 
-      err = json.NewDecoder(res.Body).Decode(&result)
-      if err != nil {
-        return err
-      }
+	var result struct {
+		Err   *APIError `json:"error"`
+		Event *Event    `json:"events"`
+	}
 
-      if result.Err != nil {
-        return result.Err
-      }
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
 
-      return nil
-  })
-  if err != nil {
-    return nil, err
-  }
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
 
-if result.Event == nil {
-    return nil, errors.New("missing result")
-  }
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
 
-  return result.Event, nil
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Event == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.Event, nil
 }
-

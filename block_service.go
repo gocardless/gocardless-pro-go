@@ -18,63 +18,38 @@ var _ = bytes.NewBuffer
 var _ = json.NewDecoder
 var _ = errors.New
 
-// CustomerBankAccountService manages customer_bank_accounts
-type CustomerBankAccountService struct {
+// BlockService manages blocks
+type BlockService struct {
 	endpoint string
 	token    string
 	client   *http.Client
 }
 
-// CustomerBankAccount model
-type CustomerBankAccount struct {
-	AccountHolderName   string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumberEnding string `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
-	AccountType         string `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankName            string `url:"bank_name,omitempty" json:"bank_name,omitempty"`
-	CountryCode         string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	CreatedAt           string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency            string `url:"currency,omitempty" json:"currency,omitempty"`
-	Enabled             bool   `url:"enabled,omitempty" json:"enabled,omitempty"`
-	Id                  string `url:"id,omitempty" json:"id,omitempty"`
-	Links               struct {
-		Customer string `url:"customer,omitempty" json:"customer,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+// Block model
+type Block struct {
+	Active            bool   `url:"active,omitempty" json:"active,omitempty"`
+	BlockType         string `url:"block_type,omitempty" json:"block_type,omitempty"`
+	CreatedAt         string `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Id                string `url:"id,omitempty" json:"id,omitempty"`
+	ReasonDescription string `url:"reason_description,omitempty" json:"reason_description,omitempty"`
+	ReasonType        string `url:"reason_type,omitempty" json:"reason_type,omitempty"`
+	ResourceReference string `url:"resource_reference,omitempty" json:"resource_reference,omitempty"`
+	UpdatedAt         string `url:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
-// CustomerBankAccountCreateParams parameters
-type CustomerBankAccountCreateParams struct {
-	AccountHolderName string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumber     string `url:"account_number,omitempty" json:"account_number,omitempty"`
-	AccountType       string `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankCode          string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-	BranchCode        string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	CountryCode       string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Currency          string `url:"currency,omitempty" json:"currency,omitempty"`
-	Iban              string `url:"iban,omitempty" json:"iban,omitempty"`
-	Links             struct {
-		Customer                 string `url:"customer,omitempty" json:"customer,omitempty"`
-		CustomerBankAccountToken string `url:"customer_bank_account_token,omitempty" json:"customer_bank_account_token,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+// BlockCreateParams parameters
+type BlockCreateParams struct {
+	Active            bool   `url:"active,omitempty" json:"active,omitempty"`
+	BlockType         string `url:"block_type,omitempty" json:"block_type,omitempty"`
+	ReasonDescription string `url:"reason_description,omitempty" json:"reason_description,omitempty"`
+	ReasonType        string `url:"reason_type,omitempty" json:"reason_type,omitempty"`
+	ResourceReference string `url:"resource_reference,omitempty" json:"resource_reference,omitempty"`
 }
 
 // Create
-// Creates a new customer bank account object.
-//
-// There are three different ways to supply bank account details:
-//
-// - [Local details](#appendix-local-bank-details)
-//
-// - IBAN
-//
-// - [Customer Bank Account
-// Tokens](#javascript-flow-create-a-customer-bank-account-token)
-//
-// For more information on the different fields required in each country, see
-// [local bank details](#appendix-local-bank-details).
-func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankAccountCreateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customer_bank_accounts"))
+// Creates a new Block of a given type. By default it will be active.
+func (s *BlockService) Create(ctx context.Context, p BlockCreateParams, opts ...RequestOption) (*Block, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/blocks"))
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +71,7 @@ func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankA
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"customer_bank_accounts": p,
+		"blocks": p,
 	})
 	if err != nil {
 		return nil, err
@@ -128,8 +103,8 @@ func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankA
 	}
 
 	var result struct {
-		Err                 *APIError            `json:"error"`
-		CustomerBankAccount *CustomerBankAccount `json:"customer_bank_accounts"`
+		Err   *APIError `json:"error"`
+		Block *Block    `json:"blocks"`
 	}
 
 	err = try(o.retries, func() error {
@@ -159,32 +134,111 @@ func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankA
 		return nil, err
 	}
 
-	if result.CustomerBankAccount == nil {
+	if result.Block == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.CustomerBankAccount, nil
+	return result.Block, nil
 }
 
-// CustomerBankAccountListParams parameters
-type CustomerBankAccountListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer string `url:"customer,omitempty" json:"customer,omitempty"`
-	Enabled  bool   `url:"enabled,omitempty" json:"enabled,omitempty"`
-	Limit    int    `url:"limit,omitempty" json:"limit,omitempty"`
+// Get
+// Retrieves the details of an existing block.
+func (s *BlockService) Get(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/blocks/%v",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	var body io.Reader
+
+	req, err := http.NewRequest("GET", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.token)
+
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+
+	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.client
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err   *APIError `json:"error"`
+		Block *Block    `json:"blocks"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Block == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.Block, nil
 }
 
-// CustomerBankAccountListResult response including pagination metadata
-type CustomerBankAccountListResult struct {
-	CustomerBankAccounts []CustomerBankAccount `json:"customer_bank_accounts"`
-	Meta                 struct {
+// BlockListParams parameters
+type BlockListParams struct {
+	After      string `url:"after,omitempty" json:"after,omitempty"`
+	Before     string `url:"before,omitempty" json:"before,omitempty"`
+	Block      string `url:"block,omitempty" json:"block,omitempty"`
+	BlockType  string `url:"block_type,omitempty" json:"block_type,omitempty"`
+	CreatedAt  string `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Limit      int    `url:"limit,omitempty" json:"limit,omitempty"`
+	ReasonType string `url:"reason_type,omitempty" json:"reason_type,omitempty"`
+	UpdatedAt  string `url:"updated_at,omitempty" json:"updated_at,omitempty"`
+}
+
+// BlockListResult response including pagination metadata
+type BlockListResult struct {
+	Blocks []Block `json:"blocks"`
+	Meta   struct {
 		Cursors struct {
 			After  string `url:"after,omitempty" json:"after,omitempty"`
 			Before string `url:"before,omitempty" json:"before,omitempty"`
@@ -194,10 +248,10 @@ type CustomerBankAccountListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your bank
-// accounts.
-func (s *CustomerBankAccountService) List(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) (*CustomerBankAccountListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customer_bank_accounts"))
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// blocks.
+func (s *BlockService) List(ctx context.Context, p BlockListParams, opts ...RequestOption) (*BlockListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/blocks"))
 	if err != nil {
 		return nil, err
 	}
@@ -244,7 +298,7 @@ func (s *CustomerBankAccountService) List(ctx context.Context, p CustomerBankAcc
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*CustomerBankAccountListResult
+		*BlockListResult
 	}
 
 	err = try(o.retries, func() error {
@@ -274,21 +328,21 @@ func (s *CustomerBankAccountService) List(ctx context.Context, p CustomerBankAcc
 		return nil, err
 	}
 
-	if result.CustomerBankAccountListResult == nil {
+	if result.BlockListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.CustomerBankAccountListResult, nil
+	return result.BlockListResult, nil
 }
 
-type CustomerBankAccountListPagingIterator struct {
+type BlockListPagingIterator struct {
 	cursor   string
-	response *CustomerBankAccountListResult
-	params   CustomerBankAccountListParams
-	service  *CustomerBankAccountService
+	response *BlockListResult
+	params   BlockListParams
+	service  *BlockService
 }
 
-func (c *CustomerBankAccountListPagingIterator) Next() bool {
+func (c *BlockListPagingIterator) Next() bool {
 	if c.cursor == "" && c.response != nil {
 		return false
 	}
@@ -296,7 +350,7 @@ func (c *CustomerBankAccountListPagingIterator) Next() bool {
 	return true
 }
 
-func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*CustomerBankAccountListResult, error) {
+func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, error) {
 	if !c.Next() {
 		return c.response, nil
 	}
@@ -305,7 +359,7 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customer_bank_accounts"))
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/blocks"))
 
 	if err != nil {
 		return nil, err
@@ -334,7 +388,7 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*CustomerBankAccountListResult
+		*BlockListResult
 	}
 
 	err = try(3, func() error {
@@ -365,216 +419,26 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 		return nil, err
 	}
 
-	if result.CustomerBankAccountListResult == nil {
+	if result.BlockListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	c.response = result.CustomerBankAccountListResult
+	c.response = result.BlockListResult
 	c.cursor = c.response.Meta.Cursors.After
 	return c.response, nil
 }
 
-func (s *CustomerBankAccountService) All(ctx context.Context, p CustomerBankAccountListParams) *CustomerBankAccountListPagingIterator {
-	return &CustomerBankAccountListPagingIterator{
+func (s *BlockService) All(ctx context.Context, p BlockListParams) *BlockListPagingIterator {
+	return &BlockListPagingIterator{
 		params:  p,
 		service: s,
 	}
 }
 
-// Get
-// Retrieves the details of an existing bank account.
-func (s *CustomerBankAccountService) Get(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/customer_bank_accounts/%v",
-		identity))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	var body io.Reader
-
-	req, err := http.NewRequest("GET", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
-
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
-	req.Header.Set("User-Agent", userAgent)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.client
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err                 *APIError            `json:"error"`
-		CustomerBankAccount *CustomerBankAccount `json:"customer_bank_accounts"`
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.CustomerBankAccount == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.CustomerBankAccount, nil
-}
-
-// CustomerBankAccountUpdateParams parameters
-type CustomerBankAccountUpdateParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-}
-
-// Update
-// Updates a customer bank account object. Only the metadata parameter is
-// allowed.
-func (s *CustomerBankAccountService) Update(ctx context.Context, identity string, p CustomerBankAccountUpdateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/customer_bank_accounts/%v",
-		identity))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-	if o.idempotencyKey == "" {
-		o.idempotencyKey = NewIdempotencyKey()
-	}
-
-	var body io.Reader
-
-	var buf bytes.Buffer
-	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"customer_bank_accounts": p,
-	})
-	if err != nil {
-		return nil, err
-	}
-	body = &buf
-
-	req, err := http.NewRequest("PUT", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
-
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
-	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Idempotency-Key", o.idempotencyKey)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.client
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err                 *APIError            `json:"error"`
-		CustomerBankAccount *CustomerBankAccount `json:"customer_bank_accounts"`
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.CustomerBankAccount == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.CustomerBankAccount, nil
-}
-
 // Disable
-// Immediately cancels all associated mandates and cancellable payments.
-//
-// This will return a `disable_failed` error if the bank account has already
-// been disabled.
-//
-// A disabled bank account can be re-enabled by creating a new bank account
-// resource with the same details.
-func (s *CustomerBankAccountService) Disable(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/customer_bank_accounts/%v/actions/disable",
+// Disables a block so that it no longer will prevent mandate creation.
+func (s *BlockService) Disable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/blocks/%v/actions/disable",
 		identity))
 	if err != nil {
 		return nil, err
@@ -620,8 +484,8 @@ func (s *CustomerBankAccountService) Disable(ctx context.Context, identity strin
 	}
 
 	var result struct {
-		Err                 *APIError            `json:"error"`
-		CustomerBankAccount *CustomerBankAccount `json:"customer_bank_accounts"`
+		Err   *APIError `json:"error"`
+		Block *Block    `json:"blocks"`
 	}
 
 	err = try(o.retries, func() error {
@@ -651,9 +515,224 @@ func (s *CustomerBankAccountService) Disable(ctx context.Context, identity strin
 		return nil, err
 	}
 
-	if result.CustomerBankAccount == nil {
+	if result.Block == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.CustomerBankAccount, nil
+	return result.Block, nil
+}
+
+// Enable
+// Enables a previously disabled block so that it will prevent mandate creation
+func (s *BlockService) Enable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/blocks/%v/actions/enable",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.token)
+
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+
+	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.client
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err   *APIError `json:"error"`
+		Block *Block    `json:"blocks"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Block == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.Block, nil
+}
+
+// BlockBlockByRefParams parameters
+type BlockBlockByRefParams struct {
+	Active            bool   `url:"active,omitempty" json:"active,omitempty"`
+	ReasonDescription string `url:"reason_description,omitempty" json:"reason_description,omitempty"`
+	ReasonType        string `url:"reason_type,omitempty" json:"reason_type,omitempty"`
+	ReferenceType     string `url:"reference_type,omitempty" json:"reference_type,omitempty"`
+	ReferenceValue    string `url:"reference_value,omitempty" json:"reference_value,omitempty"`
+}
+type BlockBlockByRefResult struct {
+	Blocks []struct {
+		Active            bool   `url:"active,omitempty" json:"active,omitempty"`
+		BlockType         string `url:"block_type,omitempty" json:"block_type,omitempty"`
+		CreatedAt         string `url:"created_at,omitempty" json:"created_at,omitempty"`
+		Id                string `url:"id,omitempty" json:"id,omitempty"`
+		ReasonDescription string `url:"reason_description,omitempty" json:"reason_description,omitempty"`
+		ReasonType        string `url:"reason_type,omitempty" json:"reason_type,omitempty"`
+		ResourceReference string `url:"resource_reference,omitempty" json:"resource_reference,omitempty"`
+		UpdatedAt         string `url:"updated_at,omitempty" json:"updated_at,omitempty"`
+	} `url:"blocks,omitempty" json:"blocks,omitempty"`
+	Meta struct {
+		Cursors struct {
+			After  string `url:"after,omitempty" json:"after,omitempty"`
+			Before string `url:"before,omitempty" json:"before,omitempty"`
+		} `url:"cursors,omitempty" json:"cursors,omitempty"`
+		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
+	} `url:"meta,omitempty" json:"meta,omitempty"`
+}
+
+// BlockByRef
+// Creates new blocks for a given reference. By default blocks will be active.
+// Returns 201 if at least one block was created. Returns 200 if there were no
+// new
+// blocks created.
+func (s *BlockService) BlockByRef(ctx context.Context, p BlockBlockByRefParams, opts ...RequestOption) (
+	*BlockBlockByRefResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/block_by_ref"))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"data": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.token)
+
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+
+	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.client
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err *APIError `json:"error"`
+
+		*BlockBlockByRefResult
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BlockBlockByRefResult == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BlockBlockByRefResult, nil
 }

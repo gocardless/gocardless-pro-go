@@ -18,45 +18,40 @@ var _ = bytes.NewBuffer
 var _ = json.NewDecoder
 var _ = errors.New
 
-// PayoutItemService manages payout_items
-type PayoutItemService struct {
+// CurrencyExchangeRateService manages currency_exchange_rates
+type CurrencyExchangeRateService struct {
 	endpoint string
 	token    string
 	client   *http.Client
 }
 
-// PayoutItem model
-type PayoutItem struct {
-	Amount string `url:"amount,omitempty" json:"amount,omitempty"`
-	Links  struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-		Payment string `url:"payment,omitempty" json:"payment,omitempty"`
-		Refund  string `url:"refund,omitempty" json:"refund,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Taxes []struct {
-		Amount              string `url:"amount,omitempty" json:"amount,omitempty"`
-		Currency            string `url:"currency,omitempty" json:"currency,omitempty"`
-		DestinationAmount   string `url:"destination_amount,omitempty" json:"destination_amount,omitempty"`
-		DestinationCurrency string `url:"destination_currency,omitempty" json:"destination_currency,omitempty"`
-		ExchangeRate        string `url:"exchange_rate,omitempty" json:"exchange_rate,omitempty"`
-		TaxRateId           string `url:"tax_rate_id,omitempty" json:"tax_rate_id,omitempty"`
-	} `url:"taxes,omitempty" json:"taxes,omitempty"`
-	Type string `url:"type,omitempty" json:"type,omitempty"`
+// CurrencyExchangeRate model
+type CurrencyExchangeRate struct {
+	Rate   string `url:"rate,omitempty" json:"rate,omitempty"`
+	Source string `url:"source,omitempty" json:"source,omitempty"`
+	Target string `url:"target,omitempty" json:"target,omitempty"`
+	Time   string `url:"time,omitempty" json:"time,omitempty"`
 }
 
-// PayoutItemListParams parameters
-type PayoutItemListParams struct {
-	After                 string `url:"after,omitempty" json:"after,omitempty"`
-	Before                string `url:"before,omitempty" json:"before,omitempty"`
-	Include2020TaxCutover string `url:"include_2020_tax_cutover,omitempty" json:"include_2020_tax_cutover,omitempty"`
-	Limit                 int    `url:"limit,omitempty" json:"limit,omitempty"`
-	Payout                string `url:"payout,omitempty" json:"payout,omitempty"`
+// CurrencyExchangeRateListParams parameters
+type CurrencyExchangeRateListParams struct {
+	After     string `url:"after,omitempty" json:"after,omitempty"`
+	Before    string `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt struct {
+		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
+	} `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Limit  int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Source string `url:"source,omitempty" json:"source,omitempty"`
+	Target string `url:"target,omitempty" json:"target,omitempty"`
 }
 
-// PayoutItemListResult response including pagination metadata
-type PayoutItemListResult struct {
-	PayoutItems []PayoutItem `json:"payout_items"`
-	Meta        struct {
+// CurrencyExchangeRateListResult response including pagination metadata
+type CurrencyExchangeRateListResult struct {
+	CurrencyExchangeRates []CurrencyExchangeRate `json:"currency_exchange_rates"`
+	Meta                  struct {
 		Cursors struct {
 			After  string `url:"after,omitempty" json:"after,omitempty"`
 			Before string `url:"before,omitempty" json:"before,omitempty"`
@@ -66,11 +61,10 @@ type PayoutItemListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of items in
-// the payout.
-//
-func (s *PayoutItemService) List(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) (*PayoutItemListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payout_items"))
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of all
+// exchange rates.
+func (s *CurrencyExchangeRateService) List(ctx context.Context, p CurrencyExchangeRateListParams, opts ...RequestOption) (*CurrencyExchangeRateListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/currency_exchange_rates"))
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +111,7 @@ func (s *PayoutItemService) List(ctx context.Context, p PayoutItemListParams, op
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*PayoutItemListResult
+		*CurrencyExchangeRateListResult
 	}
 
 	err = try(o.retries, func() error {
@@ -147,21 +141,21 @@ func (s *PayoutItemService) List(ctx context.Context, p PayoutItemListParams, op
 		return nil, err
 	}
 
-	if result.PayoutItemListResult == nil {
+	if result.CurrencyExchangeRateListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.PayoutItemListResult, nil
+	return result.CurrencyExchangeRateListResult, nil
 }
 
-type PayoutItemListPagingIterator struct {
+type CurrencyExchangeRateListPagingIterator struct {
 	cursor   string
-	response *PayoutItemListResult
-	params   PayoutItemListParams
-	service  *PayoutItemService
+	response *CurrencyExchangeRateListResult
+	params   CurrencyExchangeRateListParams
+	service  *CurrencyExchangeRateService
 }
 
-func (c *PayoutItemListPagingIterator) Next() bool {
+func (c *CurrencyExchangeRateListPagingIterator) Next() bool {
 	if c.cursor == "" && c.response != nil {
 		return false
 	}
@@ -169,7 +163,7 @@ func (c *PayoutItemListPagingIterator) Next() bool {
 	return true
 }
 
-func (c *PayoutItemListPagingIterator) Value(ctx context.Context) (*PayoutItemListResult, error) {
+func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*CurrencyExchangeRateListResult, error) {
 	if !c.Next() {
 		return c.response, nil
 	}
@@ -178,7 +172,7 @@ func (c *PayoutItemListPagingIterator) Value(ctx context.Context) (*PayoutItemLi
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payout_items"))
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/currency_exchange_rates"))
 
 	if err != nil {
 		return nil, err
@@ -207,7 +201,7 @@ func (c *PayoutItemListPagingIterator) Value(ctx context.Context) (*PayoutItemLi
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*PayoutItemListResult
+		*CurrencyExchangeRateListResult
 	}
 
 	err = try(3, func() error {
@@ -238,17 +232,17 @@ func (c *PayoutItemListPagingIterator) Value(ctx context.Context) (*PayoutItemLi
 		return nil, err
 	}
 
-	if result.PayoutItemListResult == nil {
+	if result.CurrencyExchangeRateListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	c.response = result.PayoutItemListResult
+	c.response = result.CurrencyExchangeRateListResult
 	c.cursor = c.response.Meta.Cursors.After
 	return c.response, nil
 }
 
-func (s *PayoutItemService) All(ctx context.Context, p PayoutItemListParams) *PayoutItemListPagingIterator {
-	return &PayoutItemListPagingIterator{
+func (s *CurrencyExchangeRateService) All(ctx context.Context, p CurrencyExchangeRateListParams) *CurrencyExchangeRateListPagingIterator {
+	return &CurrencyExchangeRateListPagingIterator{
 		params:  p,
 		service: s,
 	}

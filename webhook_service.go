@@ -18,40 +18,32 @@ var _ = bytes.NewBuffer
 var _ = json.NewDecoder
 var _ = errors.New
 
-// PayoutService manages payouts
-type PayoutService struct {
+// WebhookService manages webhooks
+type WebhookService struct {
 	endpoint string
 	token    string
 	client   *http.Client
 }
 
-// Payout model
-type Payout struct {
-	Amount       int    `url:"amount,omitempty" json:"amount,omitempty"`
-	ArrivalDate  string `url:"arrival_date,omitempty" json:"arrival_date,omitempty"`
-	CreatedAt    string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency     string `url:"currency,omitempty" json:"currency,omitempty"`
-	DeductedFees int    `url:"deducted_fees,omitempty" json:"deducted_fees,omitempty"`
-	Fx           struct {
-		EstimatedExchangeRate string `url:"estimated_exchange_rate,omitempty" json:"estimated_exchange_rate,omitempty"`
-		ExchangeRate          string `url:"exchange_rate,omitempty" json:"exchange_rate,omitempty"`
-		FxAmount              int    `url:"fx_amount,omitempty" json:"fx_amount,omitempty"`
-		FxCurrency            string `url:"fx_currency,omitempty" json:"fx_currency,omitempty"`
-	} `url:"fx,omitempty" json:"fx,omitempty"`
-	Id    string `url:"id,omitempty" json:"id,omitempty"`
-	Links struct {
-		Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
-		CreditorBankAccount string `url:"creditor_bank_account,omitempty" json:"creditor_bank_account,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayoutType  string                 `url:"payout_type,omitempty" json:"payout_type,omitempty"`
-	Reference   string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Status      string                 `url:"status,omitempty" json:"status,omitempty"`
-	TaxCurrency string                 `url:"tax_currency,omitempty" json:"tax_currency,omitempty"`
+// Webhook model
+type Webhook struct {
+	CreatedAt                       string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Id                              string                 `url:"id,omitempty" json:"id,omitempty"`
+	IsTest                          bool                   `url:"is_test,omitempty" json:"is_test,omitempty"`
+	RequestBody                     string                 `url:"request_body,omitempty" json:"request_body,omitempty"`
+	RequestHeaders                  map[string]interface{} `url:"request_headers,omitempty" json:"request_headers,omitempty"`
+	ResponseBody                    string                 `url:"response_body,omitempty" json:"response_body,omitempty"`
+	ResponseBodyTruncated           bool                   `url:"response_body_truncated,omitempty" json:"response_body_truncated,omitempty"`
+	ResponseCode                    int                    `url:"response_code,omitempty" json:"response_code,omitempty"`
+	ResponseHeaders                 map[string]interface{} `url:"response_headers,omitempty" json:"response_headers,omitempty"`
+	ResponseHeadersContentTruncated bool                   `url:"response_headers_content_truncated,omitempty" json:"response_headers_content_truncated,omitempty"`
+	ResponseHeadersCountTruncated   bool                   `url:"response_headers_count_truncated,omitempty" json:"response_headers_count_truncated,omitempty"`
+	Successful                      bool                   `url:"successful,omitempty" json:"successful,omitempty"`
+	Url                             string                 `url:"url,omitempty" json:"url,omitempty"`
 }
 
-// PayoutListParams parameters
-type PayoutListParams struct {
+// WebhookListParams parameters
+type WebhookListParams struct {
 	After     string `url:"after,omitempty" json:"after,omitempty"`
 	Before    string `url:"before,omitempty" json:"before,omitempty"`
 	CreatedAt struct {
@@ -60,20 +52,15 @@ type PayoutListParams struct {
 		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
 		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Creditor            string                 `url:"creditor,omitempty" json:"creditor,omitempty"`
-	CreditorBankAccount string                 `url:"creditor_bank_account,omitempty" json:"creditor_bank_account,omitempty"`
-	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Limit               int                    `url:"limit,omitempty" json:"limit,omitempty"`
-	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayoutType          string                 `url:"payout_type,omitempty" json:"payout_type,omitempty"`
-	Reference           string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Status              string                 `url:"status,omitempty" json:"status,omitempty"`
+	IsTest     bool `url:"is_test,omitempty" json:"is_test,omitempty"`
+	Limit      int  `url:"limit,omitempty" json:"limit,omitempty"`
+	Successful bool `url:"successful,omitempty" json:"successful,omitempty"`
 }
 
-// PayoutListResult response including pagination metadata
-type PayoutListResult struct {
-	Payouts []Payout `json:"payouts"`
-	Meta    struct {
+// WebhookListResult response including pagination metadata
+type WebhookListResult struct {
+	Webhooks []Webhook `json:"webhooks"`
+	Meta     struct {
 		Cursors struct {
 			After  string `url:"after,omitempty" json:"after,omitempty"`
 			Before string `url:"before,omitempty" json:"before,omitempty"`
@@ -84,9 +71,9 @@ type PayoutListResult struct {
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// payouts.
-func (s *PayoutService) List(ctx context.Context, p PayoutListParams, opts ...RequestOption) (*PayoutListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payouts"))
+// webhooks.
+func (s *WebhookService) List(ctx context.Context, p WebhookListParams, opts ...RequestOption) (*WebhookListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/webhooks"))
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +120,7 @@ func (s *PayoutService) List(ctx context.Context, p PayoutListParams, opts ...Re
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*PayoutListResult
+		*WebhookListResult
 	}
 
 	err = try(o.retries, func() error {
@@ -163,21 +150,21 @@ func (s *PayoutService) List(ctx context.Context, p PayoutListParams, opts ...Re
 		return nil, err
 	}
 
-	if result.PayoutListResult == nil {
+	if result.WebhookListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.PayoutListResult, nil
+	return result.WebhookListResult, nil
 }
 
-type PayoutListPagingIterator struct {
+type WebhookListPagingIterator struct {
 	cursor   string
-	response *PayoutListResult
-	params   PayoutListParams
-	service  *PayoutService
+	response *WebhookListResult
+	params   WebhookListParams
+	service  *WebhookService
 }
 
-func (c *PayoutListPagingIterator) Next() bool {
+func (c *WebhookListPagingIterator) Next() bool {
 	if c.cursor == "" && c.response != nil {
 		return false
 	}
@@ -185,7 +172,7 @@ func (c *PayoutListPagingIterator) Next() bool {
 	return true
 }
 
-func (c *PayoutListPagingIterator) Value(ctx context.Context) (*PayoutListResult, error) {
+func (c *WebhookListPagingIterator) Value(ctx context.Context) (*WebhookListResult, error) {
 	if !c.Next() {
 		return c.response, nil
 	}
@@ -194,7 +181,7 @@ func (c *PayoutListPagingIterator) Value(ctx context.Context) (*PayoutListResult
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payouts"))
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/webhooks"))
 
 	if err != nil {
 		return nil, err
@@ -223,7 +210,7 @@ func (c *PayoutListPagingIterator) Value(ctx context.Context) (*PayoutListResult
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*PayoutListResult
+		*WebhookListResult
 	}
 
 	err = try(3, func() error {
@@ -254,28 +241,26 @@ func (c *PayoutListPagingIterator) Value(ctx context.Context) (*PayoutListResult
 		return nil, err
 	}
 
-	if result.PayoutListResult == nil {
+	if result.WebhookListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	c.response = result.PayoutListResult
+	c.response = result.WebhookListResult
 	c.cursor = c.response.Meta.Cursors.After
 	return c.response, nil
 }
 
-func (s *PayoutService) All(ctx context.Context, p PayoutListParams) *PayoutListPagingIterator {
-	return &PayoutListPagingIterator{
+func (s *WebhookService) All(ctx context.Context, p WebhookListParams) *WebhookListPagingIterator {
+	return &WebhookListPagingIterator{
 		params:  p,
 		service: s,
 	}
 }
 
 // Get
-// Retrieves the details of a single payout. For an example of how to reconcile
-// the transactions in a payout, see [this
-// guide](#events-reconciling-payouts-with-events).
-func (s *PayoutService) Get(ctx context.Context, identity string, opts ...RequestOption) (*Payout, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/payouts/%v",
+// Retrieves the details of an existing webhook.
+func (s *WebhookService) Get(ctx context.Context, identity string, opts ...RequestOption) (*Webhook, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/webhooks/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -316,8 +301,8 @@ func (s *PayoutService) Get(ctx context.Context, identity string, opts ...Reques
 	}
 
 	var result struct {
-		Err    *APIError `json:"error"`
-		Payout *Payout   `json:"payouts"`
+		Err     *APIError `json:"error"`
+		Webhook *Webhook  `json:"webhooks"`
 	}
 
 	err = try(o.retries, func() error {
@@ -347,22 +332,17 @@ func (s *PayoutService) Get(ctx context.Context, identity string, opts ...Reques
 		return nil, err
 	}
 
-	if result.Payout == nil {
+	if result.Webhook == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.Payout, nil
+	return result.Webhook, nil
 }
 
-// PayoutUpdateParams parameters
-type PayoutUpdateParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-}
-
-// Update
-// Updates a payout object. This accepts only the metadata parameter.
-func (s *PayoutService) Update(ctx context.Context, identity string, p PayoutUpdateParams, opts ...RequestOption) (*Payout, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/payouts/%v",
+// Retry
+// Requests for a previous webhook to be sent again
+func (s *WebhookService) Retry(ctx context.Context, identity string, opts ...RequestOption) (*Webhook, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/webhooks/%v/actions/retry",
 		identity))
 	if err != nil {
 		return nil, err
@@ -383,16 +363,7 @@ func (s *PayoutService) Update(ctx context.Context, identity string, p PayoutUpd
 
 	var body io.Reader
 
-	var buf bytes.Buffer
-	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"payouts": p,
-	})
-	if err != nil {
-		return nil, err
-	}
-	body = &buf
-
-	req, err := http.NewRequest("PUT", uri.String(), body)
+	req, err := http.NewRequest("POST", uri.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -417,8 +388,8 @@ func (s *PayoutService) Update(ctx context.Context, identity string, p PayoutUpd
 	}
 
 	var result struct {
-		Err    *APIError `json:"error"`
-		Payout *Payout   `json:"payouts"`
+		Err     *APIError `json:"error"`
+		Webhook *Webhook  `json:"webhooks"`
 	}
 
 	err = try(o.retries, func() error {
@@ -448,9 +419,9 @@ func (s *PayoutService) Update(ctx context.Context, identity string, p PayoutUpd
 		return nil, err
 	}
 
-	if result.Payout == nil {
+	if result.Webhook == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.Payout, nil
+	return result.Webhook, nil
 }
