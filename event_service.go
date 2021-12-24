@@ -199,10 +199,11 @@ func (s *EventService) List(ctx context.Context, p EventListParams, opts ...Requ
 }
 
 type EventListPagingIterator struct {
-	cursor   string
-	response *EventListResult
-	params   EventListParams
-	service  *EventService
+	cursor         string
+	response       *EventListResult
+	params         EventListParams
+	service        *EventService
+	requestOptions []RequestOption
 }
 
 func (c *EventListPagingIterator) Next() bool {
@@ -228,6 +229,16 @@ func (c *EventListPagingIterator) Value(ctx context.Context) (*EventListResult, 
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -244,6 +255,9 @@ func (c *EventListPagingIterator) Value(ctx context.Context) (*EventListResult, 
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -254,7 +268,7 @@ func (c *EventListPagingIterator) Value(ctx context.Context) (*EventListResult, 
 		*EventListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -291,10 +305,13 @@ func (c *EventListPagingIterator) Value(ctx context.Context) (*EventListResult, 
 	return c.response, nil
 }
 
-func (s *EventService) All(ctx context.Context, p EventListParams) *EventListPagingIterator {
+func (s *EventService) All(ctx context.Context,
+	p EventListParams,
+	opts ...RequestOption) *EventListPagingIterator {
 	return &EventListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

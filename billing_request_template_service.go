@@ -153,10 +153,11 @@ func (s *BillingRequestTemplateService) List(ctx context.Context, p BillingReque
 }
 
 type BillingRequestTemplateListPagingIterator struct {
-	cursor   string
-	response *BillingRequestTemplateListResult
-	params   BillingRequestTemplateListParams
-	service  *BillingRequestTemplateService
+	cursor         string
+	response       *BillingRequestTemplateListResult
+	params         BillingRequestTemplateListParams
+	service        *BillingRequestTemplateService
+	requestOptions []RequestOption
 }
 
 func (c *BillingRequestTemplateListPagingIterator) Next() bool {
@@ -182,6 +183,16 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -198,6 +209,9 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -208,7 +222,7 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 		*BillingRequestTemplateListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -245,10 +259,13 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 	return c.response, nil
 }
 
-func (s *BillingRequestTemplateService) All(ctx context.Context, p BillingRequestTemplateListParams) *BillingRequestTemplateListPagingIterator {
+func (s *BillingRequestTemplateService) All(ctx context.Context,
+	p BillingRequestTemplateListParams,
+	opts ...RequestOption) *BillingRequestTemplateListPagingIterator {
 	return &BillingRequestTemplateListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

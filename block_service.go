@@ -336,10 +336,11 @@ func (s *BlockService) List(ctx context.Context, p BlockListParams, opts ...Requ
 }
 
 type BlockListPagingIterator struct {
-	cursor   string
-	response *BlockListResult
-	params   BlockListParams
-	service  *BlockService
+	cursor         string
+	response       *BlockListResult
+	params         BlockListParams
+	service        *BlockService
+	requestOptions []RequestOption
 }
 
 func (c *BlockListPagingIterator) Next() bool {
@@ -365,6 +366,16 @@ func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, 
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -381,6 +392,9 @@ func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, 
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -391,7 +405,7 @@ func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, 
 		*BlockListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -428,10 +442,13 @@ func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, 
 	return c.response, nil
 }
 
-func (s *BlockService) All(ctx context.Context, p BlockListParams) *BlockListPagingIterator {
+func (s *BlockService) All(ctx context.Context,
+	p BlockListParams,
+	opts ...RequestOption) *BlockListPagingIterator {
 	return &BlockListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

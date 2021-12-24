@@ -149,10 +149,11 @@ func (s *CurrencyExchangeRateService) List(ctx context.Context, p CurrencyExchan
 }
 
 type CurrencyExchangeRateListPagingIterator struct {
-	cursor   string
-	response *CurrencyExchangeRateListResult
-	params   CurrencyExchangeRateListParams
-	service  *CurrencyExchangeRateService
+	cursor         string
+	response       *CurrencyExchangeRateListResult
+	params         CurrencyExchangeRateListParams
+	service        *CurrencyExchangeRateService
+	requestOptions []RequestOption
 }
 
 func (c *CurrencyExchangeRateListPagingIterator) Next() bool {
@@ -178,6 +179,16 @@ func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*Cu
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -194,6 +205,9 @@ func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*Cu
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -204,7 +218,7 @@ func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*Cu
 		*CurrencyExchangeRateListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -241,9 +255,12 @@ func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*Cu
 	return c.response, nil
 }
 
-func (s *CurrencyExchangeRateService) All(ctx context.Context, p CurrencyExchangeRateListParams) *CurrencyExchangeRateListPagingIterator {
+func (s *CurrencyExchangeRateService) All(ctx context.Context,
+	p CurrencyExchangeRateListParams,
+	opts ...RequestOption) *CurrencyExchangeRateListPagingIterator {
 	return &CurrencyExchangeRateListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }

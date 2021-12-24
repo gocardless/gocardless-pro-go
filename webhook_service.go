@@ -158,10 +158,11 @@ func (s *WebhookService) List(ctx context.Context, p WebhookListParams, opts ...
 }
 
 type WebhookListPagingIterator struct {
-	cursor   string
-	response *WebhookListResult
-	params   WebhookListParams
-	service  *WebhookService
+	cursor         string
+	response       *WebhookListResult
+	params         WebhookListParams
+	service        *WebhookService
+	requestOptions []RequestOption
 }
 
 func (c *WebhookListPagingIterator) Next() bool {
@@ -187,6 +188,16 @@ func (c *WebhookListPagingIterator) Value(ctx context.Context) (*WebhookListResu
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -203,6 +214,9 @@ func (c *WebhookListPagingIterator) Value(ctx context.Context) (*WebhookListResu
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -213,7 +227,7 @@ func (c *WebhookListPagingIterator) Value(ctx context.Context) (*WebhookListResu
 		*WebhookListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -250,10 +264,13 @@ func (c *WebhookListPagingIterator) Value(ctx context.Context) (*WebhookListResu
 	return c.response, nil
 }
 
-func (s *WebhookService) All(ctx context.Context, p WebhookListParams) *WebhookListPagingIterator {
+func (s *WebhookService) All(ctx context.Context,
+	p WebhookListParams,
+	opts ...RequestOption) *WebhookListPagingIterator {
 	return &WebhookListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

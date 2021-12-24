@@ -296,10 +296,11 @@ func (s *PaymentService) List(ctx context.Context, p PaymentListParams, opts ...
 }
 
 type PaymentListPagingIterator struct {
-	cursor   string
-	response *PaymentListResult
-	params   PaymentListParams
-	service  *PaymentService
+	cursor         string
+	response       *PaymentListResult
+	params         PaymentListParams
+	service        *PaymentService
+	requestOptions []RequestOption
 }
 
 func (c *PaymentListPagingIterator) Next() bool {
@@ -325,6 +326,16 @@ func (c *PaymentListPagingIterator) Value(ctx context.Context) (*PaymentListResu
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -341,6 +352,9 @@ func (c *PaymentListPagingIterator) Value(ctx context.Context) (*PaymentListResu
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -351,7 +365,7 @@ func (c *PaymentListPagingIterator) Value(ctx context.Context) (*PaymentListResu
 		*PaymentListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -388,10 +402,13 @@ func (c *PaymentListPagingIterator) Value(ctx context.Context) (*PaymentListResu
 	return c.response, nil
 }
 
-func (s *PaymentService) All(ctx context.Context, p PaymentListParams) *PaymentListPagingIterator {
+func (s *PaymentService) All(ctx context.Context,
+	p PaymentListParams,
+	opts ...RequestOption) *PaymentListPagingIterator {
 	return &PaymentListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

@@ -279,10 +279,11 @@ func (s *CustomerService) List(ctx context.Context, p CustomerListParams, opts .
 }
 
 type CustomerListPagingIterator struct {
-	cursor   string
-	response *CustomerListResult
-	params   CustomerListParams
-	service  *CustomerService
+	cursor         string
+	response       *CustomerListResult
+	params         CustomerListParams
+	service        *CustomerService
+	requestOptions []RequestOption
 }
 
 func (c *CustomerListPagingIterator) Next() bool {
@@ -308,6 +309,16 @@ func (c *CustomerListPagingIterator) Value(ctx context.Context) (*CustomerListRe
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -324,6 +335,9 @@ func (c *CustomerListPagingIterator) Value(ctx context.Context) (*CustomerListRe
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -334,7 +348,7 @@ func (c *CustomerListPagingIterator) Value(ctx context.Context) (*CustomerListRe
 		*CustomerListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -371,10 +385,13 @@ func (c *CustomerListPagingIterator) Value(ctx context.Context) (*CustomerListRe
 	return c.response, nil
 }
 
-func (s *CustomerService) All(ctx context.Context, p CustomerListParams) *CustomerListPagingIterator {
+func (s *CustomerService) All(ctx context.Context,
+	p CustomerListParams,
+	opts ...RequestOption) *CustomerListPagingIterator {
 	return &CustomerListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

@@ -421,10 +421,11 @@ func (s *InstalmentScheduleService) List(ctx context.Context, p InstalmentSchedu
 }
 
 type InstalmentScheduleListPagingIterator struct {
-	cursor   string
-	response *InstalmentScheduleListResult
-	params   InstalmentScheduleListParams
-	service  *InstalmentScheduleService
+	cursor         string
+	response       *InstalmentScheduleListResult
+	params         InstalmentScheduleListParams
+	service        *InstalmentScheduleService
+	requestOptions []RequestOption
 }
 
 func (c *InstalmentScheduleListPagingIterator) Next() bool {
@@ -450,6 +451,16 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -466,6 +477,9 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -476,7 +490,7 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 		*InstalmentScheduleListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -513,10 +527,13 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 	return c.response, nil
 }
 
-func (s *InstalmentScheduleService) All(ctx context.Context, p InstalmentScheduleListParams) *InstalmentScheduleListPagingIterator {
+func (s *InstalmentScheduleService) All(ctx context.Context,
+	p InstalmentScheduleListParams,
+	opts ...RequestOption) *InstalmentScheduleListPagingIterator {
 	return &InstalmentScheduleListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

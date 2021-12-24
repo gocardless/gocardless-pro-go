@@ -143,10 +143,11 @@ func (s *TaxRateService) List(ctx context.Context, p TaxRateListParams, opts ...
 }
 
 type TaxRateListPagingIterator struct {
-	cursor   string
-	response *TaxRateListResult
-	params   TaxRateListParams
-	service  *TaxRateService
+	cursor         string
+	response       *TaxRateListResult
+	params         TaxRateListParams
+	service        *TaxRateService
+	requestOptions []RequestOption
 }
 
 func (c *TaxRateListPagingIterator) Next() bool {
@@ -172,6 +173,16 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -188,6 +199,9 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -198,7 +212,7 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 		*TaxRateListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -235,10 +249,13 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 	return c.response, nil
 }
 
-func (s *TaxRateService) All(ctx context.Context, p TaxRateListParams) *TaxRateListPagingIterator {
+func (s *TaxRateService) All(ctx context.Context,
+	p TaxRateListParams,
+	opts ...RequestOption) *TaxRateListPagingIterator {
 	return &TaxRateListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

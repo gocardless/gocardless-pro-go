@@ -282,10 +282,11 @@ func (s *CustomerBankAccountService) List(ctx context.Context, p CustomerBankAcc
 }
 
 type CustomerBankAccountListPagingIterator struct {
-	cursor   string
-	response *CustomerBankAccountListResult
-	params   CustomerBankAccountListParams
-	service  *CustomerBankAccountService
+	cursor         string
+	response       *CustomerBankAccountListResult
+	params         CustomerBankAccountListParams
+	service        *CustomerBankAccountService
+	requestOptions []RequestOption
 }
 
 func (c *CustomerBankAccountListPagingIterator) Next() bool {
@@ -311,6 +312,16 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -327,6 +338,9 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -337,7 +351,7 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 		*CustomerBankAccountListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -374,10 +388,13 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 	return c.response, nil
 }
 
-func (s *CustomerBankAccountService) All(ctx context.Context, p CustomerBankAccountListParams) *CustomerBankAccountListPagingIterator {
+func (s *CustomerBankAccountService) All(ctx context.Context,
+	p CustomerBankAccountListParams,
+	opts ...RequestOption) *CustomerBankAccountListPagingIterator {
 	return &CustomerBankAccountListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

@@ -231,10 +231,11 @@ func (s *BillingRequestService) List(ctx context.Context, p BillingRequestListPa
 }
 
 type BillingRequestListPagingIterator struct {
-	cursor   string
-	response *BillingRequestListResult
-	params   BillingRequestListParams
-	service  *BillingRequestService
+	cursor         string
+	response       *BillingRequestListResult
+	params         BillingRequestListParams
+	service        *BillingRequestService
+	requestOptions []RequestOption
 }
 
 func (c *BillingRequestListPagingIterator) Next() bool {
@@ -260,6 +261,16 @@ func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingR
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -276,6 +287,9 @@ func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingR
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -286,7 +300,7 @@ func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingR
 		*BillingRequestListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -323,10 +337,13 @@ func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingR
 	return c.response, nil
 }
 
-func (s *BillingRequestService) All(ctx context.Context, p BillingRequestListParams) *BillingRequestListPagingIterator {
+func (s *BillingRequestService) All(ctx context.Context,
+	p BillingRequestListParams,
+	opts ...RequestOption) *BillingRequestListPagingIterator {
 	return &BillingRequestListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 

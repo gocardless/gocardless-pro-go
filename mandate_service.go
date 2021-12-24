@@ -270,10 +270,11 @@ func (s *MandateService) List(ctx context.Context, p MandateListParams, opts ...
 }
 
 type MandateListPagingIterator struct {
-	cursor   string
-	response *MandateListResult
-	params   MandateListParams
-	service  *MandateService
+	cursor         string
+	response       *MandateListResult
+	params         MandateListParams
+	service        *MandateService
+	requestOptions []RequestOption
 }
 
 func (c *MandateListPagingIterator) Next() bool {
@@ -299,6 +300,16 @@ func (c *MandateListPagingIterator) Value(ctx context.Context) (*MandateListResu
 		return nil, err
 	}
 
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	var body io.Reader
 
 	v, err := query.Values(p)
@@ -315,6 +326,9 @@ func (c *MandateListPagingIterator) Value(ctx context.Context) (*MandateListResu
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
 	client := s.client
 	if client == nil {
 		client = http.DefaultClient
@@ -325,7 +339,7 @@ func (c *MandateListPagingIterator) Value(ctx context.Context) (*MandateListResu
 		*MandateListResult
 	}
 
-	err = try(3, func() error {
+	err = try(o.retries, func() error {
 		res, err := client.Do(req)
 		if err != nil {
 			return err
@@ -362,10 +376,13 @@ func (c *MandateListPagingIterator) Value(ctx context.Context) (*MandateListResu
 	return c.response, nil
 }
 
-func (s *MandateService) All(ctx context.Context, p MandateListParams) *MandateListPagingIterator {
+func (s *MandateService) All(ctx context.Context,
+	p MandateListParams,
+	opts ...RequestOption) *MandateListPagingIterator {
 	return &MandateListPagingIterator{
-		params:  p,
-		service: s,
+		params:         p,
+		service:        s,
+		requestOptions: opts,
 	}
 }
 
