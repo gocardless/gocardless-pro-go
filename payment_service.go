@@ -111,10 +111,8 @@ func (s *PaymentService) Create(ctx context.Context, p PaymentCreateParams, opts
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
@@ -240,10 +238,8 @@ func (s *PaymentService) List(ctx context.Context, p PaymentListParams, opts ...
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
@@ -348,9 +344,13 @@ func (c *PaymentListPagingIterator) Value(ctx context.Context) (*PaymentListResu
 	if err != nil {
 		return nil, err
 	}
+
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
@@ -439,10 +439,8 @@ func (s *PaymentService) Get(ctx context.Context, identity string, opts ...Reque
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
@@ -539,10 +537,8 @@ func (s *PaymentService) Update(ctx context.Context, identity string, p PaymentU
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
@@ -645,10 +641,8 @@ func (s *PaymentService) Cancel(ctx context.Context, identity string, p PaymentC
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
@@ -756,10 +750,8 @@ func (s *PaymentService) Retry(ctx context.Context, identity string, p PaymentRe
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")

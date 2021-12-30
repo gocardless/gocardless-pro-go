@@ -117,10 +117,8 @@ func (s *InstalmentScheduleService) CreateWithDates(ctx context.Context, p Insta
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
@@ -247,10 +245,8 @@ func (s *InstalmentScheduleService) CreateWithSchedule(ctx context.Context, p In
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
@@ -365,10 +361,8 @@ func (s *InstalmentScheduleService) List(ctx context.Context, p InstalmentSchedu
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
@@ -473,9 +467,13 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 	if err != nil {
 		return nil, err
 	}
+
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
@@ -564,10 +562,8 @@ func (s *InstalmentScheduleService) Get(ctx context.Context, identity string, op
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
@@ -663,10 +659,8 @@ func (s *InstalmentScheduleService) Update(ctx context.Context, identity string,
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
@@ -766,10 +760,8 @@ func (s *InstalmentScheduleService) Cancel(ctx context.Context, identity string,
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")

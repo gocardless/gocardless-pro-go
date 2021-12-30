@@ -97,10 +97,8 @@ func (s *BillingRequestTemplateService) List(ctx context.Context, p BillingReque
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
@@ -205,9 +203,13 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 	if err != nil {
 		return nil, err
 	}
+
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
@@ -296,10 +298,8 @@ func (s *BillingRequestTemplateService) Get(ctx context.Context, identity string
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
@@ -408,10 +408,8 @@ func (s *BillingRequestTemplateService) Create(ctx context.Context, p BillingReq
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
@@ -521,10 +519,8 @@ func (s *BillingRequestTemplateService) Update(ctx context.Context, identity str
 	}
 	req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.token)
-
 	req.Header.Set("GoCardless-Version", "2015-07-06")
-
-	req.Header.Set("GoCardless-Client-Library", "<no value>")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
 	req.Header.Set("GoCardless-Client-Version", "1.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
