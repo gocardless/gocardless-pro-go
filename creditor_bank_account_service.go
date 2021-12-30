@@ -39,7 +39,7 @@ type CreditorBankAccount struct {
 	Links               struct {
 		Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // CreditorBankAccountCreateParams parameters
@@ -55,8 +55,8 @@ type CreditorBankAccountCreateParams struct {
 	Links             struct {
 		Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata                  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	SetAsDefaultPayoutAccount bool                   `url:"set_as_default_payout_account,omitempty" json:"set_as_default_payout_account,omitempty"`
+	Metadata                  struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	SetAsDefaultPayoutAccount bool     `url:"set_as_default_payout_account,omitempty" json:"set_as_default_payout_account,omitempty"`
 }
 
 // Create

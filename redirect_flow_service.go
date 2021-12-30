@@ -37,12 +37,12 @@ type RedirectFlow struct {
 		CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 		Mandate             string `url:"mandate,omitempty" json:"mandate,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	MandateReference   string                 `url:"mandate_reference,omitempty" json:"mandate_reference,omitempty"`
-	Metadata           map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	RedirectUrl        string                 `url:"redirect_url,omitempty" json:"redirect_url,omitempty"`
-	Scheme             string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	SessionToken       string                 `url:"session_token,omitempty" json:"session_token,omitempty"`
-	SuccessRedirectUrl string                 `url:"success_redirect_url,omitempty" json:"success_redirect_url,omitempty"`
+	MandateReference   string   `url:"mandate_reference,omitempty" json:"mandate_reference,omitempty"`
+	Metadata           struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	RedirectUrl        string   `url:"redirect_url,omitempty" json:"redirect_url,omitempty"`
+	Scheme             string   `url:"scheme,omitempty" json:"scheme,omitempty"`
+	SessionToken       string   `url:"session_token,omitempty" json:"session_token,omitempty"`
+	SuccessRedirectUrl string   `url:"success_redirect_url,omitempty" json:"success_redirect_url,omitempty"`
 }
 
 // RedirectFlowCreateParams parameters
@@ -51,7 +51,7 @@ type RedirectFlowCreateParams struct {
 	Links       struct {
 		Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata             map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata             struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PrefilledBankAccount struct {
 		AccountType string `url:"account_type,omitempty" json:"account_type,omitempty"`
 	} `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`

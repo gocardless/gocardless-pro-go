@@ -148,7 +148,7 @@ func (s *BillingRequestFlowService) Create(ctx context.Context, p BillingRequest
 }
 
 // BillingRequestFlowInitialiseParams parameters
-type BillingRequestFlowInitialiseParams map[string]interface{}
+type BillingRequestFlowInitialiseParams struct{}
 
 // Initialise
 // Returns the flow having generated a fresh session token which can be used to

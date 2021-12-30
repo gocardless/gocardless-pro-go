@@ -137,7 +137,7 @@ func (s *MandateImportService) Create(ctx context.Context, p MandateImportCreate
 }
 
 // MandateImportGetParams parameters
-type MandateImportGetParams map[string]interface{}
+type MandateImportGetParams struct{}
 
 // Get
 // Returns a single mandate import.
@@ -226,7 +226,7 @@ func (s *MandateImportService) Get(ctx context.Context, identity string, p Manda
 }
 
 // MandateImportSubmitParams parameters
-type MandateImportSubmitParams map[string]interface{}
+type MandateImportSubmitParams struct{}
 
 // Submit
 // Submits the mandate import, which allows it to be processed by a member of
@@ -334,7 +334,7 @@ func (s *MandateImportService) Submit(ctx context.Context, identity string, p Ma
 }
 
 // MandateImportCancelParams parameters
-type MandateImportCancelParams map[string]interface{}
+type MandateImportCancelParams struct{}
 
 // Cancel
 // Cancels the mandate import, which aborts the import process and stops the

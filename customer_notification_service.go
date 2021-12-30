@@ -43,7 +43,7 @@ type CustomerNotification struct {
 }
 
 // CustomerNotificationHandleParams parameters
-type CustomerNotificationHandleParams map[string]interface{}
+type CustomerNotificationHandleParams struct{}
 
 // Handle
 // "Handling" a notification means that you have sent the notification yourself

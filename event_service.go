@@ -70,8 +70,8 @@ type Event struct {
 		Refund                      string `url:"refund,omitempty" json:"refund,omitempty"`
 		Subscription                string `url:"subscription,omitempty" json:"subscription,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata     map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	ResourceType string                 `url:"resource_type,omitempty" json:"resource_type,omitempty"`
+	Metadata     struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	ResourceType string   `url:"resource_type,omitempty" json:"resource_type,omitempty"`
 }
 
 // EventListParams parameters

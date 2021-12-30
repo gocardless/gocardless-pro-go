@@ -41,9 +41,9 @@ type Refund struct {
 		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 		Payment string `url:"payment,omitempty" json:"payment,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Status    string                 `url:"status,omitempty" json:"status,omitempty"`
+	Metadata  struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference string   `url:"reference,omitempty" json:"reference,omitempty"`
+	Status    string   `url:"status,omitempty" json:"status,omitempty"`
 }
 
 // RefundCreateParams parameters
@@ -53,9 +53,9 @@ type RefundCreateParams struct {
 		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 		Payment string `url:"payment,omitempty" json:"payment,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata                map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference               string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	TotalAmountConfirmation int                    `url:"total_amount_confirmation,omitempty" json:"total_amount_confirmation,omitempty"`
+	Metadata                struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference               string   `url:"reference,omitempty" json:"reference,omitempty"`
+	TotalAmountConfirmation int      `url:"total_amount_confirmation,omitempty" json:"total_amount_confirmation,omitempty"`
 }
 
 // Create
@@ -484,7 +484,7 @@ func (s *RefundService) Get(ctx context.Context, identity string, opts ...Reques
 
 // RefundUpdateParams parameters
 type RefundUpdateParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Update

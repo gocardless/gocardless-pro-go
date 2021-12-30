@@ -75,15 +75,15 @@ type Creditor struct {
 
 // CreditorCreateParams parameters
 type CreditorCreateParams struct {
-	AddressLine1 string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2 string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3 string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	City         string                 `url:"city,omitempty" json:"city,omitempty"`
-	CountryCode  string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Links        map[string]interface{} `url:"links,omitempty" json:"links,omitempty"`
-	Name         string                 `url:"name,omitempty" json:"name,omitempty"`
-	PostalCode   string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region       string                 `url:"region,omitempty" json:"region,omitempty"`
+	AddressLine1 string   `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2 string   `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3 string   `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City         string   `url:"city,omitempty" json:"city,omitempty"`
+	CountryCode  string   `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Links        struct{} `url:"links,omitempty" json:"links,omitempty"`
+	Name         string   `url:"name,omitempty" json:"name,omitempty"`
+	PostalCode   string   `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region       string   `url:"region,omitempty" json:"region,omitempty"`
 }
 
 // Create
@@ -412,7 +412,7 @@ func (s *CreditorService) All(ctx context.Context,
 }
 
 // CreditorGetParams parameters
-type CreditorGetParams map[string]interface{}
+type CreditorGetParams struct{}
 
 // Get
 // Retrieves the details of an existing creditor.

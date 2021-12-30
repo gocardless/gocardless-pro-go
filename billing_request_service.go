@@ -63,7 +63,7 @@ type BillingRequest struct {
 		Scheme string `url:"scheme,omitempty" json:"scheme,omitempty"`
 		Verify string `url:"verify,omitempty" json:"verify,omitempty"`
 	} `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata       struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentRequest struct {
 		Amount      int    `url:"amount,omitempty" json:"amount,omitempty"`
 		AppFee      int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
@@ -76,15 +76,15 @@ type BillingRequest struct {
 	} `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 	Resources struct {
 		Customer struct {
-			CompanyName string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
-			CreatedAt   string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
-			Email       string                 `url:"email,omitempty" json:"email,omitempty"`
-			FamilyName  string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
-			GivenName   string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
-			Id          string                 `url:"id,omitempty" json:"id,omitempty"`
-			Language    string                 `url:"language,omitempty" json:"language,omitempty"`
-			Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-			PhoneNumber string                 `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+			CompanyName string   `url:"company_name,omitempty" json:"company_name,omitempty"`
+			CreatedAt   string   `url:"created_at,omitempty" json:"created_at,omitempty"`
+			Email       string   `url:"email,omitempty" json:"email,omitempty"`
+			FamilyName  string   `url:"family_name,omitempty" json:"family_name,omitempty"`
+			GivenName   string   `url:"given_name,omitempty" json:"given_name,omitempty"`
+			Id          string   `url:"id,omitempty" json:"id,omitempty"`
+			Language    string   `url:"language,omitempty" json:"language,omitempty"`
+			Metadata    struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+			PhoneNumber string   `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 		} `url:"customer,omitempty" json:"customer,omitempty"`
 		CustomerBankAccount struct {
 			AccountHolderName   string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
@@ -99,7 +99,7 @@ type BillingRequest struct {
 			Links               struct {
 				Customer string `url:"customer,omitempty" json:"customer,omitempty"`
 			} `url:"links,omitempty" json:"links,omitempty"`
-			Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+			Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 		} `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 		CustomerBillingDetail struct {
 			AddressLine1          string   `url:"address_line1,omitempty" json:"address_line1,omitempty"`
@@ -360,7 +360,7 @@ type BillingRequestCreateParams struct {
 		Currency string `url:"currency,omitempty" json:"currency,omitempty"`
 		Scheme   string `url:"scheme,omitempty" json:"scheme,omitempty"`
 	} `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata       struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentRequest struct {
 		Amount      int    `url:"amount,omitempty" json:"amount,omitempty"`
 		AppFee      int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
@@ -545,13 +545,13 @@ func (s *BillingRequestService) Get(ctx context.Context, identity string, opts .
 // BillingRequestCollectCustomerDetailsParams parameters
 type BillingRequestCollectCustomerDetailsParams struct {
 	Customer struct {
-		CompanyName string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
-		Email       string                 `url:"email,omitempty" json:"email,omitempty"`
-		FamilyName  string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
-		GivenName   string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
-		Language    string                 `url:"language,omitempty" json:"language,omitempty"`
-		Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-		PhoneNumber string                 `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+		CompanyName string   `url:"company_name,omitempty" json:"company_name,omitempty"`
+		Email       string   `url:"email,omitempty" json:"email,omitempty"`
+		FamilyName  string   `url:"family_name,omitempty" json:"family_name,omitempty"`
+		GivenName   string   `url:"given_name,omitempty" json:"given_name,omitempty"`
+		Language    string   `url:"language,omitempty" json:"language,omitempty"`
+		Metadata    struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+		PhoneNumber string   `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 	} `url:"customer,omitempty" json:"customer,omitempty"`
 	CustomerBillingDetail struct {
 		AddressLine1          string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
@@ -671,16 +671,16 @@ func (s *BillingRequestService) CollectCustomerDetails(ctx context.Context, iden
 
 // BillingRequestCollectBankAccountParams parameters
 type BillingRequestCollectBankAccountParams struct {
-	AccountHolderName   string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumber       string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
-	AccountNumberSuffix string                 `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
-	AccountType         string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankCode            string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-	BranchCode          string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
-	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	AccountHolderName   string   `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber       string   `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountNumberSuffix string   `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
+	AccountType         string   `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankCode            string   `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode          string   `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode         string   `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Currency            string   `url:"currency,omitempty" json:"currency,omitempty"`
+	Iban                string   `url:"iban,omitempty" json:"iban,omitempty"`
+	Metadata            struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // CollectBankAccount
@@ -785,7 +785,7 @@ func (s *BillingRequestService) CollectBankAccount(ctx context.Context, identity
 
 // BillingRequestFulfilParams parameters
 type BillingRequestFulfilParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Fulfil
@@ -885,7 +885,7 @@ func (s *BillingRequestService) Fulfil(ctx context.Context, identity string, p B
 
 // BillingRequestConfirmPayerDetailsParams parameters
 type BillingRequestConfirmPayerDetailsParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // ConfirmPayerDetails
@@ -986,7 +986,7 @@ func (s *BillingRequestService) ConfirmPayerDetails(ctx context.Context, identit
 
 // BillingRequestCancelParams parameters
 type BillingRequestCancelParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Cancel
