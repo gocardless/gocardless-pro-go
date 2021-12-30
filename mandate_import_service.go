@@ -137,7 +137,7 @@ func (s *MandateImportService) Create(ctx context.Context, p MandateImportCreate
 }
 
 // MandateImportGetParams parameters
-type MandateImportGetParams struct{}
+type MandateImportGetParams map[string]interface{}
 
 // Get
 // Returns a single mandate import.
@@ -159,12 +159,6 @@ func (s *MandateImportService) Get(ctx context.Context, identity string, p Manda
 	}
 
 	var body io.Reader
-
-	v, err := query.Values(p)
-	if err != nil {
-		return nil, err
-	}
-	uri.RawQuery = v.Encode()
 
 	req, err := http.NewRequest("GET", uri.String(), body)
 	if err != nil {
@@ -226,7 +220,7 @@ func (s *MandateImportService) Get(ctx context.Context, identity string, p Manda
 }
 
 // MandateImportSubmitParams parameters
-type MandateImportSubmitParams struct{}
+type MandateImportSubmitParams map[string]interface{}
 
 // Submit
 // Submits the mandate import, which allows it to be processed by a member of
@@ -334,7 +328,7 @@ func (s *MandateImportService) Submit(ctx context.Context, identity string, p Ma
 }
 
 // MandateImportCancelParams parameters
-type MandateImportCancelParams struct{}
+type MandateImportCancelParams map[string]interface{}
 
 // Cancel
 // Cancels the mandate import, which aborts the import process and stops the

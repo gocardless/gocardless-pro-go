@@ -27,22 +27,22 @@ type BillingRequestTemplateService struct {
 
 // BillingRequestTemplate model
 type BillingRequestTemplate struct {
-	AuthorisationUrl          string   `url:"authorisation_url,omitempty" json:"authorisation_url,omitempty"`
-	CreatedAt                 string   `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Id                        string   `url:"id,omitempty" json:"id,omitempty"`
-	MandateRequestCurrency    string   `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
-	MandateRequestMetadata    struct{} `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
-	MandateRequestScheme      string   `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
-	MandateRequestVerify      string   `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
-	Metadata                  struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name                      string   `url:"name,omitempty" json:"name,omitempty"`
-	PaymentRequestAmount      int      `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
-	PaymentRequestCurrency    string   `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
-	PaymentRequestDescription string   `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
-	PaymentRequestMetadata    struct{} `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
-	PaymentRequestScheme      string   `url:"payment_request_scheme,omitempty" json:"payment_request_scheme,omitempty"`
-	RedirectUri               string   `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
-	UpdatedAt                 string   `url:"updated_at,omitempty" json:"updated_at,omitempty"`
+	AuthorisationUrl          string                 `url:"authorisation_url,omitempty" json:"authorisation_url,omitempty"`
+	CreatedAt                 string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Id                        string                 `url:"id,omitempty" json:"id,omitempty"`
+	MandateRequestCurrency    string                 `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
+	MandateRequestMetadata    map[string]interface{} `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
+	MandateRequestScheme      string                 `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
+	MandateRequestVerify      string                 `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
+	Metadata                  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name                      string                 `url:"name,omitempty" json:"name,omitempty"`
+	PaymentRequestAmount      int                    `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
+	PaymentRequestCurrency    string                 `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
+	PaymentRequestDescription string                 `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
+	PaymentRequestMetadata    map[string]interface{} `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
+	PaymentRequestScheme      string                 `url:"payment_request_scheme,omitempty" json:"payment_request_scheme,omitempty"`
+	RedirectUri               string                 `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	UpdatedAt                 string                 `url:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
 // BillingRequestTemplateListParams parameters
@@ -356,18 +356,18 @@ type BillingRequestTemplateCreateParams struct {
 	Links struct {
 		Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequestCurrency    string   `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
-	MandateRequestMetadata    struct{} `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
-	MandateRequestScheme      string   `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
-	MandateRequestVerify      string   `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
-	Metadata                  struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name                      string   `url:"name,omitempty" json:"name,omitempty"`
-	PaymentRequestAmount      int      `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
-	PaymentRequestCurrency    string   `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
-	PaymentRequestDescription string   `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
-	PaymentRequestMetadata    struct{} `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
-	PaymentRequestScheme      string   `url:"payment_request_scheme,omitempty" json:"payment_request_scheme,omitempty"`
-	RedirectUri               string   `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	MandateRequestCurrency    string                 `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
+	MandateRequestMetadata    map[string]interface{} `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
+	MandateRequestScheme      string                 `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
+	MandateRequestVerify      string                 `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
+	Metadata                  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name                      string                 `url:"name,omitempty" json:"name,omitempty"`
+	PaymentRequestAmount      int                    `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
+	PaymentRequestCurrency    string                 `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
+	PaymentRequestDescription string                 `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
+	PaymentRequestMetadata    map[string]interface{} `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
+	PaymentRequestScheme      string                 `url:"payment_request_scheme,omitempty" json:"payment_request_scheme,omitempty"`
+	RedirectUri               string                 `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 }
 
 // Create
@@ -465,18 +465,18 @@ func (s *BillingRequestTemplateService) Create(ctx context.Context, p BillingReq
 
 // BillingRequestTemplateUpdateParams parameters
 type BillingRequestTemplateUpdateParams struct {
-	MandateRequestCurrency    string   `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
-	MandateRequestMetadata    struct{} `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
-	MandateRequestScheme      string   `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
-	MandateRequestVerify      string   `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
-	Metadata                  struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name                      string   `url:"name,omitempty" json:"name,omitempty"`
-	PaymentRequestAmount      int      `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
-	PaymentRequestCurrency    string   `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
-	PaymentRequestDescription string   `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
-	PaymentRequestMetadata    struct{} `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
-	PaymentRequestScheme      string   `url:"payment_request_scheme,omitempty" json:"payment_request_scheme,omitempty"`
-	RedirectUri               string   `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	MandateRequestCurrency    string                 `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
+	MandateRequestMetadata    map[string]interface{} `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
+	MandateRequestScheme      string                 `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
+	MandateRequestVerify      string                 `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
+	Metadata                  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name                      string                 `url:"name,omitempty" json:"name,omitempty"`
+	PaymentRequestAmount      int                    `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
+	PaymentRequestCurrency    string                 `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
+	PaymentRequestDescription string                 `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
+	PaymentRequestMetadata    map[string]interface{} `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
+	PaymentRequestScheme      string                 `url:"payment_request_scheme,omitempty" json:"payment_request_scheme,omitempty"`
+	RedirectUri               string                 `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 }
 
 // Update

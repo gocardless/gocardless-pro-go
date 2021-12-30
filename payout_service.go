@@ -43,11 +43,11 @@ type Payout struct {
 		Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
 		CreditorBankAccount string `url:"creditor_bank_account,omitempty" json:"creditor_bank_account,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata    struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayoutType  string   `url:"payout_type,omitempty" json:"payout_type,omitempty"`
-	Reference   string   `url:"reference,omitempty" json:"reference,omitempty"`
-	Status      string   `url:"status,omitempty" json:"status,omitempty"`
-	TaxCurrency string   `url:"tax_currency,omitempty" json:"tax_currency,omitempty"`
+	Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayoutType  string                 `url:"payout_type,omitempty" json:"payout_type,omitempty"`
+	Reference   string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Status      string                 `url:"status,omitempty" json:"status,omitempty"`
+	TaxCurrency string                 `url:"tax_currency,omitempty" json:"tax_currency,omitempty"`
 }
 
 // PayoutListParams parameters
@@ -60,14 +60,14 @@ type PayoutListParams struct {
 		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
 		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Creditor            string   `url:"creditor,omitempty" json:"creditor,omitempty"`
-	CreditorBankAccount string   `url:"creditor_bank_account,omitempty" json:"creditor_bank_account,omitempty"`
-	Currency            string   `url:"currency,omitempty" json:"currency,omitempty"`
-	Limit               int      `url:"limit,omitempty" json:"limit,omitempty"`
-	Metadata            struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayoutType          string   `url:"payout_type,omitempty" json:"payout_type,omitempty"`
-	Reference           string   `url:"reference,omitempty" json:"reference,omitempty"`
-	Status              string   `url:"status,omitempty" json:"status,omitempty"`
+	Creditor            string                 `url:"creditor,omitempty" json:"creditor,omitempty"`
+	CreditorBankAccount string                 `url:"creditor_bank_account,omitempty" json:"creditor_bank_account,omitempty"`
+	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Limit               int                    `url:"limit,omitempty" json:"limit,omitempty"`
+	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayoutType          string                 `url:"payout_type,omitempty" json:"payout_type,omitempty"`
+	Reference           string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Status              string                 `url:"status,omitempty" json:"status,omitempty"`
 }
 
 // PayoutListResult response including pagination metadata
@@ -373,7 +373,7 @@ func (s *PayoutService) Get(ctx context.Context, identity string, opts ...Reques
 
 // PayoutUpdateParams parameters
 type PayoutUpdateParams struct {
-	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Update

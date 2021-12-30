@@ -35,11 +35,11 @@ type InstalmentSchedule struct {
 		Mandate  string   `url:"mandate,omitempty" json:"mandate,omitempty"`
 		Payments []string `url:"payments,omitempty" json:"payments,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata      struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name          string   `url:"name,omitempty" json:"name,omitempty"`
-	PaymentErrors struct{} `url:"payment_errors,omitempty" json:"payment_errors,omitempty"`
-	Status        string   `url:"status,omitempty" json:"status,omitempty"`
-	TotalAmount   int      `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+	Metadata      map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name          string                 `url:"name,omitempty" json:"name,omitempty"`
+	PaymentErrors map[string]interface{} `url:"payment_errors,omitempty" json:"payment_errors,omitempty"`
+	Status        string                 `url:"status,omitempty" json:"status,omitempty"`
+	TotalAmount   int                    `url:"total_amount,omitempty" json:"total_amount,omitempty"`
 }
 
 // InstalmentScheduleCreateWithDatesParams parameters
@@ -54,11 +54,11 @@ type InstalmentScheduleCreateWithDatesParams struct {
 	Links struct {
 		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name             string   `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string   `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	TotalAmount      int      `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	TotalAmount      int                    `url:"total_amount,omitempty" json:"total_amount,omitempty"`
 }
 
 // CreateWithDates
@@ -185,11 +185,11 @@ type InstalmentScheduleCreateWithScheduleParams struct {
 	Links struct {
 		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name             string   `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string   `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	TotalAmount      int      `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	TotalAmount      int                    `url:"total_amount,omitempty" json:"total_amount,omitempty"`
 }
 
 // CreateWithSchedule
@@ -617,7 +617,7 @@ func (s *InstalmentScheduleService) Get(ctx context.Context, identity string, op
 
 // InstalmentScheduleUpdateParams parameters
 type InstalmentScheduleUpdateParams struct {
-	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Update
@@ -715,7 +715,7 @@ func (s *InstalmentScheduleService) Update(ctx context.Context, identity string,
 }
 
 // InstalmentScheduleCancelParams parameters
-type InstalmentScheduleCancelParams struct{}
+type InstalmentScheduleCancelParams map[string]interface{}
 
 // Cancel
 // Immediately cancels an instalment schedule; no further payments will be

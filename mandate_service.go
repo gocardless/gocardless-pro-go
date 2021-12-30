@@ -35,12 +35,12 @@ type Mandate struct {
 		CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 		NewMandate          string `url:"new_mandate,omitempty" json:"new_mandate,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata                struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	NextPossibleChargeDate  string   `url:"next_possible_charge_date,omitempty" json:"next_possible_charge_date,omitempty"`
-	PaymentsRequireApproval bool     `url:"payments_require_approval,omitempty" json:"payments_require_approval,omitempty"`
-	Reference               string   `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme                  string   `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Status                  string   `url:"status,omitempty" json:"status,omitempty"`
+	Metadata                map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	NextPossibleChargeDate  string                 `url:"next_possible_charge_date,omitempty" json:"next_possible_charge_date,omitempty"`
+	PaymentsRequireApproval bool                   `url:"payments_require_approval,omitempty" json:"payments_require_approval,omitempty"`
+	Reference               string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme                  string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Status                  string                 `url:"status,omitempty" json:"status,omitempty"`
 }
 
 // MandateCreateParams parameters
@@ -49,10 +49,10 @@ type MandateCreateParams struct {
 		Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
 		CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata       struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayerIpAddress string   `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
-	Reference      string   `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme         string   `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerIpAddress string                 `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
+	Reference      string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme         string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 // Create
@@ -468,7 +468,7 @@ func (s *MandateService) Get(ctx context.Context, identity string, opts ...Reque
 
 // MandateUpdateParams parameters
 type MandateUpdateParams struct {
-	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Update
@@ -567,7 +567,7 @@ func (s *MandateService) Update(ctx context.Context, identity string, p MandateU
 
 // MandateCancelParams parameters
 type MandateCancelParams struct {
-	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Cancel
@@ -671,7 +671,7 @@ func (s *MandateService) Cancel(ctx context.Context, identity string, p MandateC
 
 // MandateReinstateParams parameters
 type MandateReinstateParams struct {
-	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Reinstate

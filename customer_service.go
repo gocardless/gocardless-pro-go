@@ -27,44 +27,44 @@ type CustomerService struct {
 
 // Customer model
 type Customer struct {
-	AddressLine1          string   `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2          string   `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3          string   `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	City                  string   `url:"city,omitempty" json:"city,omitempty"`
-	CompanyName           string   `url:"company_name,omitempty" json:"company_name,omitempty"`
-	CountryCode           string   `url:"country_code,omitempty" json:"country_code,omitempty"`
-	CreatedAt             string   `url:"created_at,omitempty" json:"created_at,omitempty"`
-	DanishIdentityNumber  string   `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-	Email                 string   `url:"email,omitempty" json:"email,omitempty"`
-	FamilyName            string   `url:"family_name,omitempty" json:"family_name,omitempty"`
-	GivenName             string   `url:"given_name,omitempty" json:"given_name,omitempty"`
-	Id                    string   `url:"id,omitempty" json:"id,omitempty"`
-	Language              string   `url:"language,omitempty" json:"language,omitempty"`
-	Metadata              struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PhoneNumber           string   `url:"phone_number,omitempty" json:"phone_number,omitempty"`
-	PostalCode            string   `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region                string   `url:"region,omitempty" json:"region,omitempty"`
-	SwedishIdentityNumber string   `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+	AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string                 `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreatedAt             string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
+	DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Id                    string                 `url:"id,omitempty" json:"id,omitempty"`
+	Language              string                 `url:"language,omitempty" json:"language,omitempty"`
+	Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PhoneNumber           string                 `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string                 `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
 }
 
 // CustomerCreateParams parameters
 type CustomerCreateParams struct {
-	AddressLine1          string   `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2          string   `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3          string   `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	City                  string   `url:"city,omitempty" json:"city,omitempty"`
-	CompanyName           string   `url:"company_name,omitempty" json:"company_name,omitempty"`
-	CountryCode           string   `url:"country_code,omitempty" json:"country_code,omitempty"`
-	DanishIdentityNumber  string   `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-	Email                 string   `url:"email,omitempty" json:"email,omitempty"`
-	FamilyName            string   `url:"family_name,omitempty" json:"family_name,omitempty"`
-	GivenName             string   `url:"given_name,omitempty" json:"given_name,omitempty"`
-	Language              string   `url:"language,omitempty" json:"language,omitempty"`
-	Metadata              struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PhoneNumber           string   `url:"phone_number,omitempty" json:"phone_number,omitempty"`
-	PostalCode            string   `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region                string   `url:"region,omitempty" json:"region,omitempty"`
-	SwedishIdentityNumber string   `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+	AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string                 `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language              string                 `url:"language,omitempty" json:"language,omitempty"`
+	Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PhoneNumber           string                 `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string                 `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
 }
 
 // Create
@@ -477,22 +477,22 @@ func (s *CustomerService) Get(ctx context.Context, identity string, opts ...Requ
 
 // CustomerUpdateParams parameters
 type CustomerUpdateParams struct {
-	AddressLine1          string   `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2          string   `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3          string   `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	City                  string   `url:"city,omitempty" json:"city,omitempty"`
-	CompanyName           string   `url:"company_name,omitempty" json:"company_name,omitempty"`
-	CountryCode           string   `url:"country_code,omitempty" json:"country_code,omitempty"`
-	DanishIdentityNumber  string   `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-	Email                 string   `url:"email,omitempty" json:"email,omitempty"`
-	FamilyName            string   `url:"family_name,omitempty" json:"family_name,omitempty"`
-	GivenName             string   `url:"given_name,omitempty" json:"given_name,omitempty"`
-	Language              string   `url:"language,omitempty" json:"language,omitempty"`
-	Metadata              struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PhoneNumber           string   `url:"phone_number,omitempty" json:"phone_number,omitempty"`
-	PostalCode            string   `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region                string   `url:"region,omitempty" json:"region,omitempty"`
-	SwedishIdentityNumber string   `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+	AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string                 `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language              string                 `url:"language,omitempty" json:"language,omitempty"`
+	Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PhoneNumber           string                 `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string                 `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
 }
 
 // Update
@@ -591,7 +591,7 @@ func (s *CustomerService) Update(ctx context.Context, identity string, p Custome
 }
 
 // CustomerRemoveParams parameters
-type CustomerRemoveParams struct{}
+type CustomerRemoveParams map[string]interface{}
 
 // Remove
 // Removed customers will not appear in search results or lists of customers (in

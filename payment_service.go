@@ -47,10 +47,10 @@ type Payment struct {
 		Payout             string `url:"payout,omitempty" json:"payout,omitempty"`
 		Subscription       string `url:"subscription,omitempty" json:"subscription,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata        struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference       string   `url:"reference,omitempty" json:"reference,omitempty"`
-	RetryIfPossible bool     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	Status          string   `url:"status,omitempty" json:"status,omitempty"`
+	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference       string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Status          string                 `url:"status,omitempty" json:"status,omitempty"`
 }
 
 // PaymentCreateParams parameters
@@ -63,9 +63,9 @@ type PaymentCreateParams struct {
 	Links       struct {
 		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata        struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference       string   `url:"reference,omitempty" json:"reference,omitempty"`
-	RetryIfPossible bool     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference       string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
 }
 
 // Create
@@ -494,8 +494,8 @@ func (s *PaymentService) Get(ctx context.Context, identity string, opts ...Reque
 
 // PaymentUpdateParams parameters
 type PaymentUpdateParams struct {
-	Metadata        struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	RetryIfPossible bool     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
 }
 
 // Update
@@ -594,7 +594,7 @@ func (s *PaymentService) Update(ctx context.Context, identity string, p PaymentU
 
 // PaymentCancelParams parameters
 type PaymentCancelParams struct {
-	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Cancel
@@ -698,8 +698,8 @@ func (s *PaymentService) Cancel(ctx context.Context, identity string, p PaymentC
 
 // PaymentRetryParams parameters
 type PaymentRetryParams struct {
-	ChargeDate string   `url:"charge_date,omitempty" json:"charge_date,omitempty"`
-	Metadata   struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	ChargeDate string                 `url:"charge_date,omitempty" json:"charge_date,omitempty"`
+	Metadata   map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Retry

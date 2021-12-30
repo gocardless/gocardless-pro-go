@@ -39,7 +39,7 @@ type CustomerBankAccount struct {
 	Links               struct {
 		Customer string `url:"customer,omitempty" json:"customer,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // CustomerBankAccountCreateParams parameters
@@ -56,7 +56,7 @@ type CustomerBankAccountCreateParams struct {
 		Customer                 string `url:"customer,omitempty" json:"customer,omitempty"`
 		CustomerBankAccountToken string `url:"customer_bank_account_token,omitempty" json:"customer_bank_account_token,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Create
@@ -480,7 +480,7 @@ func (s *CustomerBankAccountService) Get(ctx context.Context, identity string, o
 
 // CustomerBankAccountUpdateParams parameters
 type CustomerBankAccountUpdateParams struct {
-	Metadata struct{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Update

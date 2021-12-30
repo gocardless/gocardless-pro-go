@@ -27,19 +27,19 @@ type WebhookService struct {
 
 // Webhook model
 type Webhook struct {
-	CreatedAt                       string   `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Id                              string   `url:"id,omitempty" json:"id,omitempty"`
-	IsTest                          bool     `url:"is_test,omitempty" json:"is_test,omitempty"`
-	RequestBody                     string   `url:"request_body,omitempty" json:"request_body,omitempty"`
-	RequestHeaders                  struct{} `url:"request_headers,omitempty" json:"request_headers,omitempty"`
-	ResponseBody                    string   `url:"response_body,omitempty" json:"response_body,omitempty"`
-	ResponseBodyTruncated           bool     `url:"response_body_truncated,omitempty" json:"response_body_truncated,omitempty"`
-	ResponseCode                    int      `url:"response_code,omitempty" json:"response_code,omitempty"`
-	ResponseHeaders                 struct{} `url:"response_headers,omitempty" json:"response_headers,omitempty"`
-	ResponseHeadersContentTruncated bool     `url:"response_headers_content_truncated,omitempty" json:"response_headers_content_truncated,omitempty"`
-	ResponseHeadersCountTruncated   bool     `url:"response_headers_count_truncated,omitempty" json:"response_headers_count_truncated,omitempty"`
-	Successful                      bool     `url:"successful,omitempty" json:"successful,omitempty"`
-	Url                             string   `url:"url,omitempty" json:"url,omitempty"`
+	CreatedAt                       string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Id                              string                 `url:"id,omitempty" json:"id,omitempty"`
+	IsTest                          bool                   `url:"is_test,omitempty" json:"is_test,omitempty"`
+	RequestBody                     string                 `url:"request_body,omitempty" json:"request_body,omitempty"`
+	RequestHeaders                  map[string]interface{} `url:"request_headers,omitempty" json:"request_headers,omitempty"`
+	ResponseBody                    string                 `url:"response_body,omitempty" json:"response_body,omitempty"`
+	ResponseBodyTruncated           bool                   `url:"response_body_truncated,omitempty" json:"response_body_truncated,omitempty"`
+	ResponseCode                    int                    `url:"response_code,omitempty" json:"response_code,omitempty"`
+	ResponseHeaders                 map[string]interface{} `url:"response_headers,omitempty" json:"response_headers,omitempty"`
+	ResponseHeadersContentTruncated bool                   `url:"response_headers_content_truncated,omitempty" json:"response_headers_content_truncated,omitempty"`
+	ResponseHeadersCountTruncated   bool                   `url:"response_headers_count_truncated,omitempty" json:"response_headers_count_truncated,omitempty"`
+	Successful                      bool                   `url:"successful,omitempty" json:"successful,omitempty"`
+	Url                             string                 `url:"url,omitempty" json:"url,omitempty"`
 }
 
 // WebhookListParams parameters
