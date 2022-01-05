@@ -366,6 +366,7 @@ type BillingRequestCreateParams struct {
 		AppFee      int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
 		Currency    string `url:"currency,omitempty" json:"currency,omitempty"`
 		Description string `url:"description,omitempty" json:"description,omitempty"`
+		Scheme      string `url:"scheme,omitempty" json:"scheme,omitempty"`
 	} `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 }
 
