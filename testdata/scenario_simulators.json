@@ -1,0 +1,5 @@
+{ 
+  "run": {
+    "body": {"scenario_simulators":{"id":"payment_failed"}}
+  }
+}

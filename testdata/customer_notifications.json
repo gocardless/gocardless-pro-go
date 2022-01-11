@@ -1,0 +1,5 @@
+{ 
+  "handle": {
+    "body": {"customer_notifications":{"action_taken":"example action_taken 3162","action_taken_at":"2022-01-11T10:12:00.783Z","action_taken_by":"example action_taken_by 4904","id":"PCN123","links":{"customer":"CU123","event":"EV123","mandate":"MD123","payment":"PM123","refund":"RF123","subscription":"SB123"},"type":"payment_created"}}
+  }
+}
