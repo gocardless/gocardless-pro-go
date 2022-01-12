@@ -1,8 +1,8 @@
 { 
   "create": {
-    "body": {"billing_request_flows":{"authorisation_url":"https://monzo.com/abc-123-things","auto_fulfil":true,"created_at":"2022-01-11T13:31:22.670Z","exit_uri":"https://my-website.com/abc/callback","expires_at":"2022-01-11T13:31:22.670Z","id":"BRF123","links":{"billing_request":"BRQ123"},"lock_bank_account":true,"lock_customer_details":true,"redirect_uri":"https://my-website.com/abc/callback","session_token":"sesh_123"}}
+    "body": {"billing_request_flows":{"authorisation_url":"https://monzo.com/abc-123-things","auto_fulfil":true,"created_at":"2022-01-12T10:16:43.394Z","exit_uri":"https://my-website.com/abc/callback","expires_at":"2022-01-12T10:16:43.394Z","id":"BRF123","links":{"billing_request":"BRQ123"},"lock_bank_account":true,"lock_customer_details":true,"redirect_uri":"https://my-website.com/abc/callback","session_token":"sesh_123"}}
   },
   "initialise": {
-    "body": {"billing_request_flows":{"authorisation_url":"https://monzo.com/abc-123-things","auto_fulfil":true,"created_at":"2022-01-11T13:31:22.670Z","exit_uri":"https://my-website.com/abc/callback","expires_at":"2022-01-11T13:31:22.670Z","id":"BRF123","links":{"billing_request":"BRQ123"},"lock_bank_account":false,"lock_customer_details":true,"redirect_uri":"https://my-website.com/abc/callback","session_token":"sesh_123"}}
+    "body": {"billing_request_flows":{"authorisation_url":"https://monzo.com/abc-123-things","auto_fulfil":true,"created_at":"2022-01-12T10:16:43.394Z","exit_uri":"https://my-website.com/abc/callback","expires_at":"2022-01-12T10:16:43.394Z","id":"BRF123","links":{"billing_request":"BRQ123"},"lock_bank_account":false,"lock_customer_details":true,"redirect_uri":"https://my-website.com/abc/callback","session_token":"sesh_123"}}
   }
 }

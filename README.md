@@ -16,12 +16,12 @@ go mod tidy
 ```
 
 Then, reference gocardless-pro-go in a Go program with `import`:
-
 ``` go
 import (
     gocardless "github.com/gocardless/gocardless-pro-go"
 )
 ```
+
 
 Run any of the normal `go` commands (`build`/`install`/`test`). The Go
 toolchain will resolve and fetch the gocardless-pro-go module automatically.
