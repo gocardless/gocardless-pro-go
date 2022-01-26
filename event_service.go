@@ -87,6 +87,7 @@ type EventListParams struct {
 		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 	} `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Include            string `url:"include,omitempty" json:"include,omitempty"`
+	InstalmentSchedule string `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
 	Limit              int    `url:"limit,omitempty" json:"limit,omitempty"`
 	Mandate            string `url:"mandate,omitempty" json:"mandate,omitempty"`
 	ParentEvent        string `url:"parent_event,omitempty" json:"parent_event,omitempty"`
