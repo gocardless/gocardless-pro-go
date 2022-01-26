@@ -60,8 +60,9 @@ type BillingRequest struct {
 		Links    struct {
 			Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 		} `url:"links,omitempty" json:"links,omitempty"`
-		Scheme string `url:"scheme,omitempty" json:"scheme,omitempty"`
-		Verify string `url:"verify,omitempty" json:"verify,omitempty"`
+		Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+		Scheme   string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+		Verify   string                 `url:"verify,omitempty" json:"verify,omitempty"`
 	} `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentRequest struct {
@@ -72,7 +73,8 @@ type BillingRequest struct {
 		Links       struct {
 			Payment string `url:"payment,omitempty" json:"payment,omitempty"`
 		} `url:"links,omitempty" json:"links,omitempty"`
-		Scheme string `url:"scheme,omitempty" json:"scheme,omitempty"`
+		Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+		Scheme   string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
 	} `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 	Resources struct {
 		Customer struct {
@@ -357,16 +359,18 @@ type BillingRequestCreateParams struct {
 		CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 	} `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequest struct {
-		Currency string `url:"currency,omitempty" json:"currency,omitempty"`
-		Scheme   string `url:"scheme,omitempty" json:"scheme,omitempty"`
+		Currency string                 `url:"currency,omitempty" json:"currency,omitempty"`
+		Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+		Scheme   string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
 	} `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentRequest struct {
-		Amount      int    `url:"amount,omitempty" json:"amount,omitempty"`
-		AppFee      int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-		Currency    string `url:"currency,omitempty" json:"currency,omitempty"`
-		Description string `url:"description,omitempty" json:"description,omitempty"`
-		Scheme      string `url:"scheme,omitempty" json:"scheme,omitempty"`
+		Amount      int                    `url:"amount,omitempty" json:"amount,omitempty"`
+		AppFee      int                    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+		Currency    string                 `url:"currency,omitempty" json:"currency,omitempty"`
+		Description string                 `url:"description,omitempty" json:"description,omitempty"`
+		Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+		Scheme      string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
 	} `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 }
 
