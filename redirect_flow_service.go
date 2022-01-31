@@ -32,6 +32,7 @@ type RedirectFlow struct {
 	Description     string `url:"description,omitempty" json:"description,omitempty"`
 	Id              string `url:"id,omitempty" json:"id,omitempty"`
 	Links           struct {
+		BillingRequest      string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 		Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
 		Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
 		CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
