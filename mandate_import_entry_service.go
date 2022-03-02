@@ -25,54 +25,64 @@ type MandateImportEntryService struct {
 	client   *http.Client
 }
 
+type MandateImportEntryLinks struct {
+	Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
+	CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
+	Mandate             string `url:"mandate,omitempty" json:"mandate,omitempty"`
+	MandateImport       string `url:"mandate_import,omitempty" json:"mandate_import,omitempty"`
+}
+
 // MandateImportEntry model
 type MandateImportEntry struct {
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Links     struct {
-		Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
-		CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
-		Mandate             string `url:"mandate,omitempty" json:"mandate,omitempty"`
-		MandateImport       string `url:"mandate_import,omitempty" json:"mandate_import,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	RecordIdentifier string `url:"record_identifier,omitempty" json:"record_identifier,omitempty"`
+	CreatedAt        string                   `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Links            *MandateImportEntryLinks `url:"links,omitempty" json:"links,omitempty"`
+	RecordIdentifier string                   `url:"record_identifier,omitempty" json:"record_identifier,omitempty"`
+}
+
+type MandateImportEntryCreateParamsAmendment struct {
+	OriginalCreditorId       string `url:"original_creditor_id,omitempty" json:"original_creditor_id,omitempty"`
+	OriginalCreditorName     string `url:"original_creditor_name,omitempty" json:"original_creditor_name,omitempty"`
+	OriginalMandateReference string `url:"original_mandate_reference,omitempty" json:"original_mandate_reference,omitempty"`
+}
+
+type MandateImportEntryCreateParamsBankAccount struct {
+	AccountHolderName string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber     string `url:"account_number,omitempty" json:"account_number,omitempty"`
+	BankCode          string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode        string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode       string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Iban              string `url:"iban,omitempty" json:"iban,omitempty"`
+}
+
+type MandateImportEntryCreateParamsCustomer struct {
+	AddressLine1          string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language              string `url:"language,omitempty" json:"language,omitempty"`
+	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+}
+
+type MandateImportEntryCreateParamsLinks struct {
+	MandateImport string `url:"mandate_import,omitempty" json:"mandate_import,omitempty"`
 }
 
 // MandateImportEntryCreateParams parameters
 type MandateImportEntryCreateParams struct {
-	Amendment struct {
-		OriginalCreditorId       string `url:"original_creditor_id,omitempty" json:"original_creditor_id,omitempty"`
-		OriginalCreditorName     string `url:"original_creditor_name,omitempty" json:"original_creditor_name,omitempty"`
-		OriginalMandateReference string `url:"original_mandate_reference,omitempty" json:"original_mandate_reference,omitempty"`
-	} `url:"amendment,omitempty" json:"amendment,omitempty"`
-	BankAccount struct {
-		AccountHolderName string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-		AccountNumber     string `url:"account_number,omitempty" json:"account_number,omitempty"`
-		BankCode          string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-		BranchCode        string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-		CountryCode       string `url:"country_code,omitempty" json:"country_code,omitempty"`
-		Iban              string `url:"iban,omitempty" json:"iban,omitempty"`
-	} `url:"bank_account,omitempty" json:"bank_account,omitempty"`
-	Customer struct {
-		AddressLine1          string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-		AddressLine2          string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-		AddressLine3          string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-		City                  string `url:"city,omitempty" json:"city,omitempty"`
-		CompanyName           string `url:"company_name,omitempty" json:"company_name,omitempty"`
-		CountryCode           string `url:"country_code,omitempty" json:"country_code,omitempty"`
-		DanishIdentityNumber  string `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-		Email                 string `url:"email,omitempty" json:"email,omitempty"`
-		FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
-		GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
-		Language              string `url:"language,omitempty" json:"language,omitempty"`
-		PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
-		PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-		Region                string `url:"region,omitempty" json:"region,omitempty"`
-		SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
-	} `url:"customer,omitempty" json:"customer,omitempty"`
-	Links struct {
-		MandateImport string `url:"mandate_import,omitempty" json:"mandate_import,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	RecordIdentifier string `url:"record_identifier,omitempty" json:"record_identifier,omitempty"`
+	Amendment        *MandateImportEntryCreateParamsAmendment  `url:"amendment,omitempty" json:"amendment,omitempty"`
+	BankAccount      MandateImportEntryCreateParamsBankAccount `url:"bank_account,omitempty" json:"bank_account,omitempty"`
+	Customer         MandateImportEntryCreateParamsCustomer    `url:"customer,omitempty" json:"customer,omitempty"`
+	Links            MandateImportEntryCreateParamsLinks       `url:"links,omitempty" json:"links,omitempty"`
+	RecordIdentifier string                                    `url:"record_identifier,omitempty" json:"record_identifier,omitempty"`
 }
 
 // Create
@@ -121,7 +131,7 @@ func (s *MandateImportEntryService) Create(ctx context.Context, p MandateImportE
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -182,16 +192,19 @@ type MandateImportEntryListParams struct {
 	MandateImport string `url:"mandate_import,omitempty" json:"mandate_import,omitempty"`
 }
 
-// MandateImportEntryListResult response including pagination metadata
+type MandateImportEntryListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type MandateImportEntryListResultMeta struct {
+	Cursors *MandateImportEntryListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type MandateImportEntryListResult struct {
-	MandateImportEntries []MandateImportEntry `json:"mandate_import_entries"`
-	Meta                 struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	MandateImportEntries []MandateImportEntry             `json:"mandate_import_entries"`
+	Meta                 MandateImportEntryListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
@@ -236,7 +249,7 @@ func (s *MandateImportEntryService) List(ctx context.Context, p MandateImportEnt
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -345,7 +358,7 @@ func (c *MandateImportEntryListPagingIterator) Value(ctx context.Context) (*Mand
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

@@ -25,52 +25,56 @@ type CreditorService struct {
 	client   *http.Client
 }
 
+type CreditorLinks struct {
+	DefaultAudPayoutAccount string `url:"default_aud_payout_account,omitempty" json:"default_aud_payout_account,omitempty"`
+	DefaultCadPayoutAccount string `url:"default_cad_payout_account,omitempty" json:"default_cad_payout_account,omitempty"`
+	DefaultDkkPayoutAccount string `url:"default_dkk_payout_account,omitempty" json:"default_dkk_payout_account,omitempty"`
+	DefaultEurPayoutAccount string `url:"default_eur_payout_account,omitempty" json:"default_eur_payout_account,omitempty"`
+	DefaultGbpPayoutAccount string `url:"default_gbp_payout_account,omitempty" json:"default_gbp_payout_account,omitempty"`
+	DefaultNzdPayoutAccount string `url:"default_nzd_payout_account,omitempty" json:"default_nzd_payout_account,omitempty"`
+	DefaultSekPayoutAccount string `url:"default_sek_payout_account,omitempty" json:"default_sek_payout_account,omitempty"`
+	DefaultUsdPayoutAccount string `url:"default_usd_payout_account,omitempty" json:"default_usd_payout_account,omitempty"`
+}
+
+type CreditorSchemeIdentifiers struct {
+	AddressLine1               string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2               string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3               string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	CanSpecifyMandateReference bool   `url:"can_specify_mandate_reference,omitempty" json:"can_specify_mandate_reference,omitempty"`
+	City                       string `url:"city,omitempty" json:"city,omitempty"`
+	CountryCode                string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Currency                   string `url:"currency,omitempty" json:"currency,omitempty"`
+	Email                      string `url:"email,omitempty" json:"email,omitempty"`
+	MinimumAdvanceNotice       int    `url:"minimum_advance_notice,omitempty" json:"minimum_advance_notice,omitempty"`
+	Name                       string `url:"name,omitempty" json:"name,omitempty"`
+	PhoneNumber                string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode                 string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Reference                  string `url:"reference,omitempty" json:"reference,omitempty"`
+	Region                     string `url:"region,omitempty" json:"region,omitempty"`
+	Scheme                     string `url:"scheme,omitempty" json:"scheme,omitempty"`
+}
+
 // Creditor model
 type Creditor struct {
-	AddressLine1              string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2              string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3              string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	CanCreateRefunds          bool   `url:"can_create_refunds,omitempty" json:"can_create_refunds,omitempty"`
-	City                      string `url:"city,omitempty" json:"city,omitempty"`
-	CountryCode               string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	CreatedAt                 string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	CustomPaymentPagesEnabled bool   `url:"custom_payment_pages_enabled,omitempty" json:"custom_payment_pages_enabled,omitempty"`
-	FxPayoutCurrency          string `url:"fx_payout_currency,omitempty" json:"fx_payout_currency,omitempty"`
-	Id                        string `url:"id,omitempty" json:"id,omitempty"`
-	Links                     struct {
-		DefaultAudPayoutAccount string `url:"default_aud_payout_account,omitempty" json:"default_aud_payout_account,omitempty"`
-		DefaultCadPayoutAccount string `url:"default_cad_payout_account,omitempty" json:"default_cad_payout_account,omitempty"`
-		DefaultDkkPayoutAccount string `url:"default_dkk_payout_account,omitempty" json:"default_dkk_payout_account,omitempty"`
-		DefaultEurPayoutAccount string `url:"default_eur_payout_account,omitempty" json:"default_eur_payout_account,omitempty"`
-		DefaultGbpPayoutAccount string `url:"default_gbp_payout_account,omitempty" json:"default_gbp_payout_account,omitempty"`
-		DefaultNzdPayoutAccount string `url:"default_nzd_payout_account,omitempty" json:"default_nzd_payout_account,omitempty"`
-		DefaultSekPayoutAccount string `url:"default_sek_payout_account,omitempty" json:"default_sek_payout_account,omitempty"`
-		DefaultUsdPayoutAccount string `url:"default_usd_payout_account,omitempty" json:"default_usd_payout_account,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	LogoUrl                             string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
-	MandateImportsEnabled               bool   `url:"mandate_imports_enabled,omitempty" json:"mandate_imports_enabled,omitempty"`
-	MerchantResponsibleForNotifications bool   `url:"merchant_responsible_for_notifications,omitempty" json:"merchant_responsible_for_notifications,omitempty"`
-	Name                                string `url:"name,omitempty" json:"name,omitempty"`
-	PostalCode                          string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region                              string `url:"region,omitempty" json:"region,omitempty"`
-	SchemeIdentifiers                   []struct {
-		AddressLine1               string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-		AddressLine2               string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-		AddressLine3               string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-		CanSpecifyMandateReference bool   `url:"can_specify_mandate_reference,omitempty" json:"can_specify_mandate_reference,omitempty"`
-		City                       string `url:"city,omitempty" json:"city,omitempty"`
-		CountryCode                string `url:"country_code,omitempty" json:"country_code,omitempty"`
-		Currency                   string `url:"currency,omitempty" json:"currency,omitempty"`
-		Email                      string `url:"email,omitempty" json:"email,omitempty"`
-		MinimumAdvanceNotice       int    `url:"minimum_advance_notice,omitempty" json:"minimum_advance_notice,omitempty"`
-		Name                       string `url:"name,omitempty" json:"name,omitempty"`
-		PhoneNumber                string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
-		PostalCode                 string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-		Reference                  string `url:"reference,omitempty" json:"reference,omitempty"`
-		Region                     string `url:"region,omitempty" json:"region,omitempty"`
-		Scheme                     string `url:"scheme,omitempty" json:"scheme,omitempty"`
-	} `url:"scheme_identifiers,omitempty" json:"scheme_identifiers,omitempty"`
-	VerificationStatus string `url:"verification_status,omitempty" json:"verification_status,omitempty"`
+	AddressLine1                        string                      `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2                        string                      `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3                        string                      `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	CanCreateRefunds                    bool                        `url:"can_create_refunds,omitempty" json:"can_create_refunds,omitempty"`
+	City                                string                      `url:"city,omitempty" json:"city,omitempty"`
+	CountryCode                         string                      `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreatedAt                           string                      `url:"created_at,omitempty" json:"created_at,omitempty"`
+	CustomPaymentPagesEnabled           bool                        `url:"custom_payment_pages_enabled,omitempty" json:"custom_payment_pages_enabled,omitempty"`
+	FxPayoutCurrency                    string                      `url:"fx_payout_currency,omitempty" json:"fx_payout_currency,omitempty"`
+	Id                                  string                      `url:"id,omitempty" json:"id,omitempty"`
+	Links                               *CreditorLinks              `url:"links,omitempty" json:"links,omitempty"`
+	LogoUrl                             string                      `url:"logo_url,omitempty" json:"logo_url,omitempty"`
+	MandateImportsEnabled               bool                        `url:"mandate_imports_enabled,omitempty" json:"mandate_imports_enabled,omitempty"`
+	MerchantResponsibleForNotifications bool                        `url:"merchant_responsible_for_notifications,omitempty" json:"merchant_responsible_for_notifications,omitempty"`
+	Name                                string                      `url:"name,omitempty" json:"name,omitempty"`
+	PostalCode                          string                      `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                              string                      `url:"region,omitempty" json:"region,omitempty"`
+	SchemeIdentifiers                   []CreditorSchemeIdentifiers `url:"scheme_identifiers,omitempty" json:"scheme_identifiers,omitempty"`
+	VerificationStatus                  string                      `url:"verification_status,omitempty" json:"verification_status,omitempty"`
 }
 
 // CreditorCreateParams parameters
@@ -126,7 +130,7 @@ func (s *CreditorService) Create(ctx context.Context, p CreditorCreateParams, op
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -179,29 +183,34 @@ func (s *CreditorService) Create(ctx context.Context, p CreditorCreateParams, op
 	return result.Creditor, nil
 }
 
-// CreditorListParams parameters
-type CreditorListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Limit int `url:"limit,omitempty" json:"limit,omitempty"`
+type CreditorListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
-// CreditorListResult response including pagination metadata
+// CreditorListParams parameters
+type CreditorListParams struct {
+	After     string                       `url:"after,omitempty" json:"after,omitempty"`
+	Before    string                       `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt *CreditorListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Limit     int                          `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
+type CreditorListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type CreditorListResultMeta struct {
+	Cursors *CreditorListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                            `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type CreditorListResult struct {
-	Creditors []Creditor `json:"creditors"`
-	Meta      struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Creditors []Creditor             `json:"creditors"`
+	Meta      CreditorListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
@@ -239,7 +248,7 @@ func (s *CreditorService) List(ctx context.Context, p CreditorListParams, opts .
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -348,7 +357,7 @@ func (c *CreditorListPagingIterator) Value(ctx context.Context) (*CreditorListRe
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -412,7 +421,8 @@ func (s *CreditorService) All(ctx context.Context,
 }
 
 // CreditorGetParams parameters
-type CreditorGetParams map[string]interface{}
+type CreditorGetParams struct {
+}
 
 // Get
 // Retrieves the details of an existing creditor.
@@ -443,7 +453,7 @@ func (s *CreditorService) Get(ctx context.Context, identity string, p CreditorGe
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -494,26 +504,28 @@ func (s *CreditorService) Get(ctx context.Context, identity string, p CreditorGe
 	return result.Creditor, nil
 }
 
+type CreditorUpdateParamsLinks struct {
+	DefaultAudPayoutAccount string `url:"default_aud_payout_account,omitempty" json:"default_aud_payout_account,omitempty"`
+	DefaultCadPayoutAccount string `url:"default_cad_payout_account,omitempty" json:"default_cad_payout_account,omitempty"`
+	DefaultDkkPayoutAccount string `url:"default_dkk_payout_account,omitempty" json:"default_dkk_payout_account,omitempty"`
+	DefaultEurPayoutAccount string `url:"default_eur_payout_account,omitempty" json:"default_eur_payout_account,omitempty"`
+	DefaultGbpPayoutAccount string `url:"default_gbp_payout_account,omitempty" json:"default_gbp_payout_account,omitempty"`
+	DefaultNzdPayoutAccount string `url:"default_nzd_payout_account,omitempty" json:"default_nzd_payout_account,omitempty"`
+	DefaultSekPayoutAccount string `url:"default_sek_payout_account,omitempty" json:"default_sek_payout_account,omitempty"`
+	DefaultUsdPayoutAccount string `url:"default_usd_payout_account,omitempty" json:"default_usd_payout_account,omitempty"`
+}
+
 // CreditorUpdateParams parameters
 type CreditorUpdateParams struct {
-	AddressLine1 string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2 string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3 string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	City         string `url:"city,omitempty" json:"city,omitempty"`
-	CountryCode  string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Links        struct {
-		DefaultAudPayoutAccount string `url:"default_aud_payout_account,omitempty" json:"default_aud_payout_account,omitempty"`
-		DefaultCadPayoutAccount string `url:"default_cad_payout_account,omitempty" json:"default_cad_payout_account,omitempty"`
-		DefaultDkkPayoutAccount string `url:"default_dkk_payout_account,omitempty" json:"default_dkk_payout_account,omitempty"`
-		DefaultEurPayoutAccount string `url:"default_eur_payout_account,omitempty" json:"default_eur_payout_account,omitempty"`
-		DefaultGbpPayoutAccount string `url:"default_gbp_payout_account,omitempty" json:"default_gbp_payout_account,omitempty"`
-		DefaultNzdPayoutAccount string `url:"default_nzd_payout_account,omitempty" json:"default_nzd_payout_account,omitempty"`
-		DefaultSekPayoutAccount string `url:"default_sek_payout_account,omitempty" json:"default_sek_payout_account,omitempty"`
-		DefaultUsdPayoutAccount string `url:"default_usd_payout_account,omitempty" json:"default_usd_payout_account,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Name       string `url:"name,omitempty" json:"name,omitempty"`
-	PostalCode string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region     string `url:"region,omitempty" json:"region,omitempty"`
+	AddressLine1 string                     `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2 string                     `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3 string                     `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City         string                     `url:"city,omitempty" json:"city,omitempty"`
+	CountryCode  string                     `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Links        *CreditorUpdateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Name         string                     `url:"name,omitempty" json:"name,omitempty"`
+	PostalCode   string                     `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region       string                     `url:"region,omitempty" json:"region,omitempty"`
 }
 
 // Update
@@ -558,7 +570,7 @@ func (s *CreditorService) Update(ctx context.Context, identity string, p Credito
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

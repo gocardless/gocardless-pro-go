@@ -25,18 +25,21 @@ type RedirectFlowService struct {
 	client   *http.Client
 }
 
+type RedirectFlowLinks struct {
+	BillingRequest      string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
+	Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
+	CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
+	Mandate             string `url:"mandate,omitempty" json:"mandate,omitempty"`
+}
+
 // RedirectFlow model
 type RedirectFlow struct {
-	ConfirmationUrl string `url:"confirmation_url,omitempty" json:"confirmation_url,omitempty"`
-	CreatedAt       string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Description     string `url:"description,omitempty" json:"description,omitempty"`
-	Id              string `url:"id,omitempty" json:"id,omitempty"`
-	Links           struct {
-		Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
-		Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
-		CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
-		Mandate             string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
+	ConfirmationUrl    string                 `url:"confirmation_url,omitempty" json:"confirmation_url,omitempty"`
+	CreatedAt          string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Description        string                 `url:"description,omitempty" json:"description,omitempty"`
+	Id                 string                 `url:"id,omitempty" json:"id,omitempty"`
+	Links              *RedirectFlowLinks     `url:"links,omitempty" json:"links,omitempty"`
 	MandateReference   string                 `url:"mandate_reference,omitempty" json:"mandate_reference,omitempty"`
 	Metadata           map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	RedirectUrl        string                 `url:"redirect_url,omitempty" json:"redirect_url,omitempty"`
@@ -45,36 +48,42 @@ type RedirectFlow struct {
 	SuccessRedirectUrl string                 `url:"success_redirect_url,omitempty" json:"success_redirect_url,omitempty"`
 }
 
+type RedirectFlowCreateParamsLinks struct {
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
+}
+
+type RedirectFlowCreateParamsPrefilledBankAccount struct {
+	AccountType string `url:"account_type,omitempty" json:"account_type,omitempty"`
+}
+
+type RedirectFlowCreateParamsPrefilledCustomer struct {
+	AddressLine1          string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language              string `url:"language,omitempty" json:"language,omitempty"`
+	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+}
+
 // RedirectFlowCreateParams parameters
 type RedirectFlowCreateParams struct {
-	Description string `url:"description,omitempty" json:"description,omitempty"`
-	Links       struct {
-		Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata             map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PrefilledBankAccount struct {
-		AccountType string `url:"account_type,omitempty" json:"account_type,omitempty"`
-	} `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
-	PrefilledCustomer struct {
-		AddressLine1          string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-		AddressLine2          string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-		AddressLine3          string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-		City                  string `url:"city,omitempty" json:"city,omitempty"`
-		CompanyName           string `url:"company_name,omitempty" json:"company_name,omitempty"`
-		CountryCode           string `url:"country_code,omitempty" json:"country_code,omitempty"`
-		DanishIdentityNumber  string `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-		Email                 string `url:"email,omitempty" json:"email,omitempty"`
-		FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
-		GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
-		Language              string `url:"language,omitempty" json:"language,omitempty"`
-		PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
-		PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-		Region                string `url:"region,omitempty" json:"region,omitempty"`
-		SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
-	} `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
-	Scheme             string `url:"scheme,omitempty" json:"scheme,omitempty"`
-	SessionToken       string `url:"session_token,omitempty" json:"session_token,omitempty"`
-	SuccessRedirectUrl string `url:"success_redirect_url,omitempty" json:"success_redirect_url,omitempty"`
+	Description          string                                        `url:"description,omitempty" json:"description,omitempty"`
+	Links                *RedirectFlowCreateParamsLinks                `url:"links,omitempty" json:"links,omitempty"`
+	Metadata             map[string]interface{}                        `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PrefilledBankAccount *RedirectFlowCreateParamsPrefilledBankAccount `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
+	PrefilledCustomer    *RedirectFlowCreateParamsPrefilledCustomer    `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
+	Scheme               string                                        `url:"scheme,omitempty" json:"scheme,omitempty"`
+	SessionToken         string                                        `url:"session_token,omitempty" json:"session_token,omitempty"`
+	SuccessRedirectUrl   string                                        `url:"success_redirect_url,omitempty" json:"success_redirect_url,omitempty"`
 }
 
 // Create
@@ -118,7 +127,7 @@ func (s *RedirectFlowService) Create(ctx context.Context, p RedirectFlowCreatePa
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -200,7 +209,7 @@ func (s *RedirectFlowService) Get(ctx context.Context, identity string, opts ...
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -307,7 +316,7 @@ func (s *RedirectFlowService) Complete(ctx context.Context, identity string, p R
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

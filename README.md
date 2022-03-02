@@ -18,7 +18,7 @@ go mod tidy
 Then, reference gocardless-pro-go in a Go program with `import`:
 ``` go
 import (
-    gocardless "github.com/gocardless/gocardless-pro-go"
+    gocardless "github.com/gocardless/gocardless-pro-go/v2"
 )
 ```
 
@@ -29,7 +29,7 @@ toolchain will resolve and fetch the gocardless-pro-go module automatically.
 Alternatively, you can also explicitly `go get` the package into a project:
 
 ```
-go get -u github.com/gocardless/gocardless-pro-go/v1.0.0
+go get -u github.com/gocardless/gocardless-pro-go@v2.0.0
 ```
 
 ## Initializing the client
@@ -109,14 +109,15 @@ Resources can be created with the `Create` method:
 
 ```go
     ctx := context.TODO()
-    customerCreateParams := CustomerCreateParams{}
-    customerCreateParams.AddressLine1 = "9 Acer Gardens"
-    customerCreateParams.City = "Birmingham"
-    customerCreateParams.CountryCode = "GB"
-    customerCreateParams.Email = "bbr@example.xom"
-    customerCreateParams.FamilyName = "Rodgriguez"
-    customerCreateParams.GivenName = "Bender Bending"
-    customerCreateParams.PostalCode = "B4 7NJ"
+    customerCreateParams := gocardless.CustomerCreateParams{
+		AddressLine1: "9 Acer Gardens"
+		City:         "Birmingham",
+		PostalCode:   "B4 7NJ",
+		CountryCode:  "GB",
+		Email:        "bbr@example.com",
+		GivenName:    "Bender Bending",
+		FamilyName:   "Rodgriguez",
+	}
 
     customer, err := client.Customers.Create(ctx, customerCreateParams)
 ```
@@ -127,8 +128,9 @@ Resources can be updates with the `Update` method:
 
 ```go
     ctx := context.TODO()
-    customerUpdateParams := CustomerUpdateParams{}
-    customerUpdateParams.GivenName = "New name"
+    customerUpdateParams := CustomerUpdateParams{
+        GivenName: "New Name",
+    }
 
     customer, err := client.Customers.Update(ctx, "CU123", customerUpdateParams)
 ```
@@ -196,6 +198,21 @@ The client allows you to validate that a webhook you receive is genuinely from G
         // work through list of events
     }
 ``` 
+
+### Handling Error
+
+For handling error, we have the struct `ApiError` exposed from error
+
+```go
+    billingRequest, err := service.BillingRequests.Create(ctx, billingRequestCreateParams)
+	if err != nil {
+		var apiErr *gocardless.APIError
+		if errors.As(err, &apiErr) {
+			fmt.Printf("got err: %v", apiErr.Message)
+		}
+		return nil, err
+	}
+```
 
 ## Compatibility
 

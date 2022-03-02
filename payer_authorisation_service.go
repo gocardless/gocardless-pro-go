@@ -25,57 +25,67 @@ type PayerAuthorisationService struct {
 	client   *http.Client
 }
 
+type PayerAuthorisationBankAccount struct {
+	AccountHolderName   string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber       string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountNumberEnding string                 `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
+	AccountNumberSuffix string                 `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
+	AccountType         string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankCode            string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode          string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
+	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+}
+
+type PayerAuthorisationCustomer struct {
+	AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string                 `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Locale                string                 `url:"locale,omitempty" json:"locale,omitempty"`
+	Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string                 `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+}
+
+type PayerAuthorisationIncompleteFields struct {
+	Field          string `url:"field,omitempty" json:"field,omitempty"`
+	Message        string `url:"message,omitempty" json:"message,omitempty"`
+	RequestPointer string `url:"request_pointer,omitempty" json:"request_pointer,omitempty"`
+}
+
+type PayerAuthorisationLinks struct {
+	BankAccount string `url:"bank_account,omitempty" json:"bank_account,omitempty"`
+	Customer    string `url:"customer,omitempty" json:"customer,omitempty"`
+	Mandate     string `url:"mandate,omitempty" json:"mandate,omitempty"`
+}
+
+type PayerAuthorisationMandate struct {
+	Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerIpAddress string                 `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
+	Reference      string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme         string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+}
+
 // PayerAuthorisation model
 type PayerAuthorisation struct {
-	BankAccount struct {
-		AccountHolderName   string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-		AccountNumber       string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
-		AccountNumberEnding string                 `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
-		AccountNumberSuffix string                 `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
-		AccountType         string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
-		BankCode            string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-		BranchCode          string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-		CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-		Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
-		Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
-		Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	} `url:"bank_account,omitempty" json:"bank_account,omitempty"`
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer  struct {
-		AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-		AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-		AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-		City                  string                 `url:"city,omitempty" json:"city,omitempty"`
-		CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
-		CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-		DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-		Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
-		FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
-		GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
-		Locale                string                 `url:"locale,omitempty" json:"locale,omitempty"`
-		Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-		PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-		Region                string                 `url:"region,omitempty" json:"region,omitempty"`
-		SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
-	} `url:"customer,omitempty" json:"customer,omitempty"`
-	Id               string `url:"id,omitempty" json:"id,omitempty"`
-	IncompleteFields []struct {
-		Field          string `url:"field,omitempty" json:"field,omitempty"`
-		Message        string `url:"message,omitempty" json:"message,omitempty"`
-		RequestPointer string `url:"request_pointer,omitempty" json:"request_pointer,omitempty"`
-	} `url:"incomplete_fields,omitempty" json:"incomplete_fields,omitempty"`
-	Links struct {
-		BankAccount string `url:"bank_account,omitempty" json:"bank_account,omitempty"`
-		Customer    string `url:"customer,omitempty" json:"customer,omitempty"`
-		Mandate     string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Mandate struct {
-		Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-		PayerIpAddress string                 `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
-		Reference      string                 `url:"reference,omitempty" json:"reference,omitempty"`
-		Scheme         string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	} `url:"mandate,omitempty" json:"mandate,omitempty"`
-	Status string `url:"status,omitempty" json:"status,omitempty"`
+	BankAccount      *PayerAuthorisationBankAccount       `url:"bank_account,omitempty" json:"bank_account,omitempty"`
+	CreatedAt        string                               `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Customer         *PayerAuthorisationCustomer          `url:"customer,omitempty" json:"customer,omitempty"`
+	Id               string                               `url:"id,omitempty" json:"id,omitempty"`
+	IncompleteFields []PayerAuthorisationIncompleteFields `url:"incomplete_fields,omitempty" json:"incomplete_fields,omitempty"`
+	Links            *PayerAuthorisationLinks             `url:"links,omitempty" json:"links,omitempty"`
+	Mandate          *PayerAuthorisationMandate           `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Status           string                               `url:"status,omitempty" json:"status,omitempty"`
 }
 
 // Get
@@ -108,7 +118,7 @@ func (s *PayerAuthorisationService) Get(ctx context.Context, identity string, op
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -159,44 +169,50 @@ func (s *PayerAuthorisationService) Get(ctx context.Context, identity string, op
 	return result.PayerAuthorisation, nil
 }
 
+type PayerAuthorisationCreateParamsBankAccount struct {
+	AccountHolderName   string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber       string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountNumberEnding string                 `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
+	AccountNumberSuffix string                 `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
+	AccountType         string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankCode            string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode          string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
+	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+}
+
+type PayerAuthorisationCreateParamsCustomer struct {
+	AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string                 `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Locale                string                 `url:"locale,omitempty" json:"locale,omitempty"`
+	Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string                 `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+}
+
+type PayerAuthorisationCreateParamsMandate struct {
+	Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerIpAddress string                 `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
+	Reference      string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme         string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+}
+
 // PayerAuthorisationCreateParams parameters
 type PayerAuthorisationCreateParams struct {
-	BankAccount struct {
-		AccountHolderName   string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-		AccountNumber       string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
-		AccountNumberEnding string                 `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
-		AccountNumberSuffix string                 `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
-		AccountType         string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
-		BankCode            string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-		BranchCode          string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-		CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-		Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
-		Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
-		Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	} `url:"bank_account,omitempty" json:"bank_account,omitempty"`
-	Customer struct {
-		AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-		AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-		AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-		City                  string                 `url:"city,omitempty" json:"city,omitempty"`
-		CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
-		CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-		DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-		Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
-		FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
-		GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
-		Locale                string                 `url:"locale,omitempty" json:"locale,omitempty"`
-		Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-		PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-		Region                string                 `url:"region,omitempty" json:"region,omitempty"`
-		SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
-	} `url:"customer,omitempty" json:"customer,omitempty"`
-	Mandate struct {
-		Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-		PayerIpAddress string                 `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
-		Reference      string                 `url:"reference,omitempty" json:"reference,omitempty"`
-		Scheme         string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	} `url:"mandate,omitempty" json:"mandate,omitempty"`
+	BankAccount PayerAuthorisationCreateParamsBankAccount `url:"bank_account,omitempty" json:"bank_account,omitempty"`
+	Customer    PayerAuthorisationCreateParamsCustomer    `url:"customer,omitempty" json:"customer,omitempty"`
+	Mandate     PayerAuthorisationCreateParamsMandate     `url:"mandate,omitempty" json:"mandate,omitempty"`
 }
 
 // Create
@@ -244,7 +260,7 @@ func (s *PayerAuthorisationService) Create(ctx context.Context, p PayerAuthorisa
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -297,44 +313,50 @@ func (s *PayerAuthorisationService) Create(ctx context.Context, p PayerAuthorisa
 	return result.PayerAuthorisation, nil
 }
 
+type PayerAuthorisationUpdateParamsBankAccount struct {
+	AccountHolderName   string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber       string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountNumberEnding string                 `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
+	AccountNumberSuffix string                 `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
+	AccountType         string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankCode            string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode          string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
+	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+}
+
+type PayerAuthorisationUpdateParamsCustomer struct {
+	AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string                 `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Locale                string                 `url:"locale,omitempty" json:"locale,omitempty"`
+	Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string                 `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+}
+
+type PayerAuthorisationUpdateParamsMandate struct {
+	Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerIpAddress string                 `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
+	Reference      string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme         string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+}
+
 // PayerAuthorisationUpdateParams parameters
 type PayerAuthorisationUpdateParams struct {
-	BankAccount struct {
-		AccountHolderName   string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-		AccountNumber       string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
-		AccountNumberEnding string                 `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
-		AccountNumberSuffix string                 `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
-		AccountType         string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
-		BankCode            string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-		BranchCode          string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-		CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-		Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
-		Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
-		Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	} `url:"bank_account,omitempty" json:"bank_account,omitempty"`
-	Customer struct {
-		AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-		AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-		AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-		City                  string                 `url:"city,omitempty" json:"city,omitempty"`
-		CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
-		CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-		DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-		Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
-		FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
-		GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
-		Locale                string                 `url:"locale,omitempty" json:"locale,omitempty"`
-		Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-		PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-		Region                string                 `url:"region,omitempty" json:"region,omitempty"`
-		SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
-	} `url:"customer,omitempty" json:"customer,omitempty"`
-	Mandate struct {
-		Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-		PayerIpAddress string                 `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
-		Reference      string                 `url:"reference,omitempty" json:"reference,omitempty"`
-		Scheme         string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	} `url:"mandate,omitempty" json:"mandate,omitempty"`
+	BankAccount PayerAuthorisationUpdateParamsBankAccount `url:"bank_account,omitempty" json:"bank_account,omitempty"`
+	Customer    PayerAuthorisationUpdateParamsCustomer    `url:"customer,omitempty" json:"customer,omitempty"`
+	Mandate     PayerAuthorisationUpdateParamsMandate     `url:"mandate,omitempty" json:"mandate,omitempty"`
 }
 
 // Update
@@ -386,7 +408,7 @@ func (s *PayerAuthorisationService) Update(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -474,7 +496,7 @@ func (s *PayerAuthorisationService) Submit(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -569,7 +591,7 @@ func (s *PayerAuthorisationService) Confirm(ctx context.Context, identity string
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

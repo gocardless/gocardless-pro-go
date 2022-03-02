@@ -25,37 +25,43 @@ type RefundService struct {
 	client   *http.Client
 }
 
+type RefundFx struct {
+	EstimatedExchangeRate string `url:"estimated_exchange_rate,omitempty" json:"estimated_exchange_rate,omitempty"`
+	ExchangeRate          string `url:"exchange_rate,omitempty" json:"exchange_rate,omitempty"`
+	FxAmount              int    `url:"fx_amount,omitempty" json:"fx_amount,omitempty"`
+	FxCurrency            string `url:"fx_currency,omitempty" json:"fx_currency,omitempty"`
+}
+
+type RefundLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Payment string `url:"payment,omitempty" json:"payment,omitempty"`
+}
+
 // Refund model
 type Refund struct {
-	Amount    int    `url:"amount,omitempty" json:"amount,omitempty"`
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency  string `url:"currency,omitempty" json:"currency,omitempty"`
-	Fx        struct {
-		EstimatedExchangeRate string `url:"estimated_exchange_rate,omitempty" json:"estimated_exchange_rate,omitempty"`
-		ExchangeRate          string `url:"exchange_rate,omitempty" json:"exchange_rate,omitempty"`
-		FxAmount              int    `url:"fx_amount,omitempty" json:"fx_amount,omitempty"`
-		FxCurrency            string `url:"fx_currency,omitempty" json:"fx_currency,omitempty"`
-	} `url:"fx,omitempty" json:"fx,omitempty"`
-	Id    string `url:"id,omitempty" json:"id,omitempty"`
-	Links struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-		Payment string `url:"payment,omitempty" json:"payment,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
+	Amount    int                    `url:"amount,omitempty" json:"amount,omitempty"`
+	CreatedAt string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency  string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Fx        *RefundFx              `url:"fx,omitempty" json:"fx,omitempty"`
+	Id        string                 `url:"id,omitempty" json:"id,omitempty"`
+	Links     *RefundLinks           `url:"links,omitempty" json:"links,omitempty"`
 	Metadata  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference string                 `url:"reference,omitempty" json:"reference,omitempty"`
 	Status    string                 `url:"status,omitempty" json:"status,omitempty"`
 }
 
+type RefundCreateParamsLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Payment string `url:"payment,omitempty" json:"payment,omitempty"`
+}
+
 // RefundCreateParams parameters
 type RefundCreateParams struct {
-	Amount int `url:"amount,omitempty" json:"amount,omitempty"`
-	Links  struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-		Payment string `url:"payment,omitempty" json:"payment,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata                map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference               string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	TotalAmountConfirmation int                    `url:"total_amount_confirmation,omitempty" json:"total_amount_confirmation,omitempty"`
+	Amount                  int                     `url:"amount,omitempty" json:"amount,omitempty"`
+	Links                   RefundCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata                map[string]interface{}  `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference               string                  `url:"reference,omitempty" json:"reference,omitempty"`
+	TotalAmountConfirmation int                     `url:"total_amount_confirmation,omitempty" json:"total_amount_confirmation,omitempty"`
 }
 
 // Create
@@ -114,7 +120,7 @@ func (s *RefundService) Create(ctx context.Context, p RefundCreateParams, opts .
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -167,32 +173,37 @@ func (s *RefundService) Create(ctx context.Context, p RefundCreateParams, opts .
 	return result.Refund, nil
 }
 
-// RefundListParams parameters
-type RefundListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Limit      int    `url:"limit,omitempty" json:"limit,omitempty"`
-	Mandate    string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	Payment    string `url:"payment,omitempty" json:"payment,omitempty"`
-	RefundType string `url:"refund_type,omitempty" json:"refund_type,omitempty"`
+type RefundListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
-// RefundListResult response including pagination metadata
+// RefundListParams parameters
+type RefundListParams struct {
+	After      string                     `url:"after,omitempty" json:"after,omitempty"`
+	Before     string                     `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt  *RefundListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Limit      int                        `url:"limit,omitempty" json:"limit,omitempty"`
+	Mandate    string                     `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Payment    string                     `url:"payment,omitempty" json:"payment,omitempty"`
+	RefundType string                     `url:"refund_type,omitempty" json:"refund_type,omitempty"`
+}
+
+type RefundListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type RefundListResultMeta struct {
+	Cursors *RefundListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type RefundListResult struct {
-	Refunds []Refund `json:"refunds"`
-	Meta    struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Refunds []Refund             `json:"refunds"`
+	Meta    RefundListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
@@ -230,7 +241,7 @@ func (s *RefundService) List(ctx context.Context, p RefundListParams, opts ...Re
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -339,7 +350,7 @@ func (c *RefundListPagingIterator) Value(ctx context.Context) (*RefundListResult
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -431,7 +442,7 @@ func (s *RefundService) Get(ctx context.Context, identity string, opts ...Reques
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -528,7 +539,7 @@ func (s *RefundService) Update(ctx context.Context, identity string, p RefundUpd
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

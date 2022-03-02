@@ -25,40 +25,46 @@ type InstalmentScheduleService struct {
 	client   *http.Client
 }
 
+type InstalmentScheduleLinks struct {
+	Customer string   `url:"customer,omitempty" json:"customer,omitempty"`
+	Mandate  string   `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Payments []string `url:"payments,omitempty" json:"payments,omitempty"`
+}
+
 // InstalmentSchedule model
 type InstalmentSchedule struct {
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency  string `url:"currency,omitempty" json:"currency,omitempty"`
-	Id        string `url:"id,omitempty" json:"id,omitempty"`
-	Links     struct {
-		Customer string   `url:"customer,omitempty" json:"customer,omitempty"`
-		Mandate  string   `url:"mandate,omitempty" json:"mandate,omitempty"`
-		Payments []string `url:"payments,omitempty" json:"payments,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata      map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name          string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentErrors map[string]interface{} `url:"payment_errors,omitempty" json:"payment_errors,omitempty"`
-	Status        string                 `url:"status,omitempty" json:"status,omitempty"`
-	TotalAmount   int                    `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+	CreatedAt     string                   `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency      string                   `url:"currency,omitempty" json:"currency,omitempty"`
+	Id            string                   `url:"id,omitempty" json:"id,omitempty"`
+	Links         *InstalmentScheduleLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata      map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name          string                   `url:"name,omitempty" json:"name,omitempty"`
+	PaymentErrors map[string]interface{}   `url:"payment_errors,omitempty" json:"payment_errors,omitempty"`
+	Status        string                   `url:"status,omitempty" json:"status,omitempty"`
+	TotalAmount   int                      `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+}
+
+type InstalmentScheduleCreateWithDatesParamsInstalments struct {
+	Amount      int    `url:"amount,omitempty" json:"amount,omitempty"`
+	ChargeDate  string `url:"charge_date,omitempty" json:"charge_date,omitempty"`
+	Description string `url:"description,omitempty" json:"description,omitempty"`
+}
+
+type InstalmentScheduleCreateWithDatesParamsLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 }
 
 // InstalmentScheduleCreateWithDatesParams parameters
 type InstalmentScheduleCreateWithDatesParams struct {
-	AppFee      int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency    string `url:"currency,omitempty" json:"currency,omitempty"`
-	Instalments []struct {
-		Amount      int    `url:"amount,omitempty" json:"amount,omitempty"`
-		ChargeDate  string `url:"charge_date,omitempty" json:"charge_date,omitempty"`
-		Description string `url:"description,omitempty" json:"description,omitempty"`
-	} `url:"instalments,omitempty" json:"instalments,omitempty"`
-	Links struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	TotalAmount      int                    `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+	AppFee           int                                                  `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Currency         string                                               `url:"currency,omitempty" json:"currency,omitempty"`
+	Instalments      []InstalmentScheduleCreateWithDatesParamsInstalments `url:"instalments,omitempty" json:"instalments,omitempty"`
+	Links            InstalmentScheduleCreateWithDatesParamsLinks         `url:"links,omitempty" json:"links,omitempty"`
+	Metadata         map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name             string                                               `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference string                                               `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible  bool                                                 `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	TotalAmount      int                                                  `url:"total_amount,omitempty" json:"total_amount,omitempty"`
 }
 
 // CreateWithDates
@@ -119,7 +125,7 @@ func (s *InstalmentScheduleService) CreateWithDates(ctx context.Context, p Insta
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -172,24 +178,28 @@ func (s *InstalmentScheduleService) CreateWithDates(ctx context.Context, p Insta
 	return result.InstalmentSchedule, nil
 }
 
+type InstalmentScheduleCreateWithScheduleParamsInstalments struct {
+	Amounts      []int  `url:"amounts,omitempty" json:"amounts,omitempty"`
+	Interval     int    `url:"interval,omitempty" json:"interval,omitempty"`
+	IntervalUnit string `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
+	StartDate    string `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
+type InstalmentScheduleCreateWithScheduleParamsLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
+}
+
 // InstalmentScheduleCreateWithScheduleParams parameters
 type InstalmentScheduleCreateWithScheduleParams struct {
-	AppFee      int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency    string `url:"currency,omitempty" json:"currency,omitempty"`
-	Instalments struct {
-		Amounts      []int  `url:"amounts,omitempty" json:"amounts,omitempty"`
-		Interval     int    `url:"interval,omitempty" json:"interval,omitempty"`
-		IntervalUnit string `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
-		StartDate    string `url:"start_date,omitempty" json:"start_date,omitempty"`
-	} `url:"instalments,omitempty" json:"instalments,omitempty"`
-	Links struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	TotalAmount      int                    `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+	AppFee           int                                                   `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Currency         string                                                `url:"currency,omitempty" json:"currency,omitempty"`
+	Instalments      InstalmentScheduleCreateWithScheduleParamsInstalments `url:"instalments,omitempty" json:"instalments,omitempty"`
+	Links            InstalmentScheduleCreateWithScheduleParamsLinks       `url:"links,omitempty" json:"links,omitempty"`
+	Metadata         map[string]interface{}                                `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name             string                                                `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference string                                                `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible  bool                                                  `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	TotalAmount      int                                                   `url:"total_amount,omitempty" json:"total_amount,omitempty"`
 }
 
 // CreateWithSchedule
@@ -247,7 +257,7 @@ func (s *InstalmentScheduleService) CreateWithSchedule(ctx context.Context, p In
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -300,32 +310,37 @@ func (s *InstalmentScheduleService) CreateWithSchedule(ctx context.Context, p In
 	return result.InstalmentSchedule, nil
 }
 
-// InstalmentScheduleListParams parameters
-type InstalmentScheduleListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer string   `url:"customer,omitempty" json:"customer,omitempty"`
-	Limit    int      `url:"limit,omitempty" json:"limit,omitempty"`
-	Mandate  string   `url:"mandate,omitempty" json:"mandate,omitempty"`
-	Status   []string `url:"status,omitempty" json:"status,omitempty"`
+type InstalmentScheduleListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
-// InstalmentScheduleListResult response including pagination metadata
+// InstalmentScheduleListParams parameters
+type InstalmentScheduleListParams struct {
+	After     string                                 `url:"after,omitempty" json:"after,omitempty"`
+	Before    string                                 `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt *InstalmentScheduleListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Customer  string                                 `url:"customer,omitempty" json:"customer,omitempty"`
+	Limit     int                                    `url:"limit,omitempty" json:"limit,omitempty"`
+	Mandate   string                                 `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Status    []string                               `url:"status,omitempty" json:"status,omitempty"`
+}
+
+type InstalmentScheduleListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type InstalmentScheduleListResultMeta struct {
+	Cursors *InstalmentScheduleListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type InstalmentScheduleListResult struct {
-	InstalmentSchedules []InstalmentSchedule `json:"instalment_schedules"`
-	Meta                struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	InstalmentSchedules []InstalmentSchedule             `json:"instalment_schedules"`
+	Meta                InstalmentScheduleListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
@@ -363,7 +378,7 @@ func (s *InstalmentScheduleService) List(ctx context.Context, p InstalmentSchedu
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -472,7 +487,7 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -564,7 +579,7 @@ func (s *InstalmentScheduleService) Get(ctx context.Context, identity string, op
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -661,7 +676,7 @@ func (s *InstalmentScheduleService) Update(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -715,7 +730,8 @@ func (s *InstalmentScheduleService) Update(ctx context.Context, identity string,
 }
 
 // InstalmentScheduleCancelParams parameters
-type InstalmentScheduleCancelParams map[string]interface{}
+type InstalmentScheduleCancelParams struct {
+}
 
 // Cancel
 // Immediately cancels an instalment schedule; no further payments will be
@@ -762,7 +778,7 @@ func (s *InstalmentScheduleService) Cancel(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

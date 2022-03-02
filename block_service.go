@@ -86,7 +86,7 @@ func (s *BlockService) Create(ctx context.Context, p BlockCreateParams, opts ...
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -168,7 +168,7 @@ func (s *BlockService) Get(ctx context.Context, identity string, opts ...Request
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -231,16 +231,19 @@ type BlockListParams struct {
 	UpdatedAt  string `url:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
-// BlockListResult response including pagination metadata
+type BlockListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type BlockListResultMeta struct {
+	Cursors *BlockListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type BlockListResult struct {
-	Blocks []Block `json:"blocks"`
-	Meta   struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Blocks []Block             `json:"blocks"`
+	Meta   BlockListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
@@ -278,7 +281,7 @@ func (s *BlockService) List(ctx context.Context, p BlockListParams, opts ...Requ
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -387,7 +390,7 @@ func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, 
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -482,7 +485,7 @@ func (s *BlockService) Disable(ctx context.Context, identity string, opts ...Req
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -567,7 +570,7 @@ func (s *BlockService) Enable(ctx context.Context, identity string, opts ...Requ
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -628,24 +631,20 @@ type BlockBlockByRefParams struct {
 	ReferenceType     string `url:"reference_type,omitempty" json:"reference_type,omitempty"`
 	ReferenceValue    string `url:"reference_value,omitempty" json:"reference_value,omitempty"`
 }
+
+type BlockBlockByRefResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type BlockBlockByRefResultMeta struct {
+	Cursors *BlockBlockByRefResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                               `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type BlockBlockByRefResult struct {
-	Blocks []struct {
-		Active            bool   `url:"active,omitempty" json:"active,omitempty"`
-		BlockType         string `url:"block_type,omitempty" json:"block_type,omitempty"`
-		CreatedAt         string `url:"created_at,omitempty" json:"created_at,omitempty"`
-		Id                string `url:"id,omitempty" json:"id,omitempty"`
-		ReasonDescription string `url:"reason_description,omitempty" json:"reason_description,omitempty"`
-		ReasonType        string `url:"reason_type,omitempty" json:"reason_type,omitempty"`
-		ResourceReference string `url:"resource_reference,omitempty" json:"resource_reference,omitempty"`
-		UpdatedAt         string `url:"updated_at,omitempty" json:"updated_at,omitempty"`
-	} `url:"blocks,omitempty" json:"blocks,omitempty"`
-	Meta struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `url:"meta,omitempty" json:"meta,omitempty"`
+	Blocks []Block                   `json:"blocks"`
+	Meta   BlockBlockByRefResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // BlockByRef
@@ -692,7 +691,7 @@ func (s *BlockService) BlockByRef(ctx context.Context, p BlockBlockByRefParams, 
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

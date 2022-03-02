@@ -30,11 +30,13 @@ type ScenarioSimulator struct {
 	Id string `url:"id,omitempty" json:"id,omitempty"`
 }
 
+type ScenarioSimulatorRunParamsLinks struct {
+	Resource string `url:"resource,omitempty" json:"resource,omitempty"`
+}
+
 // ScenarioSimulatorRunParams parameters
 type ScenarioSimulatorRunParams struct {
-	Links struct {
-		Resource string `url:"resource,omitempty" json:"resource,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
+	Links *ScenarioSimulatorRunParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 }
 
 // Run
@@ -78,7 +80,7 @@ func (s *ScenarioSimulatorService) Run(ctx context.Context, identity string, p S
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

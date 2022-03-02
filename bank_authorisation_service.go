@@ -25,20 +25,22 @@ type BankAuthorisationService struct {
 	client   *http.Client
 }
 
+type BankAuthorisationLinks struct {
+	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
+	Institution    string `url:"institution,omitempty" json:"institution,omitempty"`
+}
+
 // BankAuthorisation model
 type BankAuthorisation struct {
-	AuthorisationType string `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
-	AuthorisedAt      string `url:"authorised_at,omitempty" json:"authorised_at,omitempty"`
-	CreatedAt         string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	ExpiresAt         string `url:"expires_at,omitempty" json:"expires_at,omitempty"`
-	Id                string `url:"id,omitempty" json:"id,omitempty"`
-	LastVisitedAt     string `url:"last_visited_at,omitempty" json:"last_visited_at,omitempty"`
-	Links             struct {
-		BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
-		Institution    string `url:"institution,omitempty" json:"institution,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	RedirectUri string `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
-	Url         string `url:"url,omitempty" json:"url,omitempty"`
+	AuthorisationType string                  `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
+	AuthorisedAt      string                  `url:"authorised_at,omitempty" json:"authorised_at,omitempty"`
+	CreatedAt         string                  `url:"created_at,omitempty" json:"created_at,omitempty"`
+	ExpiresAt         string                  `url:"expires_at,omitempty" json:"expires_at,omitempty"`
+	Id                string                  `url:"id,omitempty" json:"id,omitempty"`
+	LastVisitedAt     string                  `url:"last_visited_at,omitempty" json:"last_visited_at,omitempty"`
+	Links             *BankAuthorisationLinks `url:"links,omitempty" json:"links,omitempty"`
+	RedirectUri       string                  `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	Url               string                  `url:"url,omitempty" json:"url,omitempty"`
 }
 
 // Get
@@ -70,7 +72,7 @@ func (s *BankAuthorisationService) Get(ctx context.Context, identity string, opt
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -121,14 +123,16 @@ func (s *BankAuthorisationService) Get(ctx context.Context, identity string, opt
 	return result.BankAuthorisation, nil
 }
 
+type BankAuthorisationCreateParamsLinks struct {
+	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
+	Institution    string `url:"institution,omitempty" json:"institution,omitempty"`
+}
+
 // BankAuthorisationCreateParams parameters
 type BankAuthorisationCreateParams struct {
-	AuthorisationType string `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
-	Links             struct {
-		BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
-		Institution    string `url:"institution,omitempty" json:"institution,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	RedirectUri string `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	AuthorisationType string                             `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
+	Links             BankAuthorisationCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	RedirectUri       string                             `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 }
 
 // Create
@@ -171,7 +175,7 @@ func (s *BankAuthorisationService) Create(ctx context.Context, p BankAuthorisati
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

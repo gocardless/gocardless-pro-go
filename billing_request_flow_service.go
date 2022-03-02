@@ -25,33 +25,37 @@ type BillingRequestFlowService struct {
 	client   *http.Client
 }
 
+type BillingRequestFlowLinks struct {
+	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
+}
+
 // BillingRequestFlow model
 type BillingRequestFlow struct {
-	AuthorisationUrl string `url:"authorisation_url,omitempty" json:"authorisation_url,omitempty"`
-	AutoFulfil       bool   `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
-	CreatedAt        string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	ExitUri          string `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
-	ExpiresAt        string `url:"expires_at,omitempty" json:"expires_at,omitempty"`
-	Id               string `url:"id,omitempty" json:"id,omitempty"`
-	Links            struct {
-		BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	LockBankAccount     bool   `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
-	LockCustomerDetails bool   `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
-	RedirectUri         string `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
-	SessionToken        string `url:"session_token,omitempty" json:"session_token,omitempty"`
+	AuthorisationUrl    string                   `url:"authorisation_url,omitempty" json:"authorisation_url,omitempty"`
+	AutoFulfil          bool                     `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
+	CreatedAt           string                   `url:"created_at,omitempty" json:"created_at,omitempty"`
+	ExitUri             string                   `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
+	ExpiresAt           string                   `url:"expires_at,omitempty" json:"expires_at,omitempty"`
+	Id                  string                   `url:"id,omitempty" json:"id,omitempty"`
+	Links               *BillingRequestFlowLinks `url:"links,omitempty" json:"links,omitempty"`
+	LockBankAccount     bool                     `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
+	LockCustomerDetails bool                     `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
+	RedirectUri         string                   `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	SessionToken        string                   `url:"session_token,omitempty" json:"session_token,omitempty"`
+}
+
+type BillingRequestFlowCreateParamsLinks struct {
+	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 }
 
 // BillingRequestFlowCreateParams parameters
 type BillingRequestFlowCreateParams struct {
-	AutoFulfil bool   `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
-	ExitUri    string `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
-	Links      struct {
-		BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	LockBankAccount     bool   `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
-	LockCustomerDetails bool   `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
-	RedirectUri         string `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	AutoFulfil          bool                                `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
+	ExitUri             string                              `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
+	Links               BillingRequestFlowCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	LockBankAccount     bool                                `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
+	LockCustomerDetails bool                                `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
+	RedirectUri         string                              `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 }
 
 // Create
@@ -94,7 +98,7 @@ func (s *BillingRequestFlowService) Create(ctx context.Context, p BillingRequest
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -148,7 +152,8 @@ func (s *BillingRequestFlowService) Create(ctx context.Context, p BillingRequest
 }
 
 // BillingRequestFlowInitialiseParams parameters
-type BillingRequestFlowInitialiseParams struct{}
+type BillingRequestFlowInitialiseParams struct {
+}
 
 // Initialise
 // Returns the flow having generated a fresh session token which can be used to
@@ -193,7 +198,7 @@ func (s *BillingRequestFlowService) Initialise(ctx context.Context, identity str
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

@@ -42,31 +42,36 @@ type Webhook struct {
 	Url                             string                 `url:"url,omitempty" json:"url,omitempty"`
 }
 
-// WebhookListParams parameters
-type WebhookListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	IsTest     bool `url:"is_test,omitempty" json:"is_test,omitempty"`
-	Limit      int  `url:"limit,omitempty" json:"limit,omitempty"`
-	Successful bool `url:"successful,omitempty" json:"successful,omitempty"`
+type WebhookListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
-// WebhookListResult response including pagination metadata
+// WebhookListParams parameters
+type WebhookListParams struct {
+	After      string                      `url:"after,omitempty" json:"after,omitempty"`
+	Before     string                      `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt  *WebhookListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	IsTest     bool                        `url:"is_test,omitempty" json:"is_test,omitempty"`
+	Limit      int                         `url:"limit,omitempty" json:"limit,omitempty"`
+	Successful bool                        `url:"successful,omitempty" json:"successful,omitempty"`
+}
+
+type WebhookListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type WebhookListResultMeta struct {
+	Cursors *WebhookListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type WebhookListResult struct {
-	Webhooks []Webhook `json:"webhooks"`
-	Meta     struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Webhooks []Webhook             `json:"webhooks"`
+	Meta     WebhookListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
@@ -104,7 +109,7 @@ func (s *WebhookService) List(ctx context.Context, p WebhookListParams, opts ...
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -213,7 +218,7 @@ func (c *WebhookListPagingIterator) Value(ctx context.Context) (*WebhookListResu
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -305,7 +310,7 @@ func (s *WebhookService) Get(ctx context.Context, identity string, opts ...Reque
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -388,7 +393,7 @@ func (s *WebhookService) Retry(ctx context.Context, identity string, opts ...Req
 	req.Header.Set("Authorization", "Bearer "+s.token)
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
