@@ -19,66 +19,81 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // SubscriptionService manages subscriptions
-type SubscriptionService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type SubscriptionServiceImpl struct {
+	config Config
+}
+
+type SubscriptionLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
+}
+
+type SubscriptionUpcomingPayments struct {
+	Amount     int    `url:"amount,omitempty" json:"amount,omitempty"`
+	ChargeDate string `url:"charge_date,omitempty" json:"charge_date,omitempty"`
 }
 
 // Subscription model
 type Subscription struct {
-	Amount                        int    `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee                        int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Count                         int    `url:"count,omitempty" json:"count,omitempty"`
-	CreatedAt                     string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency                      string `url:"currency,omitempty" json:"currency,omitempty"`
-	DayOfMonth                    int    `url:"day_of_month,omitempty" json:"day_of_month,omitempty"`
-	EarliestChargeDateAfterResume string `url:"earliest_charge_date_after_resume,omitempty" json:"earliest_charge_date_after_resume,omitempty"`
-	EndDate                       string `url:"end_date,omitempty" json:"end_date,omitempty"`
-	Id                            string `url:"id,omitempty" json:"id,omitempty"`
-	Interval                      int    `url:"interval,omitempty" json:"interval,omitempty"`
-	IntervalUnit                  string `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
-	Links                         struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Month            string                 `url:"month,omitempty" json:"month,omitempty"`
-	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	StartDate        string                 `url:"start_date,omitempty" json:"start_date,omitempty"`
-	Status           string                 `url:"status,omitempty" json:"status,omitempty"`
-	UpcomingPayments []struct {
-		Amount     int    `url:"amount,omitempty" json:"amount,omitempty"`
-		ChargeDate string `url:"charge_date,omitempty" json:"charge_date,omitempty"`
-	} `url:"upcoming_payments,omitempty" json:"upcoming_payments,omitempty"`
+	Amount                        int                            `url:"amount,omitempty" json:"amount,omitempty"`
+	AppFee                        int                            `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Count                         int                            `url:"count,omitempty" json:"count,omitempty"`
+	CreatedAt                     string                         `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency                      string                         `url:"currency,omitempty" json:"currency,omitempty"`
+	DayOfMonth                    int                            `url:"day_of_month,omitempty" json:"day_of_month,omitempty"`
+	EarliestChargeDateAfterResume string                         `url:"earliest_charge_date_after_resume,omitempty" json:"earliest_charge_date_after_resume,omitempty"`
+	EndDate                       string                         `url:"end_date,omitempty" json:"end_date,omitempty"`
+	Id                            string                         `url:"id,omitempty" json:"id,omitempty"`
+	Interval                      int                            `url:"interval,omitempty" json:"interval,omitempty"`
+	IntervalUnit                  string                         `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
+	Links                         *SubscriptionLinks             `url:"links,omitempty" json:"links,omitempty"`
+	Metadata                      map[string]interface{}         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Month                         string                         `url:"month,omitempty" json:"month,omitempty"`
+	Name                          string                         `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference              string                         `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible               bool                           `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	StartDate                     string                         `url:"start_date,omitempty" json:"start_date,omitempty"`
+	Status                        string                         `url:"status,omitempty" json:"status,omitempty"`
+	UpcomingPayments              []SubscriptionUpcomingPayments `url:"upcoming_payments,omitempty" json:"upcoming_payments,omitempty"`
+}
+
+type SubscriptionService interface {
+	Create(ctx context.Context, p SubscriptionCreateParams, opts ...RequestOption) (*Subscription, error)
+	List(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) (*SubscriptionListResult, error)
+	All(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) *SubscriptionListPagingIterator
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*Subscription, error)
+	Update(ctx context.Context, identity string, p SubscriptionUpdateParams, opts ...RequestOption) (*Subscription, error)
+	Pause(ctx context.Context, identity string, p SubscriptionPauseParams, opts ...RequestOption) (*Subscription, error)
+	Resume(ctx context.Context, identity string, p SubscriptionResumeParams, opts ...RequestOption) (*Subscription, error)
+	Cancel(ctx context.Context, identity string, p SubscriptionCancelParams, opts ...RequestOption) (*Subscription, error)
+}
+
+type SubscriptionCreateParamsLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 }
 
 // SubscriptionCreateParams parameters
 type SubscriptionCreateParams struct {
-	Amount       int    `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee       int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Count        int    `url:"count,omitempty" json:"count,omitempty"`
-	Currency     string `url:"currency,omitempty" json:"currency,omitempty"`
-	DayOfMonth   int    `url:"day_of_month,omitempty" json:"day_of_month,omitempty"`
-	EndDate      string `url:"end_date,omitempty" json:"end_date,omitempty"`
-	Interval     int    `url:"interval,omitempty" json:"interval,omitempty"`
-	IntervalUnit string `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
-	Links        struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Month            string                 `url:"month,omitempty" json:"month,omitempty"`
-	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	StartDate        string                 `url:"start_date,omitempty" json:"start_date,omitempty"`
+	Amount           int                           `url:"amount,omitempty" json:"amount,omitempty"`
+	AppFee           int                           `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Count            int                           `url:"count,omitempty" json:"count,omitempty"`
+	Currency         string                        `url:"currency,omitempty" json:"currency,omitempty"`
+	DayOfMonth       int                           `url:"day_of_month,omitempty" json:"day_of_month,omitempty"`
+	EndDate          string                        `url:"end_date,omitempty" json:"end_date,omitempty"`
+	Interval         int                           `url:"interval,omitempty" json:"interval,omitempty"`
+	IntervalUnit     string                        `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
+	Links            SubscriptionCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata         map[string]interface{}        `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Month            string                        `url:"month,omitempty" json:"month,omitempty"`
+	Name             string                        `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference string                        `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible  bool                          `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	StartDate        string                        `url:"start_date,omitempty" json:"start_date,omitempty"`
 }
 
 // Create
 // Creates a new subscription object
-func (s *SubscriptionService) Create(ctx context.Context, p SubscriptionCreateParams, opts ...RequestOption) (*Subscription, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions"))
+func (s *SubscriptionServiceImpl) Create(ctx context.Context, p SubscriptionCreateParams, opts ...RequestOption) (*Subscription, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/subscriptions"))
 	if err != nil {
 		return nil, err
 	}
@@ -112,10 +127,10 @@ func (s *SubscriptionService) Create(ctx context.Context, p SubscriptionCreatePa
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -124,7 +139,7 @@ func (s *SubscriptionService) Create(ctx context.Context, p SubscriptionCreatePa
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -168,39 +183,44 @@ func (s *SubscriptionService) Create(ctx context.Context, p SubscriptionCreatePa
 	return result.Subscription, nil
 }
 
-// SubscriptionListParams parameters
-type SubscriptionListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer string   `url:"customer,omitempty" json:"customer,omitempty"`
-	Limit    int      `url:"limit,omitempty" json:"limit,omitempty"`
-	Mandate  string   `url:"mandate,omitempty" json:"mandate,omitempty"`
-	Status   []string `url:"status,omitempty" json:"status,omitempty"`
+type SubscriptionListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
-// SubscriptionListResult response including pagination metadata
+// SubscriptionListParams parameters
+type SubscriptionListParams struct {
+	After     string                           `url:"after,omitempty" json:"after,omitempty"`
+	Before    string                           `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt *SubscriptionListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Customer  string                           `url:"customer,omitempty" json:"customer,omitempty"`
+	Limit     int                              `url:"limit,omitempty" json:"limit,omitempty"`
+	Mandate   string                           `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Status    []string                         `url:"status,omitempty" json:"status,omitempty"`
+}
+
+type SubscriptionListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type SubscriptionListResultMeta struct {
+	Cursors *SubscriptionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type SubscriptionListResult struct {
-	Subscriptions []Subscription `json:"subscriptions"`
-	Meta          struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Subscriptions []Subscription             `json:"subscriptions"`
+	Meta          SubscriptionListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // subscriptions.
-func (s *SubscriptionService) List(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) (*SubscriptionListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions"))
+func (s *SubscriptionServiceImpl) List(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) (*SubscriptionListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/subscriptions"))
 	if err != nil {
 		return nil, err
 	}
@@ -228,17 +248,17 @@ func (s *SubscriptionService) List(ctx context.Context, p SubscriptionListParams
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -286,7 +306,7 @@ type SubscriptionListPagingIterator struct {
 	cursor         string
 	response       *SubscriptionListResult
 	params         SubscriptionListParams
-	service        *SubscriptionService
+	service        *SubscriptionServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -307,7 +327,7 @@ func (c *SubscriptionListPagingIterator) Value(ctx context.Context) (*Subscripti
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/subscriptions"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/subscriptions"))
 
 	if err != nil {
 		return nil, err
@@ -337,16 +357,16 @@ func (c *SubscriptionListPagingIterator) Value(ctx context.Context) (*Subscripti
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -393,7 +413,7 @@ func (c *SubscriptionListPagingIterator) Value(ctx context.Context) (*Subscripti
 	return c.response, nil
 }
 
-func (s *SubscriptionService) All(ctx context.Context,
+func (s *SubscriptionServiceImpl) All(ctx context.Context,
 	p SubscriptionListParams,
 	opts ...RequestOption) *SubscriptionListPagingIterator {
 	return &SubscriptionListPagingIterator{
@@ -405,8 +425,8 @@ func (s *SubscriptionService) All(ctx context.Context,
 
 // Get
 // Retrieves the details of a single subscription.
-func (s *SubscriptionService) Get(ctx context.Context, identity string, opts ...RequestOption) (*Subscription, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/subscriptions/%v",
+func (s *SubscriptionServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Subscription, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -429,17 +449,17 @@ func (s *SubscriptionService) Get(ctx context.Context, identity string, opts ...
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -519,8 +539,8 @@ type SubscriptionUpdateParams struct {
 // subscription was created by an app other than the app you are authenticated
 // as
 //
-func (s *SubscriptionService) Update(ctx context.Context, identity string, p SubscriptionUpdateParams, opts ...RequestOption) (*Subscription, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/subscriptions/%v",
+func (s *SubscriptionServiceImpl) Update(ctx context.Context, identity string, p SubscriptionUpdateParams, opts ...RequestOption) (*Subscription, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -555,10 +575,10 @@ func (s *SubscriptionService) Update(ctx context.Context, identity string, p Sub
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -567,7 +587,7 @@ func (s *SubscriptionService) Update(ctx context.Context, identity string, p Sub
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -659,8 +679,8 @@ type SubscriptionPauseParams struct {
 // - `pause_cycles_must_be_greater_than_or_equal_to` if the provided value for
 // `pause_cycles` cannot be satisfied.
 //
-func (s *SubscriptionService) Pause(ctx context.Context, identity string, p SubscriptionPauseParams, opts ...RequestOption) (*Subscription, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/subscriptions/%v/actions/pause",
+func (s *SubscriptionServiceImpl) Pause(ctx context.Context, identity string, p SubscriptionPauseParams, opts ...RequestOption) (*Subscription, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/pause",
 		identity))
 	if err != nil {
 		return nil, err
@@ -695,10 +715,10 @@ func (s *SubscriptionService) Pause(ctx context.Context, identity string, p Subs
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -707,7 +727,7 @@ func (s *SubscriptionService) Pause(ctx context.Context, identity string, p Subs
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -774,8 +794,8 @@ type SubscriptionResumeParams struct {
 //
 // - `subscription_not_paused` if the subscription is not paused.
 //
-func (s *SubscriptionService) Resume(ctx context.Context, identity string, p SubscriptionResumeParams, opts ...RequestOption) (*Subscription, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/subscriptions/%v/actions/resume",
+func (s *SubscriptionServiceImpl) Resume(ctx context.Context, identity string, p SubscriptionResumeParams, opts ...RequestOption) (*Subscription, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/resume",
 		identity))
 	if err != nil {
 		return nil, err
@@ -810,10 +830,10 @@ func (s *SubscriptionService) Resume(ctx context.Context, identity string, p Sub
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -822,7 +842,7 @@ func (s *SubscriptionService) Resume(ctx context.Context, identity string, p Sub
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -878,8 +898,8 @@ type SubscriptionCancelParams struct {
 //
 // This will fail with a cancellation_failed error if the subscription is
 // already cancelled or finished.
-func (s *SubscriptionService) Cancel(ctx context.Context, identity string, p SubscriptionCancelParams, opts ...RequestOption) (*Subscription, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/subscriptions/%v/actions/cancel",
+func (s *SubscriptionServiceImpl) Cancel(ctx context.Context, identity string, p SubscriptionCancelParams, opts ...RequestOption) (*Subscription, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/cancel",
 		identity))
 	if err != nil {
 		return nil, err
@@ -914,10 +934,10 @@ func (s *SubscriptionService) Cancel(ctx context.Context, identity string, p Sub
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -926,7 +946,7 @@ func (s *SubscriptionService) Cancel(ctx context.Context, identity string, p Sub
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

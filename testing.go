@@ -38,9 +38,12 @@ func runServer(t *testing.T, fixtureFile string, method string) *httptest.Server
 }
 
 func getClient(t *testing.T, url string) (*Service, error) {
-	opts := WithEndpoint(url)
 	token := "dummy_token"
-	service, err := New(token, opts)
+	config, err := NewConfig(token, WithEndpoint(url))
+	if err != nil {
+		t.Fatal(err)
+	}
+	service, err := New(config)
 	if err != nil {
 		t.Fatal(err)
 	}

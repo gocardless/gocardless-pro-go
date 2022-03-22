@@ -19,29 +19,36 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // PayoutItemService manages payout_items
-type PayoutItemService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type PayoutItemServiceImpl struct {
+	config Config
+}
+
+type PayoutItemLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Payment string `url:"payment,omitempty" json:"payment,omitempty"`
+	Refund  string `url:"refund,omitempty" json:"refund,omitempty"`
+}
+
+type PayoutItemTaxes struct {
+	Amount              string `url:"amount,omitempty" json:"amount,omitempty"`
+	Currency            string `url:"currency,omitempty" json:"currency,omitempty"`
+	DestinationAmount   string `url:"destination_amount,omitempty" json:"destination_amount,omitempty"`
+	DestinationCurrency string `url:"destination_currency,omitempty" json:"destination_currency,omitempty"`
+	ExchangeRate        string `url:"exchange_rate,omitempty" json:"exchange_rate,omitempty"`
+	TaxRateId           string `url:"tax_rate_id,omitempty" json:"tax_rate_id,omitempty"`
 }
 
 // PayoutItem model
 type PayoutItem struct {
-	Amount string `url:"amount,omitempty" json:"amount,omitempty"`
-	Links  struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-		Payment string `url:"payment,omitempty" json:"payment,omitempty"`
-		Refund  string `url:"refund,omitempty" json:"refund,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Taxes []struct {
-		Amount              string `url:"amount,omitempty" json:"amount,omitempty"`
-		Currency            string `url:"currency,omitempty" json:"currency,omitempty"`
-		DestinationAmount   string `url:"destination_amount,omitempty" json:"destination_amount,omitempty"`
-		DestinationCurrency string `url:"destination_currency,omitempty" json:"destination_currency,omitempty"`
-		ExchangeRate        string `url:"exchange_rate,omitempty" json:"exchange_rate,omitempty"`
-		TaxRateId           string `url:"tax_rate_id,omitempty" json:"tax_rate_id,omitempty"`
-	} `url:"taxes,omitempty" json:"taxes,omitempty"`
-	Type string `url:"type,omitempty" json:"type,omitempty"`
+	Amount string            `url:"amount,omitempty" json:"amount,omitempty"`
+	Links  *PayoutItemLinks  `url:"links,omitempty" json:"links,omitempty"`
+	Taxes  []PayoutItemTaxes `url:"taxes,omitempty" json:"taxes,omitempty"`
+	Type   string            `url:"type,omitempty" json:"type,omitempty"`
+}
+
+type PayoutItemService interface {
+	List(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) (*PayoutItemListResult, error)
+	All(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) *PayoutItemListPagingIterator
 }
 
 // PayoutItemListParams parameters
@@ -53,24 +60,27 @@ type PayoutItemListParams struct {
 	Payout                string `url:"payout,omitempty" json:"payout,omitempty"`
 }
 
-// PayoutItemListResult response including pagination metadata
+type PayoutItemListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type PayoutItemListResultMeta struct {
+	Cursors *PayoutItemListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                              `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type PayoutItemListResult struct {
-	PayoutItems []PayoutItem `json:"payout_items"`
-	Meta        struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	PayoutItems []PayoutItem             `json:"payout_items"`
+	Meta        PayoutItemListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of items in
 // the payout.
 //
-func (s *PayoutItemService) List(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) (*PayoutItemListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payout_items"))
+func (s *PayoutItemServiceImpl) List(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) (*PayoutItemListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payout_items"))
 	if err != nil {
 		return nil, err
 	}
@@ -98,17 +108,17 @@ func (s *PayoutItemService) List(ctx context.Context, p PayoutItemListParams, op
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -156,7 +166,7 @@ type PayoutItemListPagingIterator struct {
 	cursor         string
 	response       *PayoutItemListResult
 	params         PayoutItemListParams
-	service        *PayoutItemService
+	service        *PayoutItemServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -177,7 +187,7 @@ func (c *PayoutItemListPagingIterator) Value(ctx context.Context) (*PayoutItemLi
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payout_items"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payout_items"))
 
 	if err != nil {
 		return nil, err
@@ -207,16 +217,16 @@ func (c *PayoutItemListPagingIterator) Value(ctx context.Context) (*PayoutItemLi
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -263,7 +273,7 @@ func (c *PayoutItemListPagingIterator) Value(ctx context.Context) (*PayoutItemLi
 	return c.response, nil
 }
 
-func (s *PayoutItemService) All(ctx context.Context,
+func (s *PayoutItemServiceImpl) All(ctx context.Context,
 	p PayoutItemListParams,
 	opts ...RequestOption) *PayoutItemListPagingIterator {
 	return &PayoutItemListPagingIterator{

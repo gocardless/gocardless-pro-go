@@ -19,10 +19,8 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // CustomerService manages customers
-type CustomerService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type CustomerServiceImpl struct {
+	config Config
 }
 
 // Customer model
@@ -47,6 +45,15 @@ type Customer struct {
 	SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
 }
 
+type CustomerService interface {
+	Create(ctx context.Context, p CustomerCreateParams, opts ...RequestOption) (*Customer, error)
+	List(ctx context.Context, p CustomerListParams, opts ...RequestOption) (*CustomerListResult, error)
+	All(ctx context.Context, p CustomerListParams, opts ...RequestOption) *CustomerListPagingIterator
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*Customer, error)
+	Update(ctx context.Context, identity string, p CustomerUpdateParams, opts ...RequestOption) (*Customer, error)
+	Remove(ctx context.Context, identity string, p CustomerRemoveParams, opts ...RequestOption) (*Customer, error)
+}
+
 // CustomerCreateParams parameters
 type CustomerCreateParams struct {
 	AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
@@ -69,8 +76,8 @@ type CustomerCreateParams struct {
 
 // Create
 // Creates a new customer object.
-func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams, opts ...RequestOption) (*Customer, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers"))
+func (s *CustomerServiceImpl) Create(ctx context.Context, p CustomerCreateParams, opts ...RequestOption) (*Customer, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customers"))
 	if err != nil {
 		return nil, err
 	}
@@ -104,10 +111,10 @@ func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams, op
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -116,7 +123,7 @@ func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams, op
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -160,39 +167,44 @@ func (s *CustomerService) Create(ctx context.Context, p CustomerCreateParams, op
 	return result.Customer, nil
 }
 
-// CustomerListParams parameters
-type CustomerListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency      string `url:"currency,omitempty" json:"currency,omitempty"`
-	Limit         int    `url:"limit,omitempty" json:"limit,omitempty"`
-	SortDirection string `url:"sort_direction,omitempty" json:"sort_direction,omitempty"`
-	SortField     string `url:"sort_field,omitempty" json:"sort_field,omitempty"`
+type CustomerListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
-// CustomerListResult response including pagination metadata
+// CustomerListParams parameters
+type CustomerListParams struct {
+	After         string                       `url:"after,omitempty" json:"after,omitempty"`
+	Before        string                       `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt     *CustomerListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency      string                       `url:"currency,omitempty" json:"currency,omitempty"`
+	Limit         int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	SortDirection string                       `url:"sort_direction,omitempty" json:"sort_direction,omitempty"`
+	SortField     string                       `url:"sort_field,omitempty" json:"sort_field,omitempty"`
+}
+
+type CustomerListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type CustomerListResultMeta struct {
+	Cursors *CustomerListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                            `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type CustomerListResult struct {
-	Customers []Customer `json:"customers"`
-	Meta      struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Customers []Customer             `json:"customers"`
+	Meta      CustomerListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // customers.
-func (s *CustomerService) List(ctx context.Context, p CustomerListParams, opts ...RequestOption) (*CustomerListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers"))
+func (s *CustomerServiceImpl) List(ctx context.Context, p CustomerListParams, opts ...RequestOption) (*CustomerListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customers"))
 	if err != nil {
 		return nil, err
 	}
@@ -220,17 +232,17 @@ func (s *CustomerService) List(ctx context.Context, p CustomerListParams, opts .
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -278,7 +290,7 @@ type CustomerListPagingIterator struct {
 	cursor         string
 	response       *CustomerListResult
 	params         CustomerListParams
-	service        *CustomerService
+	service        *CustomerServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -299,7 +311,7 @@ func (c *CustomerListPagingIterator) Value(ctx context.Context) (*CustomerListRe
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customers"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customers"))
 
 	if err != nil {
 		return nil, err
@@ -329,16 +341,16 @@ func (c *CustomerListPagingIterator) Value(ctx context.Context) (*CustomerListRe
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -385,7 +397,7 @@ func (c *CustomerListPagingIterator) Value(ctx context.Context) (*CustomerListRe
 	return c.response, nil
 }
 
-func (s *CustomerService) All(ctx context.Context,
+func (s *CustomerServiceImpl) All(ctx context.Context,
 	p CustomerListParams,
 	opts ...RequestOption) *CustomerListPagingIterator {
 	return &CustomerListPagingIterator{
@@ -397,8 +409,8 @@ func (s *CustomerService) All(ctx context.Context,
 
 // Get
 // Retrieves the details of an existing customer.
-func (s *CustomerService) Get(ctx context.Context, identity string, opts ...RequestOption) (*Customer, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/customers/%v",
+func (s *CustomerServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Customer, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -421,17 +433,17 @@ func (s *CustomerService) Get(ctx context.Context, identity string, opts ...Requ
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -498,8 +510,8 @@ type CustomerUpdateParams struct {
 // Update
 // Updates a customer object. Supports all of the fields supported when creating
 // a customer.
-func (s *CustomerService) Update(ctx context.Context, identity string, p CustomerUpdateParams, opts ...RequestOption) (*Customer, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/customers/%v",
+func (s *CustomerServiceImpl) Update(ctx context.Context, identity string, p CustomerUpdateParams, opts ...RequestOption) (*Customer, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -534,10 +546,10 @@ func (s *CustomerService) Update(ctx context.Context, identity string, p Custome
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -546,7 +558,7 @@ func (s *CustomerService) Update(ctx context.Context, identity string, p Custome
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -591,7 +603,8 @@ func (s *CustomerService) Update(ctx context.Context, identity string, p Custome
 }
 
 // CustomerRemoveParams parameters
-type CustomerRemoveParams map[string]interface{}
+type CustomerRemoveParams struct {
+}
 
 // Remove
 // Removed customers will not appear in search results or lists of customers (in
@@ -602,8 +615,8 @@ type CustomerRemoveParams map[string]interface{}
 //
 // <p class="restricted-notice"><strong>The action of removing a customer cannot
 // be reversed, so please use with care.</strong></p>
-func (s *CustomerService) Remove(ctx context.Context, identity string, p CustomerRemoveParams, opts ...RequestOption) (*Customer, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/customers/%v",
+func (s *CustomerServiceImpl) Remove(ctx context.Context, identity string, p CustomerRemoveParams, opts ...RequestOption) (*Customer, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -638,10 +651,10 @@ func (s *CustomerService) Remove(ctx context.Context, identity string, p Custome
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -650,7 +663,7 @@ func (s *CustomerService) Remove(ctx context.Context, identity string, p Custome
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

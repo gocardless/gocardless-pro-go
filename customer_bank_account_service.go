@@ -19,44 +19,55 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // CustomerBankAccountService manages customer_bank_accounts
-type CustomerBankAccountService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type CustomerBankAccountServiceImpl struct {
+	config Config
+}
+
+type CustomerBankAccountLinks struct {
+	Customer string `url:"customer,omitempty" json:"customer,omitempty"`
 }
 
 // CustomerBankAccount model
 type CustomerBankAccount struct {
-	AccountHolderName   string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumberEnding string `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
-	AccountType         string `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankName            string `url:"bank_name,omitempty" json:"bank_name,omitempty"`
-	CountryCode         string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	CreatedAt           string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency            string `url:"currency,omitempty" json:"currency,omitempty"`
-	Enabled             bool   `url:"enabled,omitempty" json:"enabled,omitempty"`
-	Id                  string `url:"id,omitempty" json:"id,omitempty"`
-	Links               struct {
-		Customer string `url:"customer,omitempty" json:"customer,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	AccountHolderName   string                    `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumberEnding string                    `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
+	AccountType         string                    `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankName            string                    `url:"bank_name,omitempty" json:"bank_name,omitempty"`
+	CountryCode         string                    `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreatedAt           string                    `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency            string                    `url:"currency,omitempty" json:"currency,omitempty"`
+	Enabled             bool                      `url:"enabled,omitempty" json:"enabled,omitempty"`
+	Id                  string                    `url:"id,omitempty" json:"id,omitempty"`
+	Links               *CustomerBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata            map[string]interface{}    `url:"metadata,omitempty" json:"metadata,omitempty"`
+}
+
+type CustomerBankAccountService interface {
+	Create(ctx context.Context, p CustomerBankAccountCreateParams, opts ...RequestOption) (*CustomerBankAccount, error)
+	List(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) (*CustomerBankAccountListResult, error)
+	All(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) *CustomerBankAccountListPagingIterator
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error)
+	Update(ctx context.Context, identity string, p CustomerBankAccountUpdateParams, opts ...RequestOption) (*CustomerBankAccount, error)
+	Disable(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error)
+}
+
+type CustomerBankAccountCreateParamsLinks struct {
+	Customer                 string `url:"customer,omitempty" json:"customer,omitempty"`
+	CustomerBankAccountToken string `url:"customer_bank_account_token,omitempty" json:"customer_bank_account_token,omitempty"`
 }
 
 // CustomerBankAccountCreateParams parameters
 type CustomerBankAccountCreateParams struct {
-	AccountHolderName string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumber     string `url:"account_number,omitempty" json:"account_number,omitempty"`
-	AccountType       string `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankCode          string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-	BranchCode        string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	CountryCode       string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Currency          string `url:"currency,omitempty" json:"currency,omitempty"`
-	Iban              string `url:"iban,omitempty" json:"iban,omitempty"`
-	Links             struct {
-		Customer                 string `url:"customer,omitempty" json:"customer,omitempty"`
-		CustomerBankAccountToken string `url:"customer_bank_account_token,omitempty" json:"customer_bank_account_token,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	AccountHolderName string                               `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber     string                               `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountType       string                               `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankCode          string                               `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode        string                               `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode       string                               `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Currency          string                               `url:"currency,omitempty" json:"currency,omitempty"`
+	Iban              string                               `url:"iban,omitempty" json:"iban,omitempty"`
+	Links             CustomerBankAccountCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata          map[string]interface{}               `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Create
@@ -73,8 +84,8 @@ type CustomerBankAccountCreateParams struct {
 //
 // For more information on the different fields required in each country, see
 // [local bank details](#appendix-local-bank-details).
-func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankAccountCreateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customer_bank_accounts"))
+func (s *CustomerBankAccountServiceImpl) Create(ctx context.Context, p CustomerBankAccountCreateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
 	if err != nil {
 		return nil, err
 	}
@@ -108,10 +119,10 @@ func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankA
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -120,7 +131,7 @@ func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankA
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -164,38 +175,43 @@ func (s *CustomerBankAccountService) Create(ctx context.Context, p CustomerBankA
 	return result.CustomerBankAccount, nil
 }
 
-// CustomerBankAccountListParams parameters
-type CustomerBankAccountListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer string `url:"customer,omitempty" json:"customer,omitempty"`
-	Enabled  bool   `url:"enabled,omitempty" json:"enabled,omitempty"`
-	Limit    int    `url:"limit,omitempty" json:"limit,omitempty"`
+type CustomerBankAccountListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
-// CustomerBankAccountListResult response including pagination metadata
+// CustomerBankAccountListParams parameters
+type CustomerBankAccountListParams struct {
+	After     string                                  `url:"after,omitempty" json:"after,omitempty"`
+	Before    string                                  `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt *CustomerBankAccountListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Customer  string                                  `url:"customer,omitempty" json:"customer,omitempty"`
+	Enabled   bool                                    `url:"enabled,omitempty" json:"enabled,omitempty"`
+	Limit     int                                     `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
+type CustomerBankAccountListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type CustomerBankAccountListResultMeta struct {
+	Cursors *CustomerBankAccountListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                       `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type CustomerBankAccountListResult struct {
-	CustomerBankAccounts []CustomerBankAccount `json:"customer_bank_accounts"`
-	Meta                 struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	CustomerBankAccounts []CustomerBankAccount             `json:"customer_bank_accounts"`
+	Meta                 CustomerBankAccountListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your bank
 // accounts.
-func (s *CustomerBankAccountService) List(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) (*CustomerBankAccountListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customer_bank_accounts"))
+func (s *CustomerBankAccountServiceImpl) List(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) (*CustomerBankAccountListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
 	if err != nil {
 		return nil, err
 	}
@@ -223,17 +239,17 @@ func (s *CustomerBankAccountService) List(ctx context.Context, p CustomerBankAcc
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -281,7 +297,7 @@ type CustomerBankAccountListPagingIterator struct {
 	cursor         string
 	response       *CustomerBankAccountListResult
 	params         CustomerBankAccountListParams
-	service        *CustomerBankAccountService
+	service        *CustomerBankAccountServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -302,7 +318,7 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/customer_bank_accounts"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
 
 	if err != nil {
 		return nil, err
@@ -332,16 +348,16 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -388,7 +404,7 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 	return c.response, nil
 }
 
-func (s *CustomerBankAccountService) All(ctx context.Context,
+func (s *CustomerBankAccountServiceImpl) All(ctx context.Context,
 	p CustomerBankAccountListParams,
 	opts ...RequestOption) *CustomerBankAccountListPagingIterator {
 	return &CustomerBankAccountListPagingIterator{
@@ -400,8 +416,8 @@ func (s *CustomerBankAccountService) All(ctx context.Context,
 
 // Get
 // Retrieves the details of an existing bank account.
-func (s *CustomerBankAccountService) Get(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/customer_bank_accounts/%v",
+func (s *CustomerBankAccountServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_bank_accounts/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -424,17 +440,17 @@ func (s *CustomerBankAccountService) Get(ctx context.Context, identity string, o
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -486,8 +502,8 @@ type CustomerBankAccountUpdateParams struct {
 // Update
 // Updates a customer bank account object. Only the metadata parameter is
 // allowed.
-func (s *CustomerBankAccountService) Update(ctx context.Context, identity string, p CustomerBankAccountUpdateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/customer_bank_accounts/%v",
+func (s *CustomerBankAccountServiceImpl) Update(ctx context.Context, identity string, p CustomerBankAccountUpdateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_bank_accounts/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -522,10 +538,10 @@ func (s *CustomerBankAccountService) Update(ctx context.Context, identity string
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -534,7 +550,7 @@ func (s *CustomerBankAccountService) Update(ctx context.Context, identity string
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -586,8 +602,8 @@ func (s *CustomerBankAccountService) Update(ctx context.Context, identity string
 //
 // A disabled bank account can be re-enabled by creating a new bank account
 // resource with the same details.
-func (s *CustomerBankAccountService) Disable(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/customer_bank_accounts/%v/actions/disable",
+func (s *CustomerBankAccountServiceImpl) Disable(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_bank_accounts/%v/actions/disable",
 		identity))
 	if err != nil {
 		return nil, err
@@ -613,10 +629,10 @@ func (s *CustomerBankAccountService) Disable(ctx context.Context, identity strin
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -625,7 +641,7 @@ func (s *CustomerBankAccountService) Disable(ctx context.Context, identity strin
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

@@ -19,10 +19,8 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // InstitutionService manages institutions
-type InstitutionService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type InstitutionServiceImpl struct {
+	config Config
 }
 
 // Institution model
@@ -35,27 +33,34 @@ type Institution struct {
 	Roles       []string `url:"roles,omitempty" json:"roles,omitempty"`
 }
 
+type InstitutionService interface {
+	List(ctx context.Context, p InstitutionListParams, opts ...RequestOption) (*InstitutionListResult, error)
+}
+
 // InstitutionListParams parameters
 type InstitutionListParams struct {
 	CountryCode string `url:"country_code,omitempty" json:"country_code,omitempty"`
 }
 
-// InstitutionListResult response including pagination metadata
+type InstitutionListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type InstitutionListResultMeta struct {
+	Cursors *InstitutionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                               `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type InstitutionListResult struct {
-	Institutions []Institution `json:"institutions"`
-	Meta         struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Institutions []Institution             `json:"institutions"`
+	Meta         InstitutionListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
-// Returns a list of all supported institutions.
-func (s *InstitutionService) List(ctx context.Context, p InstitutionListParams, opts ...RequestOption) (*InstitutionListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/institutions"))
+// Returns a list of supported institutions.
+func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListParams, opts ...RequestOption) (*InstitutionListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/institutions"))
 	if err != nil {
 		return nil, err
 	}
@@ -83,17 +88,17 @@ func (s *InstitutionService) List(ctx context.Context, p InstitutionListParams, 
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

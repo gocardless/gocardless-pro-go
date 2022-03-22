@@ -19,10 +19,8 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // BankDetailsLookupService manages bank_details_lookups
-type BankDetailsLookupService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type BankDetailsLookupServiceImpl struct {
+	config Config
 }
 
 // BankDetailsLookup model
@@ -30,6 +28,10 @@ type BankDetailsLookup struct {
 	AvailableDebitSchemes []string `url:"available_debit_schemes,omitempty" json:"available_debit_schemes,omitempty"`
 	BankName              string   `url:"bank_name,omitempty" json:"bank_name,omitempty"`
 	Bic                   string   `url:"bic,omitempty" json:"bic,omitempty"`
+}
+
+type BankDetailsLookupService interface {
+	Create(ctx context.Context, p BankDetailsLookupCreateParams, opts ...RequestOption) (*BankDetailsLookup, error)
 }
 
 // BankDetailsLookupCreateParams parameters
@@ -60,8 +62,8 @@ type BankDetailsLookupCreateParams struct {
 // GoCardless for
 // modulus or reachability checking but not for payment collection, please get
 // in touch.
-func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLookupCreateParams, opts ...RequestOption) (*BankDetailsLookup, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/bank_details_lookups"))
+func (s *BankDetailsLookupServiceImpl) Create(ctx context.Context, p BankDetailsLookupCreateParams, opts ...RequestOption) (*BankDetailsLookup, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/bank_details_lookups"))
 	if err != nil {
 		return nil, err
 	}
@@ -95,10 +97,10 @@ func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLook
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -107,7 +109,7 @@ func (s *BankDetailsLookupService) Create(ctx context.Context, p BankDetailsLook
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

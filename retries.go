@@ -69,6 +69,10 @@ func (r *responseError) Cause() error {
 	return r.err
 }
 
+func (r *responseError) Unwrap() error {
+	return r.err
+}
+
 func (r *responseError) Error() string {
 	return r.res.Status
 }
