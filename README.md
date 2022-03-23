@@ -1,4 +1,4 @@
-# Go Client Library for GoCardless Pro Api
+# Go Client Library for GoCardless Pro API [![CircleCI](https://circleci.com/gh/gocardless/gocardless-pro-go-template/tree/master.svg?style=svg&circle-token=68c31e704d9b0020a5f42b4b89b0a77a17bdac6c)](https://circleci.com/gh/gocardless/gocardless-pro-go-template/tree/master)
 
 This library provides a simple wrapper around the [GoCardless API](http://developer.gocardless.com/api-reference).
 
@@ -40,10 +40,14 @@ The client is initialised with an access token, and is configured to use GoCardl
     token := "your_access_token"
     config, err := gocardless.NewConfig(token)
     if err != nil {
-        fmt.Printf("got err in initialising client: %s", err.Error())
+        fmt.Printf("got err in initialising config: %s", err.Error())
         return
     }
     client, err := gocardless.New(config)
+    if err != nil {
+		fmt.Printf("error in initialisating client: %s", err.Error())
+		return
+	}
 ```
 
 
@@ -51,10 +55,14 @@ Optionally, the client can be customised with endpoint, for ex: sandbox environm
 ```go
     config, err := gocardless.NewConfig(token, gocardless.WithEndpoint(gocardless.SandboxEndpoint))
     if err != nil {
-        fmt.Printf("got err in initialising client: %s", err.Error())
+        fmt.Printf("got err in initialising config: %s", err.Error())
         return
     }
     client, err := gocardless.New(config)
+    if err != nil {
+		fmt.Printf("error in initialisating client: %s", err.Error())
+		return
+	}
 ```
 
 the client can also be initialised with a customised http client, for ex;
@@ -64,10 +72,14 @@ the client can also be initialised with a customised http client, for ex;
     }
     config, err := gocardless.NewConfig(token, gocardless.WithClient(customHttpClient))
     if err != nil {
-        fmt.Printf("got err in initialising client: %s", err.Error())
+        fmt.Printf("got err in initialising config: %s", err.Error())
         return
     }
     client, err := gocardless.New(config)
+    if err != nil {
+		fmt.Printf("error in initialisating client: %s", err.Error())
+		return
+	}
 ```
 
 ## Examples 
