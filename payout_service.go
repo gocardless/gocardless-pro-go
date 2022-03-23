@@ -19,74 +19,88 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // PayoutService manages payouts
-type PayoutService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type PayoutServiceImpl struct {
+	config Config
+}
+
+type PayoutFx struct {
+	EstimatedExchangeRate string `url:"estimated_exchange_rate,omitempty" json:"estimated_exchange_rate,omitempty"`
+	ExchangeRate          string `url:"exchange_rate,omitempty" json:"exchange_rate,omitempty"`
+	FxAmount              int    `url:"fx_amount,omitempty" json:"fx_amount,omitempty"`
+	FxCurrency            string `url:"fx_currency,omitempty" json:"fx_currency,omitempty"`
+}
+
+type PayoutLinks struct {
+	Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	CreditorBankAccount string `url:"creditor_bank_account,omitempty" json:"creditor_bank_account,omitempty"`
 }
 
 // Payout model
 type Payout struct {
-	Amount       int    `url:"amount,omitempty" json:"amount,omitempty"`
-	ArrivalDate  string `url:"arrival_date,omitempty" json:"arrival_date,omitempty"`
-	CreatedAt    string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency     string `url:"currency,omitempty" json:"currency,omitempty"`
-	DeductedFees int    `url:"deducted_fees,omitempty" json:"deducted_fees,omitempty"`
-	Fx           struct {
-		EstimatedExchangeRate string `url:"estimated_exchange_rate,omitempty" json:"estimated_exchange_rate,omitempty"`
-		ExchangeRate          string `url:"exchange_rate,omitempty" json:"exchange_rate,omitempty"`
-		FxAmount              int    `url:"fx_amount,omitempty" json:"fx_amount,omitempty"`
-		FxCurrency            string `url:"fx_currency,omitempty" json:"fx_currency,omitempty"`
-	} `url:"fx,omitempty" json:"fx,omitempty"`
-	Id    string `url:"id,omitempty" json:"id,omitempty"`
-	Links struct {
-		Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
-		CreditorBankAccount string `url:"creditor_bank_account,omitempty" json:"creditor_bank_account,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayoutType  string                 `url:"payout_type,omitempty" json:"payout_type,omitempty"`
-	Reference   string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Status      string                 `url:"status,omitempty" json:"status,omitempty"`
-	TaxCurrency string                 `url:"tax_currency,omitempty" json:"tax_currency,omitempty"`
+	Amount       int                    `url:"amount,omitempty" json:"amount,omitempty"`
+	ArrivalDate  string                 `url:"arrival_date,omitempty" json:"arrival_date,omitempty"`
+	CreatedAt    string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency     string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	DeductedFees int                    `url:"deducted_fees,omitempty" json:"deducted_fees,omitempty"`
+	Fx           *PayoutFx              `url:"fx,omitempty" json:"fx,omitempty"`
+	Id           string                 `url:"id,omitempty" json:"id,omitempty"`
+	Links        *PayoutLinks           `url:"links,omitempty" json:"links,omitempty"`
+	Metadata     map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayoutType   string                 `url:"payout_type,omitempty" json:"payout_type,omitempty"`
+	Reference    string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Status       string                 `url:"status,omitempty" json:"status,omitempty"`
+	TaxCurrency  string                 `url:"tax_currency,omitempty" json:"tax_currency,omitempty"`
+}
+
+type PayoutService interface {
+	List(ctx context.Context, p PayoutListParams, opts ...RequestOption) (*PayoutListResult, error)
+	All(ctx context.Context, p PayoutListParams, opts ...RequestOption) *PayoutListPagingIterator
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*Payout, error)
+	Update(ctx context.Context, identity string, p PayoutUpdateParams, opts ...RequestOption) (*Payout, error)
+}
+
+type PayoutListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
 // PayoutListParams parameters
 type PayoutListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Creditor            string                 `url:"creditor,omitempty" json:"creditor,omitempty"`
-	CreditorBankAccount string                 `url:"creditor_bank_account,omitempty" json:"creditor_bank_account,omitempty"`
-	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Limit               int                    `url:"limit,omitempty" json:"limit,omitempty"`
-	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayoutType          string                 `url:"payout_type,omitempty" json:"payout_type,omitempty"`
-	Reference           string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Status              string                 `url:"status,omitempty" json:"status,omitempty"`
+	After               string                     `url:"after,omitempty" json:"after,omitempty"`
+	Before              string                     `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt           *PayoutListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Creditor            string                     `url:"creditor,omitempty" json:"creditor,omitempty"`
+	CreditorBankAccount string                     `url:"creditor_bank_account,omitempty" json:"creditor_bank_account,omitempty"`
+	Currency            string                     `url:"currency,omitempty" json:"currency,omitempty"`
+	Limit               int                        `url:"limit,omitempty" json:"limit,omitempty"`
+	Metadata            map[string]interface{}     `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayoutType          string                     `url:"payout_type,omitempty" json:"payout_type,omitempty"`
+	Reference           string                     `url:"reference,omitempty" json:"reference,omitempty"`
+	Status              string                     `url:"status,omitempty" json:"status,omitempty"`
 }
 
-// PayoutListResult response including pagination metadata
+type PayoutListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type PayoutListResultMeta struct {
+	Cursors *PayoutListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type PayoutListResult struct {
-	Payouts []Payout `json:"payouts"`
-	Meta    struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Payouts []Payout             `json:"payouts"`
+	Meta    PayoutListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // payouts.
-func (s *PayoutService) List(ctx context.Context, p PayoutListParams, opts ...RequestOption) (*PayoutListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payouts"))
+func (s *PayoutServiceImpl) List(ctx context.Context, p PayoutListParams, opts ...RequestOption) (*PayoutListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payouts"))
 	if err != nil {
 		return nil, err
 	}
@@ -114,17 +128,17 @@ func (s *PayoutService) List(ctx context.Context, p PayoutListParams, opts ...Re
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -172,7 +186,7 @@ type PayoutListPagingIterator struct {
 	cursor         string
 	response       *PayoutListResult
 	params         PayoutListParams
-	service        *PayoutService
+	service        *PayoutServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -193,7 +207,7 @@ func (c *PayoutListPagingIterator) Value(ctx context.Context) (*PayoutListResult
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/payouts"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payouts"))
 
 	if err != nil {
 		return nil, err
@@ -223,16 +237,16 @@ func (c *PayoutListPagingIterator) Value(ctx context.Context) (*PayoutListResult
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -279,7 +293,7 @@ func (c *PayoutListPagingIterator) Value(ctx context.Context) (*PayoutListResult
 	return c.response, nil
 }
 
-func (s *PayoutService) All(ctx context.Context,
+func (s *PayoutServiceImpl) All(ctx context.Context,
 	p PayoutListParams,
 	opts ...RequestOption) *PayoutListPagingIterator {
 	return &PayoutListPagingIterator{
@@ -293,8 +307,8 @@ func (s *PayoutService) All(ctx context.Context,
 // Retrieves the details of a single payout. For an example of how to reconcile
 // the transactions in a payout, see [this
 // guide](#events-reconciling-payouts-with-events).
-func (s *PayoutService) Get(ctx context.Context, identity string, opts ...RequestOption) (*Payout, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/payouts/%v",
+func (s *PayoutServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Payout, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payouts/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -317,17 +331,17 @@ func (s *PayoutService) Get(ctx context.Context, identity string, opts ...Reques
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -378,8 +392,8 @@ type PayoutUpdateParams struct {
 
 // Update
 // Updates a payout object. This accepts only the metadata parameter.
-func (s *PayoutService) Update(ctx context.Context, identity string, p PayoutUpdateParams, opts ...RequestOption) (*Payout, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/payouts/%v",
+func (s *PayoutServiceImpl) Update(ctx context.Context, identity string, p PayoutUpdateParams, opts ...RequestOption) (*Payout, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payouts/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -414,10 +428,10 @@ func (s *PayoutService) Update(ctx context.Context, identity string, p PayoutUpd
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -426,7 +440,7 @@ func (s *PayoutService) Update(ctx context.Context, identity string, p PayoutUpd
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

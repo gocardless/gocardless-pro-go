@@ -19,10 +19,8 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // ScenarioSimulatorService manages scenario_simulators
-type ScenarioSimulatorService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type ScenarioSimulatorServiceImpl struct {
+	config Config
 }
 
 // ScenarioSimulator model
@@ -30,17 +28,23 @@ type ScenarioSimulator struct {
 	Id string `url:"id,omitempty" json:"id,omitempty"`
 }
 
+type ScenarioSimulatorService interface {
+	Run(ctx context.Context, identity string, p ScenarioSimulatorRunParams, opts ...RequestOption) (*ScenarioSimulator, error)
+}
+
+type ScenarioSimulatorRunParamsLinks struct {
+	Resource string `url:"resource,omitempty" json:"resource,omitempty"`
+}
+
 // ScenarioSimulatorRunParams parameters
 type ScenarioSimulatorRunParams struct {
-	Links struct {
-		Resource string `url:"resource,omitempty" json:"resource,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
+	Links *ScenarioSimulatorRunParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 }
 
 // Run
 // Runs the specific scenario simulator against the specific resource
-func (s *ScenarioSimulatorService) Run(ctx context.Context, identity string, p ScenarioSimulatorRunParams, opts ...RequestOption) (*ScenarioSimulator, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/scenario_simulators/%v/actions/run",
+func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string, p ScenarioSimulatorRunParams, opts ...RequestOption) (*ScenarioSimulator, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/scenario_simulators/%v/actions/run",
 		identity))
 	if err != nil {
 		return nil, err
@@ -75,10 +79,10 @@ func (s *ScenarioSimulatorService) Run(ctx context.Context, identity string, p S
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -87,7 +91,7 @@ func (s *ScenarioSimulatorService) Run(ctx context.Context, identity string, p S
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

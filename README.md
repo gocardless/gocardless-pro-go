@@ -1,4 +1,4 @@
-# Go Client Library for GoCardless Pro Api
+# Go Client Library for GoCardless Pro API [![CircleCI](https://circleci.com/gh/gocardless/gocardless-pro-go-template/tree/master.svg?style=svg&circle-token=68c31e704d9b0020a5f42b4b89b0a77a17bdac6c)](https://circleci.com/gh/gocardless/gocardless-pro-go-template/tree/master)
 
 This library provides a simple wrapper around the [GoCardless API](http://developer.gocardless.com/api-reference).
 
@@ -18,7 +18,7 @@ go mod tidy
 Then, reference gocardless-pro-go in a Go program with `import`:
 ``` go
 import (
-    gocardless "github.com/gocardless/gocardless-pro-go"
+    gocardless "github.com/gocardless/gocardless-pro-go/v2"
 )
 ```
 
@@ -29,7 +29,7 @@ toolchain will resolve and fetch the gocardless-pro-go module automatically.
 Alternatively, you can also explicitly `go get` the package into a project:
 
 ```
-go get -u github.com/gocardless/gocardless-pro-go/v1.0.0
+go get -u github.com/gocardless/gocardless-pro-go@v2.0.0
 ```
 
 ## Initializing the client
@@ -38,14 +38,31 @@ The client is initialised with an access token, and is configured to use GoCardl
 
 ```go
     token := "your_access_token"
-    client, err := gocardless.New(token)
+    config, err := gocardless.NewConfig(token)
+    if err != nil {
+        fmt.Printf("got err in initialising config: %s", err.Error())
+        return
+    }
+    client, err := gocardless.New(config)
+    if err != nil {
+		fmt.Printf("error in initialisating client: %s", err.Error())
+		return
+	}
 ```
 
 
 Optionally, the client can be customised with endpoint, for ex: sandbox environment
 ```go
-    opts := gocardless.WithEndpoint(gocardless.SandboxEndpoint)
-    client, err := gocardless.New(token, opts)
+    config, err := gocardless.NewConfig(token, gocardless.WithEndpoint(gocardless.SandboxEndpoint))
+    if err != nil {
+        fmt.Printf("got err in initialising config: %s", err.Error())
+        return
+    }
+    client, err := gocardless.New(config)
+    if err != nil {
+		fmt.Printf("error in initialisating client: %s", err.Error())
+		return
+	}
 ```
 
 the client can also be initialised with a customised http client, for ex;
@@ -53,8 +70,16 @@ the client can also be initialised with a customised http client, for ex;
     customHttpClient := &http.Client{
         Timeout: time.Second * 10,
     }
-    opts := gocardless.WithClient(customHttpClient)
-    client, err := gocardless.New(token, opts)
+    config, err := gocardless.NewConfig(token, gocardless.WithClient(customHttpClient))
+    if err != nil {
+        fmt.Printf("got err in initialising config: %s", err.Error())
+        return
+    }
+    client, err := gocardless.New(config)
+    if err != nil {
+		fmt.Printf("error in initialisating client: %s", err.Error())
+		return
+	}
 ```
 
 ## Examples 
@@ -92,7 +117,7 @@ To fetch items in a collection, there are two options:
 ```go
     ctx := context.TODO()
     customerListParams := gocardless.CustomerListParams{}
-    customerListIterator := service.Customers.All(ctx, customerListParams)
+    customerListIterator := client.Customers.All(ctx, customerListParams)
     for customerListIterator.Next() {
         customerListResult, err := customerListIterator.Value(ctx)
         if err != nil {
@@ -109,14 +134,15 @@ Resources can be created with the `Create` method:
 
 ```go
     ctx := context.TODO()
-    customerCreateParams := CustomerCreateParams{}
-    customerCreateParams.AddressLine1 = "9 Acer Gardens"
-    customerCreateParams.City = "Birmingham"
-    customerCreateParams.CountryCode = "GB"
-    customerCreateParams.Email = "bbr@example.xom"
-    customerCreateParams.FamilyName = "Rodgriguez"
-    customerCreateParams.GivenName = "Bender Bending"
-    customerCreateParams.PostalCode = "B4 7NJ"
+    customerCreateParams := gocardless.CustomerCreateParams{
+        AddressLine1: "9 Acer Gardens"
+        City:         "Birmingham",
+        PostalCode:   "B4 7NJ",
+        CountryCode:  "GB",
+        Email:        "bbr@example.com",
+        GivenName:    "Bender Bending",
+        FamilyName:   "Rodgriguez",
+    }
 
     customer, err := client.Customers.Create(ctx, customerCreateParams)
 ```
@@ -127,8 +153,9 @@ Resources can be updates with the `Update` method:
 
 ```go
     ctx := context.TODO()
-    customerUpdateParams := CustomerUpdateParams{}
-    customerUpdateParams.GivenName = "New name"
+    customerUpdateParams := CustomerUpdateParams{
+        GivenName: "New Name",
+    }
 
     customer, err := client.Customers.Update(ctx, "CU123", customerUpdateParams)
 ```
@@ -152,7 +179,7 @@ The library will attempt to retry most failing requests automatically (with the 
 
 ```go
     requestOption := gocardless.WithoutRetries()
-    customersCreateResult, err := service.Customers.Create(ctx, customerCreateParams, requestOption)
+    customersCreateResult, err := client.Customers.Create(ctx, customerCreateParams, requestOption)
 ```
 
 ### Setting custom headers
@@ -163,7 +190,7 @@ in some cases (for example if you want to send an `Accept-Language` header when 
     headers := make(map[string]string)
     headers["Accept-Language"] = "fr"
     requestOption := gocardless.WithHeaders(headers)
-    customersCreateResult, err := service.Customers.Create(ctx, customerCreateParams, requestOption)
+    customersCreateResult, err := client.Customers.Create(ctx, customerCreateParams, requestOption)
 ```
 
 Custom headers you specify will override any headers generated by the library itself (for
@@ -171,7 +198,7 @@ example, an `Idempotency-Key` header with a randomly-generated value or one you'
 manually). Custom headers always take precedence.
 ```go
     requestOption := gocardless.WithIdempotencyKey("test-idemptency-key-123")
-    customersCreateResult, err := service.Customers.Create(ctx, customerCreateParams, requestOption)
+    customersCreateResult, err := client.Customers.Create(ctx, customerCreateParams, requestOption)
 ```
 
 ### Handling webhooks
@@ -196,6 +223,21 @@ The client allows you to validate that a webhook you receive is genuinely from G
         // work through list of events
     }
 ``` 
+
+### Error Handling
+
+When the library returns an `error` defined by us rather than the stdlib, it can be converted into a `gocardless.APIError` using `errors.As`:
+
+```go
+    billingRequest, err := client.BillingRequests.Create(ctx, billingRequestCreateParams)
+	if err != nil {
+		var apiErr *gocardless.APIError
+		if errors.As(err, &apiErr) {
+			fmt.Printf("got err: %v", apiErr.Message)
+		}
+		return nil, err
+	}
+```
 
 ## Compatibility
 

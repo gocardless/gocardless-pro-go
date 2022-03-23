@@ -6,32 +6,87 @@ import (
 	"net/url"
 )
 
-// Option used to initialise the client
-type Option func(*options) error
+const (
 
-type options struct {
+	// Live environment
+	LiveEndpoint = "https://api.gocardless.com"
+
+	// Sandbox environment
+	SandboxEndpoint = "https://api-sandbox.gocardless.com"
+)
+
+// ConfigOption used to initialise the client
+type ConfigOption func(Config) error
+
+type Config interface {
+	Token() string
+	Endpoint() string
+	Client() *http.Client
+}
+
+type config struct {
+	token    string
 	endpoint string
 	client   *http.Client
 }
 
+func (c *config) Token() string {
+	return c.token
+}
+
+func (c *config) Endpoint() string {
+	return c.endpoint
+}
+
+func (c *config) Client() *http.Client {
+	return c.client
+}
+
 // WithEndpoint configures the endpoint hosting the API
-func WithEndpoint(endpoint string) Option {
-	return func(opts *options) error {
+func WithEndpoint(endpoint string) ConfigOption {
+	return func(cfg Config) error {
 		u, err := url.Parse(endpoint)
 		if err != nil {
 			return err
 		}
-		opts.endpoint = u.String()
+		if c, ok := cfg.(*config); ok {
+			c.endpoint = u.String()
+		} else {
+			return errors.New("invalid input, input is not of type config")
+		}
 		return nil
 	}
 }
 
 // WithClient configures the net/http client
-func WithClient(c *http.Client) Option {
-	return func(opts *options) error {
-		opts.client = c
+func WithClient(client *http.Client) ConfigOption {
+	return func(cfg Config) error {
+		if c, ok := cfg.(*config); ok {
+			c.client = client
+		} else {
+			return errors.New("invalid input, input is not of type config")
+		}
 		return nil
 	}
+}
+
+func NewConfig(token string, configOpts ...ConfigOption) (Config, error) {
+	if token == "" {
+		return nil, errors.New("token required")
+	}
+
+	config := &config{
+		token:    token,
+		endpoint: LiveEndpoint,
+	}
+
+	for _, configOpt := range configOpts {
+		if err := configOpt(config); err != nil {
+			return nil, err
+		}
+	}
+
+	return config, nil
 }
 
 // RequestOption is used to configure a given request

@@ -19,10 +19,8 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // BlockService manages blocks
-type BlockService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type BlockServiceImpl struct {
+	config Config
 }
 
 // Block model
@@ -37,6 +35,17 @@ type Block struct {
 	UpdatedAt         string `url:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
+type BlockService interface {
+	Create(ctx context.Context, p BlockCreateParams, opts ...RequestOption) (*Block, error)
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*Block, error)
+	List(ctx context.Context, p BlockListParams, opts ...RequestOption) (*BlockListResult, error)
+	All(ctx context.Context, p BlockListParams, opts ...RequestOption) *BlockListPagingIterator
+	Disable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error)
+	Enable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error)
+	BlockByRef(ctx context.Context, p BlockBlockByRefParams, opts ...RequestOption) (
+		*BlockBlockByRefResult, error)
+}
+
 // BlockCreateParams parameters
 type BlockCreateParams struct {
 	Active            bool   `url:"active,omitempty" json:"active,omitempty"`
@@ -48,8 +57,8 @@ type BlockCreateParams struct {
 
 // Create
 // Creates a new Block of a given type. By default it will be active.
-func (s *BlockService) Create(ctx context.Context, p BlockCreateParams, opts ...RequestOption) (*Block, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/blocks"))
+func (s *BlockServiceImpl) Create(ctx context.Context, p BlockCreateParams, opts ...RequestOption) (*Block, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks"))
 	if err != nil {
 		return nil, err
 	}
@@ -83,10 +92,10 @@ func (s *BlockService) Create(ctx context.Context, p BlockCreateParams, opts ...
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -95,7 +104,7 @@ func (s *BlockService) Create(ctx context.Context, p BlockCreateParams, opts ...
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -141,8 +150,8 @@ func (s *BlockService) Create(ctx context.Context, p BlockCreateParams, opts ...
 
 // Get
 // Retrieves the details of an existing block.
-func (s *BlockService) Get(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/blocks/%v",
+func (s *BlockServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/blocks/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -165,17 +174,17 @@ func (s *BlockService) Get(ctx context.Context, identity string, opts ...Request
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -231,23 +240,26 @@ type BlockListParams struct {
 	UpdatedAt  string `url:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
-// BlockListResult response including pagination metadata
+type BlockListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type BlockListResultMeta struct {
+	Cursors *BlockListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type BlockListResult struct {
-	Blocks []Block `json:"blocks"`
-	Meta   struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Blocks []Block             `json:"blocks"`
+	Meta   BlockListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // blocks.
-func (s *BlockService) List(ctx context.Context, p BlockListParams, opts ...RequestOption) (*BlockListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/blocks"))
+func (s *BlockServiceImpl) List(ctx context.Context, p BlockListParams, opts ...RequestOption) (*BlockListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks"))
 	if err != nil {
 		return nil, err
 	}
@@ -275,17 +287,17 @@ func (s *BlockService) List(ctx context.Context, p BlockListParams, opts ...Requ
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -333,7 +345,7 @@ type BlockListPagingIterator struct {
 	cursor         string
 	response       *BlockListResult
 	params         BlockListParams
-	service        *BlockService
+	service        *BlockServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -354,7 +366,7 @@ func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, 
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/blocks"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks"))
 
 	if err != nil {
 		return nil, err
@@ -384,16 +396,16 @@ func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, 
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -440,7 +452,7 @@ func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, 
 	return c.response, nil
 }
 
-func (s *BlockService) All(ctx context.Context,
+func (s *BlockServiceImpl) All(ctx context.Context,
 	p BlockListParams,
 	opts ...RequestOption) *BlockListPagingIterator {
 	return &BlockListPagingIterator{
@@ -452,8 +464,8 @@ func (s *BlockService) All(ctx context.Context,
 
 // Disable
 // Disables a block so that it no longer will prevent mandate creation.
-func (s *BlockService) Disable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/blocks/%v/actions/disable",
+func (s *BlockServiceImpl) Disable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/blocks/%v/actions/disable",
 		identity))
 	if err != nil {
 		return nil, err
@@ -479,10 +491,10 @@ func (s *BlockService) Disable(ctx context.Context, identity string, opts ...Req
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -491,7 +503,7 @@ func (s *BlockService) Disable(ctx context.Context, identity string, opts ...Req
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -537,8 +549,8 @@ func (s *BlockService) Disable(ctx context.Context, identity string, opts ...Req
 
 // Enable
 // Enables a previously disabled block so that it will prevent mandate creation
-func (s *BlockService) Enable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/blocks/%v/actions/enable",
+func (s *BlockServiceImpl) Enable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/blocks/%v/actions/enable",
 		identity))
 	if err != nil {
 		return nil, err
@@ -564,10 +576,10 @@ func (s *BlockService) Enable(ctx context.Context, identity string, opts ...Requ
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -576,7 +588,7 @@ func (s *BlockService) Enable(ctx context.Context, identity string, opts ...Requ
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -628,24 +640,20 @@ type BlockBlockByRefParams struct {
 	ReferenceType     string `url:"reference_type,omitempty" json:"reference_type,omitempty"`
 	ReferenceValue    string `url:"reference_value,omitempty" json:"reference_value,omitempty"`
 }
+
+type BlockBlockByRefResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type BlockBlockByRefResultMeta struct {
+	Cursors *BlockBlockByRefResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                               `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type BlockBlockByRefResult struct {
-	Blocks []struct {
-		Active            bool   `url:"active,omitempty" json:"active,omitempty"`
-		BlockType         string `url:"block_type,omitempty" json:"block_type,omitempty"`
-		CreatedAt         string `url:"created_at,omitempty" json:"created_at,omitempty"`
-		Id                string `url:"id,omitempty" json:"id,omitempty"`
-		ReasonDescription string `url:"reason_description,omitempty" json:"reason_description,omitempty"`
-		ReasonType        string `url:"reason_type,omitempty" json:"reason_type,omitempty"`
-		ResourceReference string `url:"resource_reference,omitempty" json:"resource_reference,omitempty"`
-		UpdatedAt         string `url:"updated_at,omitempty" json:"updated_at,omitempty"`
-	} `url:"blocks,omitempty" json:"blocks,omitempty"`
-	Meta struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `url:"meta,omitempty" json:"meta,omitempty"`
+	Blocks []Block                   `json:"blocks"`
+	Meta   BlockBlockByRefResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // BlockByRef
@@ -653,9 +661,9 @@ type BlockBlockByRefResult struct {
 // Returns 201 if at least one block was created. Returns 200 if there were no
 // new
 // blocks created.
-func (s *BlockService) BlockByRef(ctx context.Context, p BlockBlockByRefParams, opts ...RequestOption) (
+func (s *BlockServiceImpl) BlockByRef(ctx context.Context, p BlockBlockByRefParams, opts ...RequestOption) (
 	*BlockBlockByRefResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/block_by_ref"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/block_by_ref"))
 	if err != nil {
 		return nil, err
 	}
@@ -689,10 +697,10 @@ func (s *BlockService) BlockByRef(ctx context.Context, p BlockBlockByRefParams, 
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -701,7 +709,7 @@ func (s *BlockService) BlockByRef(ctx context.Context, p BlockBlockByRefParams, 
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

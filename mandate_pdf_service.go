@@ -19,10 +19,8 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // MandatePdfService manages mandate_pdfs
-type MandatePdfService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type MandatePdfServiceImpl struct {
+	config Config
 }
 
 // MandatePdf model
@@ -31,34 +29,40 @@ type MandatePdf struct {
 	Url       string `url:"url,omitempty" json:"url,omitempty"`
 }
 
+type MandatePdfService interface {
+	Create(ctx context.Context, p MandatePdfCreateParams, opts ...RequestOption) (*MandatePdf, error)
+}
+
+type MandatePdfCreateParamsLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
+}
+
 // MandatePdfCreateParams parameters
 type MandatePdfCreateParams struct {
-	AccountHolderName    string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumber        string `url:"account_number,omitempty" json:"account_number,omitempty"`
-	AccountType          string `url:"account_type,omitempty" json:"account_type,omitempty"`
-	AddressLine1         string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2         string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3         string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	BankCode             string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-	Bic                  string `url:"bic,omitempty" json:"bic,omitempty"`
-	BranchCode           string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	City                 string `url:"city,omitempty" json:"city,omitempty"`
-	CountryCode          string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	DanishIdentityNumber string `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-	Iban                 string `url:"iban,omitempty" json:"iban,omitempty"`
-	Links                struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	MandateReference      string `url:"mandate_reference,omitempty" json:"mandate_reference,omitempty"`
-	PayerIpAddress        string `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
-	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
-	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region                string `url:"region,omitempty" json:"region,omitempty"`
-	Scheme                string `url:"scheme,omitempty" json:"scheme,omitempty"`
-	SignatureDate         string `url:"signature_date,omitempty" json:"signature_date,omitempty"`
-	SubscriptionAmount    int    `url:"subscription_amount,omitempty" json:"subscription_amount,omitempty"`
-	SubscriptionFrequency string `url:"subscription_frequency,omitempty" json:"subscription_frequency,omitempty"`
-	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+	AccountHolderName     string                       `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber         string                       `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountType           string                       `url:"account_type,omitempty" json:"account_type,omitempty"`
+	AddressLine1          string                       `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string                       `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string                       `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	BankCode              string                       `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	Bic                   string                       `url:"bic,omitempty" json:"bic,omitempty"`
+	BranchCode            string                       `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	City                  string                       `url:"city,omitempty" json:"city,omitempty"`
+	CountryCode           string                       `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string                       `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Iban                  string                       `url:"iban,omitempty" json:"iban,omitempty"`
+	Links                 *MandatePdfCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	MandateReference      string                       `url:"mandate_reference,omitempty" json:"mandate_reference,omitempty"`
+	PayerIpAddress        string                       `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
+	PhoneNumber           string                       `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode            string                       `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string                       `url:"region,omitempty" json:"region,omitempty"`
+	Scheme                string                       `url:"scheme,omitempty" json:"scheme,omitempty"`
+	SignatureDate         string                       `url:"signature_date,omitempty" json:"signature_date,omitempty"`
+	SubscriptionAmount    int                          `url:"subscription_amount,omitempty" json:"subscription_amount,omitempty"`
+	SubscriptionFrequency string                       `url:"subscription_frequency,omitempty" json:"subscription_frequency,omitempty"`
+	SwedishIdentityNumber string                       `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
 }
 
 // Create
@@ -105,8 +109,8 @@ type MandatePdfCreateParams struct {
 // | SEPA Core        | Danish (`da`), Dutch (`nl`), English (`en`), French
 // (`fr`), German (`de`), Italian (`it`), Portuguese (`pt`), Spanish (`es`),
 // Swedish (`sv`) |
-func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams, opts ...RequestOption) (*MandatePdf, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandate_pdfs"))
+func (s *MandatePdfServiceImpl) Create(ctx context.Context, p MandatePdfCreateParams, opts ...RequestOption) (*MandatePdf, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_pdfs"))
 	if err != nil {
 		return nil, err
 	}
@@ -140,10 +144,10 @@ func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -152,7 +156,7 @@ func (s *MandatePdfService) Create(ctx context.Context, p MandatePdfCreateParams
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

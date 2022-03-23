@@ -19,45 +19,54 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // BillingRequestFlowService manages billing_request_flows
-type BillingRequestFlowService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type BillingRequestFlowServiceImpl struct {
+	config Config
+}
+
+type BillingRequestFlowLinks struct {
+	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 }
 
 // BillingRequestFlow model
 type BillingRequestFlow struct {
-	AuthorisationUrl string `url:"authorisation_url,omitempty" json:"authorisation_url,omitempty"`
-	AutoFulfil       bool   `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
-	CreatedAt        string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	ExitUri          string `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
-	ExpiresAt        string `url:"expires_at,omitempty" json:"expires_at,omitempty"`
-	Id               string `url:"id,omitempty" json:"id,omitempty"`
-	Links            struct {
-		BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	LockBankAccount     bool   `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
-	LockCustomerDetails bool   `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
-	RedirectUri         string `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
-	SessionToken        string `url:"session_token,omitempty" json:"session_token,omitempty"`
+	AuthorisationUrl    string                   `url:"authorisation_url,omitempty" json:"authorisation_url,omitempty"`
+	AutoFulfil          bool                     `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
+	CreatedAt           string                   `url:"created_at,omitempty" json:"created_at,omitempty"`
+	ExitUri             string                   `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
+	ExpiresAt           string                   `url:"expires_at,omitempty" json:"expires_at,omitempty"`
+	Id                  string                   `url:"id,omitempty" json:"id,omitempty"`
+	Links               *BillingRequestFlowLinks `url:"links,omitempty" json:"links,omitempty"`
+	LockBankAccount     bool                     `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
+	LockCustomerDetails bool                     `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
+	RedirectUri         string                   `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	SessionToken        string                   `url:"session_token,omitempty" json:"session_token,omitempty"`
+	ShowRedirectButtons bool                     `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
+}
+
+type BillingRequestFlowService interface {
+	Create(ctx context.Context, p BillingRequestFlowCreateParams, opts ...RequestOption) (*BillingRequestFlow, error)
+	Initialise(ctx context.Context, identity string, p BillingRequestFlowInitialiseParams, opts ...RequestOption) (*BillingRequestFlow, error)
+}
+
+type BillingRequestFlowCreateParamsLinks struct {
+	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 }
 
 // BillingRequestFlowCreateParams parameters
 type BillingRequestFlowCreateParams struct {
-	AutoFulfil bool   `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
-	ExitUri    string `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
-	Links      struct {
-		BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	LockBankAccount     bool   `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
-	LockCustomerDetails bool   `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
-	RedirectUri         string `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	AutoFulfil          bool                                `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
+	ExitUri             string                              `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
+	Links               BillingRequestFlowCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	LockBankAccount     bool                                `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
+	LockCustomerDetails bool                                `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
+	RedirectUri         string                              `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	ShowRedirectButtons bool                                `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
 }
 
 // Create
 // Creates a new billing request flow.
-func (s *BillingRequestFlowService) Create(ctx context.Context, p BillingRequestFlowCreateParams, opts ...RequestOption) (*BillingRequestFlow, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/billing_request_flows"))
+func (s *BillingRequestFlowServiceImpl) Create(ctx context.Context, p BillingRequestFlowCreateParams, opts ...RequestOption) (*BillingRequestFlow, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_flows"))
 	if err != nil {
 		return nil, err
 	}
@@ -91,10 +100,10 @@ func (s *BillingRequestFlowService) Create(ctx context.Context, p BillingRequest
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -103,7 +112,7 @@ func (s *BillingRequestFlowService) Create(ctx context.Context, p BillingRequest
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -148,14 +157,15 @@ func (s *BillingRequestFlowService) Create(ctx context.Context, p BillingRequest
 }
 
 // BillingRequestFlowInitialiseParams parameters
-type BillingRequestFlowInitialiseParams struct{}
+type BillingRequestFlowInitialiseParams struct {
+}
 
 // Initialise
 // Returns the flow having generated a fresh session token which can be used to
 // power
 // integrations that manipulate the flow.
-func (s *BillingRequestFlowService) Initialise(ctx context.Context, identity string, p BillingRequestFlowInitialiseParams, opts ...RequestOption) (*BillingRequestFlow, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/billing_request_flows/%v/actions/initialise",
+func (s *BillingRequestFlowServiceImpl) Initialise(ctx context.Context, identity string, p BillingRequestFlowInitialiseParams, opts ...RequestOption) (*BillingRequestFlow, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_request_flows/%v/actions/initialise",
 		identity))
 	if err != nil {
 		return nil, err
@@ -190,10 +200,10 @@ func (s *BillingRequestFlowService) Initialise(ctx context.Context, identity str
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -202,7 +212,7 @@ func (s *BillingRequestFlowService) Initialise(ctx context.Context, identity str
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

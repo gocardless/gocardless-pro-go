@@ -19,46 +19,60 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // InstalmentScheduleService manages instalment_schedules
-type InstalmentScheduleService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type InstalmentScheduleServiceImpl struct {
+	config Config
+}
+
+type InstalmentScheduleLinks struct {
+	Customer string   `url:"customer,omitempty" json:"customer,omitempty"`
+	Mandate  string   `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Payments []string `url:"payments,omitempty" json:"payments,omitempty"`
 }
 
 // InstalmentSchedule model
 type InstalmentSchedule struct {
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency  string `url:"currency,omitempty" json:"currency,omitempty"`
-	Id        string `url:"id,omitempty" json:"id,omitempty"`
-	Links     struct {
-		Customer string   `url:"customer,omitempty" json:"customer,omitempty"`
-		Mandate  string   `url:"mandate,omitempty" json:"mandate,omitempty"`
-		Payments []string `url:"payments,omitempty" json:"payments,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata      map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name          string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentErrors map[string]interface{} `url:"payment_errors,omitempty" json:"payment_errors,omitempty"`
-	Status        string                 `url:"status,omitempty" json:"status,omitempty"`
-	TotalAmount   int                    `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+	CreatedAt     string                   `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency      string                   `url:"currency,omitempty" json:"currency,omitempty"`
+	Id            string                   `url:"id,omitempty" json:"id,omitempty"`
+	Links         *InstalmentScheduleLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata      map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name          string                   `url:"name,omitempty" json:"name,omitempty"`
+	PaymentErrors map[string]interface{}   `url:"payment_errors,omitempty" json:"payment_errors,omitempty"`
+	Status        string                   `url:"status,omitempty" json:"status,omitempty"`
+	TotalAmount   int                      `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+}
+
+type InstalmentScheduleService interface {
+	CreateWithDates(ctx context.Context, p InstalmentScheduleCreateWithDatesParams, opts ...RequestOption) (*InstalmentSchedule, error)
+	CreateWithSchedule(ctx context.Context, p InstalmentScheduleCreateWithScheduleParams, opts ...RequestOption) (*InstalmentSchedule, error)
+	List(ctx context.Context, p InstalmentScheduleListParams, opts ...RequestOption) (*InstalmentScheduleListResult, error)
+	All(ctx context.Context, p InstalmentScheduleListParams, opts ...RequestOption) *InstalmentScheduleListPagingIterator
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*InstalmentSchedule, error)
+	Update(ctx context.Context, identity string, p InstalmentScheduleUpdateParams, opts ...RequestOption) (*InstalmentSchedule, error)
+	Cancel(ctx context.Context, identity string, p InstalmentScheduleCancelParams, opts ...RequestOption) (*InstalmentSchedule, error)
+}
+
+type InstalmentScheduleCreateWithDatesParamsInstalments struct {
+	Amount      int    `url:"amount,omitempty" json:"amount,omitempty"`
+	ChargeDate  string `url:"charge_date,omitempty" json:"charge_date,omitempty"`
+	Description string `url:"description,omitempty" json:"description,omitempty"`
+}
+
+type InstalmentScheduleCreateWithDatesParamsLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 }
 
 // InstalmentScheduleCreateWithDatesParams parameters
 type InstalmentScheduleCreateWithDatesParams struct {
-	AppFee      int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency    string `url:"currency,omitempty" json:"currency,omitempty"`
-	Instalments []struct {
-		Amount      int    `url:"amount,omitempty" json:"amount,omitempty"`
-		ChargeDate  string `url:"charge_date,omitempty" json:"charge_date,omitempty"`
-		Description string `url:"description,omitempty" json:"description,omitempty"`
-	} `url:"instalments,omitempty" json:"instalments,omitempty"`
-	Links struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	TotalAmount      int                    `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+	AppFee           int                                                  `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Currency         string                                               `url:"currency,omitempty" json:"currency,omitempty"`
+	Instalments      []InstalmentScheduleCreateWithDatesParamsInstalments `url:"instalments,omitempty" json:"instalments,omitempty"`
+	Links            InstalmentScheduleCreateWithDatesParamsLinks         `url:"links,omitempty" json:"links,omitempty"`
+	Metadata         map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name             string                                               `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference string                                               `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible  bool                                                 `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	TotalAmount      int                                                  `url:"total_amount,omitempty" json:"total_amount,omitempty"`
 }
 
 // CreateWithDates
@@ -81,8 +95,8 @@ type InstalmentScheduleCreateWithDatesParams struct {
 // to the created payments, or the status `error` and detailed information about
 // the
 // failures.
-func (s *InstalmentScheduleService) CreateWithDates(ctx context.Context, p InstalmentScheduleCreateWithDatesParams, opts ...RequestOption) (*InstalmentSchedule, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/instalment_schedules"))
+func (s *InstalmentScheduleServiceImpl) CreateWithDates(ctx context.Context, p InstalmentScheduleCreateWithDatesParams, opts ...RequestOption) (*InstalmentSchedule, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
 	if err != nil {
 		return nil, err
 	}
@@ -116,10 +130,10 @@ func (s *InstalmentScheduleService) CreateWithDates(ctx context.Context, p Insta
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -128,7 +142,7 @@ func (s *InstalmentScheduleService) CreateWithDates(ctx context.Context, p Insta
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -172,24 +186,28 @@ func (s *InstalmentScheduleService) CreateWithDates(ctx context.Context, p Insta
 	return result.InstalmentSchedule, nil
 }
 
+type InstalmentScheduleCreateWithScheduleParamsInstalments struct {
+	Amounts      []int  `url:"amounts,omitempty" json:"amounts,omitempty"`
+	Interval     int    `url:"interval,omitempty" json:"interval,omitempty"`
+	IntervalUnit string `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
+	StartDate    string `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
+type InstalmentScheduleCreateWithScheduleParamsLinks struct {
+	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
+}
+
 // InstalmentScheduleCreateWithScheduleParams parameters
 type InstalmentScheduleCreateWithScheduleParams struct {
-	AppFee      int    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency    string `url:"currency,omitempty" json:"currency,omitempty"`
-	Instalments struct {
-		Amounts      []int  `url:"amounts,omitempty" json:"amounts,omitempty"`
-		Interval     int    `url:"interval,omitempty" json:"interval,omitempty"`
-		IntervalUnit string `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
-		StartDate    string `url:"start_date,omitempty" json:"start_date,omitempty"`
-	} `url:"instalments,omitempty" json:"instalments,omitempty"`
-	Links struct {
-		Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	TotalAmount      int                    `url:"total_amount,omitempty" json:"total_amount,omitempty"`
+	AppFee           int                                                   `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Currency         string                                                `url:"currency,omitempty" json:"currency,omitempty"`
+	Instalments      InstalmentScheduleCreateWithScheduleParamsInstalments `url:"instalments,omitempty" json:"instalments,omitempty"`
+	Links            InstalmentScheduleCreateWithScheduleParamsLinks       `url:"links,omitempty" json:"links,omitempty"`
+	Metadata         map[string]interface{}                                `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name             string                                                `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference string                                                `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible  bool                                                  `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	TotalAmount      int                                                   `url:"total_amount,omitempty" json:"total_amount,omitempty"`
 }
 
 // CreateWithSchedule
@@ -209,8 +227,8 @@ type InstalmentScheduleCreateWithScheduleParams struct {
 // the created payments, or the status `error` and detailed information about
 // the
 // failures.
-func (s *InstalmentScheduleService) CreateWithSchedule(ctx context.Context, p InstalmentScheduleCreateWithScheduleParams, opts ...RequestOption) (*InstalmentSchedule, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/instalment_schedules"))
+func (s *InstalmentScheduleServiceImpl) CreateWithSchedule(ctx context.Context, p InstalmentScheduleCreateWithScheduleParams, opts ...RequestOption) (*InstalmentSchedule, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
 	if err != nil {
 		return nil, err
 	}
@@ -244,10 +262,10 @@ func (s *InstalmentScheduleService) CreateWithSchedule(ctx context.Context, p In
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -256,7 +274,7 @@ func (s *InstalmentScheduleService) CreateWithSchedule(ctx context.Context, p In
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -300,39 +318,44 @@ func (s *InstalmentScheduleService) CreateWithSchedule(ctx context.Context, p In
 	return result.InstalmentSchedule, nil
 }
 
-// InstalmentScheduleListParams parameters
-type InstalmentScheduleListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer string   `url:"customer,omitempty" json:"customer,omitempty"`
-	Limit    int      `url:"limit,omitempty" json:"limit,omitempty"`
-	Mandate  string   `url:"mandate,omitempty" json:"mandate,omitempty"`
-	Status   []string `url:"status,omitempty" json:"status,omitempty"`
+type InstalmentScheduleListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
-// InstalmentScheduleListResult response including pagination metadata
+// InstalmentScheduleListParams parameters
+type InstalmentScheduleListParams struct {
+	After     string                                 `url:"after,omitempty" json:"after,omitempty"`
+	Before    string                                 `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt *InstalmentScheduleListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Customer  string                                 `url:"customer,omitempty" json:"customer,omitempty"`
+	Limit     int                                    `url:"limit,omitempty" json:"limit,omitempty"`
+	Mandate   string                                 `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Status    []string                               `url:"status,omitempty" json:"status,omitempty"`
+}
+
+type InstalmentScheduleListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type InstalmentScheduleListResultMeta struct {
+	Cursors *InstalmentScheduleListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type InstalmentScheduleListResult struct {
-	InstalmentSchedules []InstalmentSchedule `json:"instalment_schedules"`
-	Meta                struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	InstalmentSchedules []InstalmentSchedule             `json:"instalment_schedules"`
+	Meta                InstalmentScheduleListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // instalment schedules.
-func (s *InstalmentScheduleService) List(ctx context.Context, p InstalmentScheduleListParams, opts ...RequestOption) (*InstalmentScheduleListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/instalment_schedules"))
+func (s *InstalmentScheduleServiceImpl) List(ctx context.Context, p InstalmentScheduleListParams, opts ...RequestOption) (*InstalmentScheduleListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
 	if err != nil {
 		return nil, err
 	}
@@ -360,17 +383,17 @@ func (s *InstalmentScheduleService) List(ctx context.Context, p InstalmentSchedu
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -418,7 +441,7 @@ type InstalmentScheduleListPagingIterator struct {
 	cursor         string
 	response       *InstalmentScheduleListResult
 	params         InstalmentScheduleListParams
-	service        *InstalmentScheduleService
+	service        *InstalmentScheduleServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -439,7 +462,7 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/instalment_schedules"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
 
 	if err != nil {
 		return nil, err
@@ -469,16 +492,16 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -525,7 +548,7 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 	return c.response, nil
 }
 
-func (s *InstalmentScheduleService) All(ctx context.Context,
+func (s *InstalmentScheduleServiceImpl) All(ctx context.Context,
 	p InstalmentScheduleListParams,
 	opts ...RequestOption) *InstalmentScheduleListPagingIterator {
 	return &InstalmentScheduleListPagingIterator{
@@ -537,8 +560,8 @@ func (s *InstalmentScheduleService) All(ctx context.Context,
 
 // Get
 // Retrieves the details of an existing instalment schedule.
-func (s *InstalmentScheduleService) Get(ctx context.Context, identity string, opts ...RequestOption) (*InstalmentSchedule, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/instalment_schedules/%v",
+func (s *InstalmentScheduleServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*InstalmentSchedule, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/instalment_schedules/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -561,17 +584,17 @@ func (s *InstalmentScheduleService) Get(ctx context.Context, identity string, op
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -622,8 +645,8 @@ type InstalmentScheduleUpdateParams struct {
 
 // Update
 // Updates an instalment schedule. This accepts only the metadata parameter.
-func (s *InstalmentScheduleService) Update(ctx context.Context, identity string, p InstalmentScheduleUpdateParams, opts ...RequestOption) (*InstalmentSchedule, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/instalment_schedules/%v",
+func (s *InstalmentScheduleServiceImpl) Update(ctx context.Context, identity string, p InstalmentScheduleUpdateParams, opts ...RequestOption) (*InstalmentSchedule, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/instalment_schedules/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -658,10 +681,10 @@ func (s *InstalmentScheduleService) Update(ctx context.Context, identity string,
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -670,7 +693,7 @@ func (s *InstalmentScheduleService) Update(ctx context.Context, identity string,
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -715,7 +738,8 @@ func (s *InstalmentScheduleService) Update(ctx context.Context, identity string,
 }
 
 // InstalmentScheduleCancelParams parameters
-type InstalmentScheduleCancelParams map[string]interface{}
+type InstalmentScheduleCancelParams struct {
+}
 
 // Cancel
 // Immediately cancels an instalment schedule; no further payments will be
@@ -723,8 +747,8 @@ type InstalmentScheduleCancelParams map[string]interface{}
 //
 // This will fail with a `cancellation_failed` error if the instalment schedule
 // is already cancelled or has completed.
-func (s *InstalmentScheduleService) Cancel(ctx context.Context, identity string, p InstalmentScheduleCancelParams, opts ...RequestOption) (*InstalmentSchedule, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/instalment_schedules/%v/actions/cancel",
+func (s *InstalmentScheduleServiceImpl) Cancel(ctx context.Context, identity string, p InstalmentScheduleCancelParams, opts ...RequestOption) (*InstalmentSchedule, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/instalment_schedules/%v/actions/cancel",
 		identity))
 	if err != nil {
 		return nil, err
@@ -759,10 +783,10 @@ func (s *InstalmentScheduleService) Cancel(ctx context.Context, identity string,
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -771,7 +795,7 @@ func (s *InstalmentScheduleService) Cancel(ctx context.Context, identity string,
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

@@ -19,22 +19,22 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // MandateService manages mandates
-type MandateService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type MandateServiceImpl struct {
+	config Config
+}
+
+type MandateLinks struct {
+	Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
+	CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
+	NewMandate          string `url:"new_mandate,omitempty" json:"new_mandate,omitempty"`
 }
 
 // Mandate model
 type Mandate struct {
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Id        string `url:"id,omitempty" json:"id,omitempty"`
-	Links     struct {
-		Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
-		Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
-		CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
-		NewMandate          string `url:"new_mandate,omitempty" json:"new_mandate,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
+	CreatedAt               string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Id                      string                 `url:"id,omitempty" json:"id,omitempty"`
+	Links                   *MandateLinks          `url:"links,omitempty" json:"links,omitempty"`
 	Metadata                map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	NextPossibleChargeDate  string                 `url:"next_possible_charge_date,omitempty" json:"next_possible_charge_date,omitempty"`
 	PaymentsRequireApproval bool                   `url:"payments_require_approval,omitempty" json:"payments_require_approval,omitempty"`
@@ -43,22 +43,34 @@ type Mandate struct {
 	Status                  string                 `url:"status,omitempty" json:"status,omitempty"`
 }
 
+type MandateService interface {
+	Create(ctx context.Context, p MandateCreateParams, opts ...RequestOption) (*Mandate, error)
+	List(ctx context.Context, p MandateListParams, opts ...RequestOption) (*MandateListResult, error)
+	All(ctx context.Context, p MandateListParams, opts ...RequestOption) *MandateListPagingIterator
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*Mandate, error)
+	Update(ctx context.Context, identity string, p MandateUpdateParams, opts ...RequestOption) (*Mandate, error)
+	Cancel(ctx context.Context, identity string, p MandateCancelParams, opts ...RequestOption) (*Mandate, error)
+	Reinstate(ctx context.Context, identity string, p MandateReinstateParams, opts ...RequestOption) (*Mandate, error)
+}
+
+type MandateCreateParamsLinks struct {
+	Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
+}
+
 // MandateCreateParams parameters
 type MandateCreateParams struct {
-	Links struct {
-		Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
-		CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	Metadata       map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayerIpAddress string                 `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
-	Reference      string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme         string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Links          MandateCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata       map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerIpAddress string                   `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
+	Reference      string                   `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme         string                   `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 // Create
 // Creates a new mandate object.
-func (s *MandateService) Create(ctx context.Context, p MandateCreateParams, opts ...RequestOption) (*Mandate, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates"))
+func (s *MandateServiceImpl) Create(ctx context.Context, p MandateCreateParams, opts ...RequestOption) (*Mandate, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandates"))
 	if err != nil {
 		return nil, err
 	}
@@ -92,10 +104,10 @@ func (s *MandateService) Create(ctx context.Context, p MandateCreateParams, opts
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -104,7 +116,7 @@ func (s *MandateService) Create(ctx context.Context, p MandateCreateParams, opts
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -148,42 +160,47 @@ func (s *MandateService) Create(ctx context.Context, p MandateCreateParams, opts
 	return result.Mandate, nil
 }
 
-// MandateListParams parameters
-type MandateListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt struct {
-		Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-		Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-		Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-		Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-	} `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Creditor            string   `url:"creditor,omitempty" json:"creditor,omitempty"`
-	Customer            string   `url:"customer,omitempty" json:"customer,omitempty"`
-	CustomerBankAccount string   `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
-	Limit               int      `url:"limit,omitempty" json:"limit,omitempty"`
-	Reference           string   `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme              []string `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Status              []string `url:"status,omitempty" json:"status,omitempty"`
+type MandateListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
 }
 
-// MandateListResult response including pagination metadata
+// MandateListParams parameters
+type MandateListParams struct {
+	After               string                      `url:"after,omitempty" json:"after,omitempty"`
+	Before              string                      `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt           *MandateListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Creditor            string                      `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Customer            string                      `url:"customer,omitempty" json:"customer,omitempty"`
+	CustomerBankAccount string                      `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
+	Limit               int                         `url:"limit,omitempty" json:"limit,omitempty"`
+	Reference           string                      `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme              []string                    `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Status              []string                    `url:"status,omitempty" json:"status,omitempty"`
+}
+
+type MandateListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type MandateListResultMeta struct {
+	Cursors *MandateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type MandateListResult struct {
-	Mandates []Mandate `json:"mandates"`
-	Meta     struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	Mandates []Mandate             `json:"mandates"`
+	Meta     MandateListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // mandates.
-func (s *MandateService) List(ctx context.Context, p MandateListParams, opts ...RequestOption) (*MandateListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates"))
+func (s *MandateServiceImpl) List(ctx context.Context, p MandateListParams, opts ...RequestOption) (*MandateListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandates"))
 	if err != nil {
 		return nil, err
 	}
@@ -211,17 +228,17 @@ func (s *MandateService) List(ctx context.Context, p MandateListParams, opts ...
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -269,7 +286,7 @@ type MandateListPagingIterator struct {
 	cursor         string
 	response       *MandateListResult
 	params         MandateListParams
-	service        *MandateService
+	service        *MandateServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -290,7 +307,7 @@ func (c *MandateListPagingIterator) Value(ctx context.Context) (*MandateListResu
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandates"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandates"))
 
 	if err != nil {
 		return nil, err
@@ -320,16 +337,16 @@ func (c *MandateListPagingIterator) Value(ctx context.Context) (*MandateListResu
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -376,7 +393,7 @@ func (c *MandateListPagingIterator) Value(ctx context.Context) (*MandateListResu
 	return c.response, nil
 }
 
-func (s *MandateService) All(ctx context.Context,
+func (s *MandateServiceImpl) All(ctx context.Context,
 	p MandateListParams,
 	opts ...RequestOption) *MandateListPagingIterator {
 	return &MandateListPagingIterator{
@@ -388,8 +405,8 @@ func (s *MandateService) All(ctx context.Context,
 
 // Get
 // Retrieves the details of an existing mandate.
-func (s *MandateService) Get(ctx context.Context, identity string, opts ...RequestOption) (*Mandate, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/mandates/%v",
+func (s *MandateServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Mandate, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -412,17 +429,17 @@ func (s *MandateService) Get(ctx context.Context, identity string, opts ...Reque
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -473,8 +490,8 @@ type MandateUpdateParams struct {
 
 // Update
 // Updates a mandate object. This accepts only the metadata parameter.
-func (s *MandateService) Update(ctx context.Context, identity string, p MandateUpdateParams, opts ...RequestOption) (*Mandate, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/mandates/%v",
+func (s *MandateServiceImpl) Update(ctx context.Context, identity string, p MandateUpdateParams, opts ...RequestOption) (*Mandate, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -509,10 +526,10 @@ func (s *MandateService) Update(ctx context.Context, identity string, p MandateU
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -521,7 +538,7 @@ func (s *MandateService) Update(ctx context.Context, identity string, p MandateU
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -577,8 +594,8 @@ type MandateCancelParams struct {
 //
 // This will fail with a `cancellation_failed` error if the mandate is already
 // cancelled.
-func (s *MandateService) Cancel(ctx context.Context, identity string, p MandateCancelParams, opts ...RequestOption) (*Mandate, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/mandates/%v/actions/cancel",
+func (s *MandateServiceImpl) Cancel(ctx context.Context, identity string, p MandateCancelParams, opts ...RequestOption) (*Mandate, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v/actions/cancel",
 		identity))
 	if err != nil {
 		return nil, err
@@ -613,10 +630,10 @@ func (s *MandateService) Cancel(ctx context.Context, identity string, p MandateC
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -625,7 +642,7 @@ func (s *MandateService) Cancel(ctx context.Context, identity string, p MandateC
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -687,8 +704,8 @@ type MandateReinstateParams struct {
 // being submitted, or is active.
 //
 // Mandates can be resubmitted up to 10 times.
-func (s *MandateService) Reinstate(ctx context.Context, identity string, p MandateReinstateParams, opts ...RequestOption) (*Mandate, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/mandates/%v/actions/reinstate",
+func (s *MandateServiceImpl) Reinstate(ctx context.Context, identity string, p MandateReinstateParams, opts ...RequestOption) (*Mandate, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v/actions/reinstate",
 		identity))
 	if err != nil {
 		return nil, err
@@ -723,10 +740,10 @@ func (s *MandateService) Reinstate(ctx context.Context, identity string, p Manda
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -735,7 +752,7 @@ func (s *MandateService) Reinstate(ctx context.Context, identity string, p Manda
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

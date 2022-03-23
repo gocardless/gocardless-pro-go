@@ -19,10 +19,8 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // TaxRateService manages tax_rates
-type TaxRateService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type TaxRateServiceImpl struct {
+	config Config
 }
 
 // TaxRate model
@@ -35,6 +33,12 @@ type TaxRate struct {
 	Type         string `url:"type,omitempty" json:"type,omitempty"`
 }
 
+type TaxRateService interface {
+	List(ctx context.Context, p TaxRateListParams, opts ...RequestOption) (*TaxRateListResult, error)
+	All(ctx context.Context, p TaxRateListParams, opts ...RequestOption) *TaxRateListPagingIterator
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*TaxRate, error)
+}
+
 // TaxRateListParams parameters
 type TaxRateListParams struct {
 	After        string `url:"after,omitempty" json:"after,omitempty"`
@@ -42,23 +46,26 @@ type TaxRateListParams struct {
 	Jurisdiction string `url:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
 }
 
-// TaxRateListResult response including pagination metadata
+type TaxRateListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type TaxRateListResultMeta struct {
+	Cursors *TaxRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type TaxRateListResult struct {
-	TaxRates []TaxRate `json:"tax_rates"`
-	Meta     struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	TaxRates []TaxRate             `json:"tax_rates"`
+	Meta     TaxRateListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of all tax
 // rates.
-func (s *TaxRateService) List(ctx context.Context, p TaxRateListParams, opts ...RequestOption) (*TaxRateListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/tax_rates"))
+func (s *TaxRateServiceImpl) List(ctx context.Context, p TaxRateListParams, opts ...RequestOption) (*TaxRateListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/tax_rates"))
 	if err != nil {
 		return nil, err
 	}
@@ -86,17 +93,17 @@ func (s *TaxRateService) List(ctx context.Context, p TaxRateListParams, opts ...
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -144,7 +151,7 @@ type TaxRateListPagingIterator struct {
 	cursor         string
 	response       *TaxRateListResult
 	params         TaxRateListParams
-	service        *TaxRateService
+	service        *TaxRateServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -165,7 +172,7 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/tax_rates"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/tax_rates"))
 
 	if err != nil {
 		return nil, err
@@ -195,16 +202,16 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -251,7 +258,7 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 	return c.response, nil
 }
 
-func (s *TaxRateService) All(ctx context.Context,
+func (s *TaxRateServiceImpl) All(ctx context.Context,
 	p TaxRateListParams,
 	opts ...RequestOption) *TaxRateListPagingIterator {
 	return &TaxRateListPagingIterator{
@@ -263,8 +270,8 @@ func (s *TaxRateService) All(ctx context.Context,
 
 // Get
 // Retrieves the details of a tax rate.
-func (s *TaxRateService) Get(ctx context.Context, identity string, opts ...RequestOption) (*TaxRate, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/tax_rates/%v",
+func (s *TaxRateServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*TaxRate, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/tax_rates/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -287,17 +294,17 @@ func (s *TaxRateService) Get(ctx context.Context, identity string, opts ...Reque
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

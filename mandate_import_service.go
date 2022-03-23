@@ -19,10 +19,8 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // MandateImportService manages mandate_imports
-type MandateImportService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type MandateImportServiceImpl struct {
+	config Config
 }
 
 // MandateImport model
@@ -31,6 +29,13 @@ type MandateImport struct {
 	Id        string `url:"id,omitempty" json:"id,omitempty"`
 	Scheme    string `url:"scheme,omitempty" json:"scheme,omitempty"`
 	Status    string `url:"status,omitempty" json:"status,omitempty"`
+}
+
+type MandateImportService interface {
+	Create(ctx context.Context, p MandateImportCreateParams, opts ...RequestOption) (*MandateImport, error)
+	Get(ctx context.Context, identity string, p MandateImportGetParams, opts ...RequestOption) (*MandateImport, error)
+	Submit(ctx context.Context, identity string, p MandateImportSubmitParams, opts ...RequestOption) (*MandateImport, error)
+	Cancel(ctx context.Context, identity string, p MandateImportCancelParams, opts ...RequestOption) (*MandateImport, error)
 }
 
 // MandateImportCreateParams parameters
@@ -45,8 +50,8 @@ type MandateImportCreateParams struct {
 // finished
 // adding entries to an import, you should
 // [submit](#mandate-imports-submit-a-mandate-import) it.
-func (s *MandateImportService) Create(ctx context.Context, p MandateImportCreateParams, opts ...RequestOption) (*MandateImport, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/mandate_imports"))
+func (s *MandateImportServiceImpl) Create(ctx context.Context, p MandateImportCreateParams, opts ...RequestOption) (*MandateImport, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_imports"))
 	if err != nil {
 		return nil, err
 	}
@@ -80,10 +85,10 @@ func (s *MandateImportService) Create(ctx context.Context, p MandateImportCreate
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -92,7 +97,7 @@ func (s *MandateImportService) Create(ctx context.Context, p MandateImportCreate
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -137,12 +142,13 @@ func (s *MandateImportService) Create(ctx context.Context, p MandateImportCreate
 }
 
 // MandateImportGetParams parameters
-type MandateImportGetParams map[string]interface{}
+type MandateImportGetParams struct {
+}
 
 // Get
 // Returns a single mandate import.
-func (s *MandateImportService) Get(ctx context.Context, identity string, p MandateImportGetParams, opts ...RequestOption) (*MandateImport, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/mandate_imports/%v",
+func (s *MandateImportServiceImpl) Get(ctx context.Context, identity string, p MandateImportGetParams, opts ...RequestOption) (*MandateImport, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandate_imports/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -165,17 +171,17 @@ func (s *MandateImportService) Get(ctx context.Context, identity string, p Manda
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -220,7 +226,8 @@ func (s *MandateImportService) Get(ctx context.Context, identity string, p Manda
 }
 
 // MandateImportSubmitParams parameters
-type MandateImportSubmitParams map[string]interface{}
+type MandateImportSubmitParams struct {
+}
 
 // Submit
 // Submits the mandate import, which allows it to be processed by a member of
@@ -235,8 +242,8 @@ type MandateImportSubmitParams map[string]interface{}
 // you to
 // test both the "submitted" response and wait for the webhook to confirm the
 // processing has begun.
-func (s *MandateImportService) Submit(ctx context.Context, identity string, p MandateImportSubmitParams, opts ...RequestOption) (*MandateImport, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/mandate_imports/%v/actions/submit",
+func (s *MandateImportServiceImpl) Submit(ctx context.Context, identity string, p MandateImportSubmitParams, opts ...RequestOption) (*MandateImport, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandate_imports/%v/actions/submit",
 		identity))
 	if err != nil {
 		return nil, err
@@ -271,10 +278,10 @@ func (s *MandateImportService) Submit(ctx context.Context, identity string, p Ma
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -283,7 +290,7 @@ func (s *MandateImportService) Submit(ctx context.Context, identity string, p Ma
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -328,7 +335,8 @@ func (s *MandateImportService) Submit(ctx context.Context, identity string, p Ma
 }
 
 // MandateImportCancelParams parameters
-type MandateImportCancelParams map[string]interface{}
+type MandateImportCancelParams struct {
+}
 
 // Cancel
 // Cancels the mandate import, which aborts the import process and stops the
@@ -338,8 +346,8 @@ type MandateImportCancelParams map[string]interface{}
 // entries added to it. Mandate imports which have already been submitted or
 // processed
 // cannot be cancelled.
-func (s *MandateImportService) Cancel(ctx context.Context, identity string, p MandateImportCancelParams, opts ...RequestOption) (*MandateImport, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/mandate_imports/%v/actions/cancel",
+func (s *MandateImportServiceImpl) Cancel(ctx context.Context, identity string, p MandateImportCancelParams, opts ...RequestOption) (*MandateImport, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandate_imports/%v/actions/cancel",
 		identity))
 	if err != nil {
 		return nil, err
@@ -374,10 +382,10 @@ func (s *MandateImportService) Cancel(ctx context.Context, identity string, p Ma
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -386,7 +394,7 @@ func (s *MandateImportService) Cancel(ctx context.Context, identity string, p Ma
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}

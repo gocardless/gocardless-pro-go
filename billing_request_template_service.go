@@ -19,10 +19,8 @@ var _ = json.NewDecoder
 var _ = errors.New
 
 // BillingRequestTemplateService manages billing_request_templates
-type BillingRequestTemplateService struct {
-	endpoint string
-	token    string
-	client   *http.Client
+type BillingRequestTemplateServiceImpl struct {
+	config Config
 }
 
 // BillingRequestTemplate model
@@ -45,6 +43,14 @@ type BillingRequestTemplate struct {
 	UpdatedAt                 string                 `url:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
+type BillingRequestTemplateService interface {
+	List(ctx context.Context, p BillingRequestTemplateListParams, opts ...RequestOption) (*BillingRequestTemplateListResult, error)
+	All(ctx context.Context, p BillingRequestTemplateListParams, opts ...RequestOption) *BillingRequestTemplateListPagingIterator
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequestTemplate, error)
+	Create(ctx context.Context, p BillingRequestTemplateCreateParams, opts ...RequestOption) (*BillingRequestTemplate, error)
+	Update(ctx context.Context, identity string, p BillingRequestTemplateUpdateParams, opts ...RequestOption) (*BillingRequestTemplate, error)
+}
+
 // BillingRequestTemplateListParams parameters
 type BillingRequestTemplateListParams struct {
 	After  string `url:"after,omitempty" json:"after,omitempty"`
@@ -52,23 +58,26 @@ type BillingRequestTemplateListParams struct {
 	Limit  int    `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
-// BillingRequestTemplateListResult response including pagination metadata
+type BillingRequestTemplateListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type BillingRequestTemplateListResultMeta struct {
+	Cursors *BillingRequestTemplateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                          `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
 type BillingRequestTemplateListResult struct {
-	BillingRequestTemplates []BillingRequestTemplate `json:"billing_request_templates"`
-	Meta                    struct {
-		Cursors struct {
-			After  string `url:"after,omitempty" json:"after,omitempty"`
-			Before string `url:"before,omitempty" json:"before,omitempty"`
-		} `url:"cursors,omitempty" json:"cursors,omitempty"`
-		Limit int `url:"limit,omitempty" json:"limit,omitempty"`
-	} `json:"meta"`
+	BillingRequestTemplates []BillingRequestTemplate             `json:"billing_request_templates"`
+	Meta                    BillingRequestTemplateListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // Billing Request Templates.
-func (s *BillingRequestTemplateService) List(ctx context.Context, p BillingRequestTemplateListParams, opts ...RequestOption) (*BillingRequestTemplateListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/billing_request_templates"))
+func (s *BillingRequestTemplateServiceImpl) List(ctx context.Context, p BillingRequestTemplateListParams, opts ...RequestOption) (*BillingRequestTemplateListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_templates"))
 	if err != nil {
 		return nil, err
 	}
@@ -96,17 +105,17 @@ func (s *BillingRequestTemplateService) List(ctx context.Context, p BillingReque
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -154,7 +163,7 @@ type BillingRequestTemplateListPagingIterator struct {
 	cursor         string
 	response       *BillingRequestTemplateListResult
 	params         BillingRequestTemplateListParams
-	service        *BillingRequestTemplateService
+	service        *BillingRequestTemplateServiceImpl
 	requestOptions []RequestOption
 }
 
@@ -175,7 +184,7 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/billing_request_templates"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_templates"))
 
 	if err != nil {
 		return nil, err
@@ -205,16 +214,16 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 	}
 
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -261,7 +270,7 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 	return c.response, nil
 }
 
-func (s *BillingRequestTemplateService) All(ctx context.Context,
+func (s *BillingRequestTemplateServiceImpl) All(ctx context.Context,
 	p BillingRequestTemplateListParams,
 	opts ...RequestOption) *BillingRequestTemplateListPagingIterator {
 	return &BillingRequestTemplateListPagingIterator{
@@ -273,8 +282,8 @@ func (s *BillingRequestTemplateService) All(ctx context.Context,
 
 // Get
 // Fetches a Billing Request Template
-func (s *BillingRequestTemplateService) Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequestTemplate, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/billing_request_templates/%v",
+func (s *BillingRequestTemplateServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequestTemplate, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_request_templates/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -297,17 +306,17 @@ func (s *BillingRequestTemplateService) Get(ctx context.Context, identity string
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -351,29 +360,31 @@ func (s *BillingRequestTemplateService) Get(ctx context.Context, identity string
 	return result.BillingRequestTemplate, nil
 }
 
+type BillingRequestTemplateCreateParamsLinks struct {
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
+}
+
 // BillingRequestTemplateCreateParams parameters
 type BillingRequestTemplateCreateParams struct {
-	Links struct {
-		Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
-	} `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequestCurrency    string                 `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
-	MandateRequestMetadata    map[string]interface{} `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
-	MandateRequestScheme      string                 `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
-	MandateRequestVerify      string                 `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
-	Metadata                  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name                      string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentRequestAmount      int                    `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
-	PaymentRequestCurrency    string                 `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
-	PaymentRequestDescription string                 `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
-	PaymentRequestMetadata    map[string]interface{} `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
-	PaymentRequestScheme      string                 `url:"payment_request_scheme,omitempty" json:"payment_request_scheme,omitempty"`
-	RedirectUri               string                 `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	Links                     *BillingRequestTemplateCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	MandateRequestCurrency    string                                   `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
+	MandateRequestMetadata    map[string]interface{}                   `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
+	MandateRequestScheme      string                                   `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
+	MandateRequestVerify      string                                   `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
+	Metadata                  map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name                      string                                   `url:"name,omitempty" json:"name,omitempty"`
+	PaymentRequestAmount      int                                      `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
+	PaymentRequestCurrency    string                                   `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
+	PaymentRequestDescription string                                   `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
+	PaymentRequestMetadata    map[string]interface{}                   `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
+	PaymentRequestScheme      string                                   `url:"payment_request_scheme,omitempty" json:"payment_request_scheme,omitempty"`
+	RedirectUri               string                                   `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 }
 
 // Create
 //
-func (s *BillingRequestTemplateService) Create(ctx context.Context, p BillingRequestTemplateCreateParams, opts ...RequestOption) (*BillingRequestTemplate, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint + "/billing_request_templates"))
+func (s *BillingRequestTemplateServiceImpl) Create(ctx context.Context, p BillingRequestTemplateCreateParams, opts ...RequestOption) (*BillingRequestTemplate, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_templates"))
 	if err != nil {
 		return nil, err
 	}
@@ -407,10 +418,10 @@ func (s *BillingRequestTemplateService) Create(ctx context.Context, p BillingReq
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -419,7 +430,7 @@ func (s *BillingRequestTemplateService) Create(ctx context.Context, p BillingReq
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -482,8 +493,8 @@ type BillingRequestTemplateUpdateParams struct {
 // Update
 // Updates a Billing Request Template, which will affect all future Billing
 // Requests created by this template.
-func (s *BillingRequestTemplateService) Update(ctx context.Context, identity string, p BillingRequestTemplateUpdateParams, opts ...RequestOption) (*BillingRequestTemplate, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.endpoint+"/billing_request_templates/%v",
+func (s *BillingRequestTemplateServiceImpl) Update(ctx context.Context, identity string, p BillingRequestTemplateUpdateParams, opts ...RequestOption) (*BillingRequestTemplate, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_request_templates/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -518,10 +529,10 @@ func (s *BillingRequestTemplateService) Update(ctx context.Context, identity str
 		return nil, err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.token)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "1.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -530,7 +541,7 @@ func (s *BillingRequestTemplateService) Update(ctx context.Context, identity str
 		req.Header.Set(key, value)
 	}
 
-	client := s.client
+	client := s.config.Client()
 	if client == nil {
 		client = http.DefaultClient
 	}
