@@ -135,15 +135,16 @@ type BillingRequestResources struct {
 
 // BillingRequest model
 type BillingRequest struct {
-	Actions        []BillingRequestActions       `url:"actions,omitempty" json:"actions,omitempty"`
-	CreatedAt      string                        `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Id             string                        `url:"id,omitempty" json:"id,omitempty"`
-	Links          *BillingRequestLinks          `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequest *BillingRequestMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata       map[string]interface{}        `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PaymentRequest *BillingRequestPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
-	Resources      *BillingRequestResources      `url:"resources,omitempty" json:"resources,omitempty"`
-	Status         string                        `url:"status,omitempty" json:"status,omitempty"`
+	Actions         []BillingRequestActions       `url:"actions,omitempty" json:"actions,omitempty"`
+	CreatedAt       string                        `url:"created_at,omitempty" json:"created_at,omitempty"`
+	FallbackEnabled bool                          `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
+	Id              string                        `url:"id,omitempty" json:"id,omitempty"`
+	Links           *BillingRequestLinks          `url:"links,omitempty" json:"links,omitempty"`
+	MandateRequest  *BillingRequestMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
+	Metadata        map[string]interface{}        `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentRequest  *BillingRequestPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	Resources       *BillingRequestResources      `url:"resources,omitempty" json:"resources,omitempty"`
+	Status          string                        `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type BillingRequestService interface {
@@ -157,6 +158,7 @@ type BillingRequestService interface {
 	ConfirmPayerDetails(ctx context.Context, identity string, p BillingRequestConfirmPayerDetailsParams, opts ...RequestOption) (*BillingRequest, error)
 	Cancel(ctx context.Context, identity string, p BillingRequestCancelParams, opts ...RequestOption) (*BillingRequest, error)
 	Notify(ctx context.Context, identity string, p BillingRequestNotifyParams, opts ...RequestOption) (*BillingRequest, error)
+	Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error)
 }
 
 // BillingRequestListParams parameters
@@ -219,7 +221,7 @@ func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestLi
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -328,7 +330,7 @@ func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingR
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -415,10 +417,11 @@ type BillingRequestCreateParamsPaymentRequest struct {
 
 // BillingRequestCreateParams parameters
 type BillingRequestCreateParams struct {
-	Links          *BillingRequestCreateParamsLinks          `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequest *BillingRequestCreateParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata       map[string]interface{}                    `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PaymentRequest *BillingRequestCreateParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	FallbackEnabled bool                                      `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
+	Links           *BillingRequestCreateParamsLinks          `url:"links,omitempty" json:"links,omitempty"`
+	MandateRequest  *BillingRequestCreateParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
+	Metadata        map[string]interface{}                    `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentRequest  *BillingRequestCreateParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 }
 
 // Create
@@ -461,7 +464,7 @@ func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequest
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -543,7 +546,7 @@ func (s *BillingRequestServiceImpl) Get(ctx context.Context, identity string, op
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -672,7 +675,7 @@ func (s *BillingRequestServiceImpl) CollectCustomerDetails(ctx context.Context, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -786,7 +789,7 @@ func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, iden
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -886,7 +889,7 @@ func (s *BillingRequestServiceImpl) Fulfil(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -987,7 +990,7 @@ func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, ide
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1087,7 +1090,7 @@ func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1189,7 +1192,106 @@ func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.0.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err            *APIError       `json:"error"`
+		BillingRequest *BillingRequest `json:"billing_requests"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequest == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BillingRequest, nil
+}
+
+// BillingRequestFallbackParams parameters
+type BillingRequestFallbackParams struct {
+}
+
+// Fallback
+// Triggers a fallback from the open-banking flow to direct debit. Note, the
+// billing request must have fallback enabled.
+func (s *BillingRequestServiceImpl) Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/fallback",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"data": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.1.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

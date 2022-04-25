@@ -254,3 +254,31 @@ func TestBillingRequestNotify(t *testing.T) {
 
 	}
 }
+
+func TestBillingRequestFallback(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "fallback")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := BillingRequestFallbackParams{}
+
+	o, err :=
+		client.BillingRequests.Fallback(
+			ctx, "ID123", p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected BillingRequest, got nil")
+
+	}
+}
