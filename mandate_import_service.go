@@ -84,11 +84,11 @@ func (s *MandateImportServiceImpl) Create(ctx context.Context, p MandateImportCr
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -170,11 +170,11 @@ func (s *MandateImportServiceImpl) Get(ctx context.Context, identity string, p M
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -277,11 +277,11 @@ func (s *MandateImportServiceImpl) Submit(ctx context.Context, identity string, 
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -381,11 +381,11 @@ func (s *MandateImportServiceImpl) Cancel(ctx context.Context, identity string, 
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

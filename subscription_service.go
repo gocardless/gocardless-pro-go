@@ -126,11 +126,11 @@ func (s *SubscriptionServiceImpl) Create(ctx context.Context, p SubscriptionCrea
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -247,11 +247,11 @@ func (s *SubscriptionServiceImpl) List(ctx context.Context, p SubscriptionListPa
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -356,11 +356,11 @@ func (c *SubscriptionListPagingIterator) Value(ctx context.Context) (*Subscripti
 		return nil, err
 	}
 
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -448,11 +448,11 @@ func (s *SubscriptionServiceImpl) Get(ctx context.Context, identity string, opts
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -574,11 +574,11 @@ func (s *SubscriptionServiceImpl) Update(ctx context.Context, identity string, p
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -714,11 +714,11 @@ func (s *SubscriptionServiceImpl) Pause(ctx context.Context, identity string, p 
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -829,11 +829,11 @@ func (s *SubscriptionServiceImpl) Resume(ctx context.Context, identity string, p
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -933,11 +933,11 @@ func (s *SubscriptionServiceImpl) Cancel(ctx context.Context, identity string, p
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

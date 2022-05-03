@@ -107,11 +107,11 @@ func (s *PayoutItemServiceImpl) List(ctx context.Context, p PayoutItemListParams
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -216,11 +216,11 @@ func (c *PayoutItemListPagingIterator) Value(ctx context.Context) (*PayoutItemLi
 		return nil, err
 	}
 
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

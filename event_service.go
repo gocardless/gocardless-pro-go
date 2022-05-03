@@ -157,11 +157,11 @@ func (s *EventServiceImpl) List(ctx context.Context, p EventListParams, opts ...
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -266,11 +266,11 @@ func (c *EventListPagingIterator) Value(ctx context.Context) (*EventListResult, 
 		return nil, err
 	}
 
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -358,11 +358,11 @@ func (s *EventServiceImpl) Get(ctx context.Context, identity string, opts ...Req
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
