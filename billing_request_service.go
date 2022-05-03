@@ -217,11 +217,11 @@ func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestLi
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -326,11 +326,11 @@ func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingR
 		return nil, err
 	}
 
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -460,11 +460,11 @@ func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequest
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -542,11 +542,11 @@ func (s *BillingRequestServiceImpl) Get(ctx context.Context, identity string, op
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -671,11 +671,11 @@ func (s *BillingRequestServiceImpl) CollectCustomerDetails(ctx context.Context, 
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -750,6 +750,12 @@ type BillingRequestCollectBankAccountParams struct {
 // The endpoint takes the same payload as Customer Bank Accounts, but check
 // the bank account is valid for the billing request scheme before creating
 // and attaching it.
+//
+// _ACH scheme_ For compliance reasons, an extra validation step is done using
+// a third-party provider to make sure the customer's bank account can accept
+// Direct Debit. If a bank account is discovered to be closed or invalid, the
+// customer is requested to adjust the account number/routing number and
+// succeed in this check to continue with the flow.
 func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, identity string, p BillingRequestCollectBankAccountParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/collect_bank_account",
 		identity))
@@ -785,11 +791,11 @@ func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, iden
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -885,11 +891,11 @@ func (s *BillingRequestServiceImpl) Fulfil(ctx context.Context, identity string,
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -986,11 +992,11 @@ func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, ide
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1086,11 +1092,11 @@ func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string,
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1188,11 +1194,11 @@ func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string,
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1287,11 +1293,11 @@ func (s *BillingRequestServiceImpl) Fallback(ctx context.Context, identity strin
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

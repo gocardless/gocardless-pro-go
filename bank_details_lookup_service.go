@@ -58,6 +58,12 @@ type BankDetailsLookupCreateParams struct {
 // Bank account details may be supplied using [local
 // details](#appendix-local-bank-details) or an IBAN.
 //
+// _ACH scheme_ For compliance reasons, an extra validation step is done using
+// a third-party provider to make sure the customer's bank account can accept
+// Direct Debit. If a bank account is discovered to be closed or invalid, the
+// customer is requested to adjust the account number/routing number and
+// succeed in this check to continue with the flow.
+//
 // _Note:_ Usage of this endpoint is monitored. If your organisation relies on
 // GoCardless for
 // modulus or reachability checking but not for payment collection, please get
@@ -96,11 +102,11 @@ func (s *BankDetailsLookupServiceImpl) Create(ctx context.Context, p BankDetails
 	if err != nil {
 		return nil, err
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.0")
+	req.Header.Set("GoCardless-Client-Version", "2.1.1")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
