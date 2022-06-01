@@ -23,6 +23,10 @@ type BillingRequestServiceImpl struct {
 	config Config
 }
 
+type BillingRequestActionsAvailableCurrencies struct {
+	Currency string `url:"currency,omitempty" json:"currency,omitempty"`
+}
+
 type BillingRequestActionsBankAuthorisation struct {
 	Adapter             string `url:"adapter,omitempty" json:"adapter,omitempty"`
 	AuthorisationType   string `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
@@ -34,6 +38,7 @@ type BillingRequestActionsCollectCustomerDetails struct {
 }
 
 type BillingRequestActions struct {
+	AvailableCurrencies    *[]string                                    `url:"available_currencies,omitempty" json:"available_currencies,omitempty"`
 	BankAuthorisation      *BillingRequestActionsBankAuthorisation      `url:"bank_authorisation,omitempty" json:"bank_authorisation,omitempty"`
 	CollectCustomerDetails *BillingRequestActionsCollectCustomerDetails `url:"collect_customer_details,omitempty" json:"collect_customer_details,omitempty"`
 	CompletesActions       []string                                     `url:"completes_actions,omitempty" json:"completes_actions,omitempty"`
