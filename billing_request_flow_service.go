@@ -37,6 +37,7 @@ type BillingRequestFlow struct {
 	Id                  string                   `url:"id,omitempty" json:"id,omitempty"`
 	Links               *BillingRequestFlowLinks `url:"links,omitempty" json:"links,omitempty"`
 	LockBankAccount     bool                     `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
+	LockCurrency        bool                     `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
 	LockCustomerDetails bool                     `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
 	RedirectUri         string                   `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 	SessionToken        string                   `url:"session_token,omitempty" json:"session_token,omitempty"`
@@ -58,6 +59,7 @@ type BillingRequestFlowCreateParams struct {
 	ExitUri             string                              `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
 	Links               BillingRequestFlowCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 	LockBankAccount     bool                                `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
+	LockCurrency        bool                                `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
 	LockCustomerDetails bool                                `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
 	RedirectUri         string                              `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 	ShowRedirectButtons bool                                `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
