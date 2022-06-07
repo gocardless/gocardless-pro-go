@@ -171,6 +171,34 @@ func TestBillingRequestFulfil(t *testing.T) {
 	}
 }
 
+func TestBillingRequestChooseCurrency(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "choose_currency")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := BillingRequestChooseCurrencyParams{}
+
+	o, err :=
+		client.BillingRequests.ChooseCurrency(
+			ctx, "ID123", p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected BillingRequest, got nil")
+
+	}
+}
+
 func TestBillingRequestConfirmPayerDetails(t *testing.T) {
 	fixtureFile := "testdata/billing_requests.json"
 	server := runServer(t, fixtureFile, "confirm_payer_details")
