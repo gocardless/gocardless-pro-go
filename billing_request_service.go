@@ -56,6 +56,7 @@ type BillingRequestLinks struct {
 	CustomerBillingDetail string `url:"customer_billing_detail,omitempty" json:"customer_billing_detail,omitempty"`
 	MandateRequest        string `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	MandateRequestMandate string `url:"mandate_request_mandate,omitempty" json:"mandate_request_mandate,omitempty"`
+	Organisation          string `url:"organisation,omitempty" json:"organisation,omitempty"`
 	PaymentRequest        string `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 	PaymentRequestPayment string `url:"payment_request_payment,omitempty" json:"payment_request_payment,omitempty"`
 }
