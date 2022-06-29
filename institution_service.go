@@ -25,11 +25,12 @@ type InstitutionServiceImpl struct {
 
 // Institution model
 type Institution struct {
-	CountryCode string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	IconUrl     string `url:"icon_url,omitempty" json:"icon_url,omitempty"`
-	Id          string `url:"id,omitempty" json:"id,omitempty"`
-	LogoUrl     string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
-	Name        string `url:"name,omitempty" json:"name,omitempty"`
+	BankRedirect bool   `url:"bank_redirect,omitempty" json:"bank_redirect,omitempty"`
+	CountryCode  string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	IconUrl      string `url:"icon_url,omitempty" json:"icon_url,omitempty"`
+	Id           string `url:"id,omitempty" json:"id,omitempty"`
+	LogoUrl      string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
+	Name         string `url:"name,omitempty" json:"name,omitempty"`
 }
 
 type InstitutionService interface {
@@ -90,7 +91,7 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.1.1")
+	req.Header.Set("GoCardless-Client-Version", "2.2.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
