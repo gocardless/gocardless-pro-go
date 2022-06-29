@@ -621,6 +621,7 @@ type BillingRequestCollectCustomerDetailsParamsCustomerBillingDetail struct {
 	City                  string `url:"city,omitempty" json:"city,omitempty"`
 	CountryCode           string `url:"country_code,omitempty" json:"country_code,omitempty"`
 	DanishIdentityNumber  string `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	IpAddress             string `url:"ip_address,omitempty" json:"ip_address,omitempty"`
 	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region                string `url:"region,omitempty" json:"region,omitempty"`
 	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
