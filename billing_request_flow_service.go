@@ -53,16 +53,40 @@ type BillingRequestFlowCreateParamsLinks struct {
 	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 }
 
+type BillingRequestFlowCreateParamsPrefilledBankAccount struct {
+	AccountType string `url:"account_type,omitempty" json:"account_type,omitempty"`
+}
+
+type BillingRequestFlowCreateParamsPrefilledCustomer struct {
+	AddressLine1          string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language              string `url:"language,omitempty" json:"language,omitempty"`
+	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+}
+
 // BillingRequestFlowCreateParams parameters
 type BillingRequestFlowCreateParams struct {
-	AutoFulfil          bool                                `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
-	ExitUri             string                              `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
-	Links               BillingRequestFlowCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	LockBankAccount     bool                                `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
-	LockCurrency        bool                                `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
-	LockCustomerDetails bool                                `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
-	RedirectUri         string                              `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
-	ShowRedirectButtons bool                                `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
+	AutoFulfil           bool                                                `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
+	ExitUri              string                                              `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
+	Links                BillingRequestFlowCreateParamsLinks                 `url:"links,omitempty" json:"links,omitempty"`
+	LockBankAccount      bool                                                `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
+	LockCurrency         bool                                                `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
+	LockCustomerDetails  bool                                                `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
+	PrefilledBankAccount *BillingRequestFlowCreateParamsPrefilledBankAccount `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
+	PrefilledCustomer    *BillingRequestFlowCreateParamsPrefilledCustomer    `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
+	RedirectUri          string                                              `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	ShowRedirectButtons  bool                                                `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
 }
 
 // Create
