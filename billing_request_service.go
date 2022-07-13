@@ -407,10 +407,11 @@ type BillingRequestCreateParamsLinks struct {
 }
 
 type BillingRequestCreateParamsMandateRequest struct {
-	Currency string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Scheme   string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Verify   string                 `url:"verify,omitempty" json:"verify,omitempty"`
+	Currency  string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Metadata  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme    string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Verify    string                 `url:"verify,omitempty" json:"verify,omitempty"`
 }
 
 type BillingRequestCreateParamsPaymentRequest struct {
