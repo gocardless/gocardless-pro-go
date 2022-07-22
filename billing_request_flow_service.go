@@ -43,7 +43,6 @@ type BillingRequestFlowPrefilledCustomer struct {
 	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
 	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
 	Language              string `url:"language,omitempty" json:"language,omitempty"`
-	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region                string `url:"region,omitempty" json:"region,omitempty"`
 	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
@@ -93,7 +92,6 @@ type BillingRequestFlowCreateParamsPrefilledCustomer struct {
 	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
 	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
 	Language              string `url:"language,omitempty" json:"language,omitempty"`
-	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region                string `url:"region,omitempty" json:"region,omitempty"`
 	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
