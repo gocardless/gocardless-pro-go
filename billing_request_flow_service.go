@@ -43,7 +43,6 @@ type BillingRequestFlowPrefilledCustomer struct {
 	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
 	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
 	Language              string `url:"language,omitempty" json:"language,omitempty"`
-	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region                string `url:"region,omitempty" json:"region,omitempty"`
 	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
@@ -93,7 +92,6 @@ type BillingRequestFlowCreateParamsPrefilledCustomer struct {
 	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
 	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
 	Language              string `url:"language,omitempty" json:"language,omitempty"`
-	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region                string `url:"region,omitempty" json:"region,omitempty"`
 	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
@@ -153,7 +151,7 @@ func (s *BillingRequestFlowServiceImpl) Create(ctx context.Context, p BillingReq
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.4.0")
+	req.Header.Set("GoCardless-Client-Version", "2.5.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -253,7 +251,7 @@ func (s *BillingRequestFlowServiceImpl) Initialise(ctx context.Context, identity
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.4.0")
+	req.Header.Set("GoCardless-Client-Version", "2.5.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
