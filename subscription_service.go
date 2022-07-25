@@ -218,7 +218,8 @@ type SubscriptionListResult struct {
 
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// subscriptions.
+// subscriptions. Please note if the subscriptions are related to customers who
+// have been removed, they will not be shown in the response.
 func (s *SubscriptionServiceImpl) List(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) (*SubscriptionListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/subscriptions"))
 	if err != nil {
