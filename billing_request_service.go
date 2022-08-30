@@ -61,16 +61,27 @@ type BillingRequestLinks struct {
 	PaymentRequestPayment string `url:"payment_request_payment,omitempty" json:"payment_request_payment,omitempty"`
 }
 
+type BillingRequestMandateRequestConsentParameters struct {
+	EndDate              string `url:"end_date,omitempty" json:"end_date,omitempty"`
+	MandatePurposeCode   string `url:"mandate_purpose_code,omitempty" json:"mandate_purpose_code,omitempty"`
+	MaxAmountPerPayment  int    `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+	MaxAmountPerPeriod   int    `url:"max_amount_per_period,omitempty" json:"max_amount_per_period,omitempty"`
+	MaxPaymentsPerPeriod int    `url:"max_payments_per_period,omitempty" json:"max_payments_per_period,omitempty"`
+	Period               string `url:"period,omitempty" json:"period,omitempty"`
+	StartDate            string `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
 type BillingRequestMandateRequestLinks struct {
 	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 }
 
 type BillingRequestMandateRequest struct {
-	Currency string                             `url:"currency,omitempty" json:"currency,omitempty"`
-	Links    *BillingRequestMandateRequestLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata map[string]interface{}             `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Scheme   string                             `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Verify   string                             `url:"verify,omitempty" json:"verify,omitempty"`
+	ConsentParameters *BillingRequestMandateRequestConsentParameters `url:"consent_parameters,omitempty" json:"consent_parameters,omitempty"`
+	Currency          string                                         `url:"currency,omitempty" json:"currency,omitempty"`
+	Links             *BillingRequestMandateRequestLinks             `url:"links,omitempty" json:"links,omitempty"`
+	Metadata          map[string]interface{}                         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Scheme            string                                         `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Verify            string                                         `url:"verify,omitempty" json:"verify,omitempty"`
 }
 
 type BillingRequestPaymentRequestLinks struct {
