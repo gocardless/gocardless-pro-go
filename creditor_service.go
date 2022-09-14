@@ -54,7 +54,6 @@ type CreditorSchemeIdentifiers struct {
 
 // Creditor model
 type Creditor struct {
-	Activated                           bool                        `url:"activated,omitempty" json:"activated,omitempty"`
 	AddressLine1                        string                      `url:"address_line1,omitempty" json:"address_line1,omitempty"`
 	AddressLine2                        string                      `url:"address_line2,omitempty" json:"address_line2,omitempty"`
 	AddressLine3                        string                      `url:"address_line3,omitempty" json:"address_line3,omitempty"`
