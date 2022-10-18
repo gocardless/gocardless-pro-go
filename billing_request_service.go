@@ -61,14 +61,17 @@ type BillingRequestLinks struct {
 	PaymentRequestPayment string `url:"payment_request_payment,omitempty" json:"payment_request_payment,omitempty"`
 }
 
-type BillingRequestMandateRequestConsentParameters struct {
-	EndDate              string `url:"end_date,omitempty" json:"end_date,omitempty"`
-	MandatePurposeCode   string `url:"mandate_purpose_code,omitempty" json:"mandate_purpose_code,omitempty"`
-	MaxAmountPerPayment  int    `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+type BillingRequestMandateRequestConsentParametersPeriods struct {
 	MaxAmountPerPeriod   int    `url:"max_amount_per_period,omitempty" json:"max_amount_per_period,omitempty"`
 	MaxPaymentsPerPeriod int    `url:"max_payments_per_period,omitempty" json:"max_payments_per_period,omitempty"`
 	Period               string `url:"period,omitempty" json:"period,omitempty"`
-	StartDate            string `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
+type BillingRequestMandateRequestConsentParameters struct {
+	EndDate             string                                                 `url:"end_date,omitempty" json:"end_date,omitempty"`
+	MaxAmountPerPayment int                                                    `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+	Periods             []BillingRequestMandateRequestConsentParametersPeriods `url:"periods,omitempty" json:"periods,omitempty"`
+	StartDate           string                                                 `url:"start_date,omitempty" json:"start_date,omitempty"`
 }
 
 type BillingRequestMandateRequestLinks struct {
