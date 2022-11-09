@@ -81,6 +81,7 @@ type BillingRequestMandateRequestLinks struct {
 type BillingRequestMandateRequest struct {
 	ConsentParameters *BillingRequestMandateRequestConsentParameters `url:"consent_parameters,omitempty" json:"consent_parameters,omitempty"`
 	Currency          string                                         `url:"currency,omitempty" json:"currency,omitempty"`
+	Description       string                                         `url:"description,omitempty" json:"description,omitempty"`
 	Links             *BillingRequestMandateRequestLinks             `url:"links,omitempty" json:"links,omitempty"`
 	Metadata          map[string]interface{}                         `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Scheme            string                                         `url:"scheme,omitempty" json:"scheme,omitempty"`
@@ -421,11 +422,12 @@ type BillingRequestCreateParamsLinks struct {
 }
 
 type BillingRequestCreateParamsMandateRequest struct {
-	Currency  string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Metadata  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme    string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Verify    string                 `url:"verify,omitempty" json:"verify,omitempty"`
+	Currency    string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Description string                 `url:"description,omitempty" json:"description,omitempty"`
+	Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference   string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme      string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Verify      string                 `url:"verify,omitempty" json:"verify,omitempty"`
 }
 
 type BillingRequestCreateParamsPaymentRequest struct {
