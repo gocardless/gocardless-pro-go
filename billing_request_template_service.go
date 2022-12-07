@@ -29,6 +29,7 @@ type BillingRequestTemplate struct {
 	CreatedAt                 string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Id                        string                 `url:"id,omitempty" json:"id,omitempty"`
 	MandateRequestCurrency    string                 `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
+	MandateRequestDescription string                 `url:"mandate_request_description,omitempty" json:"mandate_request_description,omitempty"`
 	MandateRequestMetadata    map[string]interface{} `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
 	MandateRequestScheme      string                 `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
 	MandateRequestVerify      string                 `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
@@ -368,6 +369,7 @@ type BillingRequestTemplateCreateParamsLinks struct {
 type BillingRequestTemplateCreateParams struct {
 	Links                     *BillingRequestTemplateCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequestCurrency    string                                   `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
+	MandateRequestDescription string                                   `url:"mandate_request_description,omitempty" json:"mandate_request_description,omitempty"`
 	MandateRequestMetadata    map[string]interface{}                   `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
 	MandateRequestScheme      string                                   `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
 	MandateRequestVerify      string                                   `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
@@ -477,6 +479,7 @@ func (s *BillingRequestTemplateServiceImpl) Create(ctx context.Context, p Billin
 // BillingRequestTemplateUpdateParams parameters
 type BillingRequestTemplateUpdateParams struct {
 	MandateRequestCurrency    string                 `url:"mandate_request_currency,omitempty" json:"mandate_request_currency,omitempty"`
+	MandateRequestDescription string                 `url:"mandate_request_description,omitempty" json:"mandate_request_description,omitempty"`
 	MandateRequestMetadata    map[string]interface{} `url:"mandate_request_metadata,omitempty" json:"mandate_request_metadata,omitempty"`
 	MandateRequestScheme      string                 `url:"mandate_request_scheme,omitempty" json:"mandate_request_scheme,omitempty"`
 	MandateRequestVerify      string                 `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`

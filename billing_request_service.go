@@ -61,17 +61,18 @@ type BillingRequestLinks struct {
 	PaymentRequestPayment string `url:"payment_request_payment,omitempty" json:"payment_request_payment,omitempty"`
 }
 
-type BillingRequestMandateRequestConsentParametersPeriods struct {
-	MaxAmountPerPeriod   int    `url:"max_amount_per_period,omitempty" json:"max_amount_per_period,omitempty"`
-	MaxPaymentsPerPeriod int    `url:"max_payments_per_period,omitempty" json:"max_payments_per_period,omitempty"`
-	Period               string `url:"period,omitempty" json:"period,omitempty"`
+type BillingRequestMandateRequestConstraintsPeriodicLimits struct {
+	Alignment      string `url:"alignment,omitempty" json:"alignment,omitempty"`
+	MaxPayments    int    `url:"max_payments,omitempty" json:"max_payments,omitempty"`
+	MaxTotalAmount int    `url:"max_total_amount,omitempty" json:"max_total_amount,omitempty"`
+	Period         string `url:"period,omitempty" json:"period,omitempty"`
 }
 
-type BillingRequestMandateRequestConsentParameters struct {
-	EndDate             string                                                 `url:"end_date,omitempty" json:"end_date,omitempty"`
-	MaxAmountPerPayment int                                                    `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
-	Periods             []BillingRequestMandateRequestConsentParametersPeriods `url:"periods,omitempty" json:"periods,omitempty"`
-	StartDate           string                                                 `url:"start_date,omitempty" json:"start_date,omitempty"`
+type BillingRequestMandateRequestConstraints struct {
+	EndDate             string                                                  `url:"end_date,omitempty" json:"end_date,omitempty"`
+	MaxAmountPerPayment int                                                     `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+	PeriodicLimits      []BillingRequestMandateRequestConstraintsPeriodicLimits `url:"periodic_limits,omitempty" json:"periodic_limits,omitempty"`
+	StartDate           string                                                  `url:"start_date,omitempty" json:"start_date,omitempty"`
 }
 
 type BillingRequestMandateRequestLinks struct {
@@ -79,13 +80,13 @@ type BillingRequestMandateRequestLinks struct {
 }
 
 type BillingRequestMandateRequest struct {
-	ConsentParameters *BillingRequestMandateRequestConsentParameters `url:"consent_parameters,omitempty" json:"consent_parameters,omitempty"`
-	Currency          string                                         `url:"currency,omitempty" json:"currency,omitempty"`
-	Description       string                                         `url:"description,omitempty" json:"description,omitempty"`
-	Links             *BillingRequestMandateRequestLinks             `url:"links,omitempty" json:"links,omitempty"`
-	Metadata          map[string]interface{}                         `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Scheme            string                                         `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Verify            string                                         `url:"verify,omitempty" json:"verify,omitempty"`
+	Constraints *BillingRequestMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
+	Currency    string                                   `url:"currency,omitempty" json:"currency,omitempty"`
+	Description string                                   `url:"description,omitempty" json:"description,omitempty"`
+	Links       *BillingRequestMandateRequestLinks       `url:"links,omitempty" json:"links,omitempty"`
+	Metadata    map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Scheme      string                                   `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Verify      string                                   `url:"verify,omitempty" json:"verify,omitempty"`
 }
 
 type BillingRequestPaymentRequestLinks struct {
@@ -421,13 +422,28 @@ type BillingRequestCreateParamsLinks struct {
 	CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 }
 
+type BillingRequestCreateParamsMandateRequestConstraintsPeriodicLimits struct {
+	Alignment      string `url:"alignment,omitempty" json:"alignment,omitempty"`
+	MaxPayments    int    `url:"max_payments,omitempty" json:"max_payments,omitempty"`
+	MaxTotalAmount int    `url:"max_total_amount,omitempty" json:"max_total_amount,omitempty"`
+	Period         string `url:"period,omitempty" json:"period,omitempty"`
+}
+
+type BillingRequestCreateParamsMandateRequestConstraints struct {
+	EndDate             string                                                              `url:"end_date,omitempty" json:"end_date,omitempty"`
+	MaxAmountPerPayment int                                                                 `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+	PeriodicLimits      []BillingRequestCreateParamsMandateRequestConstraintsPeriodicLimits `url:"periodic_limits,omitempty" json:"periodic_limits,omitempty"`
+	StartDate           string                                                              `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
 type BillingRequestCreateParamsMandateRequest struct {
-	Currency    string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Description string                 `url:"description,omitempty" json:"description,omitempty"`
-	Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference   string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme      string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Verify      string                 `url:"verify,omitempty" json:"verify,omitempty"`
+	Constraints *BillingRequestCreateParamsMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
+	Currency    string                                               `url:"currency,omitempty" json:"currency,omitempty"`
+	Description string                                               `url:"description,omitempty" json:"description,omitempty"`
+	Metadata    map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference   string                                               `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme      string                                               `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Verify      string                                               `url:"verify,omitempty" json:"verify,omitempty"`
 }
 
 type BillingRequestCreateParamsPaymentRequest struct {
