@@ -1,5 +1,5 @@
 { 
   "handle": {
-    "body": {"customer_notifications":{"action_taken":"example action_taken 2286","action_taken_at":"2022-12-07T14:02:59.126Z","action_taken_by":"example action_taken_by 6537","id":"PCN123","links":{"customer":"CU123","event":"EV123","mandate":"MD123","payment":"PM123","refund":"RF123","subscription":"SB123"},"type":"payment_created"}}
+    "body": {"customer_notifications":{"action_taken":"example action_taken 2286","action_taken_at":"2022-12-08T10:52:36.612Z","action_taken_by":"example action_taken_by 6537","id":"PCN123","links":{"customer":"CU123","event":"EV123","mandate":"MD123","payment":"PM123","refund":"RF123","subscription":"SB123"},"type":"payment_created"}}
   }
 }
