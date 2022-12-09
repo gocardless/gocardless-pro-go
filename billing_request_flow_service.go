@@ -42,7 +42,6 @@ type BillingRequestFlowPrefilledCustomer struct {
 	Email                 string `url:"email,omitempty" json:"email,omitempty"`
 	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
 	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
-	Language              string `url:"language,omitempty" json:"language,omitempty"`
 	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region                string `url:"region,omitempty" json:"region,omitempty"`
 	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
@@ -56,6 +55,7 @@ type BillingRequestFlow struct {
 	ExitUri              string                                  `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
 	ExpiresAt            string                                  `url:"expires_at,omitempty" json:"expires_at,omitempty"`
 	Id                   string                                  `url:"id,omitempty" json:"id,omitempty"`
+	Language             string                                  `url:"language,omitempty" json:"language,omitempty"`
 	Links                *BillingRequestFlowLinks                `url:"links,omitempty" json:"links,omitempty"`
 	LockBankAccount      bool                                    `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
 	LockCurrency         bool                                    `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
@@ -91,7 +91,6 @@ type BillingRequestFlowCreateParamsPrefilledCustomer struct {
 	Email                 string `url:"email,omitempty" json:"email,omitempty"`
 	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
 	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
-	Language              string `url:"language,omitempty" json:"language,omitempty"`
 	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region                string `url:"region,omitempty" json:"region,omitempty"`
 	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
@@ -101,6 +100,7 @@ type BillingRequestFlowCreateParamsPrefilledCustomer struct {
 type BillingRequestFlowCreateParams struct {
 	AutoFulfil           bool                                                `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
 	ExitUri              string                                              `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
+	Language             string                                              `url:"language,omitempty" json:"language,omitempty"`
 	Links                BillingRequestFlowCreateParamsLinks                 `url:"links,omitempty" json:"links,omitempty"`
 	LockBankAccount      bool                                                `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
 	LockCurrency         bool                                                `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
