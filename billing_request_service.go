@@ -61,16 +61,32 @@ type BillingRequestLinks struct {
 	PaymentRequestPayment string `url:"payment_request_payment,omitempty" json:"payment_request_payment,omitempty"`
 }
 
+type BillingRequestMandateRequestConstraintsPeriodicLimits struct {
+	Alignment      string `url:"alignment,omitempty" json:"alignment,omitempty"`
+	MaxPayments    int    `url:"max_payments,omitempty" json:"max_payments,omitempty"`
+	MaxTotalAmount int    `url:"max_total_amount,omitempty" json:"max_total_amount,omitempty"`
+	Period         string `url:"period,omitempty" json:"period,omitempty"`
+}
+
+type BillingRequestMandateRequestConstraints struct {
+	EndDate             string                                                  `url:"end_date,omitempty" json:"end_date,omitempty"`
+	MaxAmountPerPayment int                                                     `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+	PeriodicLimits      []BillingRequestMandateRequestConstraintsPeriodicLimits `url:"periodic_limits,omitempty" json:"periodic_limits,omitempty"`
+	StartDate           string                                                  `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
 type BillingRequestMandateRequestLinks struct {
 	Mandate string `url:"mandate,omitempty" json:"mandate,omitempty"`
 }
 
 type BillingRequestMandateRequest struct {
-	Currency string                             `url:"currency,omitempty" json:"currency,omitempty"`
-	Links    *BillingRequestMandateRequestLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata map[string]interface{}             `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Scheme   string                             `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Verify   string                             `url:"verify,omitempty" json:"verify,omitempty"`
+	Constraints *BillingRequestMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
+	Currency    string                                   `url:"currency,omitempty" json:"currency,omitempty"`
+	Description string                                   `url:"description,omitempty" json:"description,omitempty"`
+	Links       *BillingRequestMandateRequestLinks       `url:"links,omitempty" json:"links,omitempty"`
+	Metadata    map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Scheme      string                                   `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Verify      string                                   `url:"verify,omitempty" json:"verify,omitempty"`
 }
 
 type BillingRequestPaymentRequestLinks struct {
@@ -228,7 +244,7 @@ func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestLi
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -337,7 +353,7 @@ func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingR
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -406,12 +422,28 @@ type BillingRequestCreateParamsLinks struct {
 	CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 }
 
+type BillingRequestCreateParamsMandateRequestConstraintsPeriodicLimits struct {
+	Alignment      string `url:"alignment,omitempty" json:"alignment,omitempty"`
+	MaxPayments    int    `url:"max_payments,omitempty" json:"max_payments,omitempty"`
+	MaxTotalAmount int    `url:"max_total_amount,omitempty" json:"max_total_amount,omitempty"`
+	Period         string `url:"period,omitempty" json:"period,omitempty"`
+}
+
+type BillingRequestCreateParamsMandateRequestConstraints struct {
+	EndDate             string                                                              `url:"end_date,omitempty" json:"end_date,omitempty"`
+	MaxAmountPerPayment int                                                                 `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+	PeriodicLimits      []BillingRequestCreateParamsMandateRequestConstraintsPeriodicLimits `url:"periodic_limits,omitempty" json:"periodic_limits,omitempty"`
+	StartDate           string                                                              `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
 type BillingRequestCreateParamsMandateRequest struct {
-	Currency  string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Metadata  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme    string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Verify    string                 `url:"verify,omitempty" json:"verify,omitempty"`
+	Constraints *BillingRequestCreateParamsMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
+	Currency    string                                               `url:"currency,omitempty" json:"currency,omitempty"`
+	Description string                                               `url:"description,omitempty" json:"description,omitempty"`
+	Metadata    map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference   string                                               `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme      string                                               `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Verify      string                                               `url:"verify,omitempty" json:"verify,omitempty"`
 }
 
 type BillingRequestCreateParamsPaymentRequest struct {
@@ -472,7 +504,7 @@ func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequest
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -554,7 +586,7 @@ func (s *BillingRequestServiceImpl) Get(ctx context.Context, identity string, op
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -684,7 +716,7 @@ func (s *BillingRequestServiceImpl) CollectCustomerDetails(ctx context.Context, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -804,7 +836,7 @@ func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, iden
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -904,7 +936,7 @@ func (s *BillingRequestServiceImpl) Fulfil(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -965,9 +997,12 @@ type BillingRequestChooseCurrencyParams struct {
 
 // ChooseCurrency
 // This will allow for the updating of the currency and subsequently the scheme
-// if needed for a billing request
-// this will only be available for mandate only flows, it will not support
-// payments requests or plans
+// if
+// needed for a Billing Request. This will only be available for mandate only
+// flows
+// which do not have the lock_currency flag set to true on the Billing Request
+// Flow. It
+// will also not support any request which has a payments request.
 func (s *BillingRequestServiceImpl) ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/choose_currency",
 		identity))
@@ -1007,7 +1042,7 @@ func (s *BillingRequestServiceImpl) ChooseCurrency(ctx context.Context, identity
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1108,7 +1143,7 @@ func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, ide
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1208,7 +1243,7 @@ func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1310,7 +1345,7 @@ func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1409,7 +1444,7 @@ func (s *BillingRequestServiceImpl) Fallback(ctx context.Context, identity strin
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.5.0")
+	req.Header.Set("GoCardless-Client-Version", "2.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
