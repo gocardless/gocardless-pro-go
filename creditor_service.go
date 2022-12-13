@@ -62,6 +62,7 @@ type Creditor struct {
 	City                                string                      `url:"city,omitempty" json:"city,omitempty"`
 	CountryCode                         string                      `url:"country_code,omitempty" json:"country_code,omitempty"`
 	CreatedAt                           string                      `url:"created_at,omitempty" json:"created_at,omitempty"`
+	CreditorType                        string                      `url:"creditor_type,omitempty" json:"creditor_type,omitempty"`
 	CustomPaymentPagesEnabled           bool                        `url:"custom_payment_pages_enabled,omitempty" json:"custom_payment_pages_enabled,omitempty"`
 	FxPayoutCurrency                    string                      `url:"fx_payout_currency,omitempty" json:"fx_payout_currency,omitempty"`
 	Id                                  string                      `url:"id,omitempty" json:"id,omitempty"`
@@ -91,6 +92,7 @@ type CreditorCreateParams struct {
 	AddressLine3 string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
 	City         string                 `url:"city,omitempty" json:"city,omitempty"`
 	CountryCode  string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreditorType string                 `url:"creditor_type,omitempty" json:"creditor_type,omitempty"`
 	Links        map[string]interface{} `url:"links,omitempty" json:"links,omitempty"`
 	Name         string                 `url:"name,omitempty" json:"name,omitempty"`
 	PostalCode   string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
@@ -137,7 +139,7 @@ func (s *CreditorServiceImpl) Create(ctx context.Context, p CreditorCreateParams
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.6.0")
+	req.Header.Set("GoCardless-Client-Version", "2.7.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -255,7 +257,7 @@ func (s *CreditorServiceImpl) List(ctx context.Context, p CreditorListParams, op
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.6.0")
+	req.Header.Set("GoCardless-Client-Version", "2.7.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -364,7 +366,7 @@ func (c *CreditorListPagingIterator) Value(ctx context.Context) (*CreditorListRe
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.6.0")
+	req.Header.Set("GoCardless-Client-Version", "2.7.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -460,7 +462,7 @@ func (s *CreditorServiceImpl) Get(ctx context.Context, identity string, p Credit
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.6.0")
+	req.Header.Set("GoCardless-Client-Version", "2.7.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -577,7 +579,7 @@ func (s *CreditorServiceImpl) Update(ctx context.Context, identity string, p Cre
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.6.0")
+	req.Header.Set("GoCardless-Client-Version", "2.7.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
