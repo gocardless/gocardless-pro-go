@@ -134,7 +134,12 @@ func (err *APIError) Error() string {
 }
 
 type ValidationError struct {
-	Message        string `json:"message"`
-	Field          string `json:"field"`
-	RequestPointer string `json:"request_pointer"`
+	Message        string     `json:"message"`
+	Field          string     `json:"field"`
+	RequestPointer string     `json:"request_pointer"`
+	Links          ErrorLinks `json:"links"`
+}
+
+type ErrorLinks struct {
+	ConflictingResourceID string `json:"conflicting_resource_id"`
 }
