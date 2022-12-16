@@ -663,7 +663,7 @@ type BlockBlockByRefResult struct {
 // blocks created.
 func (s *BlockServiceImpl) BlockByRef(ctx context.Context, p BlockBlockByRefParams, opts ...RequestOption) (
 	*BlockBlockByRefResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/block_by_ref"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks/block_by_ref"))
 	if err != nil {
 		return nil, err
 	}
