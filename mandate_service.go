@@ -74,11 +74,12 @@ type MandateCreateParamsLinks struct {
 
 // MandateCreateParams parameters
 type MandateCreateParams struct {
-	Links          MandateCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata       map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayerIpAddress string                   `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
-	Reference      string                   `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme         string                   `url:"scheme,omitempty" json:"scheme,omitempty"`
+	AuthorisationSource string                   `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
+	Links               MandateCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata            map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerIpAddress      string                   `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
+	Reference           string                   `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme              string                   `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 // Create
