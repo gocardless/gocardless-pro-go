@@ -45,6 +45,7 @@ type MandateLinks struct {
 
 // Mandate model
 type Mandate struct {
+	AuthorisationSource     string                    `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
 	ConsentParameters       *MandateConsentParameters `url:"consent_parameters,omitempty" json:"consent_parameters,omitempty"`
 	CreatedAt               string                    `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Id                      string                    `url:"id,omitempty" json:"id,omitempty"`
