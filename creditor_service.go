@@ -87,16 +87,10 @@ type CreditorService interface {
 
 // CreditorCreateParams parameters
 type CreditorCreateParams struct {
-	AddressLine1 string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2 string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3 string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	City         string                 `url:"city,omitempty" json:"city,omitempty"`
 	CountryCode  string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
 	CreditorType string                 `url:"creditor_type,omitempty" json:"creditor_type,omitempty"`
 	Links        map[string]interface{} `url:"links,omitempty" json:"links,omitempty"`
 	Name         string                 `url:"name,omitempty" json:"name,omitempty"`
-	PostalCode   string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region       string                 `url:"region,omitempty" json:"region,omitempty"`
 }
 
 // Create
