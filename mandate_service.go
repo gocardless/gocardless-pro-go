@@ -56,6 +56,7 @@ type Mandate struct {
 	Reference               string                    `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme                  string                    `url:"scheme,omitempty" json:"scheme,omitempty"`
 	Status                  string                    `url:"status,omitempty" json:"status,omitempty"`
+	VerifiedAt              string                    `url:"verified_at,omitempty" json:"verified_at,omitempty"`
 }
 
 type MandateService interface {
