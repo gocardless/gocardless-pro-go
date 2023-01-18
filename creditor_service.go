@@ -41,8 +41,10 @@ type CreditorSchemeIdentifiers struct {
 	CanSpecifyMandateReference bool   `url:"can_specify_mandate_reference,omitempty" json:"can_specify_mandate_reference,omitempty"`
 	City                       string `url:"city,omitempty" json:"city,omitempty"`
 	CountryCode                string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreatedAt                  string `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Currency                   string `url:"currency,omitempty" json:"currency,omitempty"`
 	Email                      string `url:"email,omitempty" json:"email,omitempty"`
+	Id                         string `url:"id,omitempty" json:"id,omitempty"`
 	MinimumAdvanceNotice       int    `url:"minimum_advance_notice,omitempty" json:"minimum_advance_notice,omitempty"`
 	Name                       string `url:"name,omitempty" json:"name,omitempty"`
 	PhoneNumber                string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
@@ -50,6 +52,7 @@ type CreditorSchemeIdentifiers struct {
 	Reference                  string `url:"reference,omitempty" json:"reference,omitempty"`
 	Region                     string `url:"region,omitempty" json:"region,omitempty"`
 	Scheme                     string `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Status                     string `url:"status,omitempty" json:"status,omitempty"`
 }
 
 // Creditor model

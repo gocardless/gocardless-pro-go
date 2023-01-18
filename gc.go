@@ -33,6 +33,7 @@ type Service struct {
 	RedirectFlows           RedirectFlowService
 	Refunds                 RefundService
 	ScenarioSimulators      ScenarioSimulatorService
+	SchemeIdentifiers       SchemeIdentifierService
 	Subscriptions           SubscriptionService
 	TaxRates                TaxRateService
 	Webhooks                WebhookService
@@ -99,6 +100,8 @@ func New(config Config) (*Service, error) {
 		}, Refunds: &RefundServiceImpl{
 			config: config,
 		}, ScenarioSimulators: &ScenarioSimulatorServiceImpl{
+			config: config,
+		}, SchemeIdentifiers: &SchemeIdentifierServiceImpl{
 			config: config,
 		}, Subscriptions: &SubscriptionServiceImpl{
 			config: config,
