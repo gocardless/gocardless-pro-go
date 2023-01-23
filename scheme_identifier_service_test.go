@@ -5,6 +5,34 @@ import (
 	"testing"
 )
 
+func TestSchemeIdentifierCreate(t *testing.T) {
+	fixtureFile := "testdata/scheme_identifiers.json"
+	server := runServer(t, fixtureFile, "create")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := SchemeIdentifierCreateParams{}
+
+	o, err :=
+		client.SchemeIdentifiers.Create(
+			ctx, p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected SchemeIdentifier, got nil")
+
+	}
+}
+
 func TestSchemeIdentifierList(t *testing.T) {
 	fixtureFile := "testdata/scheme_identifiers.json"
 	server := runServer(t, fixtureFile, "list")
