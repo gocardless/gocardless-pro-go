@@ -36,6 +36,7 @@ type Service struct {
 	SchemeIdentifiers       SchemeIdentifierService
 	Subscriptions           SubscriptionService
 	TaxRates                TaxRateService
+	VerificationDetails     VerificationDetailService
 	Webhooks                WebhookService
 }
 
@@ -106,6 +107,8 @@ func New(config Config) (*Service, error) {
 		}, Subscriptions: &SubscriptionServiceImpl{
 			config: config,
 		}, TaxRates: &TaxRateServiceImpl{
+			config: config,
+		}, VerificationDetails: &VerificationDetailServiceImpl{
 			config: config,
 		}, Webhooks: &WebhookServiceImpl{
 			config: config,
