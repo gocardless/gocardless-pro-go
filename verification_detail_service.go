@@ -51,7 +51,7 @@ type VerificationDetail struct {
 }
 
 type VerificationDetailService interface {
-	Create(ctx context.Context, identity string, p VerificationDetailCreateParams, opts ...RequestOption) (*VerificationDetail, error)
+	Create(ctx context.Context, p VerificationDetailCreateParams, opts ...RequestOption) (*VerificationDetail, error)
 }
 
 type VerificationDetailCreateParamsDirectors struct {
@@ -87,9 +87,8 @@ type VerificationDetailCreateParams struct {
 // Currently, only UK-based companies are supported.
 // In other words, to submit verification details for a creditor, their
 // creditor_type must be company and their country_code must be GB.
-func (s *VerificationDetailServiceImpl) Create(ctx context.Context, identity string, p VerificationDetailCreateParams, opts ...RequestOption) (*VerificationDetail, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/verification_details/%v",
-		identity))
+func (s *VerificationDetailServiceImpl) Create(ctx context.Context, p VerificationDetailCreateParams, opts ...RequestOption) (*VerificationDetail, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/verification_details"))
 	if err != nil {
 		return nil, err
 	}

@@ -20,7 +20,7 @@ func TestVerificationDetailCreate(t *testing.T) {
 
 	o, err :=
 		client.VerificationDetails.Create(
-			ctx, "ID123", p)
+			ctx, p)
 
 	if err != nil {
 		t.Fatal(err)
