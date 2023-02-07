@@ -41,8 +41,10 @@ type CreditorSchemeIdentifiers struct {
 	CanSpecifyMandateReference bool   `url:"can_specify_mandate_reference,omitempty" json:"can_specify_mandate_reference,omitempty"`
 	City                       string `url:"city,omitempty" json:"city,omitempty"`
 	CountryCode                string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreatedAt                  string `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Currency                   string `url:"currency,omitempty" json:"currency,omitempty"`
 	Email                      string `url:"email,omitempty" json:"email,omitempty"`
+	Id                         string `url:"id,omitempty" json:"id,omitempty"`
 	MinimumAdvanceNotice       int    `url:"minimum_advance_notice,omitempty" json:"minimum_advance_notice,omitempty"`
 	Name                       string `url:"name,omitempty" json:"name,omitempty"`
 	PhoneNumber                string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
@@ -50,6 +52,7 @@ type CreditorSchemeIdentifiers struct {
 	Reference                  string `url:"reference,omitempty" json:"reference,omitempty"`
 	Region                     string `url:"region,omitempty" json:"region,omitempty"`
 	Scheme                     string `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Status                     string `url:"status,omitempty" json:"status,omitempty"`
 }
 
 // Creditor model
@@ -83,20 +86,15 @@ type CreditorService interface {
 	All(ctx context.Context, p CreditorListParams, opts ...RequestOption) *CreditorListPagingIterator
 	Get(ctx context.Context, identity string, p CreditorGetParams, opts ...RequestOption) (*Creditor, error)
 	Update(ctx context.Context, identity string, p CreditorUpdateParams, opts ...RequestOption) (*Creditor, error)
+	ApplySchemeIdentifier(ctx context.Context, identity string, p CreditorApplySchemeIdentifierParams, opts ...RequestOption) (*Creditor, error)
 }
 
 // CreditorCreateParams parameters
 type CreditorCreateParams struct {
-	AddressLine1 string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2 string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3 string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	City         string                 `url:"city,omitempty" json:"city,omitempty"`
 	CountryCode  string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
 	CreditorType string                 `url:"creditor_type,omitempty" json:"creditor_type,omitempty"`
 	Links        map[string]interface{} `url:"links,omitempty" json:"links,omitempty"`
 	Name         string                 `url:"name,omitempty" json:"name,omitempty"`
-	PostalCode   string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region       string                 `url:"region,omitempty" json:"region,omitempty"`
 }
 
 // Create
@@ -139,7 +137,7 @@ func (s *CreditorServiceImpl) Create(ctx context.Context, p CreditorCreateParams
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.9.0")
+	req.Header.Set("GoCardless-Client-Version", "2.10.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -257,7 +255,7 @@ func (s *CreditorServiceImpl) List(ctx context.Context, p CreditorListParams, op
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.9.0")
+	req.Header.Set("GoCardless-Client-Version", "2.10.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -366,7 +364,7 @@ func (c *CreditorListPagingIterator) Value(ctx context.Context) (*CreditorListRe
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.9.0")
+	req.Header.Set("GoCardless-Client-Version", "2.10.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -462,7 +460,7 @@ func (s *CreditorServiceImpl) Get(ctx context.Context, identity string, p Credit
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.9.0")
+	req.Header.Set("GoCardless-Client-Version", "2.10.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -579,7 +577,117 @@ func (s *CreditorServiceImpl) Update(ctx context.Context, identity string, p Cre
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.9.0")
+	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err      *APIError `json:"error"`
+		Creditor *Creditor `json:"creditors"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Creditor == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.Creditor, nil
+}
+
+type CreditorApplySchemeIdentifierParamsLinks struct {
+	SchemeIdentifier string `url:"scheme_identifier,omitempty" json:"scheme_identifier,omitempty"`
+}
+
+// CreditorApplySchemeIdentifierParams parameters
+type CreditorApplySchemeIdentifierParams struct {
+	Links CreditorApplySchemeIdentifierParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+}
+
+// ApplySchemeIdentifier
+// Applies a [scheme identifier](#core-endpoints-scheme-identifiers) to a
+// creditor.
+// If the creditor already has a scheme identifier for the scheme, it will be
+// replaced,
+// and any mandates attached to it transferred asynchronously.
+// For some schemes, the application of the scheme identifier will be performed
+// asynchronously.
+//
+func (s *CreditorServiceImpl) ApplySchemeIdentifier(ctx context.Context, identity string, p CreditorApplySchemeIdentifierParams, opts ...RequestOption) (*Creditor, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditors/%v/actions/apply_scheme_identifier",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"data": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.10.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
