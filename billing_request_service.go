@@ -166,6 +166,7 @@ type BillingRequest struct {
 	MandateRequest  *BillingRequestMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata        map[string]interface{}        `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentRequest  *BillingRequestPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode     string                        `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 	Resources       *BillingRequestResources      `url:"resources,omitempty" json:"resources,omitempty"`
 	Status          string                        `url:"status,omitempty" json:"status,omitempty"`
 }
@@ -464,6 +465,7 @@ type BillingRequestCreateParams struct {
 	MandateRequest  *BillingRequestCreateParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata        map[string]interface{}                    `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentRequest  *BillingRequestCreateParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode     string                                    `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 }
 
 // Create
