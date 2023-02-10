@@ -47,6 +47,7 @@ type VerificationDetail struct {
 	Description   string                        `url:"description,omitempty" json:"description,omitempty"`
 	Directors     []VerificationDetailDirectors `url:"directors,omitempty" json:"directors,omitempty"`
 	Links         *VerificationDetailLinks      `url:"links,omitempty" json:"links,omitempty"`
+	Name          string                        `url:"name,omitempty" json:"name,omitempty"`
 	PostalCode    string                        `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 }
 
@@ -309,6 +310,7 @@ type VerificationDetailCreateParams struct {
 	Description   string                                    `url:"description,omitempty" json:"description,omitempty"`
 	Directors     []VerificationDetailCreateParamsDirectors `url:"directors,omitempty" json:"directors,omitempty"`
 	Links         VerificationDetailCreateParamsLinks       `url:"links,omitempty" json:"links,omitempty"`
+	Name          string                                    `url:"name,omitempty" json:"name,omitempty"`
 	PostalCode    string                                    `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 }
 
