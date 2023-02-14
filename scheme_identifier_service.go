@@ -87,6 +87,10 @@ type SchemeIdentifierCreateParams struct {
 // | faster_payments | 18 characters      | `a-zA-Z0-9/?:().,'+-`    | yes
 //  |
 //
+// The validation error that gets returned for an invalid name will contain a
+// suggested name
+// in the metadata that is guaranteed to pass name validations.
+//
 func (s *SchemeIdentifierServiceImpl) Create(ctx context.Context, p SchemeIdentifierCreateParams, opts ...RequestOption) (*SchemeIdentifier, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/scheme_identifiers"))
 	if err != nil {
