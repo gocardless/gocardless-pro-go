@@ -63,6 +63,7 @@ type EventLinks struct {
 	Payout                      string `url:"payout,omitempty" json:"payout,omitempty"`
 	PreviousCustomerBankAccount string `url:"previous_customer_bank_account,omitempty" json:"previous_customer_bank_account,omitempty"`
 	Refund                      string `url:"refund,omitempty" json:"refund,omitempty"`
+	SchemeIdentifier            string `url:"scheme_identifier,omitempty" json:"scheme_identifier,omitempty"`
 	Subscription                string `url:"subscription,omitempty" json:"subscription,omitempty"`
 }
 
