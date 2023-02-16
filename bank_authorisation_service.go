@@ -48,7 +48,6 @@ type BankAuthorisationService interface {
 
 type BankAuthorisationCreateParamsLinks struct {
 	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
-	Institution    string `url:"institution,omitempty" json:"institution,omitempty"`
 }
 
 // BankAuthorisationCreateParams parameters
