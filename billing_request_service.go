@@ -1204,6 +1204,9 @@ type BillingRequestNotifyParams struct {
 // Notifies the customer linked to the billing request, asking them to authorise
 // it.
 // Currently, the customer can only be notified by email.
+//
+// This endpoint is currently supported only for Instant Bank Pay Billing
+// Requests.
 func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string, p BillingRequestNotifyParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/notify",
 		identity))

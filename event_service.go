@@ -99,6 +99,7 @@ type EventListParams struct {
 	Before             string                    `url:"before,omitempty" json:"before,omitempty"`
 	BillingRequest     string                    `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 	CreatedAt          *EventListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Creditor           string                    `url:"creditor,omitempty" json:"creditor,omitempty"`
 	Include            string                    `url:"include,omitempty" json:"include,omitempty"`
 	InstalmentSchedule string                    `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
 	Limit              int                       `url:"limit,omitempty" json:"limit,omitempty"`
@@ -109,6 +110,7 @@ type EventListParams struct {
 	Payout             string                    `url:"payout,omitempty" json:"payout,omitempty"`
 	Refund             string                    `url:"refund,omitempty" json:"refund,omitempty"`
 	ResourceType       string                    `url:"resource_type,omitempty" json:"resource_type,omitempty"`
+	SchemeIdentifier   string                    `url:"scheme_identifier,omitempty" json:"scheme_identifier,omitempty"`
 	Subscription       string                    `url:"subscription,omitempty" json:"subscription,omitempty"`
 }
 
