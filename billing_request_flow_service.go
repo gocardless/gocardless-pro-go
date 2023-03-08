@@ -27,6 +27,10 @@ type BillingRequestFlowLinks struct {
 	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 }
 
+type BillingRequestFlowOptions struct {
+	ShowSuccessRedirectButton bool `url:"show_success_redirect_button,omitempty" json:"show_success_redirect_button,omitempty"`
+}
+
 type BillingRequestFlowPrefilledBankAccount struct {
 	AccountType string `url:"account_type,omitempty" json:"account_type,omitempty"`
 }
@@ -60,6 +64,7 @@ type BillingRequestFlow struct {
 	LockBankAccount      bool                                    `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
 	LockCurrency         bool                                    `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
 	LockCustomerDetails  bool                                    `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
+	Options              *BillingRequestFlowOptions              `url:"options,omitempty" json:"options,omitempty"`
 	PrefilledBankAccount *BillingRequestFlowPrefilledBankAccount `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
 	PrefilledCustomer    *BillingRequestFlowPrefilledCustomer    `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
 	RedirectUri          string                                  `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
@@ -74,6 +79,10 @@ type BillingRequestFlowService interface {
 
 type BillingRequestFlowCreateParamsLinks struct {
 	BillingRequest string `url:"billing_request,omitempty" json:"billing_request,omitempty"`
+}
+
+type BillingRequestFlowCreateParamsOptions struct {
+	ShowSuccessRedirectButton bool `url:"show_success_redirect_button,omitempty" json:"show_success_redirect_button,omitempty"`
 }
 
 type BillingRequestFlowCreateParamsPrefilledBankAccount struct {
@@ -105,6 +114,7 @@ type BillingRequestFlowCreateParams struct {
 	LockBankAccount      bool                                                `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
 	LockCurrency         bool                                                `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
 	LockCustomerDetails  bool                                                `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
+	Options              *BillingRequestFlowCreateParamsOptions              `url:"options,omitempty" json:"options,omitempty"`
 	PrefilledBankAccount *BillingRequestFlowCreateParamsPrefilledBankAccount `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
 	PrefilledCustomer    *BillingRequestFlowCreateParamsPrefilledCustomer    `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
 	RedirectUri          string                                              `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
