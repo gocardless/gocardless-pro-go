@@ -184,6 +184,7 @@ type BillingRequestService interface {
 	Notify(ctx context.Context, identity string, p BillingRequestNotifyParams, opts ...RequestOption) (*BillingRequest, error)
 	Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error)
 	ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error)
+	SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error)
 }
 
 type BillingRequestCreateParamsLinks struct {
@@ -1414,6 +1415,106 @@ type BillingRequestChooseCurrencyParams struct {
 // will also not support any request which has a payments request.
 func (s *BillingRequestServiceImpl) ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/choose_currency",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"data": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err            *APIError       `json:"error"`
+		BillingRequest *BillingRequest `json:"billing_requests"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequest == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BillingRequest, nil
+}
+
+// BillingRequestSelectInstitutionParams parameters
+type BillingRequestSelectInstitutionParams struct {
+	CountryCode string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Institution string `url:"institution,omitempty" json:"institution,omitempty"`
+}
+
+// SelectInstitution
+// Creates an Institution object and attaches it to the Billing Request
+func (s *BillingRequestServiceImpl) SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/select_institution",
 		identity))
 	if err != nil {
 		return nil, err

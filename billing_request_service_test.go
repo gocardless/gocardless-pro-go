@@ -310,3 +310,31 @@ func TestBillingRequestChooseCurrency(t *testing.T) {
 
 	}
 }
+
+func TestBillingRequestSelectInstitution(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "select_institution")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := BillingRequestSelectInstitutionParams{}
+
+	o, err :=
+		client.BillingRequests.SelectInstitution(
+			ctx, "ID123", p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected BillingRequest, got nil")
+
+	}
+}
