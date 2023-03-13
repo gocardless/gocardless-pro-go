@@ -33,8 +33,14 @@ type BillingRequestActionsBankAuthorisation struct {
 	RequiresInstitution bool   `url:"requires_institution,omitempty" json:"requires_institution,omitempty"`
 }
 
+type BillingRequestActionsCollectCustomerDetailsIncompleteFields struct {
+	Customer              []string `url:"customer,omitempty" json:"customer,omitempty"`
+	CustomerBillingDetail []string `url:"customer_billing_detail,omitempty" json:"customer_billing_detail,omitempty"`
+}
+
 type BillingRequestActionsCollectCustomerDetails struct {
-	DefaultCountryCode string `url:"default_country_code,omitempty" json:"default_country_code,omitempty"`
+	DefaultCountryCode string                                                       `url:"default_country_code,omitempty" json:"default_country_code,omitempty"`
+	IncompleteFields   *BillingRequestActionsCollectCustomerDetailsIncompleteFields `url:"incomplete_fields,omitempty" json:"incomplete_fields,omitempty"`
 }
 
 type BillingRequestActions struct {
