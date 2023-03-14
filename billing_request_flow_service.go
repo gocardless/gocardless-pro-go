@@ -49,22 +49,23 @@ type BillingRequestFlowPrefilledCustomer struct {
 
 // BillingRequestFlow model
 type BillingRequestFlow struct {
-	AuthorisationUrl     string                                  `url:"authorisation_url,omitempty" json:"authorisation_url,omitempty"`
-	AutoFulfil           bool                                    `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
-	CreatedAt            string                                  `url:"created_at,omitempty" json:"created_at,omitempty"`
-	ExitUri              string                                  `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
-	ExpiresAt            string                                  `url:"expires_at,omitempty" json:"expires_at,omitempty"`
-	Id                   string                                  `url:"id,omitempty" json:"id,omitempty"`
-	Language             string                                  `url:"language,omitempty" json:"language,omitempty"`
-	Links                *BillingRequestFlowLinks                `url:"links,omitempty" json:"links,omitempty"`
-	LockBankAccount      bool                                    `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
-	LockCurrency         bool                                    `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
-	LockCustomerDetails  bool                                    `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
-	PrefilledBankAccount *BillingRequestFlowPrefilledBankAccount `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
-	PrefilledCustomer    *BillingRequestFlowPrefilledCustomer    `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
-	RedirectUri          string                                  `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
-	SessionToken         string                                  `url:"session_token,omitempty" json:"session_token,omitempty"`
-	ShowRedirectButtons  bool                                    `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
+	AuthorisationUrl          string                                  `url:"authorisation_url,omitempty" json:"authorisation_url,omitempty"`
+	AutoFulfil                bool                                    `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
+	CreatedAt                 string                                  `url:"created_at,omitempty" json:"created_at,omitempty"`
+	ExitUri                   string                                  `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
+	ExpiresAt                 string                                  `url:"expires_at,omitempty" json:"expires_at,omitempty"`
+	Id                        string                                  `url:"id,omitempty" json:"id,omitempty"`
+	Language                  string                                  `url:"language,omitempty" json:"language,omitempty"`
+	Links                     *BillingRequestFlowLinks                `url:"links,omitempty" json:"links,omitempty"`
+	LockBankAccount           bool                                    `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
+	LockCurrency              bool                                    `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
+	LockCustomerDetails       bool                                    `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
+	PrefilledBankAccount      *BillingRequestFlowPrefilledBankAccount `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
+	PrefilledCustomer         *BillingRequestFlowPrefilledCustomer    `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
+	RedirectUri               string                                  `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	SessionToken              string                                  `url:"session_token,omitempty" json:"session_token,omitempty"`
+	ShowRedirectButtons       bool                                    `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
+	ShowSuccessRedirectButton bool                                    `url:"show_success_redirect_button,omitempty" json:"show_success_redirect_button,omitempty"`
 }
 
 type BillingRequestFlowService interface {
@@ -98,17 +99,18 @@ type BillingRequestFlowCreateParamsPrefilledCustomer struct {
 
 // BillingRequestFlowCreateParams parameters
 type BillingRequestFlowCreateParams struct {
-	AutoFulfil           bool                                                `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
-	ExitUri              string                                              `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
-	Language             string                                              `url:"language,omitempty" json:"language,omitempty"`
-	Links                BillingRequestFlowCreateParamsLinks                 `url:"links,omitempty" json:"links,omitempty"`
-	LockBankAccount      bool                                                `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
-	LockCurrency         bool                                                `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
-	LockCustomerDetails  bool                                                `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
-	PrefilledBankAccount *BillingRequestFlowCreateParamsPrefilledBankAccount `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
-	PrefilledCustomer    *BillingRequestFlowCreateParamsPrefilledCustomer    `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
-	RedirectUri          string                                              `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
-	ShowRedirectButtons  bool                                                `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
+	AutoFulfil                bool                                                `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
+	ExitUri                   string                                              `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
+	Language                  string                                              `url:"language,omitempty" json:"language,omitempty"`
+	Links                     BillingRequestFlowCreateParamsLinks                 `url:"links,omitempty" json:"links,omitempty"`
+	LockBankAccount           bool                                                `url:"lock_bank_account,omitempty" json:"lock_bank_account,omitempty"`
+	LockCurrency              bool                                                `url:"lock_currency,omitempty" json:"lock_currency,omitempty"`
+	LockCustomerDetails       bool                                                `url:"lock_customer_details,omitempty" json:"lock_customer_details,omitempty"`
+	PrefilledBankAccount      *BillingRequestFlowCreateParamsPrefilledBankAccount `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
+	PrefilledCustomer         *BillingRequestFlowCreateParamsPrefilledCustomer    `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
+	RedirectUri               string                                              `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	ShowRedirectButtons       bool                                                `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
+	ShowSuccessRedirectButton bool                                                `url:"show_success_redirect_button,omitempty" json:"show_success_redirect_button,omitempty"`
 }
 
 // Create
