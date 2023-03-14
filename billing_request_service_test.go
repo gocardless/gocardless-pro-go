@@ -5,34 +5,6 @@ import (
 	"testing"
 )
 
-func TestBillingRequestList(t *testing.T) {
-	fixtureFile := "testdata/billing_requests.json"
-	server := runServer(t, fixtureFile, "list")
-	defer server.Close()
-
-	ctx := context.TODO()
-	client, err := getClient(t, server.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	p := BillingRequestListParams{}
-
-	o, err :=
-		client.BillingRequests.List(
-			ctx, p)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if o.BillingRequests == nil {
-
-		t.Fatalf("Expected list of BillingRequests, got nil")
-
-	}
-}
-
 func TestBillingRequestCreate(t *testing.T) {
 	fixtureFile := "testdata/billing_requests.json"
 	server := runServer(t, fixtureFile, "create")
@@ -49,32 +21,6 @@ func TestBillingRequestCreate(t *testing.T) {
 	o, err :=
 		client.BillingRequests.Create(
 			ctx, p)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if o == nil {
-
-		t.Fatalf("Expected BillingRequest, got nil")
-
-	}
-}
-
-func TestBillingRequestGet(t *testing.T) {
-	fixtureFile := "testdata/billing_requests.json"
-	server := runServer(t, fixtureFile, "get")
-	defer server.Close()
-
-	ctx := context.TODO()
-	client, err := getClient(t, server.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	o, err :=
-		client.BillingRequests.Get(
-			ctx, "ID123")
 
 	if err != nil {
 		t.Fatal(err)
@@ -143,62 +89,6 @@ func TestBillingRequestCollectBankAccount(t *testing.T) {
 	}
 }
 
-func TestBillingRequestFulfil(t *testing.T) {
-	fixtureFile := "testdata/billing_requests.json"
-	server := runServer(t, fixtureFile, "fulfil")
-	defer server.Close()
-
-	ctx := context.TODO()
-	client, err := getClient(t, server.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	p := BillingRequestFulfilParams{}
-
-	o, err :=
-		client.BillingRequests.Fulfil(
-			ctx, "ID123", p)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if o == nil {
-
-		t.Fatalf("Expected BillingRequest, got nil")
-
-	}
-}
-
-func TestBillingRequestChooseCurrency(t *testing.T) {
-	fixtureFile := "testdata/billing_requests.json"
-	server := runServer(t, fixtureFile, "choose_currency")
-	defer server.Close()
-
-	ctx := context.TODO()
-	client, err := getClient(t, server.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	p := BillingRequestChooseCurrencyParams{}
-
-	o, err :=
-		client.BillingRequests.ChooseCurrency(
-			ctx, "ID123", p)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if o == nil {
-
-		t.Fatalf("Expected BillingRequest, got nil")
-
-	}
-}
-
 func TestBillingRequestConfirmPayerDetails(t *testing.T) {
 	fixtureFile := "testdata/billing_requests.json"
 	server := runServer(t, fixtureFile, "confirm_payer_details")
@@ -214,6 +104,34 @@ func TestBillingRequestConfirmPayerDetails(t *testing.T) {
 
 	o, err :=
 		client.BillingRequests.ConfirmPayerDetails(
+			ctx, "ID123", p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected BillingRequest, got nil")
+
+	}
+}
+
+func TestBillingRequestFulfil(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "fulfil")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := BillingRequestFulfilParams{}
+
+	o, err :=
+		client.BillingRequests.Fulfil(
 			ctx, "ID123", p)
 
 	if err != nil {
@@ -243,6 +161,60 @@ func TestBillingRequestCancel(t *testing.T) {
 	o, err :=
 		client.BillingRequests.Cancel(
 			ctx, "ID123", p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected BillingRequest, got nil")
+
+	}
+}
+
+func TestBillingRequestList(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "list")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := BillingRequestListParams{}
+
+	o, err :=
+		client.BillingRequests.List(
+			ctx, p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o.BillingRequests == nil {
+
+		t.Fatalf("Expected list of BillingRequests, got nil")
+
+	}
+}
+
+func TestBillingRequestGet(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "get")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	o, err :=
+		client.BillingRequests.Get(
+			ctx, "ID123")
 
 	if err != nil {
 		t.Fatal(err)
@@ -298,6 +270,62 @@ func TestBillingRequestFallback(t *testing.T) {
 
 	o, err :=
 		client.BillingRequests.Fallback(
+			ctx, "ID123", p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected BillingRequest, got nil")
+
+	}
+}
+
+func TestBillingRequestChooseCurrency(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "choose_currency")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := BillingRequestChooseCurrencyParams{}
+
+	o, err :=
+		client.BillingRequests.ChooseCurrency(
+			ctx, "ID123", p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected BillingRequest, got nil")
+
+	}
+}
+
+func TestBillingRequestSelectInstitution(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "select_institution")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := BillingRequestSelectInstitutionParams{}
+
+	o, err :=
+		client.BillingRequests.SelectInstitution(
 			ctx, "ID123", p)
 
 	if err != nil {

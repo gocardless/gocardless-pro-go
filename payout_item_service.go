@@ -79,11 +79,9 @@ type PayoutItemListResult struct {
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of items in
 // the payout.
 //
-// <div class="notice notice--warning u-block">
-//   <strong>Note</strong>: From 1 March 2023 onwards, we will only serve
-// requests for payout items created in the last 6 months. Requests for older
-// payouts will return an HTTP status <code>410 Gone</code>.
-// </div>
+// <strong>This endpoint only serves requests for payouts created in the last 6
+// months. Requests for older payouts will return an HTTP status <code>410
+// Gone</code>.</strong>
 //
 func (s *PayoutItemServiceImpl) List(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) (*PayoutItemListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payout_items"))
@@ -117,7 +115,7 @@ func (s *PayoutItemServiceImpl) List(ctx context.Context, p PayoutItemListParams
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -226,7 +224,7 @@ func (c *PayoutItemListPagingIterator) Value(ctx context.Context) (*PayoutItemLi
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

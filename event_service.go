@@ -63,6 +63,7 @@ type EventLinks struct {
 	Payout                      string `url:"payout,omitempty" json:"payout,omitempty"`
 	PreviousCustomerBankAccount string `url:"previous_customer_bank_account,omitempty" json:"previous_customer_bank_account,omitempty"`
 	Refund                      string `url:"refund,omitempty" json:"refund,omitempty"`
+	SchemeIdentifier            string `url:"scheme_identifier,omitempty" json:"scheme_identifier,omitempty"`
 	Subscription                string `url:"subscription,omitempty" json:"subscription,omitempty"`
 }
 
@@ -98,6 +99,7 @@ type EventListParams struct {
 	Before             string                    `url:"before,omitempty" json:"before,omitempty"`
 	BillingRequest     string                    `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 	CreatedAt          *EventListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Creditor           string                    `url:"creditor,omitempty" json:"creditor,omitempty"`
 	Include            string                    `url:"include,omitempty" json:"include,omitempty"`
 	InstalmentSchedule string                    `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
 	Limit              int                       `url:"limit,omitempty" json:"limit,omitempty"`
@@ -108,6 +110,7 @@ type EventListParams struct {
 	Payout             string                    `url:"payout,omitempty" json:"payout,omitempty"`
 	Refund             string                    `url:"refund,omitempty" json:"refund,omitempty"`
 	ResourceType       string                    `url:"resource_type,omitempty" json:"resource_type,omitempty"`
+	SchemeIdentifier   string                    `url:"scheme_identifier,omitempty" json:"scheme_identifier,omitempty"`
 	Subscription       string                    `url:"subscription,omitempty" json:"subscription,omitempty"`
 }
 
@@ -161,7 +164,7 @@ func (s *EventServiceImpl) List(ctx context.Context, p EventListParams, opts ...
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -270,7 +273,7 @@ func (c *EventListPagingIterator) Value(ctx context.Context) (*EventListResult, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -362,7 +365,7 @@ func (s *EventServiceImpl) Get(ctx context.Context, identity string, opts ...Req
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

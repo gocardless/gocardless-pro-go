@@ -33,8 +33,14 @@ type BillingRequestActionsBankAuthorisation struct {
 	RequiresInstitution bool   `url:"requires_institution,omitempty" json:"requires_institution,omitempty"`
 }
 
+type BillingRequestActionsCollectCustomerDetailsIncompleteFields struct {
+	Customer              []string `url:"customer,omitempty" json:"customer,omitempty"`
+	CustomerBillingDetail []string `url:"customer_billing_detail,omitempty" json:"customer_billing_detail,omitempty"`
+}
+
 type BillingRequestActionsCollectCustomerDetails struct {
-	DefaultCountryCode string `url:"default_country_code,omitempty" json:"default_country_code,omitempty"`
+	DefaultCountryCode string                                                       `url:"default_country_code,omitempty" json:"default_country_code,omitempty"`
+	IncompleteFields   *BillingRequestActionsCollectCustomerDetailsIncompleteFields `url:"incomplete_fields,omitempty" json:"incomplete_fields,omitempty"`
 }
 
 type BillingRequestActions struct {
@@ -166,255 +172,25 @@ type BillingRequest struct {
 	MandateRequest  *BillingRequestMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata        map[string]interface{}        `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentRequest  *BillingRequestPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode     string                        `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 	Resources       *BillingRequestResources      `url:"resources,omitempty" json:"resources,omitempty"`
 	Status          string                        `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type BillingRequestService interface {
-	List(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) (*BillingRequestListResult, error)
-	All(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) *BillingRequestListPagingIterator
 	Create(ctx context.Context, p BillingRequestCreateParams, opts ...RequestOption) (*BillingRequest, error)
-	Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequest, error)
 	CollectCustomerDetails(ctx context.Context, identity string, p BillingRequestCollectCustomerDetailsParams, opts ...RequestOption) (*BillingRequest, error)
 	CollectBankAccount(ctx context.Context, identity string, p BillingRequestCollectBankAccountParams, opts ...RequestOption) (*BillingRequest, error)
-	Fulfil(ctx context.Context, identity string, p BillingRequestFulfilParams, opts ...RequestOption) (*BillingRequest, error)
-	ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error)
 	ConfirmPayerDetails(ctx context.Context, identity string, p BillingRequestConfirmPayerDetailsParams, opts ...RequestOption) (*BillingRequest, error)
+	Fulfil(ctx context.Context, identity string, p BillingRequestFulfilParams, opts ...RequestOption) (*BillingRequest, error)
 	Cancel(ctx context.Context, identity string, p BillingRequestCancelParams, opts ...RequestOption) (*BillingRequest, error)
+	List(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) (*BillingRequestListResult, error)
+	All(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) *BillingRequestListPagingIterator
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequest, error)
 	Notify(ctx context.Context, identity string, p BillingRequestNotifyParams, opts ...RequestOption) (*BillingRequest, error)
 	Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error)
-}
-
-// BillingRequestListParams parameters
-type BillingRequestListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer  string `url:"customer,omitempty" json:"customer,omitempty"`
-	Limit     int    `url:"limit,omitempty" json:"limit,omitempty"`
-	Status    string `url:"status,omitempty" json:"status,omitempty"`
-}
-
-type BillingRequestListResultMetaCursors struct {
-	After  string `url:"after,omitempty" json:"after,omitempty"`
-	Before string `url:"before,omitempty" json:"before,omitempty"`
-}
-
-type BillingRequestListResultMeta struct {
-	Cursors *BillingRequestListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                  `url:"limit,omitempty" json:"limit,omitempty"`
-}
-
-type BillingRequestListResult struct {
-	BillingRequests []BillingRequest             `json:"billing_requests"`
-	Meta            BillingRequestListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
-}
-
-// List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// billing requests.
-func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) (*BillingRequestListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	var body io.Reader
-
-	v, err := query.Values(p)
-	if err != nil {
-		return nil, err
-	}
-	uri.RawQuery = v.Encode()
-
-	req, err := http.NewRequest("GET", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.config.Token())
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
-	req.Header.Set("User-Agent", userAgent)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.config.Client()
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err *APIError `json:"error"`
-		*BillingRequestListResult
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.BillingRequestListResult == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.BillingRequestListResult, nil
-}
-
-type BillingRequestListPagingIterator struct {
-	cursor         string
-	response       *BillingRequestListResult
-	params         BillingRequestListParams
-	service        *BillingRequestServiceImpl
-	requestOptions []RequestOption
-}
-
-func (c *BillingRequestListPagingIterator) Next() bool {
-	if c.cursor == "" && c.response != nil {
-		return false
-	}
-
-	return true
-}
-
-func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingRequestListResult, error) {
-	if !c.Next() {
-		return c.response, nil
-	}
-
-	s := c.service
-	p := c.params
-	p.After = c.cursor
-
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
-
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range c.requestOptions {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	var body io.Reader
-
-	v, err := query.Values(p)
-	if err != nil {
-		return nil, err
-	}
-	uri.RawQuery = v.Encode()
-
-	req, err := http.NewRequest("GET", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req = req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.config.Token())
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
-	req.Header.Set("User-Agent", userAgent)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-	client := s.config.Client()
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err *APIError `json:"error"`
-		*BillingRequestListResult
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.BillingRequestListResult == nil {
-		return nil, errors.New("missing result")
-	}
-
-	c.response = result.BillingRequestListResult
-	c.cursor = c.response.Meta.Cursors.After
-	return c.response, nil
-}
-
-func (s *BillingRequestServiceImpl) All(ctx context.Context,
-	p BillingRequestListParams,
-	opts ...RequestOption) *BillingRequestListPagingIterator {
-	return &BillingRequestListPagingIterator{
-		params:         p,
-		service:        s,
-		requestOptions: opts,
-	}
+	ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error)
+	SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error)
 }
 
 type BillingRequestCreateParamsLinks struct {
@@ -464,6 +240,7 @@ type BillingRequestCreateParams struct {
 	MandateRequest  *BillingRequestCreateParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata        map[string]interface{}                    `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentRequest  *BillingRequestCreateParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode     string                                    `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 }
 
 // Create
@@ -506,90 +283,10 @@ func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequest
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.config.Client()
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err            *APIError       `json:"error"`
-		BillingRequest *BillingRequest `json:"billing_requests"`
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.BillingRequest == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.BillingRequest, nil
-}
-
-// Get
-// Fetches a billing request
-func (s *BillingRequestServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequest, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v",
-		identity))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	var body io.Reader
-
-	req, err := http.NewRequest("GET", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.config.Token())
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
-	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
 		req.Header.Set(key, value)
@@ -718,7 +415,7 @@ func (s *BillingRequestServiceImpl) CollectCustomerDetails(ctx context.Context, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -838,7 +535,108 @@ func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, iden
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err            *APIError       `json:"error"`
+		BillingRequest *BillingRequest `json:"billing_requests"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequest == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BillingRequest, nil
+}
+
+// BillingRequestConfirmPayerDetailsParams parameters
+type BillingRequestConfirmPayerDetailsParams struct {
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+}
+
+// ConfirmPayerDetails
+// This is needed when you have a mandate request. As a scheme compliance rule
+// we are required to
+// allow the payer to crosscheck the details entered by them and confirm it.
+func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, identity string, p BillingRequestConfirmPayerDetailsParams, opts ...RequestOption) (*BillingRequest, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/confirm_payer_details",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"data": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -938,7 +736,623 @@ func (s *BillingRequestServiceImpl) Fulfil(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err            *APIError       `json:"error"`
+		BillingRequest *BillingRequest `json:"billing_requests"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequest == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BillingRequest, nil
+}
+
+// BillingRequestCancelParams parameters
+type BillingRequestCancelParams struct {
+	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+}
+
+// Cancel
+// Immediately cancels a billing request, causing all billing request flows
+// to expire.
+func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string, p BillingRequestCancelParams, opts ...RequestOption) (*BillingRequest, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/cancel",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"data": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err            *APIError       `json:"error"`
+		BillingRequest *BillingRequest `json:"billing_requests"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequest == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BillingRequest, nil
+}
+
+// BillingRequestListParams parameters
+type BillingRequestListParams struct {
+	After     string `url:"after,omitempty" json:"after,omitempty"`
+	Before    string `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Customer  string `url:"customer,omitempty" json:"customer,omitempty"`
+	Limit     int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Status    string `url:"status,omitempty" json:"status,omitempty"`
+}
+
+type BillingRequestListResultMetaCursors struct {
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+}
+
+type BillingRequestListResultMeta struct {
+	Cursors *BillingRequestListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                  `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
+type BillingRequestListResult struct {
+	BillingRequests []BillingRequest             `json:"billing_requests"`
+	Meta            BillingRequestListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
+}
+
+// List
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// billing requests.
+func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) (*BillingRequestListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	var body io.Reader
+
+	v, err := query.Values(p)
+	if err != nil {
+		return nil, err
+	}
+	uri.RawQuery = v.Encode()
+
+	req, err := http.NewRequest("GET", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("User-Agent", userAgent)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err *APIError `json:"error"`
+		*BillingRequestListResult
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequestListResult == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BillingRequestListResult, nil
+}
+
+type BillingRequestListPagingIterator struct {
+	cursor         string
+	response       *BillingRequestListResult
+	params         BillingRequestListParams
+	service        *BillingRequestServiceImpl
+	requestOptions []RequestOption
+}
+
+func (c *BillingRequestListPagingIterator) Next() bool {
+	if c.cursor == "" && c.response != nil {
+		return false
+	}
+
+	return true
+}
+
+func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingRequestListResult, error) {
+	if !c.Next() {
+		return c.response, nil
+	}
+
+	s := c.service
+	p := c.params
+	p.After = c.cursor
+
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
+
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range c.requestOptions {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	var body io.Reader
+
+	v, err := query.Values(p)
+	if err != nil {
+		return nil, err
+	}
+	uri.RawQuery = v.Encode()
+
+	req, err := http.NewRequest("GET", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("User-Agent", userAgent)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err *APIError `json:"error"`
+		*BillingRequestListResult
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequestListResult == nil {
+		return nil, errors.New("missing result")
+	}
+
+	c.response = result.BillingRequestListResult
+	c.cursor = c.response.Meta.Cursors.After
+	return c.response, nil
+}
+
+func (s *BillingRequestServiceImpl) All(ctx context.Context,
+	p BillingRequestListParams,
+	opts ...RequestOption) *BillingRequestListPagingIterator {
+	return &BillingRequestListPagingIterator{
+		params:         p,
+		service:        s,
+		requestOptions: opts,
+	}
+}
+
+// Get
+// Fetches a billing request
+func (s *BillingRequestServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequest, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	var body io.Reader
+
+	req, err := http.NewRequest("GET", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("User-Agent", userAgent)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err            *APIError       `json:"error"`
+		BillingRequest *BillingRequest `json:"billing_requests"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequest == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BillingRequest, nil
+}
+
+// BillingRequestNotifyParams parameters
+type BillingRequestNotifyParams struct {
+	NotificationType string `url:"notification_type,omitempty" json:"notification_type,omitempty"`
+	RedirectUri      string `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+}
+
+// Notify
+// Notifies the customer linked to the billing request, asking them to authorise
+// it.
+// Currently, the customer can only be notified by email.
+//
+// This endpoint is currently supported only for Instant Bank Pay Billing
+// Requests.
+func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string, p BillingRequestNotifyParams, opts ...RequestOption) (*BillingRequest, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/notify",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"data": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err            *APIError       `json:"error"`
+		BillingRequest *BillingRequest `json:"billing_requests"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequest == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BillingRequest, nil
+}
+
+// BillingRequestFallbackParams parameters
+type BillingRequestFallbackParams struct {
+}
+
+// Fallback
+// Triggers a fallback from the open-banking flow to direct debit. Note, the
+// billing request must have fallback enabled.
+func (s *BillingRequestServiceImpl) Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/fallback",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"data": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1044,7 +1458,7 @@ func (s *BillingRequestServiceImpl) ChooseCurrency(ctx context.Context, identity
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -1097,17 +1511,16 @@ func (s *BillingRequestServiceImpl) ChooseCurrency(ctx context.Context, identity
 	return result.BillingRequest, nil
 }
 
-// BillingRequestConfirmPayerDetailsParams parameters
-type BillingRequestConfirmPayerDetailsParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+// BillingRequestSelectInstitutionParams parameters
+type BillingRequestSelectInstitutionParams struct {
+	CountryCode string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Institution string `url:"institution,omitempty" json:"institution,omitempty"`
 }
 
-// ConfirmPayerDetails
-// This is needed when you have a mandate request. As a scheme compliance rule
-// we are required to
-// allow the payer to crosscheck the details entered by them and confirm it.
-func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, identity string, p BillingRequestConfirmPayerDetailsParams, opts ...RequestOption) (*BillingRequest, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/confirm_payer_details",
+// SelectInstitution
+// Creates an Institution object and attaches it to the Billing Request
+func (s *BillingRequestServiceImpl) SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/select_institution",
 		identity))
 	if err != nil {
 		return nil, err
@@ -1145,308 +1558,7 @@ func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, ide
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
-	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Idempotency-Key", o.idempotencyKey)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.config.Client()
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err            *APIError       `json:"error"`
-		BillingRequest *BillingRequest `json:"billing_requests"`
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.BillingRequest == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.BillingRequest, nil
-}
-
-// BillingRequestCancelParams parameters
-type BillingRequestCancelParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-}
-
-// Cancel
-// Immediately cancels a billing request, causing all billing request flows
-// to expire.
-func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string, p BillingRequestCancelParams, opts ...RequestOption) (*BillingRequest, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/cancel",
-		identity))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-	if o.idempotencyKey == "" {
-		o.idempotencyKey = NewIdempotencyKey()
-	}
-
-	var body io.Reader
-
-	var buf bytes.Buffer
-	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
-	})
-	if err != nil {
-		return nil, err
-	}
-	body = &buf
-
-	req, err := http.NewRequest("POST", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.config.Token())
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
-	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Idempotency-Key", o.idempotencyKey)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.config.Client()
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err            *APIError       `json:"error"`
-		BillingRequest *BillingRequest `json:"billing_requests"`
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.BillingRequest == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.BillingRequest, nil
-}
-
-// BillingRequestNotifyParams parameters
-type BillingRequestNotifyParams struct {
-	NotificationType string `url:"notification_type,omitempty" json:"notification_type,omitempty"`
-	RedirectUri      string `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
-}
-
-// Notify
-// Notifies the customer linked to the billing request, asking them to authorise
-// it.
-// Currently, the customer can only be notified by email.
-func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string, p BillingRequestNotifyParams, opts ...RequestOption) (*BillingRequest, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/notify",
-		identity))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-	if o.idempotencyKey == "" {
-		o.idempotencyKey = NewIdempotencyKey()
-	}
-
-	var body io.Reader
-
-	var buf bytes.Buffer
-	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
-	})
-	if err != nil {
-		return nil, err
-	}
-	body = &buf
-
-	req, err := http.NewRequest("POST", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.config.Token())
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
-	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Idempotency-Key", o.idempotencyKey)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.config.Client()
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err            *APIError       `json:"error"`
-		BillingRequest *BillingRequest `json:"billing_requests"`
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.BillingRequest == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.BillingRequest, nil
-}
-
-// BillingRequestFallbackParams parameters
-type BillingRequestFallbackParams struct {
-}
-
-// Fallback
-// Triggers a fallback from the open-banking flow to direct debit. Note, the
-// billing request must have fallback enabled.
-func (s *BillingRequestServiceImpl) Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/fallback",
-		identity))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-	if o.idempotencyKey == "" {
-		o.idempotencyKey = NewIdempotencyKey()
-	}
-
-	var body io.Reader
-
-	var buf bytes.Buffer
-	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
-	})
-	if err != nil {
-		return nil, err
-	}
-	body = &buf
-
-	req, err := http.NewRequest("POST", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.config.Token())
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.10.0")
+	req.Header.Set("GoCardless-Client-Version", "2.11.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
