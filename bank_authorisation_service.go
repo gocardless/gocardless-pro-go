@@ -52,9 +52,8 @@ type BankAuthorisationCreateParamsLinks struct {
 
 // BankAuthorisationCreateParams parameters
 type BankAuthorisationCreateParams struct {
-	AuthorisationType string                             `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
-	Links             BankAuthorisationCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	RedirectUri       string                             `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
+	Links       BankAuthorisationCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	RedirectUri string                             `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 }
 
 // Create
