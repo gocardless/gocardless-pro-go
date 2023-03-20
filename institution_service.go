@@ -61,6 +61,13 @@ type InstitutionListResult struct {
 
 // List
 // Returns a list of supported institutions.
+//
+// <p class="deprecated-notice"><strong>Deprecated</strong>: This list
+// institutions endpoint
+// is no longer supported. We strongly recommend using the
+// [List Institutions For Billing
+// Request](#institutions-list-institutions-for-billing-request)
+// instead.</p>
 func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListParams, opts ...RequestOption) (*InstitutionListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/institutions"))
 	if err != nil {
@@ -93,7 +100,7 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("GoCardless-Client-Version", "2.12.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -203,7 +210,7 @@ func (s *InstitutionServiceImpl) ListForBillingRequest(ctx context.Context, iden
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.11.0")
+	req.Header.Set("GoCardless-Client-Version", "2.12.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
