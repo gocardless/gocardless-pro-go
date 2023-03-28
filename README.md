@@ -241,7 +241,7 @@ When the library returns an `error` defined by us rather than the stdlib, it can
 
 ## Compatibility
 
-This library requires go 1.16 and above.
+This library requires go 1.20 and above.
 
 ## Documentation
 
