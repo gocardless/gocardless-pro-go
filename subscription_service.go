@@ -130,7 +130,7 @@ func (s *SubscriptionServiceImpl) Create(ctx context.Context, p SubscriptionCrea
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -252,7 +252,7 @@ func (s *SubscriptionServiceImpl) List(ctx context.Context, p SubscriptionListPa
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -361,7 +361,7 @@ func (c *SubscriptionListPagingIterator) Value(ctx context.Context) (*Subscripti
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -453,7 +453,7 @@ func (s *SubscriptionServiceImpl) Get(ctx context.Context, identity string, opts
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -539,7 +539,6 @@ type SubscriptionUpdateParams struct {
 // - `resource_created_by_another_app` if the app fee is being changed, and the
 // subscription was created by an app other than the app you are authenticated
 // as
-//
 func (s *SubscriptionServiceImpl) Update(ctx context.Context, identity string, p SubscriptionUpdateParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v",
 		identity))
@@ -579,7 +578,7 @@ func (s *SubscriptionServiceImpl) Update(ctx context.Context, identity string, p
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -679,7 +678,6 @@ type SubscriptionPauseParams struct {
 //
 // - `pause_cycles_must_be_greater_than_or_equal_to` if the provided value for
 // `pause_cycles` cannot be satisfied.
-//
 func (s *SubscriptionServiceImpl) Pause(ctx context.Context, identity string, p SubscriptionPauseParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/pause",
 		identity))
@@ -719,7 +717,7 @@ func (s *SubscriptionServiceImpl) Pause(ctx context.Context, identity string, p 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -794,7 +792,6 @@ type SubscriptionResumeParams struct {
 // subscription.
 //
 // - `subscription_not_paused` if the subscription is not paused.
-//
 func (s *SubscriptionServiceImpl) Resume(ctx context.Context, identity string, p SubscriptionResumeParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/resume",
 		identity))
@@ -834,7 +831,7 @@ func (s *SubscriptionServiceImpl) Resume(ctx context.Context, identity string, p
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -938,7 +935,7 @@ func (s *SubscriptionServiceImpl) Cancel(ctx context.Context, identity string, p
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

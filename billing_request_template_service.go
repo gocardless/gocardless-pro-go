@@ -109,7 +109,7 @@ func (s *BillingRequestTemplateServiceImpl) List(ctx context.Context, p BillingR
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -218,7 +218,7 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -310,7 +310,7 @@ func (s *BillingRequestTemplateServiceImpl) Get(ctx context.Context, identity st
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -384,7 +384,6 @@ type BillingRequestTemplateCreateParams struct {
 }
 
 // Create
-//
 func (s *BillingRequestTemplateServiceImpl) Create(ctx context.Context, p BillingRequestTemplateCreateParams, opts ...RequestOption) (*BillingRequestTemplate, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_templates"))
 	if err != nil {
@@ -423,7 +422,7 @@ func (s *BillingRequestTemplateServiceImpl) Create(ctx context.Context, p Billin
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -535,7 +534,7 @@ func (s *BillingRequestTemplateServiceImpl) Update(ctx context.Context, identity
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

@@ -64,33 +64,42 @@ type SchemeIdentifierCreateParams struct {
 // are taken
 // using it. The scheme identifier must also have the `status` of active before
 // it can be
-// used. For some schemes e.g. faster_payments this will happen instantly. For
-// other schemes
-// e.g. bacs this can take several days.
+// used. On Bacs, this will take 5 working days. On other schemes, this happens
+// instantly.
 //
-// ### Scheme identifier name validations
+// #### Scheme identifier name validations
 //
-// Each scheme has different rules for the length and permitted characters in
-// the scheme identifier
-// name field. The rules are:
+// The `name` field of a scheme identifier can contain alphanumeric characters,
+// spaces and
+// special characters.
 //
-// | __scheme__      | __maximum length__ | __allowed characters__   |
-// __spaces__ |
-// | :-------------- | :----------------- | :----------------------- |
-// :--------- |
-// | bacs            | 18 characters      | `a-zA-Z0-9/.&-`          | yes
-//  |
-// | sepa_core       | 70 characters      | `a-zA-Z0-9/?:().,+&<>'"` | yes
-//  |
-// | ach             | 16 characters      | `a-zA-Z0-9/?:().,'+-`    | yes
-//  |
-// | faster_payments | 18 characters      | `a-zA-Z0-9/?:().,'+-`    | yes
-//  |
+// Its maximum length and the special characters it supports depend on the
+// scheme:
+//
+// | __scheme__        | __maximum length__ | __special characters allowed__
+//
+//	|
+//
+// | :---------------- | :----------------- |
+// :-------------------------------------------------- |
+// | `bacs`            | 18 characters      | `/` `.` `&` `-`
+//
+//	|
+//
+// | `sepa_core`       | 70 characters      | `/` `?` `:` `(` `)` `.` `,` `+`
+// `&` `<` `>` `'` `"` |
+// | `ach`             | 16 characters      | `/` `?` `:` `(` `)` `.` `,` `'`
+// `+` `-`             |
+// | `faster_payments` | 18 characters      | `/` `?` `:` `(` `)` `.` `,` `'`
+// `+` `-`             |
 //
 // The validation error that gets returned for an invalid name will contain a
 // suggested name
 // in the metadata that is guaranteed to pass name validations.
 //
+// You should ensure that the name you set matches the legal name or the trading
+// name of
+// the creditor, otherwise, there is an increased risk of chargeback.
 func (s *SchemeIdentifierServiceImpl) Create(ctx context.Context, p SchemeIdentifierCreateParams, opts ...RequestOption) (*SchemeIdentifier, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/scheme_identifiers"))
 	if err != nil {
@@ -129,7 +138,7 @@ func (s *SchemeIdentifierServiceImpl) Create(ctx context.Context, p SchemeIdenti
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -239,7 +248,7 @@ func (s *SchemeIdentifierServiceImpl) List(ctx context.Context, p SchemeIdentifi
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -348,7 +357,7 @@ func (c *SchemeIdentifierListPagingIterator) Value(ctx context.Context) (*Scheme
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -440,7 +449,7 @@ func (s *SchemeIdentifierServiceImpl) Get(ctx context.Context, identity string, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
