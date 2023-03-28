@@ -57,7 +57,6 @@ type CreditorSchemeIdentifiers struct {
 
 // Creditor model
 type Creditor struct {
-	Activated                           bool                        `url:"activated,omitempty" json:"activated,omitempty"`
 	AddressLine1                        string                      `url:"address_line1,omitempty" json:"address_line1,omitempty"`
 	AddressLine2                        string                      `url:"address_line2,omitempty" json:"address_line2,omitempty"`
 	AddressLine3                        string                      `url:"address_line3,omitempty" json:"address_line3,omitempty"`
@@ -137,7 +136,7 @@ func (s *CreditorServiceImpl) Create(ctx context.Context, p CreditorCreateParams
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -255,7 +254,7 @@ func (s *CreditorServiceImpl) List(ctx context.Context, p CreditorListParams, op
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -364,7 +363,7 @@ func (c *CreditorListPagingIterator) Value(ctx context.Context) (*CreditorListRe
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -460,7 +459,7 @@ func (s *CreditorServiceImpl) Get(ctx context.Context, identity string, p Credit
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -577,7 +576,7 @@ func (s *CreditorServiceImpl) Update(ctx context.Context, identity string, p Cre
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -642,12 +641,20 @@ type CreditorApplySchemeIdentifierParams struct {
 // ApplySchemeIdentifier
 // Applies a [scheme identifier](#core-endpoints-scheme-identifiers) to a
 // creditor.
+//
+// If the scheme identifier has a `pending` status, it will be applied
+// asynchronously
+// once it becomes `active`.
+//
 // If the creditor already has a scheme identifier for the scheme, it will be
 // replaced,
-// and any mandates attached to it transferred asynchronously.
-// For some schemes, the application of the scheme identifier will be performed
-// asynchronously.
-//
+// and any mandates attached to it transferred asynchronously. On Bacs and SEPA,
+// if
+// payments were about to be submitted, they will be delayed. To minimise this
+// delay, we
+// recommend that you apply the new scheme identifier after the daily payment
+// submission
+// time (4 PM Europe/London time).
 func (s *CreditorServiceImpl) ApplySchemeIdentifier(ctx context.Context, identity string, p CreditorApplySchemeIdentifierParams, opts ...RequestOption) (*Creditor, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditors/%v/actions/apply_scheme_identifier",
 		identity))
@@ -687,7 +694,7 @@ func (s *CreditorServiceImpl) ApplySchemeIdentifier(ctx context.Context, identit
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

@@ -81,31 +81,39 @@ type MandatePdfCreateParams struct {
 //
 // | Scheme           | Supported languages
 //
-//       |
+//	|
+//
 // | :--------------- |
 // :-------------------------------------------------------------------------------------------------------------------------------------------
 // |
 // | ACH              | English (`en`)
 //
-//       |
+//	|
+//
 // | Autogiro         | English (`en`), Swedish (`sv`)
 //
-//       |
+//	|
+//
 // | Bacs             | English (`en`)
 //
-//       |
+//	|
+//
 // | BECS             | English (`en`)
 //
-//       |
+//	|
+//
 // | BECS NZ          | English (`en`)
 //
-//       |
+//	|
+//
 // | Betalingsservice | Danish (`da`), English (`en`)
 //
-//       |
+//	|
+//
 // | PAD              | English (`en`)
 //
-//       |
+//	|
+//
 // | SEPA Core        | Danish (`da`), Dutch (`nl`), English (`en`), French
 // (`fr`), German (`de`), Italian (`it`), Portuguese (`pt`), Spanish (`es`),
 // Swedish (`sv`) |
@@ -147,7 +155,7 @@ func (s *MandatePdfServiceImpl) Create(ctx context.Context, p MandatePdfCreatePa
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "2.12.0")
+	req.Header.Set("GoCardless-Client-Version", "3.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
