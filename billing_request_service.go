@@ -165,6 +165,7 @@ type BillingRequestResources struct {
 // BillingRequest model
 type BillingRequest struct {
 	Actions         []BillingRequestActions       `url:"actions,omitempty" json:"actions,omitempty"`
+	AutoFulfil      bool                          `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
 	CreatedAt       string                        `url:"created_at,omitempty" json:"created_at,omitempty"`
 	FallbackEnabled bool                          `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
 	Id              string                        `url:"id,omitempty" json:"id,omitempty"`
