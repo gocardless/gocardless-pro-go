@@ -28,9 +28,8 @@ type BillingRequestActionsAvailableCurrencies struct {
 }
 
 type BillingRequestActionsBankAuthorisation struct {
-	Adapter             string `url:"adapter,omitempty" json:"adapter,omitempty"`
-	AuthorisationType   string `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
-	RequiresInstitution bool   `url:"requires_institution,omitempty" json:"requires_institution,omitempty"`
+	Adapter           string `url:"adapter,omitempty" json:"adapter,omitempty"`
+	AuthorisationType string `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
 }
 
 type BillingRequestActionsCollectCustomerDetailsIncompleteFields struct {
