@@ -100,7 +100,7 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.0.0")
+	req.Header.Set("GoCardless-Client-Version", "3.1.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -153,8 +153,9 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 
 // InstitutionListForBillingRequestParams parameters
 type InstitutionListForBillingRequestParams struct {
-	Ids    []string `url:"ids,omitempty" json:"ids,omitempty"`
-	Search string   `url:"search,omitempty" json:"search,omitempty"`
+	CountryCode string   `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Ids         []string `url:"ids,omitempty" json:"ids,omitempty"`
+	Search      string   `url:"search,omitempty" json:"search,omitempty"`
 }
 
 type InstitutionListForBillingRequestResultMetaCursors struct {
@@ -210,7 +211,7 @@ func (s *InstitutionServiceImpl) ListForBillingRequest(ctx context.Context, iden
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.0.0")
+	req.Header.Set("GoCardless-Client-Version", "3.1.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
