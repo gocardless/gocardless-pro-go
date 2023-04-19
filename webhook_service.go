@@ -70,8 +70,8 @@ type WebhookListResultMetaCursors struct {
 }
 
 type WebhookListResultMeta struct {
-	Cursors *WebhookListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors WebhookListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type WebhookListResult struct {

@@ -207,8 +207,8 @@ type SubscriptionListResultMetaCursors struct {
 }
 
 type SubscriptionListResultMeta struct {
-	Cursors *SubscriptionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors SubscriptionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                               `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type SubscriptionListResult struct {

@@ -204,8 +204,8 @@ type SchemeIdentifierListResultMetaCursors struct {
 }
 
 type SchemeIdentifierListResultMeta struct {
-	Cursors *SchemeIdentifierListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                    `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors SchemeIdentifierListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                   `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type SchemeIdentifierListResult struct {

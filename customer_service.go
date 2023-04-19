@@ -191,8 +191,8 @@ type CustomerListResultMetaCursors struct {
 }
 
 type CustomerListResultMeta struct {
-	Cursors *CustomerListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                            `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors CustomerListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type CustomerListResult struct {

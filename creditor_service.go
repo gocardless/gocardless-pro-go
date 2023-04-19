@@ -210,8 +210,8 @@ type CreditorListResultMetaCursors struct {
 }
 
 type CreditorListResultMeta struct {
-	Cursors *CreditorListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                            `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors CreditorListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type CreditorListResult struct {

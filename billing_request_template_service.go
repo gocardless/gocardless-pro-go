@@ -65,8 +65,8 @@ type BillingRequestTemplateListResultMetaCursors struct {
 }
 
 type BillingRequestTemplateListResultMeta struct {
-	Cursors *BillingRequestTemplateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                          `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors BillingRequestTemplateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                         `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type BillingRequestTemplateListResult struct {

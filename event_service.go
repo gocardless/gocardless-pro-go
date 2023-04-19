@@ -120,8 +120,8 @@ type EventListResultMetaCursors struct {
 }
 
 type EventListResultMeta struct {
-	Cursors *EventListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors EventListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                        `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type EventListResult struct {

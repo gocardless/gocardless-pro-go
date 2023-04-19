@@ -50,8 +50,8 @@ type InstitutionListResultMetaCursors struct {
 }
 
 type InstitutionListResultMeta struct {
-	Cursors *InstitutionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                               `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors InstitutionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                              `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type InstitutionListResult struct {
@@ -164,8 +164,8 @@ type InstitutionListForBillingRequestResultMetaCursors struct {
 }
 
 type InstitutionListForBillingRequestResultMeta struct {
-	Cursors *InstitutionListForBillingRequestResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                                `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors InstitutionListForBillingRequestResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                               `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type InstitutionListForBillingRequestResult struct {

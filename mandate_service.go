@@ -205,8 +205,8 @@ type MandateListResultMetaCursors struct {
 }
 
 type MandateListResultMeta struct {
-	Cursors *MandateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors MandateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type MandateListResult struct {

@@ -192,8 +192,8 @@ type VerificationDetailListResultMetaCursors struct {
 }
 
 type VerificationDetailListResultMeta struct {
-	Cursors *VerificationDetailListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors VerificationDetailListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                     `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type VerificationDetailListResult struct {
