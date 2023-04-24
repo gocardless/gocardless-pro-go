@@ -193,9 +193,10 @@ func (s *SchemeIdentifierServiceImpl) Create(ctx context.Context, p SchemeIdenti
 
 // SchemeIdentifierListParams parameters
 type SchemeIdentifierListParams struct {
-	After  string `url:"after,omitempty" json:"after,omitempty"`
-	Before string `url:"before,omitempty" json:"before,omitempty"`
-	Limit  int    `url:"limit,omitempty" json:"limit,omitempty"`
+	After    string `url:"after,omitempty" json:"after,omitempty"`
+	Before   string `url:"before,omitempty" json:"before,omitempty"`
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Limit    int    `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type SchemeIdentifierListResultMetaCursors struct {
