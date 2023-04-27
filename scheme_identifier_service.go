@@ -86,7 +86,7 @@ type SchemeIdentifierCreateParams struct {
 //
 //	|
 //
-// | `sepa_core`       | 70 characters      | `/` `?` `:` `(` `)` `.` `,` `+`
+// | `sepa`            | 70 characters      | `/` `?` `:` `(` `)` `.` `,` `+`
 // `&` `<` `>` `'` `"` |
 // | `ach`             | 16 characters      | `/` `?` `:` `(` `)` `.` `,` `'`
 // `+` `-`             |
