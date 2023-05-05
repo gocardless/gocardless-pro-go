@@ -37,6 +37,7 @@ type BankAuthorisation struct {
 	Id                string                  `url:"id,omitempty" json:"id,omitempty"`
 	LastVisitedAt     string                  `url:"last_visited_at,omitempty" json:"last_visited_at,omitempty"`
 	Links             *BankAuthorisationLinks `url:"links,omitempty" json:"links,omitempty"`
+	QrCodeUrl         string                  `url:"qr_code_url,omitempty" json:"qr_code_url,omitempty"`
 	RedirectUri       string                  `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 	Url               string                  `url:"url,omitempty" json:"url,omitempty"`
 }
