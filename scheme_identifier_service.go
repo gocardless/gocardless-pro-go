@@ -52,10 +52,15 @@ type SchemeIdentifierService interface {
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*SchemeIdentifier, error)
 }
 
+type SchemeIdentifierCreateParamsLinks struct {
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
+}
+
 // SchemeIdentifierCreateParams parameters
 type SchemeIdentifierCreateParams struct {
-	Name   string `url:"name,omitempty" json:"name,omitempty"`
-	Scheme string `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Links  *SchemeIdentifierCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Name   string                             `url:"name,omitempty" json:"name,omitempty"`
+	Scheme string                             `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 // Create
