@@ -60,6 +60,7 @@ type Creditor struct {
 	AddressLine1                        string                      `url:"address_line1,omitempty" json:"address_line1,omitempty"`
 	AddressLine2                        string                      `url:"address_line2,omitempty" json:"address_line2,omitempty"`
 	AddressLine3                        string                      `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	BankReferencePrefix                 string                      `url:"bank_reference_prefix,omitempty" json:"bank_reference_prefix,omitempty"`
 	CanCreateRefunds                    bool                        `url:"can_create_refunds,omitempty" json:"can_create_refunds,omitempty"`
 	City                                string                      `url:"city,omitempty" json:"city,omitempty"`
 	CountryCode                         string                      `url:"country_code,omitempty" json:"country_code,omitempty"`
@@ -90,10 +91,11 @@ type CreditorService interface {
 
 // CreditorCreateParams parameters
 type CreditorCreateParams struct {
-	CountryCode  string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-	CreditorType string                 `url:"creditor_type,omitempty" json:"creditor_type,omitempty"`
-	Links        map[string]interface{} `url:"links,omitempty" json:"links,omitempty"`
-	Name         string                 `url:"name,omitempty" json:"name,omitempty"`
+	BankReferencePrefix string                 `url:"bank_reference_prefix,omitempty" json:"bank_reference_prefix,omitempty"`
+	CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreditorType        string                 `url:"creditor_type,omitempty" json:"creditor_type,omitempty"`
+	Links               map[string]interface{} `url:"links,omitempty" json:"links,omitempty"`
+	Name                string                 `url:"name,omitempty" json:"name,omitempty"`
 }
 
 // Create
@@ -523,15 +525,16 @@ type CreditorUpdateParamsLinks struct {
 
 // CreditorUpdateParams parameters
 type CreditorUpdateParams struct {
-	AddressLine1 string                     `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2 string                     `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3 string                     `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	City         string                     `url:"city,omitempty" json:"city,omitempty"`
-	CountryCode  string                     `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Links        *CreditorUpdateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Name         string                     `url:"name,omitempty" json:"name,omitempty"`
-	PostalCode   string                     `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region       string                     `url:"region,omitempty" json:"region,omitempty"`
+	AddressLine1        string                     `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2        string                     `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3        string                     `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	BankReferencePrefix string                     `url:"bank_reference_prefix,omitempty" json:"bank_reference_prefix,omitempty"`
+	City                string                     `url:"city,omitempty" json:"city,omitempty"`
+	CountryCode         string                     `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Links               *CreditorUpdateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Name                string                     `url:"name,omitempty" json:"name,omitempty"`
+	PostalCode          string                     `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region              string                     `url:"region,omitempty" json:"region,omitempty"`
 }
 
 // Update
