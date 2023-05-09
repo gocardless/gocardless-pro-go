@@ -25,12 +25,12 @@ type InstitutionServiceImpl struct {
 
 // Institution model
 type Institution struct {
-	BankRedirect bool   `url:"bank_redirect,omitempty" json:"bank_redirect,omitempty"`
-	CountryCode  string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	IconUrl      string `url:"icon_url,omitempty" json:"icon_url,omitempty"`
-	Id           string `url:"id,omitempty" json:"id,omitempty"`
-	LogoUrl      string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
-	Name         string `url:"name,omitempty" json:"name,omitempty"`
+	AutocompletesCollectBankAccount bool   `url:"autocompletes_collect_bank_account,omitempty" json:"autocompletes_collect_bank_account,omitempty"`
+	CountryCode                     string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	IconUrl                         string `url:"icon_url,omitempty" json:"icon_url,omitempty"`
+	Id                              string `url:"id,omitempty" json:"id,omitempty"`
+	LogoUrl                         string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
+	Name                            string `url:"name,omitempty" json:"name,omitempty"`
 }
 
 type InstitutionService interface {
