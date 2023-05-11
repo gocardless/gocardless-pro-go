@@ -37,6 +37,7 @@ type BankAuthorisation struct {
 	Id                string                  `url:"id,omitempty" json:"id,omitempty"`
 	LastVisitedAt     string                  `url:"last_visited_at,omitempty" json:"last_visited_at,omitempty"`
 	Links             *BankAuthorisationLinks `url:"links,omitempty" json:"links,omitempty"`
+	QrCodeUrl         string                  `url:"qr_code_url,omitempty" json:"qr_code_url,omitempty"`
 	RedirectUri       string                  `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 	Url               string                  `url:"url,omitempty" json:"url,omitempty"`
 }
@@ -96,7 +97,7 @@ func (s *BankAuthorisationServiceImpl) Create(ctx context.Context, p BankAuthori
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.1.0")
+	req.Header.Set("GoCardless-Client-Version", "3.2.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -178,7 +179,7 @@ func (s *BankAuthorisationServiceImpl) Get(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.1.0")
+	req.Header.Set("GoCardless-Client-Version", "3.2.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

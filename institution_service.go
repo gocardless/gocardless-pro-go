@@ -25,12 +25,12 @@ type InstitutionServiceImpl struct {
 
 // Institution model
 type Institution struct {
-	BankRedirect bool   `url:"bank_redirect,omitempty" json:"bank_redirect,omitempty"`
-	CountryCode  string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	IconUrl      string `url:"icon_url,omitempty" json:"icon_url,omitempty"`
-	Id           string `url:"id,omitempty" json:"id,omitempty"`
-	LogoUrl      string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
-	Name         string `url:"name,omitempty" json:"name,omitempty"`
+	AutocompletesCollectBankAccount bool   `url:"autocompletes_collect_bank_account,omitempty" json:"autocompletes_collect_bank_account,omitempty"`
+	CountryCode                     string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	IconUrl                         string `url:"icon_url,omitempty" json:"icon_url,omitempty"`
+	Id                              string `url:"id,omitempty" json:"id,omitempty"`
+	LogoUrl                         string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
+	Name                            string `url:"name,omitempty" json:"name,omitempty"`
 }
 
 type InstitutionService interface {
@@ -50,8 +50,8 @@ type InstitutionListResultMetaCursors struct {
 }
 
 type InstitutionListResultMeta struct {
-	Cursors *InstitutionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                               `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors InstitutionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                              `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type InstitutionListResult struct {
@@ -100,7 +100,7 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.1.0")
+	req.Header.Set("GoCardless-Client-Version", "3.2.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -164,8 +164,8 @@ type InstitutionListForBillingRequestResultMetaCursors struct {
 }
 
 type InstitutionListForBillingRequestResultMeta struct {
-	Cursors *InstitutionListForBillingRequestResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                                `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors InstitutionListForBillingRequestResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                               `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type InstitutionListForBillingRequestResult struct {
@@ -211,7 +211,7 @@ func (s *InstitutionServiceImpl) ListForBillingRequest(ctx context.Context, iden
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.1.0")
+	req.Header.Set("GoCardless-Client-Version", "3.2.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

@@ -116,31 +116,3 @@ func TestCreditorUpdate(t *testing.T) {
 
 	}
 }
-
-func TestCreditorApplySchemeIdentifier(t *testing.T) {
-	fixtureFile := "testdata/creditors.json"
-	server := runServer(t, fixtureFile, "apply_scheme_identifier")
-	defer server.Close()
-
-	ctx := context.TODO()
-	client, err := getClient(t, server.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	p := CreditorApplySchemeIdentifierParams{}
-
-	o, err :=
-		client.Creditors.ApplySchemeIdentifier(
-			ctx, "ID123", p)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if o == nil {
-
-		t.Fatalf("Expected Creditor, got nil")
-
-	}
-}

@@ -59,8 +59,8 @@ type CurrencyExchangeRateListResultMetaCursors struct {
 }
 
 type CurrencyExchangeRateListResultMeta struct {
-	Cursors *CurrencyExchangeRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                        `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors CurrencyExchangeRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                       `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type CurrencyExchangeRateListResult struct {
@@ -103,7 +103,7 @@ func (s *CurrencyExchangeRateServiceImpl) List(ctx context.Context, p CurrencyEx
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.1.0")
+	req.Header.Set("GoCardless-Client-Version", "3.2.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -212,7 +212,7 @@ func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*Cu
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.1.0")
+	req.Header.Set("GoCardless-Client-Version", "3.2.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
