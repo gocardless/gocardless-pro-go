@@ -44,6 +44,7 @@ type TaxRateListParams struct {
 	After        string `url:"after,omitempty" json:"after,omitempty"`
 	Before       string `url:"before,omitempty" json:"before,omitempty"`
 	Jurisdiction string `url:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Limit        int    `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type TaxRateListResultMetaCursors struct {
@@ -52,8 +53,8 @@ type TaxRateListResultMetaCursors struct {
 }
 
 type TaxRateListResultMeta struct {
-	Cursors TaxRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors *TaxRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type TaxRateListResult struct {
