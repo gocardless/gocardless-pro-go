@@ -903,8 +903,8 @@ type BillingRequestListResultMetaCursors struct {
 }
 
 type BillingRequestListResultMeta struct {
-	Cursors BillingRequestListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                 `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors *BillingRequestListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                  `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type BillingRequestListResult struct {

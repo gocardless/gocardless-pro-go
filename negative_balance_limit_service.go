@@ -46,22 +46,14 @@ type NegativeBalanceLimitService interface {
 	Create(ctx context.Context, p NegativeBalanceLimitCreateParams, opts ...RequestOption) (*NegativeBalanceLimit, error)
 }
 
-type NegativeBalanceLimitListParamsCreatedAt struct {
-	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-}
-
 // NegativeBalanceLimitListParams parameters
 type NegativeBalanceLimitListParams struct {
-	Active    string                                   `url:"active,omitempty" json:"active,omitempty"`
-	After     string                                   `url:"after,omitempty" json:"after,omitempty"`
-	Before    string                                   `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt *NegativeBalanceLimitListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Creditor  string                                   `url:"creditor,omitempty" json:"creditor,omitempty"`
-	Currency  string                                   `url:"currency,omitempty" json:"currency,omitempty"`
-	Limit     int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+	Active   string `url:"active,omitempty" json:"active,omitempty"`
+	After    string `url:"after,omitempty" json:"after,omitempty"`
+	Before   string `url:"before,omitempty" json:"before,omitempty"`
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Currency string `url:"currency,omitempty" json:"currency,omitempty"`
+	Limit    int    `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type NegativeBalanceLimitListResultMetaCursors struct {
@@ -70,8 +62,8 @@ type NegativeBalanceLimitListResultMetaCursors struct {
 }
 
 type NegativeBalanceLimitListResultMeta struct {
-	Cursors NegativeBalanceLimitListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                       `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors *NegativeBalanceLimitListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                        `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type NegativeBalanceLimitListResult struct {

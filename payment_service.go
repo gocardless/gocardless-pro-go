@@ -217,8 +217,8 @@ type PaymentListResultMetaCursors struct {
 }
 
 type PaymentListResultMeta struct {
-	Cursors PaymentListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors *PaymentListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type PaymentListResult struct {
