@@ -46,22 +46,14 @@ type NegativeBalanceLimitService interface {
 	Create(ctx context.Context, p NegativeBalanceLimitCreateParams, opts ...RequestOption) (*NegativeBalanceLimit, error)
 }
 
-type NegativeBalanceLimitListParamsCreatedAt struct {
-	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-}
-
 // NegativeBalanceLimitListParams parameters
 type NegativeBalanceLimitListParams struct {
-	Active    string                                   `url:"active,omitempty" json:"active,omitempty"`
-	After     string                                   `url:"after,omitempty" json:"after,omitempty"`
-	Before    string                                   `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt *NegativeBalanceLimitListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Creditor  string                                   `url:"creditor,omitempty" json:"creditor,omitempty"`
-	Currency  string                                   `url:"currency,omitempty" json:"currency,omitempty"`
-	Limit     int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+	Active   string `url:"active,omitempty" json:"active,omitempty"`
+	After    string `url:"after,omitempty" json:"after,omitempty"`
+	Before   string `url:"before,omitempty" json:"before,omitempty"`
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Currency string `url:"currency,omitempty" json:"currency,omitempty"`
+	Limit    int    `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type NegativeBalanceLimitListResultMetaCursors struct {
@@ -70,8 +62,8 @@ type NegativeBalanceLimitListResultMetaCursors struct {
 }
 
 type NegativeBalanceLimitListResultMeta struct {
-	Cursors NegativeBalanceLimitListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                       `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors *NegativeBalanceLimitListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                        `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type NegativeBalanceLimitListResult struct {
@@ -114,7 +106,7 @@ func (s *NegativeBalanceLimitServiceImpl) List(ctx context.Context, p NegativeBa
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -223,7 +215,7 @@ func (c *NegativeBalanceLimitListPagingIterator) Value(ctx context.Context) (*Ne
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -339,7 +331,7 @@ func (s *NegativeBalanceLimitServiceImpl) Create(ctx context.Context, p Negative
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

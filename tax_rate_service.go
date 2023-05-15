@@ -44,6 +44,7 @@ type TaxRateListParams struct {
 	After        string `url:"after,omitempty" json:"after,omitempty"`
 	Before       string `url:"before,omitempty" json:"before,omitempty"`
 	Jurisdiction string `url:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Limit        int    `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type TaxRateListResultMetaCursors struct {
@@ -52,8 +53,8 @@ type TaxRateListResultMetaCursors struct {
 }
 
 type TaxRateListResultMeta struct {
-	Cursors TaxRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors *TaxRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type TaxRateListResult struct {
@@ -96,7 +97,7 @@ func (s *TaxRateServiceImpl) List(ctx context.Context, p TaxRateListParams, opts
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -205,7 +206,7 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -297,7 +298,7 @@ func (s *TaxRateServiceImpl) Get(ctx context.Context, identity string, opts ...R
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

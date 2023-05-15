@@ -125,7 +125,7 @@ func (s *VerificationDetailServiceImpl) Create(ctx context.Context, p Verificati
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -192,8 +192,8 @@ type VerificationDetailListResultMetaCursors struct {
 }
 
 type VerificationDetailListResultMeta struct {
-	Cursors VerificationDetailListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                     `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors *VerificationDetailListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type VerificationDetailListResult struct {
@@ -235,7 +235,7 @@ func (s *VerificationDetailServiceImpl) List(ctx context.Context, p Verification
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -344,7 +344,7 @@ func (c *VerificationDetailListPagingIterator) Value(ctx context.Context) (*Veri
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

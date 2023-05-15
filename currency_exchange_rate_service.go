@@ -36,21 +36,13 @@ type CurrencyExchangeRateService interface {
 	All(ctx context.Context, p CurrencyExchangeRateListParams, opts ...RequestOption) *CurrencyExchangeRateListPagingIterator
 }
 
-type CurrencyExchangeRateListParamsCreatedAt struct {
-	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
-	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
-	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
-	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
-}
-
 // CurrencyExchangeRateListParams parameters
 type CurrencyExchangeRateListParams struct {
-	After     string                                   `url:"after,omitempty" json:"after,omitempty"`
-	Before    string                                   `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt *CurrencyExchangeRateListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Limit     int                                      `url:"limit,omitempty" json:"limit,omitempty"`
-	Source    string                                   `url:"source,omitempty" json:"source,omitempty"`
-	Target    string                                   `url:"target,omitempty" json:"target,omitempty"`
+	After  string `url:"after,omitempty" json:"after,omitempty"`
+	Before string `url:"before,omitempty" json:"before,omitempty"`
+	Limit  int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Source string `url:"source,omitempty" json:"source,omitempty"`
+	Target string `url:"target,omitempty" json:"target,omitempty"`
 }
 
 type CurrencyExchangeRateListResultMetaCursors struct {
@@ -59,8 +51,8 @@ type CurrencyExchangeRateListResultMetaCursors struct {
 }
 
 type CurrencyExchangeRateListResultMeta struct {
-	Cursors CurrencyExchangeRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                       `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors *CurrencyExchangeRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                        `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type CurrencyExchangeRateListResult struct {
@@ -103,7 +95,7 @@ func (s *CurrencyExchangeRateServiceImpl) List(ctx context.Context, p CurrencyEx
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -212,7 +204,7 @@ func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*Cu
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.2.0")
+	req.Header.Set("GoCardless-Client-Version", "3.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
