@@ -36,7 +36,6 @@ type NegativeBalanceLimit struct {
 	Currency     string                     `url:"currency,omitempty" json:"currency,omitempty"`
 	Id           string                     `url:"id,omitempty" json:"id,omitempty"`
 	Links        *NegativeBalanceLimitLinks `url:"links,omitempty" json:"links,omitempty"`
-	Reason       string                     `url:"reason,omitempty" json:"reason,omitempty"`
 	UpdatedAt    string                     `url:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
@@ -287,7 +286,6 @@ type NegativeBalanceLimitCreateParams struct {
 	BalanceLimit int                                    `url:"balance_limit,omitempty" json:"balance_limit,omitempty"`
 	Currency     string                                 `url:"currency,omitempty" json:"currency,omitempty"`
 	Links        *NegativeBalanceLimitCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Reason       string                                 `url:"reason,omitempty" json:"reason,omitempty"`
 }
 
 // Create
