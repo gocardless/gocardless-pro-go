@@ -35,7 +35,6 @@ type NegativeBalanceLimit struct {
 	Currency     string                     `url:"currency,omitempty" json:"currency,omitempty"`
 	Id           string                     `url:"id,omitempty" json:"id,omitempty"`
 	Links        *NegativeBalanceLimitLinks `url:"links,omitempty" json:"links,omitempty"`
-	UpdatedAt    string                     `url:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
 type NegativeBalanceLimitService interface {
