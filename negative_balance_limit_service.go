@@ -30,14 +30,11 @@ type NegativeBalanceLimitLinks struct {
 
 // NegativeBalanceLimit model
 type NegativeBalanceLimit struct {
-	Active       bool                       `url:"active,omitempty" json:"active,omitempty"`
 	BalanceLimit int                        `url:"balance_limit,omitempty" json:"balance_limit,omitempty"`
 	CreatedAt    string                     `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Currency     string                     `url:"currency,omitempty" json:"currency,omitempty"`
 	Id           string                     `url:"id,omitempty" json:"id,omitempty"`
 	Links        *NegativeBalanceLimitLinks `url:"links,omitempty" json:"links,omitempty"`
-	Reason       string                     `url:"reason,omitempty" json:"reason,omitempty"`
-	UpdatedAt    string                     `url:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
 type NegativeBalanceLimitService interface {
@@ -48,7 +45,6 @@ type NegativeBalanceLimitService interface {
 
 // NegativeBalanceLimitListParams parameters
 type NegativeBalanceLimitListParams struct {
-	Active   string `url:"active,omitempty" json:"active,omitempty"`
 	After    string `url:"after,omitempty" json:"after,omitempty"`
 	Before   string `url:"before,omitempty" json:"before,omitempty"`
 	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
@@ -287,12 +283,11 @@ type NegativeBalanceLimitCreateParams struct {
 	BalanceLimit int                                    `url:"balance_limit,omitempty" json:"balance_limit,omitempty"`
 	Currency     string                                 `url:"currency,omitempty" json:"currency,omitempty"`
 	Links        *NegativeBalanceLimitCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Reason       string                                 `url:"reason,omitempty" json:"reason,omitempty"`
 }
 
 // Create
-// Creates a new negative balance limit, which also deactivates the existing
-// limit (if present) for that currency and creditor combination.
+// Creates a new negative balance limit, which replaces the existing limit (if
+// present) for that currency and creditor combination.
 func (s *NegativeBalanceLimitServiceImpl) Create(ctx context.Context, p NegativeBalanceLimitCreateParams, opts ...RequestOption) (*NegativeBalanceLimit, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/negative_balance_limits"))
 	if err != nil {
