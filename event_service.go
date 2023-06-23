@@ -76,6 +76,7 @@ type Event struct {
 	Id                    string                       `url:"id,omitempty" json:"id,omitempty"`
 	Links                 *EventLinks                  `url:"links,omitempty" json:"links,omitempty"`
 	Metadata              map[string]interface{}       `url:"metadata,omitempty" json:"metadata,omitempty"`
+	ResourceMetadata      map[string]interface{}       `url:"resource_metadata,omitempty" json:"resource_metadata,omitempty"`
 	ResourceType          string                       `url:"resource_type,omitempty" json:"resource_type,omitempty"`
 }
 
