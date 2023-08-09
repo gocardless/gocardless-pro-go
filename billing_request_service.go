@@ -47,6 +47,7 @@ type BillingRequestActions struct {
 	BankAuthorisation      *BillingRequestActionsBankAuthorisation      `url:"bank_authorisation,omitempty" json:"bank_authorisation,omitempty"`
 	CollectCustomerDetails *BillingRequestActionsCollectCustomerDetails `url:"collect_customer_details,omitempty" json:"collect_customer_details,omitempty"`
 	CompletesActions       []string                                     `url:"completes_actions,omitempty" json:"completes_actions,omitempty"`
+	InstitutionGuessStatus string                                       `url:"institution_guess_status,omitempty" json:"institution_guess_status,omitempty"`
 	Required               bool                                         `url:"required,omitempty" json:"required,omitempty"`
 	RequiresActions        []string                                     `url:"requires_actions,omitempty" json:"requires_actions,omitempty"`
 	Status                 string                                       `url:"status,omitempty" json:"status,omitempty"`
