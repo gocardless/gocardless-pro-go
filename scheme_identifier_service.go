@@ -64,13 +64,15 @@ type SchemeIdentifierCreateParams struct {
 }
 
 // Create
-// Creates a new scheme identifier. The scheme identifier must be
-// [applied to a creditor](#creditors-apply-a-scheme-identifier) before payments
-// are taken
-// using it. The scheme identifier must also have the `status` of active before
-// it can be
-// used. On Bacs, this will take 5 working days. On other schemes, this happens
-// instantly.
+// Creates a new scheme identifier. The scheme identifier status will be
+// `pending` while GoCardless is
+// processing the request. Once the scheme identifier is ready to be used the
+// status will be updated to `active`.
+// At this point, GoCardless will emit a scheme identifier activated event via
+// webhook to notify you of this change.
+// In Bacs, it will take up to five working days for a scheme identifier to
+// become active. On other schemes, including SEPA,
+// this happens instantly.
 //
 // #### Scheme identifier name validations
 //
@@ -143,7 +145,7 @@ func (s *SchemeIdentifierServiceImpl) Create(ctx context.Context, p SchemeIdenti
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.4.0")
+	req.Header.Set("GoCardless-Client-Version", "3.5.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -254,7 +256,7 @@ func (s *SchemeIdentifierServiceImpl) List(ctx context.Context, p SchemeIdentifi
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.4.0")
+	req.Header.Set("GoCardless-Client-Version", "3.5.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -363,7 +365,7 @@ func (c *SchemeIdentifierListPagingIterator) Value(ctx context.Context) (*Scheme
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.4.0")
+	req.Header.Set("GoCardless-Client-Version", "3.5.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -455,7 +457,7 @@ func (s *SchemeIdentifierServiceImpl) Get(ctx context.Context, identity string, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.4.0")
+	req.Header.Set("GoCardless-Client-Version", "3.5.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
