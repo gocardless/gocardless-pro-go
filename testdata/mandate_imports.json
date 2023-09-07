@@ -1,14 +1,14 @@
 { 
   "create": {
-    "body": {"mandate_imports":{"created_at":"2014-01-01T12:00:00.000Z","id":"IM000010790WX1","scheme":"bacs","status":"created"}}
+    "body": {"mandate_imports":{"created_at":"2014-01-01T12:00:00.000Z","id":"IM000010790WX1","links":{"creditor":"CR123"},"scheme":"bacs","status":"created"}}
   },
   "get": {
-    "body": {"mandate_imports":{"created_at":"2014-01-01T12:00:00.000Z","id":"IM000010790WX1","scheme":"bacs","status":"created"}}
+    "body": {"mandate_imports":{"created_at":"2014-01-01T12:00:00.000Z","id":"IM000010790WX1","links":{"creditor":"CR123"},"scheme":"bacs","status":"created"}}
   },
   "submit": {
-    "body": {"mandate_imports":{"created_at":"2014-01-01T12:00:00.000Z","id":"IM000010790WX1","scheme":"bacs","status":"created"}}
+    "body": {"mandate_imports":{"created_at":"2014-01-01T12:00:00.000Z","id":"IM000010790WX1","links":{"creditor":"CR123"},"scheme":"bacs","status":"created"}}
   },
   "cancel": {
-    "body": {"mandate_imports":{"created_at":"2014-01-01T12:00:00.000Z","id":"IM000010790WX1","scheme":"bacs","status":"created"}}
+    "body": {"mandate_imports":{"created_at":"2014-01-01T12:00:00.000Z","id":"IM000010790WX1","links":{"creditor":"CR123"},"scheme":"bacs","status":"created"}}
   }
 }
