@@ -40,6 +40,7 @@ type CreditorBankAccount struct {
 	Id                  string                    `url:"id,omitempty" json:"id,omitempty"`
 	Links               *CreditorBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
 	Metadata            map[string]interface{}    `url:"metadata,omitempty" json:"metadata,omitempty"`
+	VerificationStatus  string                    `url:"verification_status,omitempty" json:"verification_status,omitempty"`
 }
 
 type CreditorBankAccountService interface {
