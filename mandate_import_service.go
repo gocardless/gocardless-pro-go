@@ -23,12 +23,17 @@ type MandateImportServiceImpl struct {
 	config Config
 }
 
+type MandateImportLinks struct {
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
+}
+
 // MandateImport model
 type MandateImport struct {
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Id        string `url:"id,omitempty" json:"id,omitempty"`
-	Scheme    string `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Status    string `url:"status,omitempty" json:"status,omitempty"`
+	CreatedAt string              `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Id        string              `url:"id,omitempty" json:"id,omitempty"`
+	Links     *MandateImportLinks `url:"links,omitempty" json:"links,omitempty"`
+	Scheme    string              `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Status    string              `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type MandateImportService interface {
@@ -38,9 +43,14 @@ type MandateImportService interface {
 	Cancel(ctx context.Context, identity string, p MandateImportCancelParams, opts ...RequestOption) (*MandateImport, error)
 }
 
+type MandateImportCreateParamsLinks struct {
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
+}
+
 // MandateImportCreateParams parameters
 type MandateImportCreateParams struct {
-	Scheme string `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Links  *MandateImportCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Scheme string                          `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 // Create
@@ -88,7 +98,7 @@ func (s *MandateImportServiceImpl) Create(ctx context.Context, p MandateImportCr
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.5.0")
+	req.Header.Set("GoCardless-Client-Version", "3.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -174,7 +184,7 @@ func (s *MandateImportServiceImpl) Get(ctx context.Context, identity string, p M
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.5.0")
+	req.Header.Set("GoCardless-Client-Version", "3.6.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -281,7 +291,7 @@ func (s *MandateImportServiceImpl) Submit(ctx context.Context, identity string, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.5.0")
+	req.Header.Set("GoCardless-Client-Version", "3.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -385,7 +395,7 @@ func (s *MandateImportServiceImpl) Cancel(ctx context.Context, identity string, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.5.0")
+	req.Header.Set("GoCardless-Client-Version", "3.6.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
