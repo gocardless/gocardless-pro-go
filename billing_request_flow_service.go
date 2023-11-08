@@ -52,6 +52,7 @@ type BillingRequestFlow struct {
 	AuthorisationUrl          string                                  `url:"authorisation_url,omitempty" json:"authorisation_url,omitempty"`
 	AutoFulfil                bool                                    `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
 	CreatedAt                 string                                  `url:"created_at,omitempty" json:"created_at,omitempty"`
+	CustomerDetailsCaptured   bool                                    `url:"customer_details_captured,omitempty" json:"customer_details_captured,omitempty"`
 	ExitUri                   string                                  `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
 	ExpiresAt                 string                                  `url:"expires_at,omitempty" json:"expires_at,omitempty"`
 	Id                        string                                  `url:"id,omitempty" json:"id,omitempty"`
@@ -100,6 +101,7 @@ type BillingRequestFlowCreateParamsPrefilledCustomer struct {
 // BillingRequestFlowCreateParams parameters
 type BillingRequestFlowCreateParams struct {
 	AutoFulfil                bool                                                `url:"auto_fulfil,omitempty" json:"auto_fulfil,omitempty"`
+	CustomerDetailsCaptured   bool                                                `url:"customer_details_captured,omitempty" json:"customer_details_captured,omitempty"`
 	ExitUri                   string                                              `url:"exit_uri,omitempty" json:"exit_uri,omitempty"`
 	Language                  string                                              `url:"language,omitempty" json:"language,omitempty"`
 	Links                     BillingRequestFlowCreateParamsLinks                 `url:"links,omitempty" json:"links,omitempty"`
