@@ -480,6 +480,7 @@ type BillingRequestCollectBankAccountParams struct {
 	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
 	Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
 	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayId               string                 `url:"pay_id,omitempty" json:"pay_id,omitempty"`
 }
 
 // CollectBankAccount
@@ -490,6 +491,10 @@ type BillingRequestCollectBankAccountParams struct {
 // The endpoint takes the same payload as Customer Bank Accounts, but check
 // the bank account is valid for the billing request scheme before creating
 // and attaching it.
+//
+// If the scheme is PayTo and the pay_id is available, this can be included in
+// the payload along with the
+// country_code.
 //
 // _ACH scheme_ For compliance reasons, an extra validation step is done using
 // a third-party provider to make sure the customer's bank account can accept
