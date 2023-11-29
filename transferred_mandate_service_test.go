@@ -16,9 +16,11 @@ func TestTransferredMandateTransferredMandates(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	p := TransferredMandateTransferredMandatesParams{}
+
 	o, err :=
 		client.TransferredMandates.TransferredMandates(
-			ctx, "ID123")
+			ctx, "ID123", p)
 
 	if err != nil {
 		t.Fatal(err)

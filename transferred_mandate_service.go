@@ -37,13 +37,17 @@ type TransferredMandate struct {
 }
 
 type TransferredMandateService interface {
-	TransferredMandates(ctx context.Context, identity string, opts ...RequestOption) (*TransferredMandate, error)
+	TransferredMandates(ctx context.Context, identity string, p TransferredMandateTransferredMandatesParams, opts ...RequestOption) (*TransferredMandate, error)
+}
+
+// TransferredMandateTransferredMandatesParams parameters
+type TransferredMandateTransferredMandatesParams struct {
 }
 
 // TransferredMandates
 // Returns new customer bank details for a mandate that's been recently
 // transferred
-func (s *TransferredMandateServiceImpl) TransferredMandates(ctx context.Context, identity string, opts ...RequestOption) (*TransferredMandate, error) {
+func (s *TransferredMandateServiceImpl) TransferredMandates(ctx context.Context, identity string, p TransferredMandateTransferredMandatesParams, opts ...RequestOption) (*TransferredMandate, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/transferred_mandates/%v",
 		identity))
 	if err != nil {
