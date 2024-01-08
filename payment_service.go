@@ -46,6 +46,7 @@ type Payment struct {
 	CreatedAt       string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Currency        string                 `url:"currency,omitempty" json:"currency,omitempty"`
 	Description     string                 `url:"description,omitempty" json:"description,omitempty"`
+	FasterAch       bool                   `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
 	Fx              *PaymentFx             `url:"fx,omitempty" json:"fx,omitempty"`
 	Id              string                 `url:"id,omitempty" json:"id,omitempty"`
 	Links           *PaymentLinks          `url:"links,omitempty" json:"links,omitempty"`
@@ -76,6 +77,7 @@ type PaymentCreateParams struct {
 	ChargeDate      string                   `url:"charge_date,omitempty" json:"charge_date,omitempty"`
 	Currency        string                   `url:"currency,omitempty" json:"currency,omitempty"`
 	Description     string                   `url:"description,omitempty" json:"description,omitempty"`
+	FasterAch       bool                     `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
 	Links           PaymentCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 	Metadata        map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference       string                   `url:"reference,omitempty" json:"reference,omitempty"`
