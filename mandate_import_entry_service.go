@@ -80,12 +80,17 @@ type MandateImportEntryCreateParamsLinks struct {
 	MandateImport string `url:"mandate_import,omitempty" json:"mandate_import,omitempty"`
 }
 
+type MandateImportEntryCreateParamsMandate struct {
+	Reference string `url:"reference,omitempty" json:"reference,omitempty"`
+}
+
 // MandateImportEntryCreateParams parameters
 type MandateImportEntryCreateParams struct {
 	Amendment        *MandateImportEntryCreateParamsAmendment  `url:"amendment,omitempty" json:"amendment,omitempty"`
 	BankAccount      MandateImportEntryCreateParamsBankAccount `url:"bank_account,omitempty" json:"bank_account,omitempty"`
 	Customer         MandateImportEntryCreateParamsCustomer    `url:"customer,omitempty" json:"customer,omitempty"`
 	Links            MandateImportEntryCreateParamsLinks       `url:"links,omitempty" json:"links,omitempty"`
+	Mandate          *MandateImportEntryCreateParamsMandate    `url:"mandate,omitempty" json:"mandate,omitempty"`
 	RecordIdentifier string                                    `url:"record_identifier,omitempty" json:"record_identifier,omitempty"`
 }
 
