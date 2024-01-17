@@ -36,12 +36,11 @@ type BankDetailsLookupService interface {
 
 // BankDetailsLookupCreateParams parameters
 type BankDetailsLookupCreateParams struct {
-	AccountHolderName string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumber     string `url:"account_number,omitempty" json:"account_number,omitempty"`
-	BankCode          string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-	BranchCode        string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	CountryCode       string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Iban              string `url:"iban,omitempty" json:"iban,omitempty"`
+	AccountNumber string `url:"account_number,omitempty" json:"account_number,omitempty"`
+	BankCode      string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode    string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode   string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Iban          string `url:"iban,omitempty" json:"iban,omitempty"`
 }
 
 // Create
