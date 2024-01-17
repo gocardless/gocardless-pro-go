@@ -87,14 +87,15 @@ type BillingRequestMandateRequestLinks struct {
 }
 
 type BillingRequestMandateRequest struct {
-	AuthorisationSource string                                   `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
-	Constraints         *BillingRequestMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
-	Currency            string                                   `url:"currency,omitempty" json:"currency,omitempty"`
-	Description         string                                   `url:"description,omitempty" json:"description,omitempty"`
-	Links               *BillingRequestMandateRequestLinks       `url:"links,omitempty" json:"links,omitempty"`
-	Metadata            map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Scheme              string                                   `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Verify              string                                   `url:"verify,omitempty" json:"verify,omitempty"`
+	AuthorisationSource         string                                   `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
+	Constraints                 *BillingRequestMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
+	Currency                    string                                   `url:"currency,omitempty" json:"currency,omitempty"`
+	Description                 string                                   `url:"description,omitempty" json:"description,omitempty"`
+	Links                       *BillingRequestMandateRequestLinks       `url:"links,omitempty" json:"links,omitempty"`
+	Metadata                    map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerRequestedDualSignature bool                                     `url:"payer_requested_dual_signature,omitempty" json:"payer_requested_dual_signature,omitempty"`
+	Scheme                      string                                   `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Verify                      string                                   `url:"verify,omitempty" json:"verify,omitempty"`
 }
 
 type BillingRequestPaymentRequestLinks struct {
@@ -595,7 +596,8 @@ func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, iden
 
 // BillingRequestConfirmPayerDetailsParams parameters
 type BillingRequestConfirmPayerDetailsParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata                    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerRequestedDualSignature bool                   `url:"payer_requested_dual_signature,omitempty" json:"payer_requested_dual_signature,omitempty"`
 }
 
 // ConfirmPayerDetails
