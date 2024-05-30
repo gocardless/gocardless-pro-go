@@ -18,34 +18,39 @@ var _ = bytes.NewBuffer
 var _ = json.NewDecoder
 var _ = errors.New
 
-// ScenarioSimulatorService manages scenario_simulators
-type ScenarioSimulatorServiceImpl struct {
+// PayerThemeService manages payer_themes
+type PayerThemeServiceImpl struct {
 	config Config
 }
 
-// ScenarioSimulator model
-type ScenarioSimulator struct {
+// PayerTheme model
+type PayerTheme struct {
 	Id string `url:"id,omitempty" json:"id,omitempty"`
 }
 
-type ScenarioSimulatorService interface {
-	Run(ctx context.Context, identity string, p ScenarioSimulatorRunParams, opts ...RequestOption) (*ScenarioSimulator, error)
+type PayerThemeService interface {
+	CreateForCreditor(ctx context.Context, p PayerThemeCreateForCreditorParams, opts ...RequestOption) (*PayerTheme, error)
 }
 
-type ScenarioSimulatorRunParamsLinks struct {
-	Resource string `url:"resource,omitempty" json:"resource,omitempty"`
+type PayerThemeCreateForCreditorParamsLinks struct {
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
 }
 
-// ScenarioSimulatorRunParams parameters
-type ScenarioSimulatorRunParams struct {
-	Links *ScenarioSimulatorRunParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+// PayerThemeCreateForCreditorParams parameters
+type PayerThemeCreateForCreditorParams struct {
+	ButtonBackgroundColour string                                  `url:"button_background_colour,omitempty" json:"button_background_colour,omitempty"`
+	ContentBoxBorderColour string                                  `url:"content_box_border_colour,omitempty" json:"content_box_border_colour,omitempty"`
+	HeaderBackgroundColour string                                  `url:"header_background_colour,omitempty" json:"header_background_colour,omitempty"`
+	LinkTextColour         string                                  `url:"link_text_colour,omitempty" json:"link_text_colour,omitempty"`
+	Links                  *PayerThemeCreateForCreditorParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 }
 
-// Run
-// Runs the specific scenario simulator against the specific resource
-func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string, p ScenarioSimulatorRunParams, opts ...RequestOption) (*ScenarioSimulator, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/scenario_simulators/%v/actions/run",
-		identity))
+// CreateForCreditor
+// Creates a new payer theme associated with a creditor. If a creditor already
+// has payer themes, this will update the existing payer theme linked to the
+// creditor.
+func (s *PayerThemeServiceImpl) CreateForCreditor(ctx context.Context, p PayerThemeCreateForCreditorParams, opts ...RequestOption) (*PayerTheme, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/branding/payer_themes"))
 	if err != nil {
 		return nil, err
 	}
@@ -97,8 +102,8 @@ func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string,
 	}
 
 	var result struct {
-		Err               *APIError          `json:"error"`
-		ScenarioSimulator *ScenarioSimulator `json:"scenario_simulators"`
+		Err        *APIError   `json:"error"`
+		PayerTheme *PayerTheme `json:"payer_themes"`
 	}
 
 	err = try(o.retries, func() error {
@@ -128,9 +133,9 @@ func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string,
 		return nil, err
 	}
 
-	if result.ScenarioSimulator == nil {
+	if result.PayerTheme == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.ScenarioSimulator, nil
+	return result.PayerTheme, nil
 }

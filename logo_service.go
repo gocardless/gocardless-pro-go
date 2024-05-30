@@ -18,34 +18,35 @@ var _ = bytes.NewBuffer
 var _ = json.NewDecoder
 var _ = errors.New
 
-// ScenarioSimulatorService manages scenario_simulators
-type ScenarioSimulatorServiceImpl struct {
+// LogoService manages logos
+type LogoServiceImpl struct {
 	config Config
 }
 
-// ScenarioSimulator model
-type ScenarioSimulator struct {
+// Logo model
+type Logo struct {
 	Id string `url:"id,omitempty" json:"id,omitempty"`
 }
 
-type ScenarioSimulatorService interface {
-	Run(ctx context.Context, identity string, p ScenarioSimulatorRunParams, opts ...RequestOption) (*ScenarioSimulator, error)
+type LogoService interface {
+	CreateForCreditor(ctx context.Context, p LogoCreateForCreditorParams, opts ...RequestOption) (*Logo, error)
 }
 
-type ScenarioSimulatorRunParamsLinks struct {
-	Resource string `url:"resource,omitempty" json:"resource,omitempty"`
+type LogoCreateForCreditorParamsLinks struct {
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
 }
 
-// ScenarioSimulatorRunParams parameters
-type ScenarioSimulatorRunParams struct {
-	Links *ScenarioSimulatorRunParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+// LogoCreateForCreditorParams parameters
+type LogoCreateForCreditorParams struct {
+	Image string                            `url:"image,omitempty" json:"image,omitempty"`
+	Links *LogoCreateForCreditorParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 }
 
-// Run
-// Runs the specific scenario simulator against the specific resource
-func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string, p ScenarioSimulatorRunParams, opts ...RequestOption) (*ScenarioSimulator, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/scenario_simulators/%v/actions/run",
-		identity))
+// CreateForCreditor
+// Creates a new logo associated with a creditor. If a creditor already has a
+// logo, this will update the existing logo linked to the creditor.
+func (s *LogoServiceImpl) CreateForCreditor(ctx context.Context, p LogoCreateForCreditorParams, opts ...RequestOption) (*Logo, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/branding/logos"))
 	if err != nil {
 		return nil, err
 	}
@@ -97,8 +98,8 @@ func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string,
 	}
 
 	var result struct {
-		Err               *APIError          `json:"error"`
-		ScenarioSimulator *ScenarioSimulator `json:"scenario_simulators"`
+		Err  *APIError `json:"error"`
+		Logo *Logo     `json:"logos"`
 	}
 
 	err = try(o.retries, func() error {
@@ -128,9 +129,9 @@ func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string,
 		return nil, err
 	}
 
-	if result.ScenarioSimulator == nil {
+	if result.Logo == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.ScenarioSimulator, nil
+	return result.Logo, nil
 }
