@@ -103,13 +103,14 @@ type BillingRequestPaymentRequestLinks struct {
 }
 
 type BillingRequestPaymentRequest struct {
-	Amount      int                                `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee      int                                `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency    string                             `url:"currency,omitempty" json:"currency,omitempty"`
-	Description string                             `url:"description,omitempty" json:"description,omitempty"`
-	Links       *BillingRequestPaymentRequestLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata    map[string]interface{}             `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Scheme      string                             `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Amount          int                                `url:"amount,omitempty" json:"amount,omitempty"`
+	AppFee          int                                `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Currency        string                             `url:"currency,omitempty" json:"currency,omitempty"`
+	Description     string                             `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement string                             `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
+	Links           *BillingRequestPaymentRequestLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata        map[string]interface{}             `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Scheme          string                             `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 type BillingRequestResourcesCustomer struct {
@@ -227,12 +228,13 @@ type BillingRequestCreateParamsMandateRequest struct {
 }
 
 type BillingRequestCreateParamsPaymentRequest struct {
-	Amount      int                    `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee      int                    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency    string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Description string                 `url:"description,omitempty" json:"description,omitempty"`
-	Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Scheme      string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Amount          int                    `url:"amount,omitempty" json:"amount,omitempty"`
+	AppFee          int                    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Currency        string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Description     string                 `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement string                 `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
+	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Scheme          string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 // BillingRequestCreateParams parameters
@@ -502,6 +504,12 @@ type BillingRequestCollectBankAccountParams struct {
 // Direct Debit. If a bank account is discovered to be closed or invalid, the
 // customer is requested to adjust the account number/routing number and
 // succeed in this check to continue with the flow.
+//
+// _BACS scheme_ [Payer Name
+// Verification](https://hub.gocardless.com/s/article/Introduction-to-Payer-Name-Verification?language=en_GB)
+// is enabled by default for UK based bank accounts, meaning we verify the
+// account holder name and bank account
+// number match the details held by the relevant bank.
 func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, identity string, p BillingRequestCollectBankAccountParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/collect_bank_account",
 		identity))

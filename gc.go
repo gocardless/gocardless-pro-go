@@ -22,12 +22,14 @@ type Service struct {
 	Events                  EventService
 	InstalmentSchedules     InstalmentScheduleService
 	Institutions            InstitutionService
+	Logos                   LogoService
 	Mandates                MandateService
 	MandateImports          MandateImportService
 	MandateImportEntries    MandateImportEntryService
 	MandatePdfs             MandatePdfService
 	NegativeBalanceLimits   NegativeBalanceLimitService
 	PayerAuthorisations     PayerAuthorisationService
+	PayerThemes             PayerThemeService
 	Payments                PaymentService
 	Payouts                 PayoutService
 	PayoutItems             PayoutItemService
@@ -82,6 +84,8 @@ func New(config Config) (*Service, error) {
 			config: config,
 		}, Institutions: &InstitutionServiceImpl{
 			config: config,
+		}, Logos: &LogoServiceImpl{
+			config: config,
 		}, Mandates: &MandateServiceImpl{
 			config: config,
 		}, MandateImports: &MandateImportServiceImpl{
@@ -93,6 +97,8 @@ func New(config Config) (*Service, error) {
 		}, NegativeBalanceLimits: &NegativeBalanceLimitServiceImpl{
 			config: config,
 		}, PayerAuthorisations: &PayerAuthorisationServiceImpl{
+			config: config,
+		}, PayerThemes: &PayerThemeServiceImpl{
 			config: config,
 		}, Payments: &PaymentServiceImpl{
 			config: config,

@@ -36,16 +36,23 @@ type BankDetailsLookupService interface {
 
 // BankDetailsLookupCreateParams parameters
 type BankDetailsLookupCreateParams struct {
-	AccountNumber string `url:"account_number,omitempty" json:"account_number,omitempty"`
-	BankCode      string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-	BranchCode    string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	CountryCode   string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Iban          string `url:"iban,omitempty" json:"iban,omitempty"`
+	AccountHolderName string `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber     string `url:"account_number,omitempty" json:"account_number,omitempty"`
+	BankCode          string `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode        string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode       string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Iban              string `url:"iban,omitempty" json:"iban,omitempty"`
 }
 
 // Create
 // Performs a bank details lookup. As part of the lookup, a modulus check and
 // reachability check are performed.
+//
+// For UK-based bank accounts, where an account holder name is provided (and an
+// account number, a sort code or an iban
+// are already present), we verify that the account holder name and bank account
+// number match the details held by
+// the relevant bank.
 //
 // If your request returns an [error](#api-usage-errors) or the
 // `available_debit_schemes`
