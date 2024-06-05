@@ -49,6 +49,7 @@ type Subscription struct {
 	Metadata                      map[string]interface{}         `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Month                         string                         `url:"month,omitempty" json:"month,omitempty"`
 	Name                          string                         `url:"name,omitempty" json:"name,omitempty"`
+	ParentPlanPaused              bool                           `url:"parent_plan_paused,omitempty" json:"parent_plan_paused,omitempty"`
 	PaymentReference              string                         `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
 	RetryIfPossible               bool                           `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
 	StartDate                     string                         `url:"start_date,omitempty" json:"start_date,omitempty"`
