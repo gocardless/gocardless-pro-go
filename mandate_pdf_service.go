@@ -49,8 +49,11 @@ type MandatePdfCreateParams struct {
 	Bic                   string                       `url:"bic,omitempty" json:"bic,omitempty"`
 	BranchCode            string                       `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	City                  string                       `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string                       `url:"company_name,omitempty" json:"company_name,omitempty"`
 	CountryCode           string                       `url:"country_code,omitempty" json:"country_code,omitempty"`
 	DanishIdentityNumber  string                       `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	FamilyName            string                       `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string                       `url:"given_name,omitempty" json:"given_name,omitempty"`
 	Iban                  string                       `url:"iban,omitempty" json:"iban,omitempty"`
 	Links                 *MandatePdfCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 	MandateReference      string                       `url:"mandate_reference,omitempty" json:"mandate_reference,omitempty"`
