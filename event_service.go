@@ -101,6 +101,7 @@ type EventListParams struct {
 	BillingRequest     string                    `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 	CreatedAt          *EventListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Creditor           string                    `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Export             string                    `url:"export,omitempty" json:"export,omitempty"`
 	Include            string                    `url:"include,omitempty" json:"include,omitempty"`
 	InstalmentSchedule string                    `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
 	Limit              int                       `url:"limit,omitempty" json:"limit,omitempty"`

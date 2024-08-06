@@ -110,6 +110,7 @@ type BillingRequestPaymentRequest struct {
 	FundsSettlement string                             `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Links           *BillingRequestPaymentRequestLinks `url:"links,omitempty" json:"links,omitempty"`
 	Metadata        map[string]interface{}             `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference       string                             `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme          string                             `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
@@ -234,6 +235,7 @@ type BillingRequestCreateParamsPaymentRequest struct {
 	Description     string                 `url:"description,omitempty" json:"description,omitempty"`
 	FundsSettlement string                 `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference       string                 `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme          string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
