@@ -20,6 +20,7 @@ type Service struct {
 	CustomerBankAccounts    CustomerBankAccountService
 	CustomerNotifications   CustomerNotificationService
 	Events                  EventService
+	Exports                 ExportService
 	InstalmentSchedules     InstalmentScheduleService
 	Institutions            InstitutionService
 	Logos                   LogoService
@@ -79,6 +80,8 @@ func New(config Config) (*Service, error) {
 		}, CustomerNotifications: &CustomerNotificationServiceImpl{
 			config: config,
 		}, Events: &EventServiceImpl{
+			config: config,
+		}, Exports: &ExportServiceImpl{
 			config: config,
 		}, InstalmentSchedules: &InstalmentScheduleServiceImpl{
 			config: config,

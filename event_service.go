@@ -101,6 +101,7 @@ type EventListParams struct {
 	BillingRequest     string                    `url:"billing_request,omitempty" json:"billing_request,omitempty"`
 	CreatedAt          *EventListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Creditor           string                    `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Export             string                    `url:"export,omitempty" json:"export,omitempty"`
 	Include            string                    `url:"include,omitempty" json:"include,omitempty"`
 	InstalmentSchedule string                    `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
 	Limit              int                       `url:"limit,omitempty" json:"limit,omitempty"`
@@ -165,7 +166,7 @@ func (s *EventServiceImpl) List(ctx context.Context, p EventListParams, opts ...
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.10.0")
+	req.Header.Set("GoCardless-Client-Version", "3.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -274,7 +275,7 @@ func (c *EventListPagingIterator) Value(ctx context.Context) (*EventListResult, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.10.0")
+	req.Header.Set("GoCardless-Client-Version", "3.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -366,7 +367,7 @@ func (s *EventServiceImpl) Get(ctx context.Context, identity string, opts ...Req
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.10.0")
+	req.Header.Set("GoCardless-Client-Version", "3.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

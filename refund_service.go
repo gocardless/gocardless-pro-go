@@ -125,7 +125,7 @@ func (s *RefundServiceImpl) Create(ctx context.Context, p RefundCreateParams, op
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.10.0")
+	req.Header.Set("GoCardless-Client-Version", "3.11.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -246,7 +246,7 @@ func (s *RefundServiceImpl) List(ctx context.Context, p RefundListParams, opts .
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.10.0")
+	req.Header.Set("GoCardless-Client-Version", "3.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -355,7 +355,7 @@ func (c *RefundListPagingIterator) Value(ctx context.Context) (*RefundListResult
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.10.0")
+	req.Header.Set("GoCardless-Client-Version", "3.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -447,7 +447,7 @@ func (s *RefundServiceImpl) Get(ctx context.Context, identity string, opts ...Re
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.10.0")
+	req.Header.Set("GoCardless-Client-Version", "3.11.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -544,7 +544,7 @@ func (s *RefundServiceImpl) Update(ctx context.Context, identity string, p Refun
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.10.0")
+	req.Header.Set("GoCardless-Client-Version", "3.11.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

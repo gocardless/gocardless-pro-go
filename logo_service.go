@@ -45,6 +45,11 @@ type LogoCreateForCreditorParams struct {
 // CreateForCreditor
 // Creates a new logo associated with a creditor. If a creditor already has a
 // logo, this will update the existing logo linked to the creditor.
+//
+// We support JPG and PNG formats. Your logo will be scaled to a maximum of
+// 300px by 40px. For more guidance on how to upload logos that will look
+// great across your customer payment page and notification emails see
+// [here](https://developer.gocardless.com/gc-embed/setting-up-branding#tips_for_uploading_your_logo).
 func (s *LogoServiceImpl) CreateForCreditor(ctx context.Context, p LogoCreateForCreditorParams, opts ...RequestOption) (*Logo, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/branding/logos"))
 	if err != nil {
@@ -83,7 +88,7 @@ func (s *LogoServiceImpl) CreateForCreditor(ctx context.Context, p LogoCreateFor
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "3.10.0")
+	req.Header.Set("GoCardless-Client-Version", "3.11.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
