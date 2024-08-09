@@ -35,6 +35,7 @@ type EventDetails struct {
 	Cause            string `url:"cause,omitempty" json:"cause,omitempty"`
 	Currency         string `url:"currency,omitempty" json:"currency,omitempty"`
 	Description      string `url:"description,omitempty" json:"description,omitempty"`
+	ItemCount        int    `url:"item_count,omitempty" json:"item_count,omitempty"`
 	NotRetriedReason string `url:"not_retried_reason,omitempty" json:"not_retried_reason,omitempty"`
 	Origin           string `url:"origin,omitempty" json:"origin,omitempty"`
 	Property         string `url:"property,omitempty" json:"property,omitempty"`
