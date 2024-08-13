@@ -88,7 +88,6 @@ type BillingRequestMandateRequestLinks struct {
 
 type BillingRequestMandateRequest struct {
 	AuthorisationSource         string                                   `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
-	ConsentType                 string                                   `url:"consent_type,omitempty" json:"consent_type,omitempty"`
 	Constraints                 *BillingRequestMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
 	Currency                    string                                   `url:"currency,omitempty" json:"currency,omitempty"`
 	Description                 string                                   `url:"description,omitempty" json:"description,omitempty"`
