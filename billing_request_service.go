@@ -135,6 +135,7 @@ type BillingRequestResourcesCustomerBankAccount struct {
 	AccountHolderName   string                                           `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
 	AccountNumberEnding string                                           `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
 	AccountType         string                                           `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankAccountToken    string                                           `url:"bank_account_token,omitempty" json:"bank_account_token,omitempty"`
 	BankName            string                                           `url:"bank_name,omitempty" json:"bank_name,omitempty"`
 	CountryCode         string                                           `url:"country_code,omitempty" json:"country_code,omitempty"`
 	CreatedAt           string                                           `url:"created_at,omitempty" json:"created_at,omitempty"`
