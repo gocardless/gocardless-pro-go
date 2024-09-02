@@ -163,4 +163,5 @@ type ValidationError struct {
 
 type ErrorLinks struct {
 	ConflictingResourceID string `json:"conflicting_resource_id"`
+	CustomerBankAccount   string `json:"customer_bank_account"`
 }
