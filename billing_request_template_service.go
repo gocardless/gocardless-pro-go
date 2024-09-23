@@ -35,7 +35,7 @@ type BillingRequestTemplate struct {
 	MandateRequestVerify      string                 `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
 	Metadata                  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Name                      string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentRequestAmount      int                    `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
+	PaymentRequestAmount      string                 `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
 	PaymentRequestCurrency    string                 `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
 	PaymentRequestDescription string                 `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
 	PaymentRequestMetadata    map[string]interface{} `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
@@ -375,7 +375,7 @@ type BillingRequestTemplateCreateParams struct {
 	MandateRequestVerify      string                                   `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
 	Metadata                  map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Name                      string                                   `url:"name,omitempty" json:"name,omitempty"`
-	PaymentRequestAmount      int                                      `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
+	PaymentRequestAmount      string                                   `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
 	PaymentRequestCurrency    string                                   `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
 	PaymentRequestDescription string                                   `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
 	PaymentRequestMetadata    map[string]interface{}                   `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
@@ -484,7 +484,7 @@ type BillingRequestTemplateUpdateParams struct {
 	MandateRequestVerify      string                 `url:"mandate_request_verify,omitempty" json:"mandate_request_verify,omitempty"`
 	Metadata                  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Name                      string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentRequestAmount      int                    `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
+	PaymentRequestAmount      string                 `url:"payment_request_amount,omitempty" json:"payment_request_amount,omitempty"`
 	PaymentRequestCurrency    string                 `url:"payment_request_currency,omitempty" json:"payment_request_currency,omitempty"`
 	PaymentRequestDescription string                 `url:"payment_request_description,omitempty" json:"payment_request_description,omitempty"`
 	PaymentRequestMetadata    map[string]interface{} `url:"payment_request_metadata,omitempty" json:"payment_request_metadata,omitempty"`
