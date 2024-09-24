@@ -7,7 +7,7 @@ import (
 
 const (
 	// client library version
-	clientLibVersion = "4.0.0"
+	clientLibVersion = "3.7.0"
 )
 
 var userAgent string
