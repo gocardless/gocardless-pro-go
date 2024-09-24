@@ -1,4 +1,4 @@
-module github.com/gocardless/gocardless-pro-go/v3
+module github.com/gocardless/gocardless-pro-go/v4
 
 go 1.20
 
