@@ -67,6 +67,7 @@ type BillingRequestFlow struct {
 	SessionToken              string                                  `url:"session_token,omitempty" json:"session_token,omitempty"`
 	ShowRedirectButtons       bool                                    `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
 	ShowSuccessRedirectButton bool                                    `url:"show_success_redirect_button,omitempty" json:"show_success_redirect_button,omitempty"`
+	SkipSuccessScreen         bool                                    `url:"skip_success_screen,omitempty" json:"skip_success_screen,omitempty"`
 }
 
 type BillingRequestFlowService interface {
@@ -113,6 +114,7 @@ type BillingRequestFlowCreateParams struct {
 	RedirectUri               string                                              `url:"redirect_uri,omitempty" json:"redirect_uri,omitempty"`
 	ShowRedirectButtons       bool                                                `url:"show_redirect_buttons,omitempty" json:"show_redirect_buttons,omitempty"`
 	ShowSuccessRedirectButton bool                                                `url:"show_success_redirect_button,omitempty" json:"show_success_redirect_button,omitempty"`
+	SkipSuccessScreen         bool                                                `url:"skip_success_screen,omitempty" json:"skip_success_screen,omitempty"`
 }
 
 // Create
