@@ -170,17 +170,18 @@ type BillingRequestResources struct {
 
 // BillingRequest model
 type BillingRequest struct {
-	Actions         []BillingRequestActions       `url:"actions,omitempty" json:"actions,omitempty"`
-	CreatedAt       string                        `url:"created_at,omitempty" json:"created_at,omitempty"`
-	FallbackEnabled bool                          `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
-	Id              string                        `url:"id,omitempty" json:"id,omitempty"`
-	Links           *BillingRequestLinks          `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequest  *BillingRequestMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata        map[string]interface{}        `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PaymentRequest  *BillingRequestPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
-	PurposeCode     string                        `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
-	Resources       *BillingRequestResources      `url:"resources,omitempty" json:"resources,omitempty"`
-	Status          string                        `url:"status,omitempty" json:"status,omitempty"`
+	Actions          []BillingRequestActions       `url:"actions,omitempty" json:"actions,omitempty"`
+	CreatedAt        string                        `url:"created_at,omitempty" json:"created_at,omitempty"`
+	FallbackEnabled  bool                          `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
+	FallbackOccurred bool                          `url:"fallback_occurred,omitempty" json:"fallback_occurred,omitempty"`
+	Id               string                        `url:"id,omitempty" json:"id,omitempty"`
+	Links            *BillingRequestLinks          `url:"links,omitempty" json:"links,omitempty"`
+	MandateRequest   *BillingRequestMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
+	Metadata         map[string]interface{}        `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentRequest   *BillingRequestPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode      string                        `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
+	Resources        *BillingRequestResources      `url:"resources,omitempty" json:"resources,omitempty"`
+	Status           string                        `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type BillingRequestService interface {
