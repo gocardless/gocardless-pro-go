@@ -33,6 +33,62 @@ func TestBillingRequestCreate(t *testing.T) {
 	}
 }
 
+func TestBillingRequestCreateWithInstalmentsWithDates(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "create_with_instalments_with_dates")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := BillingRequestCreateWithInstalmentsWithDatesParams{}
+
+	o, err :=
+		client.BillingRequests.CreateWithInstalmentsWithDates(
+			ctx, p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected BillingRequest, got nil")
+
+	}
+}
+
+func TestBillingRequestCreateWithInstalmentsWithSchedule(t *testing.T) {
+	fixtureFile := "testdata/billing_requests.json"
+	server := runServer(t, fixtureFile, "create_with_instalments_with_schedule")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := BillingRequestCreateWithInstalmentsWithScheduleParams{}
+
+	o, err :=
+		client.BillingRequests.CreateWithInstalmentsWithSchedule(
+			ctx, p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected BillingRequest, got nil")
+
+	}
+}
+
 func TestBillingRequestCollectCustomerDetails(t *testing.T) {
 	fixtureFile := "testdata/billing_requests.json"
 	server := runServer(t, fixtureFile, "collect_customer_details")

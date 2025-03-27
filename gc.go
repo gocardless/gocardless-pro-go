@@ -7,6 +7,7 @@ import (
 )
 
 type Service struct {
+	Balances                BalanceService
 	BankAuthorisations      BankAuthorisationService
 	BankDetailsLookups      BankDetailsLookupService
 	BillingRequests         BillingRequestService
@@ -55,7 +56,9 @@ func New(config Config) (*Service, error) {
 	}
 
 	s := &Service{
-		BankAuthorisations: &BankAuthorisationServiceImpl{
+		Balances: &BalanceServiceImpl{
+			config: config,
+		}, BankAuthorisations: &BankAuthorisationServiceImpl{
 			config: config,
 		}, BankDetailsLookups: &BankDetailsLookupServiceImpl{
 			config: config,

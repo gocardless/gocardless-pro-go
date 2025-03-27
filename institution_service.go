@@ -31,6 +31,7 @@ type Institution struct {
 	Id                              string `url:"id,omitempty" json:"id,omitempty"`
 	LogoUrl                         string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
 	Name                            string `url:"name,omitempty" json:"name,omitempty"`
+	Status                          string `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type InstitutionService interface {
@@ -93,7 +94,7 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "4.1.0")
+	req.Header.Set("GoCardless-Client-Version", "4.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -204,7 +205,7 @@ func (s *InstitutionServiceImpl) ListForBillingRequest(ctx context.Context, iden
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "4.1.0")
+	req.Header.Set("GoCardless-Client-Version", "4.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
