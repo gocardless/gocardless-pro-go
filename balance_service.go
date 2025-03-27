@@ -18,53 +18,58 @@ var _ = bytes.NewBuffer
 var _ = json.NewDecoder
 var _ = errors.New
 
-// CurrencyExchangeRateService manages currency_exchange_rates
-type CurrencyExchangeRateServiceImpl struct {
+// BalanceService manages balances
+type BalanceServiceImpl struct {
 	config Config
 }
 
-// CurrencyExchangeRate model
-type CurrencyExchangeRate struct {
-	Rate   string `url:"rate,omitempty" json:"rate,omitempty"`
-	Source string `url:"source,omitempty" json:"source,omitempty"`
-	Target string `url:"target,omitempty" json:"target,omitempty"`
-	Time   string `url:"time,omitempty" json:"time,omitempty"`
+type BalanceLinks struct {
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
 }
 
-type CurrencyExchangeRateService interface {
-	List(ctx context.Context, p CurrencyExchangeRateListParams, opts ...RequestOption) (*CurrencyExchangeRateListResult, error)
-	All(ctx context.Context, p CurrencyExchangeRateListParams, opts ...RequestOption) *CurrencyExchangeRateListPagingIterator
+// Balance model
+type Balance struct {
+	Amount        int           `url:"amount,omitempty" json:"amount,omitempty"`
+	BalanceType   string        `url:"balance_type,omitempty" json:"balance_type,omitempty"`
+	Currency      string        `url:"currency,omitempty" json:"currency,omitempty"`
+	LastUpdatedAt string        `url:"last_updated_at,omitempty" json:"last_updated_at,omitempty"`
+	Links         *BalanceLinks `url:"links,omitempty" json:"links,omitempty"`
 }
 
-// CurrencyExchangeRateListParams parameters
-type CurrencyExchangeRateListParams struct {
+type BalanceService interface {
+	List(ctx context.Context, p BalanceListParams, opts ...RequestOption) (*BalanceListResult, error)
+	All(ctx context.Context, p BalanceListParams, opts ...RequestOption) *BalanceListPagingIterator
+}
+
+// BalanceListParams parameters
+type BalanceListParams struct {
+	After    string `url:"after,omitempty" json:"after,omitempty"`
+	Before   string `url:"before,omitempty" json:"before,omitempty"`
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Limit    int    `url:"limit,omitempty" json:"limit,omitempty"`
+}
+
+type BalanceListResultMetaCursors struct {
 	After  string `url:"after,omitempty" json:"after,omitempty"`
 	Before string `url:"before,omitempty" json:"before,omitempty"`
-	Limit  int    `url:"limit,omitempty" json:"limit,omitempty"`
-	Source string `url:"source,omitempty" json:"source,omitempty"`
-	Target string `url:"target,omitempty" json:"target,omitempty"`
 }
 
-type CurrencyExchangeRateListResultMetaCursors struct {
-	After  string `url:"after,omitempty" json:"after,omitempty"`
-	Before string `url:"before,omitempty" json:"before,omitempty"`
+type BalanceListResultMeta struct {
+	Cursors *BalanceListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
-type CurrencyExchangeRateListResultMeta struct {
-	Cursors *CurrencyExchangeRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                        `url:"limit,omitempty" json:"limit,omitempty"`
-}
-
-type CurrencyExchangeRateListResult struct {
-	CurrencyExchangeRates []CurrencyExchangeRate             `json:"currency_exchange_rates"`
-	Meta                  CurrencyExchangeRateListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
+type BalanceListResult struct {
+	Balances []Balance             `json:"balances"`
+	Meta     BalanceListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of all
-// exchange rates.
-func (s *CurrencyExchangeRateServiceImpl) List(ctx context.Context, p CurrencyExchangeRateListParams, opts ...RequestOption) (*CurrencyExchangeRateListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/currency_exchange_rates"))
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of balances
+// for a given creditor. This endpoint is rate limited to 60 requests per
+// minute.
+func (s *BalanceServiceImpl) List(ctx context.Context, p BalanceListParams, opts ...RequestOption) (*BalanceListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/balances"))
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +114,7 @@ func (s *CurrencyExchangeRateServiceImpl) List(ctx context.Context, p CurrencyEx
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*CurrencyExchangeRateListResult
+		*BalanceListResult
 	}
 
 	err = try(o.retries, func() error {
@@ -139,22 +144,22 @@ func (s *CurrencyExchangeRateServiceImpl) List(ctx context.Context, p CurrencyEx
 		return nil, err
 	}
 
-	if result.CurrencyExchangeRateListResult == nil {
+	if result.BalanceListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.CurrencyExchangeRateListResult, nil
+	return result.BalanceListResult, nil
 }
 
-type CurrencyExchangeRateListPagingIterator struct {
+type BalanceListPagingIterator struct {
 	cursor         string
-	response       *CurrencyExchangeRateListResult
-	params         CurrencyExchangeRateListParams
-	service        *CurrencyExchangeRateServiceImpl
+	response       *BalanceListResult
+	params         BalanceListParams
+	service        *BalanceServiceImpl
 	requestOptions []RequestOption
 }
 
-func (c *CurrencyExchangeRateListPagingIterator) Next() bool {
+func (c *BalanceListPagingIterator) Next() bool {
 	if c.cursor == "" && c.response != nil {
 		return false
 	}
@@ -162,7 +167,7 @@ func (c *CurrencyExchangeRateListPagingIterator) Next() bool {
 	return true
 }
 
-func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*CurrencyExchangeRateListResult, error) {
+func (c *BalanceListPagingIterator) Value(ctx context.Context) (*BalanceListResult, error) {
 	if !c.Next() {
 		return c.response, nil
 	}
@@ -171,7 +176,7 @@ func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*Cu
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/currency_exchange_rates"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/balances"))
 
 	if err != nil {
 		return nil, err
@@ -217,7 +222,7 @@ func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*Cu
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*CurrencyExchangeRateListResult
+		*BalanceListResult
 	}
 
 	err = try(o.retries, func() error {
@@ -248,19 +253,19 @@ func (c *CurrencyExchangeRateListPagingIterator) Value(ctx context.Context) (*Cu
 		return nil, err
 	}
 
-	if result.CurrencyExchangeRateListResult == nil {
+	if result.BalanceListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	c.response = result.CurrencyExchangeRateListResult
+	c.response = result.BalanceListResult
 	c.cursor = c.response.Meta.Cursors.After
 	return c.response, nil
 }
 
-func (s *CurrencyExchangeRateServiceImpl) All(ctx context.Context,
-	p CurrencyExchangeRateListParams,
-	opts ...RequestOption) *CurrencyExchangeRateListPagingIterator {
-	return &CurrencyExchangeRateListPagingIterator{
+func (s *BalanceServiceImpl) All(ctx context.Context,
+	p BalanceListParams,
+	opts ...RequestOption) *BalanceListPagingIterator {
+	return &BalanceListPagingIterator{
 		params:         p,
 		service:        s,
 		requestOptions: opts,
