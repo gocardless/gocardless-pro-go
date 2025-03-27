@@ -1,6 +1,7 @@
 package gocardless
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -9,7 +10,7 @@ import (
 )
 
 func TestWebhookFailsWithInvalidSignature(t *testing.T) {
-	wh, err := NewWebhookHandler("testing", EventHandlerFunc(func(e Event) error {
+	wh, err := NewWebhookHandler("testing", EventHandlerFunc(func(ctx context.Context, e Event) error {
 		t.Error("unexpected call")
 		return nil
 	}))
@@ -36,7 +37,7 @@ func TestWebhookFailsWithInvalidSignature(t *testing.T) {
 func TestWebhookFailsWithValidSignature(t *testing.T) {
 	var called int
 
-	wh, err := NewWebhookHandler("testing", EventHandlerFunc(func(e Event) error {
+	wh, err := NewWebhookHandler("testing", EventHandlerFunc(func(ctx context.Context, e Event) error {
 		called++
 		expectedID := "EVTESTNE86TNZS"
 		if e.Id != expectedID {
@@ -72,7 +73,7 @@ func TestWebhookFailsWithValidSignature(t *testing.T) {
 func TestWebhookWhenHandlerFails(t *testing.T) {
 	var called int
 
-	wh, err := NewWebhookHandler("testing", EventHandlerFunc(func(e Event) error {
+	wh, err := NewWebhookHandler("testing", EventHandlerFunc(func(ctx context.Context, e Event) error {
 		called++
 		expectedID := "EVTESTNE86TNZS"
 		if e.Id != expectedID {
