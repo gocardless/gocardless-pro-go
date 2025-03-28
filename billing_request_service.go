@@ -74,7 +74,6 @@ type BillingRequestInstalmentScheduleRequestLinks struct {
 type BillingRequestInstalmentScheduleRequest struct {
 	AppFee                  int                                                             `url:"app_fee,omitempty" json:"app_fee,omitempty"`
 	Currency                string                                                          `url:"currency,omitempty" json:"currency,omitempty"`
-	Instalments             struct{}                                                        `url:"instalments,omitempty" json:"instalments,omitempty"`
 	InstalmentsWithDates    []BillingRequestInstalmentScheduleRequestInstalmentsWithDates   `url:"instalments_with_dates,omitempty" json:"instalments_with_dates,omitempty"`
 	InstalmentsWithSchedule *BillingRequestInstalmentScheduleRequestInstalmentsWithSchedule `url:"instalments_with_schedule,omitempty" json:"instalments_with_schedule,omitempty"`
 	Links                   *BillingRequestInstalmentScheduleRequestLinks                   `url:"links,omitempty" json:"links,omitempty"`
@@ -246,8 +245,6 @@ type BillingRequest struct {
 
 type BillingRequestService interface {
 	Create(ctx context.Context, p BillingRequestCreateParams, opts ...RequestOption) (*BillingRequest, error)
-	CreateWithInstalmentsWithDates(ctx context.Context, p BillingRequestCreateWithInstalmentsWithDatesParams, opts ...RequestOption) (*BillingRequest, error)
-	CreateWithInstalmentsWithSchedule(ctx context.Context, p BillingRequestCreateWithInstalmentsWithScheduleParams, opts ...RequestOption) (*BillingRequest, error)
 	CollectCustomerDetails(ctx context.Context, identity string, p BillingRequestCollectCustomerDetailsParams, opts ...RequestOption) (*BillingRequest, error)
 	CollectBankAccount(ctx context.Context, identity string, p BillingRequestCollectBankAccountParams, opts ...RequestOption) (*BillingRequest, error)
 	ConfirmPayerDetails(ctx context.Context, identity string, p BillingRequestConfirmPayerDetailsParams, opts ...RequestOption) (*BillingRequest, error)
@@ -260,6 +257,36 @@ type BillingRequestService interface {
 	Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error)
 	ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error)
 	SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error)
+}
+
+type BillingRequestCreateParamsInstalmentScheduleRequestInstalmentsWithDates struct {
+	Amount      int    `url:"amount,omitempty" json:"amount,omitempty"`
+	ChargeDate  string `url:"charge_date,omitempty" json:"charge_date,omitempty"`
+	Description string `url:"description,omitempty" json:"description,omitempty"`
+}
+
+type BillingRequestCreateParamsInstalmentScheduleRequestInstalmentsWithSchedule struct {
+	Amounts      []int  `url:"amounts,omitempty" json:"amounts,omitempty"`
+	Interval     int    `url:"interval,omitempty" json:"interval,omitempty"`
+	IntervalUnit string `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
+	StartDate    string `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
+type BillingRequestCreateParamsInstalmentScheduleRequestLinks struct {
+	InstalmentSchedule string `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
+}
+
+type BillingRequestCreateParamsInstalmentScheduleRequest struct {
+	AppFee                  int                                                                         `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Currency                string                                                                      `url:"currency,omitempty" json:"currency,omitempty"`
+	InstalmentsWithDates    []BillingRequestCreateParamsInstalmentScheduleRequestInstalmentsWithDates   `url:"instalments_with_dates,omitempty" json:"instalments_with_dates,omitempty"`
+	InstalmentsWithSchedule *BillingRequestCreateParamsInstalmentScheduleRequestInstalmentsWithSchedule `url:"instalments_with_schedule,omitempty" json:"instalments_with_schedule,omitempty"`
+	Links                   *BillingRequestCreateParamsInstalmentScheduleRequestLinks                   `url:"links,omitempty" json:"links,omitempty"`
+	Metadata                map[string]interface{}                                                      `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Name                    string                                                                      `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference        string                                                                      `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible         bool                                                                        `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	TotalAmount             int                                                                         `url:"total_amount,omitempty" json:"total_amount,omitempty"`
 }
 
 type BillingRequestCreateParamsLinks struct {
@@ -285,6 +312,7 @@ type BillingRequestCreateParamsMandateRequestConstraints struct {
 
 type BillingRequestCreateParamsMandateRequest struct {
 	AuthorisationSource string                                               `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
+	ConsentType         string                                               `url:"consent_type,omitempty" json:"consent_type,omitempty"`
 	Constraints         *BillingRequestCreateParamsMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
 	Currency            string                                               `url:"currency,omitempty" json:"currency,omitempty"`
 	Description         string                                               `url:"description,omitempty" json:"description,omitempty"`
@@ -325,18 +353,20 @@ type BillingRequestCreateParamsSubscriptionRequest struct {
 
 // BillingRequestCreateParams parameters
 type BillingRequestCreateParams struct {
-	FallbackEnabled     bool                                           `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
-	Links               *BillingRequestCreateParamsLinks               `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequest      *BillingRequestCreateParamsMandateRequest      `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata            map[string]interface{}                         `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PaymentRequest      *BillingRequestCreateParamsPaymentRequest      `url:"payment_request,omitempty" json:"payment_request,omitempty"`
-	PurposeCode         string                                         `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
-	SubscriptionRequest *BillingRequestCreateParamsSubscriptionRequest `url:"subscription_request,omitempty" json:"subscription_request,omitempty"`
+	FallbackEnabled           bool                                                 `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
+	InstalmentScheduleRequest *BillingRequestCreateParamsInstalmentScheduleRequest `url:"instalment_schedule_request,omitempty" json:"instalment_schedule_request,omitempty"`
+	Links                     *BillingRequestCreateParamsLinks                     `url:"links,omitempty" json:"links,omitempty"`
+	MandateRequest            *BillingRequestCreateParamsMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
+	Metadata                  map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentRequest            *BillingRequestCreateParamsPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode               string                                               `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
+	SubscriptionRequest       *BillingRequestCreateParamsSubscriptionRequest       `url:"subscription_request,omitempty" json:"subscription_request,omitempty"`
 }
 
 // Create
 // <p class="notice"><strong>Important</strong>: All properties associated with
-// `subscription_request` are only supported for ACH and PAD schemes.</p>
+// `subscription_request` and `instalment_schedule_request` are only supported
+// for ACH and PAD schemes.</p>
 func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequestCreateParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
 	if err != nil {
@@ -361,307 +391,6 @@ func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequest
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
 		"billing_requests": p,
-	})
-	if err != nil {
-		return nil, err
-	}
-	body = &buf
-
-	req, err := http.NewRequest("POST", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.config.Token())
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "4.3.0")
-	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Idempotency-Key", o.idempotencyKey)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.config.Client()
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err            *APIError       `json:"error"`
-		BillingRequest *BillingRequest `json:"billing_requests"`
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.BillingRequest == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.BillingRequest, nil
-}
-
-type BillingRequestCreateWithInstalmentsWithDatesParamsInstalmentScheduleRequestInstalments struct {
-	Amount      int    `url:"amount,omitempty" json:"amount,omitempty"`
-	ChargeDate  string `url:"charge_date,omitempty" json:"charge_date,omitempty"`
-	Description string `url:"description,omitempty" json:"description,omitempty"`
-}
-
-type BillingRequestCreateWithInstalmentsWithDatesParamsInstalmentScheduleRequest struct {
-	AppFee           int                                                                                      `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency         string                                                                                   `url:"currency,omitempty" json:"currency,omitempty"`
-	Instalments      []BillingRequestCreateWithInstalmentsWithDatesParamsInstalmentScheduleRequestInstalments `url:"instalments,omitempty" json:"instalments,omitempty"`
-	Metadata         map[string]interface{}                                                                   `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name             string                                                                                   `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string                                                                                   `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool                                                                                     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	TotalAmount      int                                                                                      `url:"total_amount,omitempty" json:"total_amount,omitempty"`
-}
-
-type BillingRequestCreateWithInstalmentsWithDatesParamsLinks struct {
-	Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
-	Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
-	CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
-}
-
-type BillingRequestCreateWithInstalmentsWithDatesParamsMandateRequest struct {
-	AuthorisationSource string                 `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
-	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Description         string                 `url:"description,omitempty" json:"description,omitempty"`
-	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference           string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme              string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Sweeping            bool                   `url:"sweeping,omitempty" json:"sweeping,omitempty"`
-	Verify              string                 `url:"verify,omitempty" json:"verify,omitempty"`
-}
-
-type BillingRequestCreateWithInstalmentsWithDatesParamsPaymentRequest struct {
-	Amount          int                    `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee          int                    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency        string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Description     string                 `url:"description,omitempty" json:"description,omitempty"`
-	FundsSettlement string                 `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
-	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference       string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	Scheme          string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-}
-
-// BillingRequestCreateWithInstalmentsWithDatesParams parameters
-type BillingRequestCreateWithInstalmentsWithDatesParams struct {
-	FallbackEnabled           bool                                                                         `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
-	InstalmentScheduleRequest *BillingRequestCreateWithInstalmentsWithDatesParamsInstalmentScheduleRequest `url:"instalment_schedule_request,omitempty" json:"instalment_schedule_request,omitempty"`
-	Links                     *BillingRequestCreateWithInstalmentsWithDatesParamsLinks                     `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequest            *BillingRequestCreateWithInstalmentsWithDatesParamsMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata                  map[string]interface{}                                                       `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PaymentRequest            *BillingRequestCreateWithInstalmentsWithDatesParamsPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
-}
-
-// CreateWithInstalmentsWithDates
-// <p class="notice"><strong>Important</strong>: All properties associated with
-// `instalment_schedule_request` are only supported for ACH and PAD schemes.</p>
-func (s *BillingRequestServiceImpl) CreateWithInstalmentsWithDates(ctx context.Context, p BillingRequestCreateWithInstalmentsWithDatesParams, opts ...RequestOption) (*BillingRequest, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-	if o.idempotencyKey == "" {
-		o.idempotencyKey = NewIdempotencyKey()
-	}
-
-	var body io.Reader
-
-	var buf bytes.Buffer
-	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
-	})
-	if err != nil {
-		return nil, err
-	}
-	body = &buf
-
-	req, err := http.NewRequest("POST", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.config.Token())
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "4.3.0")
-	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Idempotency-Key", o.idempotencyKey)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.config.Client()
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err            *APIError       `json:"error"`
-		BillingRequest *BillingRequest `json:"billing_requests"`
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.BillingRequest == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.BillingRequest, nil
-}
-
-type BillingRequestCreateWithInstalmentsWithScheduleParamsInstalmentScheduleRequestInstalments struct {
-	Amounts      []int  `url:"amounts,omitempty" json:"amounts,omitempty"`
-	Interval     int    `url:"interval,omitempty" json:"interval,omitempty"`
-	IntervalUnit string `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
-	StartDate    string `url:"start_date,omitempty" json:"start_date,omitempty"`
-}
-
-type BillingRequestCreateWithInstalmentsWithScheduleParamsInstalmentScheduleRequest struct {
-	AppFee           int                                                                                       `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency         string                                                                                    `url:"currency,omitempty" json:"currency,omitempty"`
-	Instalments      BillingRequestCreateWithInstalmentsWithScheduleParamsInstalmentScheduleRequestInstalments `url:"instalments,omitempty" json:"instalments,omitempty"`
-	Metadata         map[string]interface{}                                                                    `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Name             string                                                                                    `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string                                                                                    `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool                                                                                      `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	TotalAmount      int                                                                                       `url:"total_amount,omitempty" json:"total_amount,omitempty"`
-}
-
-type BillingRequestCreateWithInstalmentsWithScheduleParamsLinks struct {
-	Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
-	Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
-	CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
-}
-
-type BillingRequestCreateWithInstalmentsWithScheduleParamsMandateRequest struct {
-	AuthorisationSource string                 `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
-	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Description         string                 `url:"description,omitempty" json:"description,omitempty"`
-	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference           string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	Scheme              string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Sweeping            bool                   `url:"sweeping,omitempty" json:"sweeping,omitempty"`
-	Verify              string                 `url:"verify,omitempty" json:"verify,omitempty"`
-}
-
-type BillingRequestCreateWithInstalmentsWithScheduleParamsPaymentRequest struct {
-	Amount          int                    `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee          int                    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency        string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Description     string                 `url:"description,omitempty" json:"description,omitempty"`
-	FundsSettlement string                 `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
-	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference       string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	Scheme          string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-}
-
-// BillingRequestCreateWithInstalmentsWithScheduleParams parameters
-type BillingRequestCreateWithInstalmentsWithScheduleParams struct {
-	FallbackEnabled           bool                                                                            `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
-	InstalmentScheduleRequest *BillingRequestCreateWithInstalmentsWithScheduleParamsInstalmentScheduleRequest `url:"instalment_schedule_request,omitempty" json:"instalment_schedule_request,omitempty"`
-	Links                     *BillingRequestCreateWithInstalmentsWithScheduleParamsLinks                     `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequest            *BillingRequestCreateWithInstalmentsWithScheduleParamsMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata                  map[string]interface{}                                                          `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PaymentRequest            *BillingRequestCreateWithInstalmentsWithScheduleParamsPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
-}
-
-// CreateWithInstalmentsWithSchedule
-// <p class="notice"><strong>Important</strong>: All properties associated with
-// `instalment_schedule_request` are only supported for ACH and PAD schemes.</p>
-func (s *BillingRequestServiceImpl) CreateWithInstalmentsWithSchedule(ctx context.Context, p BillingRequestCreateWithInstalmentsWithScheduleParams, opts ...RequestOption) (*BillingRequest, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-	if o.idempotencyKey == "" {
-		o.idempotencyKey = NewIdempotencyKey()
-	}
-
-	var body io.Reader
-
-	var buf bytes.Buffer
-	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
 	})
 	if err != nil {
 		return nil, err
