@@ -272,16 +272,11 @@ type BillingRequestCreateParamsInstalmentScheduleRequestInstalmentsWithSchedule 
 	StartDate    string `url:"start_date,omitempty" json:"start_date,omitempty"`
 }
 
-type BillingRequestCreateParamsInstalmentScheduleRequestLinks struct {
-	InstalmentSchedule string `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
-}
-
 type BillingRequestCreateParamsInstalmentScheduleRequest struct {
 	AppFee                  int                                                                         `url:"app_fee,omitempty" json:"app_fee,omitempty"`
 	Currency                string                                                                      `url:"currency,omitempty" json:"currency,omitempty"`
 	InstalmentsWithDates    []BillingRequestCreateParamsInstalmentScheduleRequestInstalmentsWithDates   `url:"instalments_with_dates,omitempty" json:"instalments_with_dates,omitempty"`
 	InstalmentsWithSchedule *BillingRequestCreateParamsInstalmentScheduleRequestInstalmentsWithSchedule `url:"instalments_with_schedule,omitempty" json:"instalments_with_schedule,omitempty"`
-	Links                   *BillingRequestCreateParamsInstalmentScheduleRequestLinks                   `url:"links,omitempty" json:"links,omitempty"`
 	Metadata                map[string]interface{}                                                      `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Name                    string                                                                      `url:"name,omitempty" json:"name,omitempty"`
 	PaymentReference        string                                                                      `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
