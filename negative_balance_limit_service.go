@@ -102,7 +102,7 @@ func (s *NegativeBalanceLimitServiceImpl) List(ctx context.Context, p NegativeBa
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "4.4.0")
+	req.Header.Set("GoCardless-Client-Version", "4.5.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -211,7 +211,7 @@ func (c *NegativeBalanceLimitListPagingIterator) Value(ctx context.Context) (*Ne
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "4.4.0")
+	req.Header.Set("GoCardless-Client-Version", "4.5.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -326,7 +326,7 @@ func (s *NegativeBalanceLimitServiceImpl) Create(ctx context.Context, p Negative
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "4.4.0")
+	req.Header.Set("GoCardless-Client-Version", "4.5.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
