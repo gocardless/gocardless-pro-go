@@ -1,5 +1,5 @@
 { 
   "get": {
-    "body": {"bank_account_details":{"ciphertext":"example ciphertext 2081","encrypted_key":"example encrypted_key 2540","iv":"example iv 456","protected":"example protected 4425","tag":"example tag 1318"}}
+    "body": {"bank_account_details":{"ciphertext":"example ciphertext 2540","encrypted_key":"example encrypted_key 1318","iv":"example iv 4425","protected":"example protected 2081","tag":"example tag 456"}}
   }
 }
