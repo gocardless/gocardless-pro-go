@@ -107,6 +107,7 @@ type EventListParams struct {
 	InstalmentSchedule string                    `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
 	Limit              int                       `url:"limit,omitempty" json:"limit,omitempty"`
 	Mandate            string                    `url:"mandate,omitempty" json:"mandate,omitempty"`
+	OutboundPayment    string                    `url:"outbound_payment,omitempty" json:"outbound_payment,omitempty"`
 	ParentEvent        string                    `url:"parent_event,omitempty" json:"parent_event,omitempty"`
 	PayerAuthorisation string                    `url:"payer_authorisation,omitempty" json:"payer_authorisation,omitempty"`
 	Payment            string                    `url:"payment,omitempty" json:"payment,omitempty"`
