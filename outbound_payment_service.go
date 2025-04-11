@@ -57,12 +57,12 @@ type OutboundPayment struct {
 type OutboundPaymentService interface {
 	Create(ctx context.Context, p OutboundPaymentCreateParams, opts ...RequestOption) (*OutboundPayment, error)
 	Withdraw(ctx context.Context, p OutboundPaymentWithdrawParams, opts ...RequestOption) (*OutboundPayment, error)
-	Cancel(ctx context.Context, id string, p OutboundPaymentCancelParams, opts ...RequestOption) (*OutboundPayment, error)
-	Approve(ctx context.Context, id string, p OutboundPaymentApproveParams, opts ...RequestOption) (*OutboundPayment, error)
-	Get(ctx context.Context, id string, opts ...RequestOption) (*OutboundPayment, error)
+	Cancel(ctx context.Context, identity string, p OutboundPaymentCancelParams, opts ...RequestOption) (*OutboundPayment, error)
+	Approve(ctx context.Context, identity string, p OutboundPaymentApproveParams, opts ...RequestOption) (*OutboundPayment, error)
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*OutboundPayment, error)
 	List(ctx context.Context, p OutboundPaymentListParams, opts ...RequestOption) (*OutboundPaymentListResult, error)
 	All(ctx context.Context, p OutboundPaymentListParams, opts ...RequestOption) *OutboundPaymentListPagingIterator
-	Update(ctx context.Context, id string, p OutboundPaymentUpdateParams, opts ...RequestOption) (*OutboundPayment, error)
+	Update(ctx context.Context, identity string, p OutboundPaymentUpdateParams, opts ...RequestOption) (*OutboundPayment, error)
 }
 
 type OutboundPaymentCreateParamsLinks struct {
@@ -290,9 +290,9 @@ type OutboundPaymentCancelParams struct {
 // `pending_approval`, or `scheduled` status can be cancelled.
 // Once an outbound payment is `executing`, the money moving process has begun
 // and cannot be reversed.
-func (s *OutboundPaymentServiceImpl) Cancel(ctx context.Context, id string, p OutboundPaymentCancelParams, opts ...RequestOption) (*OutboundPayment, error) {
+func (s *OutboundPaymentServiceImpl) Cancel(ctx context.Context, identity string, p OutboundPaymentCancelParams, opts ...RequestOption) (*OutboundPayment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payments/%v/actions/cancel",
-		id))
+		identity))
 	if err != nil {
 		return nil, err
 	}
@@ -389,9 +389,9 @@ type OutboundPaymentApproveParams struct {
 // Approve
 // Approves an outbound payment. Only outbound payments in the
 // “pending_approval” state can be approved.
-func (s *OutboundPaymentServiceImpl) Approve(ctx context.Context, id string, p OutboundPaymentApproveParams, opts ...RequestOption) (*OutboundPayment, error) {
+func (s *OutboundPaymentServiceImpl) Approve(ctx context.Context, identity string, p OutboundPaymentApproveParams, opts ...RequestOption) (*OutboundPayment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payments/%v/actions/approve",
-		id))
+		identity))
 	if err != nil {
 		return nil, err
 	}
@@ -483,9 +483,9 @@ func (s *OutboundPaymentServiceImpl) Approve(ctx context.Context, id string, p O
 
 // Get
 // Fetches an outbound_payment by ID
-func (s *OutboundPaymentServiceImpl) Get(ctx context.Context, id string, opts ...RequestOption) (*OutboundPayment, error) {
+func (s *OutboundPaymentServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*OutboundPayment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payments/%v",
-		id))
+		identity))
 	if err != nil {
 		return nil, err
 	}
@@ -800,9 +800,9 @@ type OutboundPaymentUpdateParams struct {
 
 // Update
 // Updates an outbound payment object. This accepts only the metadata parameter.
-func (s *OutboundPaymentServiceImpl) Update(ctx context.Context, id string, p OutboundPaymentUpdateParams, opts ...RequestOption) (*OutboundPayment, error) {
+func (s *OutboundPaymentServiceImpl) Update(ctx context.Context, identity string, p OutboundPaymentUpdateParams, opts ...RequestOption) (*OutboundPayment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payments/%v",
-		id))
+		identity))
 	if err != nil {
 		return nil, err
 	}
