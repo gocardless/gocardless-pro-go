@@ -25,6 +25,7 @@ type OutboundPaymentServiceImpl struct {
 
 type OutboundPaymentLinks struct {
 	Creditor             string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Customer             string `url:"customer,omitempty" json:"customer,omitempty"`
 	RecipientBankAccount string `url:"recipient_bank_account,omitempty" json:"recipient_bank_account,omitempty"`
 }
 
