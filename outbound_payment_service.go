@@ -388,8 +388,8 @@ type OutboundPaymentApproveParams struct {
 }
 
 // Approve
-// Approves an outbound payment. Only outbound payments in the
-// “pending_approval” state can be approved.
+// Approves an outbound payment. Only outbound payments with the
+// “pending_approval” status can be approved.
 func (s *OutboundPaymentServiceImpl) Approve(ctx context.Context, identity string, p OutboundPaymentApproveParams, opts ...RequestOption) (*OutboundPayment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payments/%v/actions/approve",
 		identity))
