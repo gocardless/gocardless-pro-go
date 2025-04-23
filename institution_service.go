@@ -23,15 +23,21 @@ type InstitutionServiceImpl struct {
 	config Config
 }
 
+type InstitutionLimits struct {
+	Daily  map[string]interface{} `url:"daily,omitempty" json:"daily,omitempty"`
+	Single map[string]interface{} `url:"single,omitempty" json:"single,omitempty"`
+}
+
 // Institution model
 type Institution struct {
-	AutocompletesCollectBankAccount bool   `url:"autocompletes_collect_bank_account,omitempty" json:"autocompletes_collect_bank_account,omitempty"`
-	CountryCode                     string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	IconUrl                         string `url:"icon_url,omitempty" json:"icon_url,omitempty"`
-	Id                              string `url:"id,omitempty" json:"id,omitempty"`
-	LogoUrl                         string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
-	Name                            string `url:"name,omitempty" json:"name,omitempty"`
-	Status                          string `url:"status,omitempty" json:"status,omitempty"`
+	AutocompletesCollectBankAccount bool               `url:"autocompletes_collect_bank_account,omitempty" json:"autocompletes_collect_bank_account,omitempty"`
+	CountryCode                     string             `url:"country_code,omitempty" json:"country_code,omitempty"`
+	IconUrl                         string             `url:"icon_url,omitempty" json:"icon_url,omitempty"`
+	Id                              string             `url:"id,omitempty" json:"id,omitempty"`
+	Limits                          *InstitutionLimits `url:"limits,omitempty" json:"limits,omitempty"`
+	LogoUrl                         string             `url:"logo_url,omitempty" json:"logo_url,omitempty"`
+	Name                            string             `url:"name,omitempty" json:"name,omitempty"`
+	Status                          string             `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type InstitutionService interface {
@@ -42,7 +48,10 @@ type InstitutionService interface {
 
 // InstitutionListParams parameters
 type InstitutionListParams struct {
+	BranchCode  string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	CountryCode string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Feature     string `url:"feature,omitempty" json:"feature,omitempty"`
+	Scheme      string `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 type InstitutionListResultMetaCursors struct {
