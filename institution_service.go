@@ -156,9 +156,10 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 
 // InstitutionListForBillingRequestParams parameters
 type InstitutionListForBillingRequestParams struct {
-	CountryCode string   `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Ids         []string `url:"ids,omitempty" json:"ids,omitempty"`
-	Search      string   `url:"search,omitempty" json:"search,omitempty"`
+	CountryCode     string   `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Ids             []string `url:"ids,omitempty" json:"ids,omitempty"`
+	IncludeDisabled bool     `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
+	Search          string   `url:"search,omitempty" json:"search,omitempty"`
 }
 
 type InstitutionListForBillingRequestResultMetaCursors struct {
