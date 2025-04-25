@@ -23,15 +23,21 @@ type InstitutionServiceImpl struct {
 	config Config
 }
 
+type InstitutionLimits struct {
+	Daily  map[string]interface{} `url:"daily,omitempty" json:"daily,omitempty"`
+	Single map[string]interface{} `url:"single,omitempty" json:"single,omitempty"`
+}
+
 // Institution model
 type Institution struct {
-	AutocompletesCollectBankAccount bool   `url:"autocompletes_collect_bank_account,omitempty" json:"autocompletes_collect_bank_account,omitempty"`
-	CountryCode                     string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	IconUrl                         string `url:"icon_url,omitempty" json:"icon_url,omitempty"`
-	Id                              string `url:"id,omitempty" json:"id,omitempty"`
-	LogoUrl                         string `url:"logo_url,omitempty" json:"logo_url,omitempty"`
-	Name                            string `url:"name,omitempty" json:"name,omitempty"`
-	Status                          string `url:"status,omitempty" json:"status,omitempty"`
+	AutocompletesCollectBankAccount bool               `url:"autocompletes_collect_bank_account,omitempty" json:"autocompletes_collect_bank_account,omitempty"`
+	CountryCode                     string             `url:"country_code,omitempty" json:"country_code,omitempty"`
+	IconUrl                         string             `url:"icon_url,omitempty" json:"icon_url,omitempty"`
+	Id                              string             `url:"id,omitempty" json:"id,omitempty"`
+	Limits                          *InstitutionLimits `url:"limits,omitempty" json:"limits,omitempty"`
+	LogoUrl                         string             `url:"logo_url,omitempty" json:"logo_url,omitempty"`
+	Name                            string             `url:"name,omitempty" json:"name,omitempty"`
+	Status                          string             `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type InstitutionService interface {
@@ -42,7 +48,10 @@ type InstitutionService interface {
 
 // InstitutionListParams parameters
 type InstitutionListParams struct {
+	BranchCode  string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	CountryCode string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Feature     string `url:"feature,omitempty" json:"feature,omitempty"`
+	Scheme      string `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 type InstitutionListResultMetaCursors struct {
@@ -94,7 +103,7 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "4.5.0")
+	req.Header.Set("GoCardless-Client-Version", "4.7.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -147,9 +156,10 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 
 // InstitutionListForBillingRequestParams parameters
 type InstitutionListForBillingRequestParams struct {
-	CountryCode string   `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Ids         []string `url:"ids,omitempty" json:"ids,omitempty"`
-	Search      string   `url:"search,omitempty" json:"search,omitempty"`
+	CountryCode     string   `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Ids             []string `url:"ids,omitempty" json:"ids,omitempty"`
+	IncludeDisabled bool     `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
+	Search          string   `url:"search,omitempty" json:"search,omitempty"`
 }
 
 type InstitutionListForBillingRequestResultMetaCursors struct {
@@ -205,7 +215,7 @@ func (s *InstitutionServiceImpl) ListForBillingRequest(ctx context.Context, iden
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "4.5.0")
+	req.Header.Set("GoCardless-Client-Version", "4.7.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

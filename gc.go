@@ -31,6 +31,7 @@ type Service struct {
 	MandateImportEntries    MandateImportEntryService
 	MandatePdfs             MandatePdfService
 	NegativeBalanceLimits   NegativeBalanceLimitService
+	OutboundPayments        OutboundPaymentService
 	PayerAuthorisations     PayerAuthorisationService
 	PayerThemes             PayerThemeService
 	Payments                PaymentService
@@ -104,6 +105,8 @@ func New(config Config) (*Service, error) {
 		}, MandatePdfs: &MandatePdfServiceImpl{
 			config: config,
 		}, NegativeBalanceLimits: &NegativeBalanceLimitServiceImpl{
+			config: config,
+		}, OutboundPayments: &OutboundPaymentServiceImpl{
 			config: config,
 		}, PayerAuthorisations: &PayerAuthorisationServiceImpl{
 			config: config,
