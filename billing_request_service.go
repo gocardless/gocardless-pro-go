@@ -257,6 +257,7 @@ type BillingRequestService interface {
 	Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error)
 	ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error)
 	SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error)
+	CreateWithActions(ctx context.Context, p BillingRequestCreateWithActionsParams, opts ...RequestOption) (*BillingRequest, error)
 }
 
 type BillingRequestCreateParamsInstalmentScheduleRequestInstalmentsWithDates struct {
@@ -1651,6 +1652,234 @@ type BillingRequestSelectInstitutionParams struct {
 func (s *BillingRequestServiceImpl) SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/select_institution",
 		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if o.idempotencyKey == "" {
+		o.idempotencyKey = NewIdempotencyKey()
+	}
+
+	var body io.Reader
+
+	var buf bytes.Buffer
+	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"data": p,
+	})
+	if err != nil {
+		return nil, err
+	}
+	body = &buf
+
+	req, err := http.NewRequest("POST", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "4.7.0")
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Idempotency-Key", o.idempotencyKey)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err            *APIError       `json:"error"`
+		BillingRequest *BillingRequest `json:"billing_requests"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.BillingRequest == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.BillingRequest, nil
+}
+
+type BillingRequestCreateWithActionsParamsActionsCollectBankAccount struct {
+	AccountHolderName   string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber       string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountNumberSuffix string                 `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
+	AccountType         string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankCode            string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode          string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
+	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayId               string                 `url:"pay_id,omitempty" json:"pay_id,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsActionsCollectCustomerDetailsCustomer struct {
+	CompanyName string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
+	Email       string                 `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName  string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName   string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language    string                 `url:"language,omitempty" json:"language,omitempty"`
+	Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PhoneNumber string                 `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsActionsCollectCustomerDetailsCustomerBillingDetail struct {
+	AddressLine1          string `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string `url:"city,omitempty" json:"city,omitempty"`
+	CountryCode           string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	IpAddress             string `url:"ip_address,omitempty" json:"ip_address,omitempty"`
+	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsActionsCollectCustomerDetails struct {
+	Customer              *BillingRequestCreateWithActionsParamsActionsCollectCustomerDetailsCustomer              `url:"customer,omitempty" json:"customer,omitempty"`
+	CustomerBillingDetail *BillingRequestCreateWithActionsParamsActionsCollectCustomerDetailsCustomerBillingDetail `url:"customer_billing_detail,omitempty" json:"customer_billing_detail,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsActionsConfirmPayerDetails struct {
+	Metadata                    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerRequestedDualSignature bool                   `url:"payer_requested_dual_signature,omitempty" json:"payer_requested_dual_signature,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsActionsSelectInstitution struct {
+	CountryCode string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Institution string `url:"institution,omitempty" json:"institution,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsActions struct {
+	BankAuthorisationRedirectUri string                                                              `url:"bank_authorisation_redirect_uri,omitempty" json:"bank_authorisation_redirect_uri,omitempty"`
+	CollectBankAccount           *BillingRequestCreateWithActionsParamsActionsCollectBankAccount     `url:"collect_bank_account,omitempty" json:"collect_bank_account,omitempty"`
+	CollectCustomerDetails       *BillingRequestCreateWithActionsParamsActionsCollectCustomerDetails `url:"collect_customer_details,omitempty" json:"collect_customer_details,omitempty"`
+	ConfirmPayerDetails          *BillingRequestCreateWithActionsParamsActionsConfirmPayerDetails    `url:"confirm_payer_details,omitempty" json:"confirm_payer_details,omitempty"`
+	CreateBankAuthorisation      bool                                                                `url:"create_bank_authorisation,omitempty" json:"create_bank_authorisation,omitempty"`
+	SelectInstitution            *BillingRequestCreateWithActionsParamsActionsSelectInstitution      `url:"select_institution,omitempty" json:"select_institution,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsLinks struct {
+	Creditor            string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Customer            string `url:"customer,omitempty" json:"customer,omitempty"`
+	CustomerBankAccount string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsMandateRequestConstraintsPeriodicLimits struct {
+	Alignment      string `url:"alignment,omitempty" json:"alignment,omitempty"`
+	MaxPayments    int    `url:"max_payments,omitempty" json:"max_payments,omitempty"`
+	MaxTotalAmount int    `url:"max_total_amount,omitempty" json:"max_total_amount,omitempty"`
+	Period         string `url:"period,omitempty" json:"period,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsMandateRequestConstraints struct {
+	EndDate             string                                                                         `url:"end_date,omitempty" json:"end_date,omitempty"`
+	MaxAmountPerPayment int                                                                            `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+	PaymentMethod       string                                                                         `url:"payment_method,omitempty" json:"payment_method,omitempty"`
+	PeriodicLimits      []BillingRequestCreateWithActionsParamsMandateRequestConstraintsPeriodicLimits `url:"periodic_limits,omitempty" json:"periodic_limits,omitempty"`
+	StartDate           string                                                                         `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsMandateRequest struct {
+	AuthorisationSource string                                                          `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
+	Constraints         *BillingRequestCreateWithActionsParamsMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
+	Currency            string                                                          `url:"currency,omitempty" json:"currency,omitempty"`
+	Description         string                                                          `url:"description,omitempty" json:"description,omitempty"`
+	Metadata            map[string]interface{}                                          `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference           string                                                          `url:"reference,omitempty" json:"reference,omitempty"`
+	Scheme              string                                                          `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Sweeping            bool                                                            `url:"sweeping,omitempty" json:"sweeping,omitempty"`
+	Verify              string                                                          `url:"verify,omitempty" json:"verify,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsPaymentRequest struct {
+	Amount          int                    `url:"amount,omitempty" json:"amount,omitempty"`
+	AppFee          int                    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Currency        string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	Description     string                 `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement string                 `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
+	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference       string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Scheme          string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+}
+
+type BillingRequestCreateWithActionsParamsSubscriptionRequest struct {
+	Amount           int                    `url:"amount,omitempty" json:"amount,omitempty"`
+	AppFee           int                    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Count            int                    `url:"count,omitempty" json:"count,omitempty"`
+	Currency         string                 `url:"currency,omitempty" json:"currency,omitempty"`
+	DayOfMonth       int                    `url:"day_of_month,omitempty" json:"day_of_month,omitempty"`
+	Interval         int                    `url:"interval,omitempty" json:"interval,omitempty"`
+	IntervalUnit     string                 `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
+	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Month            string                 `url:"month,omitempty" json:"month,omitempty"`
+	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
+	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
+	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	StartDate        string                 `url:"start_date,omitempty" json:"start_date,omitempty"`
+}
+
+// BillingRequestCreateWithActionsParams parameters
+type BillingRequestCreateWithActionsParams struct {
+	Actions             *BillingRequestCreateWithActionsParamsActions             `url:"actions,omitempty" json:"actions,omitempty"`
+	FallbackEnabled     bool                                                      `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
+	Links               *BillingRequestCreateWithActionsParamsLinks               `url:"links,omitempty" json:"links,omitempty"`
+	MandateRequest      *BillingRequestCreateWithActionsParamsMandateRequest      `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
+	Metadata            map[string]interface{}                                    `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentRequest      *BillingRequestCreateWithActionsParamsPaymentRequest      `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode         string                                                    `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
+	SubscriptionRequest *BillingRequestCreateWithActionsParamsSubscriptionRequest `url:"subscription_request,omitempty" json:"subscription_request,omitempty"`
+}
+
+// CreateWithActions
+// This endpoint allows you to create a billing request and complete any
+// required actions in a single request.
+func (s *BillingRequestServiceImpl) CreateWithActions(ctx context.Context, p BillingRequestCreateWithActionsParams, opts ...RequestOption) (*BillingRequest, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests/create_with_actions"))
 	if err != nil {
 		return nil, err
 	}
