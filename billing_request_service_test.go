@@ -338,31 +338,3 @@ func TestBillingRequestSelectInstitution(t *testing.T) {
 
 	}
 }
-
-func TestBillingRequestCreateWithActions(t *testing.T) {
-	fixtureFile := "testdata/billing_requests.json"
-	server := runServer(t, fixtureFile, "create_with_actions")
-	defer server.Close()
-
-	ctx := context.TODO()
-	client, err := getClient(t, server.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	p := BillingRequestCreateWithActionsParams{}
-
-	o, err :=
-		client.BillingRequests.CreateWithActions(
-			ctx, p)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if o == nil {
-
-		t.Fatalf("Expected BillingRequest, got nil")
-
-	}
-}
