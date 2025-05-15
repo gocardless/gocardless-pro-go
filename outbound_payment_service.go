@@ -43,6 +43,7 @@ type OutboundPaymentVerifications struct {
 type OutboundPayment struct {
 	Amount        int                           `url:"amount,omitempty" json:"amount,omitempty"`
 	CreatedAt     string                        `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency      string                        `url:"currency,omitempty" json:"currency,omitempty"`
 	Description   string                        `url:"description,omitempty" json:"description,omitempty"`
 	ExecutionDate string                        `url:"execution_date,omitempty" json:"execution_date,omitempty"`
 	Id            string                        `url:"id,omitempty" json:"id,omitempty"`
