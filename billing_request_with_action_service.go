@@ -465,7 +465,7 @@ func (s *BillingRequestWithActionServiceImpl) CreateWithActions(ctx context.Cont
 
 	var result struct {
 		Err                      *APIError                 `json:"error"`
-		BillingRequestWithAction *BillingRequestWithAction `json:"billing_requests"`
+		BillingRequestWithAction *BillingRequestWithAction `json:"billing_request_with_actions"`
 	}
 
 	err = try(o.retries, func() error {
