@@ -376,32 +376,15 @@ type BillingRequestWithActionCreateWithActionsParamsPaymentRequest struct {
 	Scheme          string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
-type BillingRequestWithActionCreateWithActionsParamsSubscriptionRequest struct {
-	Amount           int                    `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee           int                    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Count            int                    `url:"count,omitempty" json:"count,omitempty"`
-	Currency         string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	DayOfMonth       int                    `url:"day_of_month,omitempty" json:"day_of_month,omitempty"`
-	Interval         int                    `url:"interval,omitempty" json:"interval,omitempty"`
-	IntervalUnit     string                 `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
-	Metadata         map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Month            string                 `url:"month,omitempty" json:"month,omitempty"`
-	Name             string                 `url:"name,omitempty" json:"name,omitempty"`
-	PaymentReference string                 `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
-	RetryIfPossible  bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	StartDate        string                 `url:"start_date,omitempty" json:"start_date,omitempty"`
-}
-
 // BillingRequestWithActionCreateWithActionsParams parameters
 type BillingRequestWithActionCreateWithActionsParams struct {
-	Actions             *BillingRequestWithActionCreateWithActionsParamsActions             `url:"actions,omitempty" json:"actions,omitempty"`
-	FallbackEnabled     bool                                                                `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
-	Links               *BillingRequestWithActionCreateWithActionsParamsLinks               `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequest      *BillingRequestWithActionCreateWithActionsParamsMandateRequest      `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata            map[string]interface{}                                              `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PaymentRequest      *BillingRequestWithActionCreateWithActionsParamsPaymentRequest      `url:"payment_request,omitempty" json:"payment_request,omitempty"`
-	PurposeCode         string                                                              `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
-	SubscriptionRequest *BillingRequestWithActionCreateWithActionsParamsSubscriptionRequest `url:"subscription_request,omitempty" json:"subscription_request,omitempty"`
+	Actions         *BillingRequestWithActionCreateWithActionsParamsActions        `url:"actions,omitempty" json:"actions,omitempty"`
+	FallbackEnabled bool                                                           `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
+	Links           *BillingRequestWithActionCreateWithActionsParamsLinks          `url:"links,omitempty" json:"links,omitempty"`
+	MandateRequest  *BillingRequestWithActionCreateWithActionsParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
+	Metadata        map[string]interface{}                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentRequest  *BillingRequestWithActionCreateWithActionsParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode     string                                                         `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 }
 
 // CreateWithActions
