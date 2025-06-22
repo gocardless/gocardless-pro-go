@@ -1,6 +1,7 @@
 package gocardless
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -12,15 +13,15 @@ import (
 
 // EventHandler is the interface that must be implemented to handle events from a webhook.
 type EventHandler interface {
-	HandleEvent(Event) error
+	HandleEvent(context.Context, Event) error
 }
 
 // EventHandlerFunc can be used to convert a function into an EventHandler
-type EventHandlerFunc func(Event) error
+type EventHandlerFunc func(context.Context, Event) error
 
 // HandleEvent will call the EventHandlerFunc function
-func (h EventHandlerFunc) HandleEvent(e Event) error {
-	return h(e)
+func (h EventHandlerFunc) HandleEvent(ctx context.Context, e Event) error {
+	return h(ctx, e)
 }
 
 // WebhookHandler allows you to process incoming events from webhooks.
@@ -43,7 +44,7 @@ func NewWebhookHandler(secret string, h EventHandler) (*WebhookHandler, error) {
 // ServeHTTP processes incoming webhooks and dispatches events to the corresponsing handlers.
 func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	sig, err := hex.DecodeString(r.Header.Get("Webhook-Signature"))
-	if len(sig) == 0 {
+	if len(sig) == 0 || err != nil {
 		http.Error(w, "invalid signature", 498)
 		return
 	}
@@ -65,7 +66,7 @@ func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, event := range events.Events {
-		err := h.HandleEvent(event)
+		err := h.HandleEvent(r.Context(), event)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
