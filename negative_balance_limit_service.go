@@ -40,7 +40,6 @@ type NegativeBalanceLimit struct {
 type NegativeBalanceLimitService interface {
 	List(ctx context.Context, p NegativeBalanceLimitListParams, opts ...RequestOption) (*NegativeBalanceLimitListResult, error)
 	All(ctx context.Context, p NegativeBalanceLimitListParams, opts ...RequestOption) *NegativeBalanceLimitListPagingIterator
-	Create(ctx context.Context, p NegativeBalanceLimitCreateParams, opts ...RequestOption) (*NegativeBalanceLimit, error)
 }
 
 // NegativeBalanceLimitListParams parameters
@@ -102,7 +101,7 @@ func (s *NegativeBalanceLimitServiceImpl) List(ctx context.Context, p NegativeBa
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.1.0")
+	req.Header.Set("GoCardless-Client-Version", "5.2.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -211,7 +210,7 @@ func (c *NegativeBalanceLimitListPagingIterator) Value(ctx context.Context) (*Ne
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.1.0")
+	req.Header.Set("GoCardless-Client-Version", "5.2.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -272,109 +271,4 @@ func (s *NegativeBalanceLimitServiceImpl) All(ctx context.Context,
 		service:        s,
 		requestOptions: opts,
 	}
-}
-
-type NegativeBalanceLimitCreateParamsLinks struct {
-	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
-}
-
-// NegativeBalanceLimitCreateParams parameters
-type NegativeBalanceLimitCreateParams struct {
-	BalanceLimit int                                    `url:"balance_limit,omitempty" json:"balance_limit,omitempty"`
-	Currency     string                                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Links        *NegativeBalanceLimitCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-}
-
-// Create
-// Creates a new negative balance limit, which replaces the existing limit (if
-// present) for that currency and creditor combination.
-func (s *NegativeBalanceLimitServiceImpl) Create(ctx context.Context, p NegativeBalanceLimitCreateParams, opts ...RequestOption) (*NegativeBalanceLimit, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/negative_balance_limits"))
-	if err != nil {
-		return nil, err
-	}
-
-	o := &requestOptions{
-		retries: 3,
-	}
-	for _, opt := range opts {
-		err := opt(o)
-		if err != nil {
-			return nil, err
-		}
-	}
-	if o.idempotencyKey == "" {
-		o.idempotencyKey = NewIdempotencyKey()
-	}
-
-	var body io.Reader
-
-	var buf bytes.Buffer
-	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"negative_balance_limits": p,
-	})
-	if err != nil {
-		return nil, err
-	}
-	body = &buf
-
-	req, err := http.NewRequest("POST", uri.String(), body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	req.Header.Set("Authorization", "Bearer "+s.config.Token())
-	req.Header.Set("GoCardless-Version", "2015-07-06")
-	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.1.0")
-	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Idempotency-Key", o.idempotencyKey)
-
-	for key, value := range o.headers {
-		req.Header.Set(key, value)
-	}
-
-	client := s.config.Client()
-	if client == nil {
-		client = http.DefaultClient
-	}
-
-	var result struct {
-		Err                  *APIError             `json:"error"`
-		NegativeBalanceLimit *NegativeBalanceLimit `json:"negative_balance_limits"`
-	}
-
-	err = try(o.retries, func() error {
-		res, err := client.Do(req)
-		if err != nil {
-			return err
-		}
-		defer res.Body.Close()
-
-		err = responseErr(res)
-		if err != nil {
-			return err
-		}
-
-		err = json.NewDecoder(res.Body).Decode(&result)
-		if err != nil {
-			return err
-		}
-
-		if result.Err != nil {
-			return result.Err
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if result.NegativeBalanceLimit == nil {
-		return nil, errors.New("missing result")
-	}
-
-	return result.NegativeBalanceLimit, nil
 }

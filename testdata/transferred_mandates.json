@@ -1,5 +1,5 @@
 { 
   "transferred_mandates": {
-    "body": {"transferred_mandates":{"encrypted_customer_bank_details":"example encrypted_customer_bank_details 1800","encrypted_decryption_key":"example encrypted_decryption_key 6588","links":{"customer_bank_account":"BA123","mandate":"MD123"},"public_key_id":"example public_key_id 3237"}}
+    "body": {"transferred_mandates":{"encrypted_customer_bank_details":"example encrypted_customer_bank_details 3237","encrypted_decryption_key":"example encrypted_decryption_key 1800","links":{"customer_bank_account":"BA123","mandate":"MD123"},"public_key_id":"example public_key_id 6588"}}
   }
 }
