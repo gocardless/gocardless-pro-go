@@ -53,6 +53,7 @@ type Payment struct {
 	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference       string                 `url:"reference,omitempty" json:"reference,omitempty"`
 	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Scheme          string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
 	Status          string                 `url:"status,omitempty" json:"status,omitempty"`
 }
 

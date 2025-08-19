@@ -23,17 +23,13 @@ type MandateServiceImpl struct {
 	config Config
 }
 
-type MandateConsentParametersPeriods struct {
+type MandateConsentParameters struct {
+	EndDate              string `url:"end_date,omitempty" json:"end_date,omitempty"`
+	MaxAmountPerPayment  int    `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
 	MaxAmountPerPeriod   int    `url:"max_amount_per_period,omitempty" json:"max_amount_per_period,omitempty"`
 	MaxPaymentsPerPeriod int    `url:"max_payments_per_period,omitempty" json:"max_payments_per_period,omitempty"`
 	Period               string `url:"period,omitempty" json:"period,omitempty"`
-}
-
-type MandateConsentParameters struct {
-	EndDate             string                            `url:"end_date,omitempty" json:"end_date,omitempty"`
-	MaxAmountPerPayment int                               `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
-	Periods             []MandateConsentParametersPeriods `url:"periods,omitempty" json:"periods,omitempty"`
-	StartDate           string                            `url:"start_date,omitempty" json:"start_date,omitempty"`
+	StartDate            string `url:"start_date,omitempty" json:"start_date,omitempty"`
 }
 
 type MandateLinks struct {

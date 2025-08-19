@@ -112,3 +112,31 @@ func TestCreditorBankAccountDisable(t *testing.T) {
 
 	}
 }
+
+func TestCreditorBankAccountValidate(t *testing.T) {
+	fixtureFile := "testdata/creditor_bank_accounts.json"
+	server := runServer(t, fixtureFile, "validate")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := CreditorBankAccountValidateParams{}
+
+	o, err :=
+		client.CreditorBankAccounts.Validate(
+			ctx, p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected CreditorBankAccount, got nil")
+
+	}
+}

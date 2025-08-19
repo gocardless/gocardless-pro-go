@@ -79,6 +79,7 @@ type OutboundPaymentCreateParams struct {
 	ExecutionDate string                           `url:"execution_date,omitempty" json:"execution_date,omitempty"`
 	Links         OutboundPaymentCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 	Metadata      map[string]interface{}           `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference     string                           `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme        string                           `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
@@ -185,6 +186,7 @@ type OutboundPaymentWithdrawParams struct {
 	ExecutionDate string                              `url:"execution_date,omitempty" json:"execution_date,omitempty"`
 	Links         *OutboundPaymentWithdrawParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 	Metadata      map[string]interface{}              `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference     string                              `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme        string                              `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 

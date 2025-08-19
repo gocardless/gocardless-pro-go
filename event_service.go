@@ -128,9 +128,25 @@ type EventListResultMeta struct {
 	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
+type EventListResultLinked struct {
+	BillingRequests     []BillingRequest     `url:"billing_requests,omitempty" json:"billing_requests,omitempty"`
+	Creditors           []Creditor           `url:"creditors,omitempty" json:"creditors,omitempty"`
+	Customers           []Customer           `url:"customers,omitempty" json:"customers,omitempty"`
+	InstalmentSchedules []InstalmentSchedule `url:"instalment_schedules,omitempty" json:"instalment_schedules,omitempty"`
+	Mandates            []Mandate            `url:"mandates,omitempty" json:"mandates,omitempty"`
+	OutboundPayments    []OutboundPayment    `url:"outbound_payments,omitempty" json:"outbound_payments,omitempty"`
+	PayerAuthorisations []PayerAuthorisation `url:"payer_authorisations,omitempty" json:"payer_authorisations,omitempty"`
+	Payments            []Payment            `url:"payments,omitempty" json:"payments,omitempty"`
+	Payouts             []Payout             `url:"payouts,omitempty" json:"payouts,omitempty"`
+	Refunds             []Refund             `url:"refunds,omitempty" json:"refunds,omitempty"`
+	SchemeIdentifiers   []SchemeIdentifier   `url:"scheme_identifiers,omitempty" json:"scheme_identifiers,omitempty"`
+	Subscriptions       []Subscription       `url:"subscriptions,omitempty" json:"subscriptions,omitempty"`
+}
+
 type EventListResult struct {
-	Events []Event             `json:"events"`
-	Meta   EventListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
+	Events []Event               `json:"events"`
+	Meta   EventListResultMeta   `url:"meta,omitempty" json:"meta,omitempty"`
+	Linked EventListResultLinked `url:"linked,omitempty" json:"linked,omitempty"`
 }
 
 // List
