@@ -70,9 +70,10 @@ type BillingRequestTemplateService interface {
 
 // BillingRequestTemplateListParams parameters
 type BillingRequestTemplateListParams struct {
-	After  string `url:"after,omitempty" json:"after,omitempty"`
-	Before string `url:"before,omitempty" json:"before,omitempty"`
-	Limit  int    `url:"limit,omitempty" json:"limit,omitempty"`
+	After                string `url:"after,omitempty" json:"after,omitempty"`
+	Before               string `url:"before,omitempty" json:"before,omitempty"`
+	Limit                int    `url:"limit,omitempty" json:"limit,omitempty"`
+	PaymentRequestScheme string `url:"payment_request_scheme,omitempty" json:"payment_request_scheme,omitempty"`
 }
 
 type BillingRequestTemplateListResultMetaCursors struct {
