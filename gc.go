@@ -7,46 +7,47 @@ import (
 )
 
 type Service struct {
-	Balances                  BalanceService
-	BankAccountDetails        BankAccountDetailService
-	BankAuthorisations        BankAuthorisationService
-	BankDetailsLookups        BankDetailsLookupService
-	BillingRequests           BillingRequestService
-	BillingRequestFlows       BillingRequestFlowService
-	BillingRequestTemplates   BillingRequestTemplateService
-	BillingRequestWithActions BillingRequestWithActionService
-	Blocks                    BlockService
-	Creditors                 CreditorService
-	CreditorBankAccounts      CreditorBankAccountService
-	CurrencyExchangeRates     CurrencyExchangeRateService
-	Customers                 CustomerService
-	CustomerBankAccounts      CustomerBankAccountService
-	CustomerNotifications     CustomerNotificationService
-	Events                    EventService
-	Exports                   ExportService
-	InstalmentSchedules       InstalmentScheduleService
-	Institutions              InstitutionService
-	Logos                     LogoService
-	Mandates                  MandateService
-	MandateImports            MandateImportService
-	MandateImportEntries      MandateImportEntryService
-	MandatePdfs               MandatePdfService
-	NegativeBalanceLimits     NegativeBalanceLimitService
-	OutboundPayments          OutboundPaymentService
-	PayerAuthorisations       PayerAuthorisationService
-	PayerThemes               PayerThemeService
-	Payments                  PaymentService
-	Payouts                   PayoutService
-	PayoutItems               PayoutItemService
-	RedirectFlows             RedirectFlowService
-	Refunds                   RefundService
-	ScenarioSimulators        ScenarioSimulatorService
-	SchemeIdentifiers         SchemeIdentifierService
-	Subscriptions             SubscriptionService
-	TaxRates                  TaxRateService
-	TransferredMandates       TransferredMandateService
-	VerificationDetails       VerificationDetailService
-	Webhooks                  WebhookService
+	Balances                     BalanceService
+	BankAccountDetails           BankAccountDetailService
+	BankAuthorisations           BankAuthorisationService
+	BankDetailsLookups           BankDetailsLookupService
+	BillingRequests              BillingRequestService
+	BillingRequestFlows          BillingRequestFlowService
+	BillingRequestTemplates      BillingRequestTemplateService
+	BillingRequestWithActions    BillingRequestWithActionService
+	Blocks                       BlockService
+	Creditors                    CreditorService
+	CreditorBankAccounts         CreditorBankAccountService
+	CreditorBankAccountValidates CreditorBankAccountValidateService
+	CurrencyExchangeRates        CurrencyExchangeRateService
+	Customers                    CustomerService
+	CustomerBankAccounts         CustomerBankAccountService
+	CustomerNotifications        CustomerNotificationService
+	Events                       EventService
+	Exports                      ExportService
+	InstalmentSchedules          InstalmentScheduleService
+	Institutions                 InstitutionService
+	Logos                        LogoService
+	Mandates                     MandateService
+	MandateImports               MandateImportService
+	MandateImportEntries         MandateImportEntryService
+	MandatePdfs                  MandatePdfService
+	NegativeBalanceLimits        NegativeBalanceLimitService
+	OutboundPayments             OutboundPaymentService
+	PayerAuthorisations          PayerAuthorisationService
+	PayerThemes                  PayerThemeService
+	Payments                     PaymentService
+	Payouts                      PayoutService
+	PayoutItems                  PayoutItemService
+	RedirectFlows                RedirectFlowService
+	Refunds                      RefundService
+	ScenarioSimulators           ScenarioSimulatorService
+	SchemeIdentifiers            SchemeIdentifierService
+	Subscriptions                SubscriptionService
+	TaxRates                     TaxRateService
+	TransferredMandates          TransferredMandateService
+	VerificationDetails          VerificationDetailService
+	Webhooks                     WebhookService
 }
 
 func init() {
@@ -80,6 +81,8 @@ func New(config Config) (*Service, error) {
 		}, Creditors: &CreditorServiceImpl{
 			config: config,
 		}, CreditorBankAccounts: &CreditorBankAccountServiceImpl{
+			config: config,
+		}, CreditorBankAccountValidates: &CreditorBankAccountValidateServiceImpl{
 			config: config,
 		}, CurrencyExchangeRates: &CurrencyExchangeRateServiceImpl{
 			config: config,

@@ -1,0 +1,5 @@
+{ 
+  "validate": {
+    "body": {"creditor_bank_accounts":{"bank_name":"BARCLAYS BANK PLC","icon_url":"https://example.com/natwest-icon.png","invalid_reasons":[{"field":"account_number","message":"does not match sort code"},{"field":"branch_code","message":"is invalid"}],"is_valid":true}}
+  }
+}
