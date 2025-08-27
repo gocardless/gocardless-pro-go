@@ -79,6 +79,7 @@ type OutboundPaymentCreateParams struct {
 	ExecutionDate string                           `url:"execution_date,omitempty" json:"execution_date,omitempty"`
 	Links         OutboundPaymentCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 	Metadata      map[string]interface{}           `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference     string                           `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme        string                           `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
@@ -121,7 +122,7 @@ func (s *OutboundPaymentServiceImpl) Create(ctx context.Context, p OutboundPayme
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.2.0")
+	req.Header.Set("GoCardless-Client-Version", "5.3.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -185,6 +186,7 @@ type OutboundPaymentWithdrawParams struct {
 	ExecutionDate string                              `url:"execution_date,omitempty" json:"execution_date,omitempty"`
 	Links         *OutboundPaymentWithdrawParamsLinks `url:"links,omitempty" json:"links,omitempty"`
 	Metadata      map[string]interface{}              `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference     string                              `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme        string                              `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
@@ -229,7 +231,7 @@ func (s *OutboundPaymentServiceImpl) Withdraw(ctx context.Context, p OutboundPay
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.2.0")
+	req.Header.Set("GoCardless-Client-Version", "5.3.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -331,7 +333,7 @@ func (s *OutboundPaymentServiceImpl) Cancel(ctx context.Context, identity string
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.2.0")
+	req.Header.Set("GoCardless-Client-Version", "5.3.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -430,7 +432,7 @@ func (s *OutboundPaymentServiceImpl) Approve(ctx context.Context, identity strin
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.2.0")
+	req.Header.Set("GoCardless-Client-Version", "5.3.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -512,7 +514,7 @@ func (s *OutboundPaymentServiceImpl) Get(ctx context.Context, identity string, o
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.2.0")
+	req.Header.Set("GoCardless-Client-Version", "5.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -623,7 +625,7 @@ func (s *OutboundPaymentServiceImpl) List(ctx context.Context, p OutboundPayment
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.2.0")
+	req.Header.Set("GoCardless-Client-Version", "5.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -732,7 +734,7 @@ func (c *OutboundPaymentListPagingIterator) Value(ctx context.Context) (*Outboun
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.2.0")
+	req.Header.Set("GoCardless-Client-Version", "5.3.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -841,7 +843,7 @@ func (s *OutboundPaymentServiceImpl) Update(ctx context.Context, identity string
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.2.0")
+	req.Header.Set("GoCardless-Client-Version", "5.3.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
