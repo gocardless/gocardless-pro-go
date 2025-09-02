@@ -53,6 +53,7 @@ type EventLinks struct {
 	CustomerBankAccount         string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 	InstalmentSchedule          string `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
 	Mandate                     string `url:"mandate,omitempty" json:"mandate,omitempty"`
+	MandateRequest              string `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	MandateRequestMandate       string `url:"mandate_request_mandate,omitempty" json:"mandate_request_mandate,omitempty"`
 	NewCustomerBankAccount      string `url:"new_customer_bank_account,omitempty" json:"new_customer_bank_account,omitempty"`
 	NewMandate                  string `url:"new_mandate,omitempty" json:"new_mandate,omitempty"`
