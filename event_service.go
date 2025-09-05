@@ -69,6 +69,11 @@ type EventLinks struct {
 	Subscription                string `url:"subscription,omitempty" json:"subscription,omitempty"`
 }
 
+type EventSource struct {
+	Name string `url:"name,omitempty" json:"name,omitempty"`
+	Type string `url:"type,omitempty" json:"type,omitempty"`
+}
+
 // Event model
 type Event struct {
 	Action                string                       `url:"action,omitempty" json:"action,omitempty"`
@@ -80,6 +85,7 @@ type Event struct {
 	Metadata              map[string]interface{}       `url:"metadata,omitempty" json:"metadata,omitempty"`
 	ResourceMetadata      map[string]interface{}       `url:"resource_metadata,omitempty" json:"resource_metadata,omitempty"`
 	ResourceType          string                       `url:"resource_type,omitempty" json:"resource_type,omitempty"`
+	Source                *EventSource                 `url:"source,omitempty" json:"source,omitempty"`
 }
 
 type EventService interface {
