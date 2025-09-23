@@ -208,6 +208,7 @@ type PaymentListParams struct {
 	Customer      string                       `url:"customer,omitempty" json:"customer,omitempty"`
 	Limit         int                          `url:"limit,omitempty" json:"limit,omitempty"`
 	Mandate       string                       `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Scheme        string                       `url:"scheme,omitempty" json:"scheme,omitempty"`
 	SortDirection string                       `url:"sort_direction,omitempty" json:"sort_direction,omitempty"`
 	SortField     string                       `url:"sort_field,omitempty" json:"sort_field,omitempty"`
 	Status        string                       `url:"status,omitempty" json:"status,omitempty"`
