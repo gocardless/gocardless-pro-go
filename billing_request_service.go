@@ -127,6 +127,7 @@ type BillingRequestMandateRequest struct {
 	Constraints                 *BillingRequestMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
 	Currency                    string                                   `url:"currency,omitempty" json:"currency,omitempty"`
 	Description                 string                                   `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement             string                                   `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Links                       *BillingRequestMandateRequestLinks       `url:"links,omitempty" json:"links,omitempty"`
 	Metadata                    map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PayerRequestedDualSignature bool                                     `url:"payer_requested_dual_signature,omitempty" json:"payer_requested_dual_signature,omitempty"`
