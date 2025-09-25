@@ -311,6 +311,7 @@ type BillingRequestCreateParamsMandateRequest struct {
 	Constraints         *BillingRequestCreateParamsMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
 	Currency            string                                               `url:"currency,omitempty" json:"currency,omitempty"`
 	Description         string                                               `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement     string                                               `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Metadata            map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference           string                                               `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme              string                                               `url:"scheme,omitempty" json:"scheme,omitempty"`
