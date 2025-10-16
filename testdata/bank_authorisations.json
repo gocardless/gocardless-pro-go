@@ -1,8 +1,8 @@
 { 
   "create": {
-    "body": {"bank_authorisations":{"authorisation_type":"example authorisation_type 3300","authorised_at":"2020-01-01T12:00:00.000Z","created_at":"2025-10-10T11:39:12.643Z","expires_at":"2025-10-10T11:39:12.643Z","id":"BAU123","last_visited_at":"2020-01-01T12:00:00.000Z","links":{"billing_request":"BRQ123","institution":"monzo"},"qr_code_url":"https://pay.gocardless.com/obauth/BAU123/qr_code","redirect_uri":"https://my-website.com/abc/callback","url":"https://pay.gocardless.com/obauth/BAU123"}}
+    "body": {"bank_authorisations":{"authorisation_type":"example authorisation_type 3300","authorised_at":"2020-01-01T12:00:00.000Z","created_at":"2025-10-16T14:46:21.270Z","expires_at":"2025-10-16T14:46:21.270Z","id":"BAU123","last_visited_at":"2020-01-01T12:00:00.000Z","links":{"billing_request":"BRQ123","institution":"monzo"},"qr_code_url":"https://pay.gocardless.com/obauth/BAU123/qr_code","redirect_uri":"https://my-website.com/abc/callback","url":"https://pay.gocardless.com/obauth/BAU123"}}
   },
   "get": {
-    "body": {"bank_authorisations":{"authorisation_type":"example authorisation_type 694","authorised_at":"2020-01-01T12:00:00.000Z","created_at":"2025-10-10T11:39:12.645Z","expires_at":"2025-10-10T11:39:12.643Z","id":"BAU123","last_visited_at":"2020-01-01T12:00:00.000Z","links":{"billing_request":"BRQ123","institution":"monzo"},"qr_code_url":"https://pay.gocardless.com/obauth/BAU123/qr_code","redirect_uri":"https://my-website.com/abc/callback","url":"https://pay.gocardless.com/obauth/BAU123"}}
+    "body": {"bank_authorisations":{"authorisation_type":"example authorisation_type 694","authorised_at":"2020-01-01T12:00:00.000Z","created_at":"2025-10-16T14:46:21.271Z","expires_at":"2025-10-16T14:46:21.271Z","id":"BAU123","last_visited_at":"2020-01-01T12:00:00.000Z","links":{"billing_request":"BRQ123","institution":"monzo"},"qr_code_url":"https://pay.gocardless.com/obauth/BAU123/qr_code","redirect_uri":"https://my-website.com/abc/callback","url":"https://pay.gocardless.com/obauth/BAU123"}}
   }
 }
