@@ -48,7 +48,8 @@ type PayoutItem struct {
 
 type PayoutItemService interface {
 	List(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) (*PayoutItemListResult, error)
-	All(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) *PayoutItemListPagingIterator
+	All(ctx context.Context,
+		p PayoutItemListParams, opts ...RequestOption) *PayoutItemListPagingIterator
 }
 
 // PayoutItemListParams parameters

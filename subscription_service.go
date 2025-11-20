@@ -60,7 +60,8 @@ type Subscription struct {
 type SubscriptionService interface {
 	Create(ctx context.Context, p SubscriptionCreateParams, opts ...RequestOption) (*Subscription, error)
 	List(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) (*SubscriptionListResult, error)
-	All(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) *SubscriptionListPagingIterator
+	All(ctx context.Context,
+		p SubscriptionListParams, opts ...RequestOption) *SubscriptionListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Subscription, error)
 	Update(ctx context.Context, identity string, p SubscriptionUpdateParams, opts ...RequestOption) (*Subscription, error)
 	Pause(ctx context.Context, identity string, p SubscriptionPauseParams, opts ...RequestOption) (*Subscription, error)

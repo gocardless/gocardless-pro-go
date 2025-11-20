@@ -38,7 +38,8 @@ type Balance struct {
 
 type BalanceService interface {
 	List(ctx context.Context, p BalanceListParams, opts ...RequestOption) (*BalanceListResult, error)
-	All(ctx context.Context, p BalanceListParams, opts ...RequestOption) *BalanceListPagingIterator
+	All(ctx context.Context,
+		p BalanceListParams, opts ...RequestOption) *BalanceListPagingIterator
 }
 
 // BalanceListParams parameters

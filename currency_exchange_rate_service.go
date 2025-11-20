@@ -33,7 +33,8 @@ type CurrencyExchangeRate struct {
 
 type CurrencyExchangeRateService interface {
 	List(ctx context.Context, p CurrencyExchangeRateListParams, opts ...RequestOption) (*CurrencyExchangeRateListResult, error)
-	All(ctx context.Context, p CurrencyExchangeRateListParams, opts ...RequestOption) *CurrencyExchangeRateListPagingIterator
+	All(ctx context.Context,
+		p CurrencyExchangeRateListParams, opts ...RequestOption) *CurrencyExchangeRateListPagingIterator
 }
 
 // CurrencyExchangeRateListParams parameters

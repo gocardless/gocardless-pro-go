@@ -42,7 +42,8 @@ type Webhook struct {
 
 type WebhookService interface {
 	List(ctx context.Context, p WebhookListParams, opts ...RequestOption) (*WebhookListResult, error)
-	All(ctx context.Context, p WebhookListParams, opts ...RequestOption) *WebhookListPagingIterator
+	All(ctx context.Context,
+		p WebhookListParams, opts ...RequestOption) *WebhookListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Webhook, error)
 	Retry(ctx context.Context, identity string, opts ...RequestOption) (*Webhook, error)
 }

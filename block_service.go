@@ -39,7 +39,8 @@ type BlockService interface {
 	Create(ctx context.Context, p BlockCreateParams, opts ...RequestOption) (*Block, error)
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Block, error)
 	List(ctx context.Context, p BlockListParams, opts ...RequestOption) (*BlockListResult, error)
-	All(ctx context.Context, p BlockListParams, opts ...RequestOption) *BlockListPagingIterator
+	All(ctx context.Context,
+		p BlockListParams, opts ...RequestOption) *BlockListPagingIterator
 	Disable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error)
 	Enable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error)
 	BlockByRef(ctx context.Context, p BlockBlockByRefParams, opts ...RequestOption) (

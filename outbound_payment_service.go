@@ -63,11 +63,13 @@ type OutboundPaymentService interface {
 	Approve(ctx context.Context, identity string, p OutboundPaymentApproveParams, opts ...RequestOption) (*OutboundPayment, error)
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*OutboundPayment, error)
 	List(ctx context.Context, p OutboundPaymentListParams, opts ...RequestOption) (*OutboundPaymentListResult, error)
-	All(ctx context.Context, p OutboundPaymentListParams, opts ...RequestOption) *OutboundPaymentListPagingIterator
+	All(ctx context.Context,
+		p OutboundPaymentListParams, opts ...RequestOption) *OutboundPaymentListPagingIterator
 	Update(ctx context.Context, identity string, p OutboundPaymentUpdateParams, opts ...RequestOption) (*OutboundPayment, error)
 }
 
 type OutboundPaymentCreateParamsLinks struct {
+	App                  string `url:"app,omitempty" json:"app,omitempty"`
 	Creditor             string `url:"creditor,omitempty" json:"creditor,omitempty"`
 	RecipientBankAccount string `url:"recipient_bank_account,omitempty" json:"recipient_bank_account,omitempty"`
 }

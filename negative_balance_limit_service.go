@@ -39,7 +39,8 @@ type NegativeBalanceLimit struct {
 
 type NegativeBalanceLimitService interface {
 	List(ctx context.Context, p NegativeBalanceLimitListParams, opts ...RequestOption) (*NegativeBalanceLimitListResult, error)
-	All(ctx context.Context, p NegativeBalanceLimitListParams, opts ...RequestOption) *NegativeBalanceLimitListPagingIterator
+	All(ctx context.Context,
+		p NegativeBalanceLimitListParams, opts ...RequestOption) *NegativeBalanceLimitListPagingIterator
 }
 
 // NegativeBalanceLimitListParams parameters

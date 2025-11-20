@@ -51,7 +51,8 @@ type Refund struct {
 type RefundService interface {
 	Create(ctx context.Context, p RefundCreateParams, opts ...RequestOption) (*Refund, error)
 	List(ctx context.Context, p RefundListParams, opts ...RequestOption) (*RefundListResult, error)
-	All(ctx context.Context, p RefundListParams, opts ...RequestOption) *RefundListPagingIterator
+	All(ctx context.Context,
+		p RefundListParams, opts ...RequestOption) *RefundListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Refund, error)
 	Update(ctx context.Context, identity string, p RefundUpdateParams, opts ...RequestOption) (*Refund, error)
 }

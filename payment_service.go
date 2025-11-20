@@ -60,7 +60,8 @@ type Payment struct {
 type PaymentService interface {
 	Create(ctx context.Context, p PaymentCreateParams, opts ...RequestOption) (*Payment, error)
 	List(ctx context.Context, p PaymentListParams, opts ...RequestOption) (*PaymentListResult, error)
-	All(ctx context.Context, p PaymentListParams, opts ...RequestOption) *PaymentListPagingIterator
+	All(ctx context.Context,
+		p PaymentListParams, opts ...RequestOption) *PaymentListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Payment, error)
 	Update(ctx context.Context, identity string, p PaymentUpdateParams, opts ...RequestOption) (*Payment, error)
 	Cancel(ctx context.Context, identity string, p PaymentCancelParams, opts ...RequestOption) (*Payment, error)

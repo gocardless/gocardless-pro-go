@@ -90,7 +90,8 @@ type Event struct {
 
 type EventService interface {
 	List(ctx context.Context, p EventListParams, opts ...RequestOption) (*EventListResult, error)
-	All(ctx context.Context, p EventListParams, opts ...RequestOption) *EventListPagingIterator
+	All(ctx context.Context,
+		p EventListParams, opts ...RequestOption) *EventListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Event, error)
 }
 

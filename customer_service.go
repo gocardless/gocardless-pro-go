@@ -48,7 +48,8 @@ type Customer struct {
 type CustomerService interface {
 	Create(ctx context.Context, p CustomerCreateParams, opts ...RequestOption) (*Customer, error)
 	List(ctx context.Context, p CustomerListParams, opts ...RequestOption) (*CustomerListResult, error)
-	All(ctx context.Context, p CustomerListParams, opts ...RequestOption) *CustomerListPagingIterator
+	All(ctx context.Context,
+		p CustomerListParams, opts ...RequestOption) *CustomerListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Customer, error)
 	Update(ctx context.Context, identity string, p CustomerUpdateParams, opts ...RequestOption) (*Customer, error)
 	Remove(ctx context.Context, identity string, p CustomerRemoveParams, opts ...RequestOption) (*Customer, error)

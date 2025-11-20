@@ -54,7 +54,8 @@ type Payout struct {
 
 type PayoutService interface {
 	List(ctx context.Context, p PayoutListParams, opts ...RequestOption) (*PayoutListResult, error)
-	All(ctx context.Context, p PayoutListParams, opts ...RequestOption) *PayoutListPagingIterator
+	All(ctx context.Context,
+		p PayoutListParams, opts ...RequestOption) *PayoutListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Payout, error)
 	Update(ctx context.Context, identity string, p PayoutUpdateParams, opts ...RequestOption) (*Payout, error)
 }

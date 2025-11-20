@@ -46,7 +46,8 @@ type CustomerBankAccount struct {
 type CustomerBankAccountService interface {
 	Create(ctx context.Context, p CustomerBankAccountCreateParams, opts ...RequestOption) (*CustomerBankAccount, error)
 	List(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) (*CustomerBankAccountListResult, error)
-	All(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) *CustomerBankAccountListPagingIterator
+	All(ctx context.Context,
+		p CustomerBankAccountListParams, opts ...RequestOption) *CustomerBankAccountListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error)
 	Update(ctx context.Context, identity string, p CustomerBankAccountUpdateParams, opts ...RequestOption) (*CustomerBankAccount, error)
 	Disable(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error)

@@ -46,7 +46,8 @@ type CreditorBankAccount struct {
 type CreditorBankAccountService interface {
 	Create(ctx context.Context, p CreditorBankAccountCreateParams, opts ...RequestOption) (*CreditorBankAccount, error)
 	List(ctx context.Context, p CreditorBankAccountListParams, opts ...RequestOption) (*CreditorBankAccountListResult, error)
-	All(ctx context.Context, p CreditorBankAccountListParams, opts ...RequestOption) *CreditorBankAccountListPagingIterator
+	All(ctx context.Context,
+		p CreditorBankAccountListParams, opts ...RequestOption) *CreditorBankAccountListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*CreditorBankAccount, error)
 	Disable(ctx context.Context, identity string, opts ...RequestOption) (*CreditorBankAccount, error)
 }

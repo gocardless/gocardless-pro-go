@@ -35,7 +35,8 @@ type TaxRate struct {
 
 type TaxRateService interface {
 	List(ctx context.Context, p TaxRateListParams, opts ...RequestOption) (*TaxRateListResult, error)
-	All(ctx context.Context, p TaxRateListParams, opts ...RequestOption) *TaxRateListPagingIterator
+	All(ctx context.Context,
+		p TaxRateListParams, opts ...RequestOption) *TaxRateListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*TaxRate, error)
 }
 
