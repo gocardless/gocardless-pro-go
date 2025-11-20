@@ -41,10 +41,6 @@ type BillingRequestWithActionBankAuthorisations struct {
 	Url               string                                           `url:"url,omitempty" json:"url,omitempty"`
 }
 
-type BillingRequestWithActionBillingRequestsActionsAvailableCurrencies struct {
-	Currency string `url:"currency,omitempty" json:"currency,omitempty"`
-}
-
 type BillingRequestWithActionBillingRequestsActionsBankAuthorisation struct {
 	Adapter           string `url:"adapter,omitempty" json:"adapter,omitempty"`
 	AuthorisationType string `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
@@ -61,7 +57,7 @@ type BillingRequestWithActionBillingRequestsActionsCollectCustomerDetails struct
 }
 
 type BillingRequestWithActionBillingRequestsActions struct {
-	AvailableCurrencies    *[]string                                                             `url:"available_currencies,omitempty" json:"available_currencies,omitempty"`
+	AvailableCurrencies    []string                                                              `url:"available_currencies,omitempty" json:"available_currencies,omitempty"`
 	BankAuthorisation      *BillingRequestWithActionBillingRequestsActionsBankAuthorisation      `url:"bank_authorisation,omitempty" json:"bank_authorisation,omitempty"`
 	CollectCustomerDetails *BillingRequestWithActionBillingRequestsActionsCollectCustomerDetails `url:"collect_customer_details,omitempty" json:"collect_customer_details,omitempty"`
 	CompletesActions       []string                                                              `url:"completes_actions,omitempty" json:"completes_actions,omitempty"`
@@ -145,6 +141,7 @@ type BillingRequestWithActionBillingRequestsMandateRequest struct {
 	Constraints                 *BillingRequestWithActionBillingRequestsMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
 	Currency                    string                                                            `url:"currency,omitempty" json:"currency,omitempty"`
 	Description                 string                                                            `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement             string                                                            `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Links                       *BillingRequestWithActionBillingRequestsMandateRequestLinks       `url:"links,omitempty" json:"links,omitempty"`
 	Metadata                    map[string]interface{}                                            `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PayerRequestedDualSignature bool                                                              `url:"payer_requested_dual_signature,omitempty" json:"payer_requested_dual_signature,omitempty"`
@@ -357,6 +354,7 @@ type BillingRequestWithActionCreateWithActionsParamsMandateRequest struct {
 	Constraints         *BillingRequestWithActionCreateWithActionsParamsMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
 	Currency            string                                                                    `url:"currency,omitempty" json:"currency,omitempty"`
 	Description         string                                                                    `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement     string                                                                    `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Metadata            map[string]interface{}                                                    `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference           string                                                                    `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme              string                                                                    `url:"scheme,omitempty" json:"scheme,omitempty"`

@@ -62,7 +62,8 @@ type BillingRequestTemplate struct {
 
 type BillingRequestTemplateService interface {
 	List(ctx context.Context, p BillingRequestTemplateListParams, opts ...RequestOption) (*BillingRequestTemplateListResult, error)
-	All(ctx context.Context, p BillingRequestTemplateListParams, opts ...RequestOption) *BillingRequestTemplateListPagingIterator
+	All(ctx context.Context,
+		p BillingRequestTemplateListParams, opts ...RequestOption) *BillingRequestTemplateListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequestTemplate, error)
 	Create(ctx context.Context, p BillingRequestTemplateCreateParams, opts ...RequestOption) (*BillingRequestTemplate, error)
 	Update(ctx context.Context, identity string, p BillingRequestTemplateUpdateParams, opts ...RequestOption) (*BillingRequestTemplate, error)

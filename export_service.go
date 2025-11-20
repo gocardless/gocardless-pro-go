@@ -35,7 +35,8 @@ type Export struct {
 type ExportService interface {
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Export, error)
 	List(ctx context.Context, p ExportListParams, opts ...RequestOption) (*ExportListResult, error)
-	All(ctx context.Context, p ExportListParams, opts ...RequestOption) *ExportListPagingIterator
+	All(ctx context.Context,
+		p ExportListParams, opts ...RequestOption) *ExportListPagingIterator
 }
 
 // Get

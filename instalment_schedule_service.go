@@ -46,7 +46,8 @@ type InstalmentScheduleService interface {
 	CreateWithDates(ctx context.Context, p InstalmentScheduleCreateWithDatesParams, opts ...RequestOption) (*InstalmentSchedule, error)
 	CreateWithSchedule(ctx context.Context, p InstalmentScheduleCreateWithScheduleParams, opts ...RequestOption) (*InstalmentSchedule, error)
 	List(ctx context.Context, p InstalmentScheduleListParams, opts ...RequestOption) (*InstalmentScheduleListResult, error)
-	All(ctx context.Context, p InstalmentScheduleListParams, opts ...RequestOption) *InstalmentScheduleListPagingIterator
+	All(ctx context.Context,
+		p InstalmentScheduleListParams, opts ...RequestOption) *InstalmentScheduleListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*InstalmentSchedule, error)
 	Update(ctx context.Context, identity string, p InstalmentScheduleUpdateParams, opts ...RequestOption) (*InstalmentSchedule, error)
 	Cancel(ctx context.Context, identity string, p InstalmentScheduleCancelParams, opts ...RequestOption) (*InstalmentSchedule, error)

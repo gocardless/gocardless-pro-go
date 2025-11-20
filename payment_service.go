@@ -60,7 +60,8 @@ type Payment struct {
 type PaymentService interface {
 	Create(ctx context.Context, p PaymentCreateParams, opts ...RequestOption) (*Payment, error)
 	List(ctx context.Context, p PaymentListParams, opts ...RequestOption) (*PaymentListResult, error)
-	All(ctx context.Context, p PaymentListParams, opts ...RequestOption) *PaymentListPagingIterator
+	All(ctx context.Context,
+		p PaymentListParams, opts ...RequestOption) *PaymentListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Payment, error)
 	Update(ctx context.Context, identity string, p PaymentUpdateParams, opts ...RequestOption) (*Payment, error)
 	Cancel(ctx context.Context, identity string, p PaymentCancelParams, opts ...RequestOption) (*Payment, error)
@@ -208,6 +209,7 @@ type PaymentListParams struct {
 	Customer      string                       `url:"customer,omitempty" json:"customer,omitempty"`
 	Limit         int                          `url:"limit,omitempty" json:"limit,omitempty"`
 	Mandate       string                       `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Scheme        string                       `url:"scheme,omitempty" json:"scheme,omitempty"`
 	SortDirection string                       `url:"sort_direction,omitempty" json:"sort_direction,omitempty"`
 	SortField     string                       `url:"sort_field,omitempty" json:"sort_field,omitempty"`
 	Status        string                       `url:"status,omitempty" json:"status,omitempty"`

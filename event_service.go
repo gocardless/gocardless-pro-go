@@ -53,6 +53,7 @@ type EventLinks struct {
 	CustomerBankAccount         string `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 	InstalmentSchedule          string `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
 	Mandate                     string `url:"mandate,omitempty" json:"mandate,omitempty"`
+	MandateRequest              string `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	MandateRequestMandate       string `url:"mandate_request_mandate,omitempty" json:"mandate_request_mandate,omitempty"`
 	NewCustomerBankAccount      string `url:"new_customer_bank_account,omitempty" json:"new_customer_bank_account,omitempty"`
 	NewMandate                  string `url:"new_mandate,omitempty" json:"new_mandate,omitempty"`
@@ -68,6 +69,11 @@ type EventLinks struct {
 	Subscription                string `url:"subscription,omitempty" json:"subscription,omitempty"`
 }
 
+type EventSource struct {
+	Name string `url:"name,omitempty" json:"name,omitempty"`
+	Type string `url:"type,omitempty" json:"type,omitempty"`
+}
+
 // Event model
 type Event struct {
 	Action                string                       `url:"action,omitempty" json:"action,omitempty"`
@@ -79,11 +85,13 @@ type Event struct {
 	Metadata              map[string]interface{}       `url:"metadata,omitempty" json:"metadata,omitempty"`
 	ResourceMetadata      map[string]interface{}       `url:"resource_metadata,omitempty" json:"resource_metadata,omitempty"`
 	ResourceType          string                       `url:"resource_type,omitempty" json:"resource_type,omitempty"`
+	Source                *EventSource                 `url:"source,omitempty" json:"source,omitempty"`
 }
 
 type EventService interface {
 	List(ctx context.Context, p EventListParams, opts ...RequestOption) (*EventListResult, error)
-	All(ctx context.Context, p EventListParams, opts ...RequestOption) *EventListPagingIterator
+	All(ctx context.Context,
+		p EventListParams, opts ...RequestOption) *EventListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Event, error)
 }
 

@@ -48,7 +48,8 @@ type SchemeIdentifier struct {
 type SchemeIdentifierService interface {
 	Create(ctx context.Context, p SchemeIdentifierCreateParams, opts ...RequestOption) (*SchemeIdentifier, error)
 	List(ctx context.Context, p SchemeIdentifierListParams, opts ...RequestOption) (*SchemeIdentifierListResult, error)
-	All(ctx context.Context, p SchemeIdentifierListParams, opts ...RequestOption) *SchemeIdentifierListPagingIterator
+	All(ctx context.Context,
+		p SchemeIdentifierListParams, opts ...RequestOption) *SchemeIdentifierListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*SchemeIdentifier, error)
 }
 

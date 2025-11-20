@@ -23,10 +23,6 @@ type BillingRequestServiceImpl struct {
 	config Config
 }
 
-type BillingRequestActionsAvailableCurrencies struct {
-	Currency string `url:"currency,omitempty" json:"currency,omitempty"`
-}
-
 type BillingRequestActionsBankAuthorisation struct {
 	Adapter           string `url:"adapter,omitempty" json:"adapter,omitempty"`
 	AuthorisationType string `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
@@ -43,7 +39,7 @@ type BillingRequestActionsCollectCustomerDetails struct {
 }
 
 type BillingRequestActions struct {
-	AvailableCurrencies    *[]string                                    `url:"available_currencies,omitempty" json:"available_currencies,omitempty"`
+	AvailableCurrencies    []string                                     `url:"available_currencies,omitempty" json:"available_currencies,omitempty"`
 	BankAuthorisation      *BillingRequestActionsBankAuthorisation      `url:"bank_authorisation,omitempty" json:"bank_authorisation,omitempty"`
 	CollectCustomerDetails *BillingRequestActionsCollectCustomerDetails `url:"collect_customer_details,omitempty" json:"collect_customer_details,omitempty"`
 	CompletesActions       []string                                     `url:"completes_actions,omitempty" json:"completes_actions,omitempty"`
@@ -127,6 +123,7 @@ type BillingRequestMandateRequest struct {
 	Constraints                 *BillingRequestMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
 	Currency                    string                                   `url:"currency,omitempty" json:"currency,omitempty"`
 	Description                 string                                   `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement             string                                   `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Links                       *BillingRequestMandateRequestLinks       `url:"links,omitempty" json:"links,omitempty"`
 	Metadata                    map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PayerRequestedDualSignature bool                                     `url:"payer_requested_dual_signature,omitempty" json:"payer_requested_dual_signature,omitempty"`
@@ -251,7 +248,8 @@ type BillingRequestService interface {
 	Fulfil(ctx context.Context, identity string, p BillingRequestFulfilParams, opts ...RequestOption) (*BillingRequest, error)
 	Cancel(ctx context.Context, identity string, p BillingRequestCancelParams, opts ...RequestOption) (*BillingRequest, error)
 	List(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) (*BillingRequestListResult, error)
-	All(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) *BillingRequestListPagingIterator
+	All(ctx context.Context,
+		p BillingRequestListParams, opts ...RequestOption) *BillingRequestListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequest, error)
 	Notify(ctx context.Context, identity string, p BillingRequestNotifyParams, opts ...RequestOption) (*BillingRequest, error)
 	Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error)
@@ -311,6 +309,7 @@ type BillingRequestCreateParamsMandateRequest struct {
 	Constraints         *BillingRequestCreateParamsMandateRequestConstraints `url:"constraints,omitempty" json:"constraints,omitempty"`
 	Currency            string                                               `url:"currency,omitempty" json:"currency,omitempty"`
 	Description         string                                               `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement     string                                               `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Metadata            map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference           string                                               `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme              string                                               `url:"scheme,omitempty" json:"scheme,omitempty"`

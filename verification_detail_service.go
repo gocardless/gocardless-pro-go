@@ -54,7 +54,8 @@ type VerificationDetail struct {
 type VerificationDetailService interface {
 	Create(ctx context.Context, p VerificationDetailCreateParams, opts ...RequestOption) (*VerificationDetail, error)
 	List(ctx context.Context, p VerificationDetailListParams, opts ...RequestOption) (*VerificationDetailListResult, error)
-	All(ctx context.Context, p VerificationDetailListParams, opts ...RequestOption) *VerificationDetailListPagingIterator
+	All(ctx context.Context,
+		p VerificationDetailListParams, opts ...RequestOption) *VerificationDetailListPagingIterator
 }
 
 type VerificationDetailCreateParamsDirectors struct {

@@ -41,7 +41,8 @@ type MandateImportEntry struct {
 type MandateImportEntryService interface {
 	Create(ctx context.Context, p MandateImportEntryCreateParams, opts ...RequestOption) (*MandateImportEntry, error)
 	List(ctx context.Context, p MandateImportEntryListParams, opts ...RequestOption) (*MandateImportEntryListResult, error)
-	All(ctx context.Context, p MandateImportEntryListParams, opts ...RequestOption) *MandateImportEntryListPagingIterator
+	All(ctx context.Context,
+		p MandateImportEntryListParams, opts ...RequestOption) *MandateImportEntryListPagingIterator
 }
 
 type MandateImportEntryCreateParamsAmendment struct {

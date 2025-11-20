@@ -61,7 +61,8 @@ type Mandate struct {
 type MandateService interface {
 	Create(ctx context.Context, p MandateCreateParams, opts ...RequestOption) (*Mandate, error)
 	List(ctx context.Context, p MandateListParams, opts ...RequestOption) (*MandateListResult, error)
-	All(ctx context.Context, p MandateListParams, opts ...RequestOption) *MandateListPagingIterator
+	All(ctx context.Context,
+		p MandateListParams, opts ...RequestOption) *MandateListPagingIterator
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*Mandate, error)
 	Update(ctx context.Context, identity string, p MandateUpdateParams, opts ...RequestOption) (*Mandate, error)
 	Cancel(ctx context.Context, identity string, p MandateCancelParams, opts ...RequestOption) (*Mandate, error)

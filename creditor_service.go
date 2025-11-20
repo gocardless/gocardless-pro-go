@@ -83,7 +83,8 @@ type Creditor struct {
 type CreditorService interface {
 	Create(ctx context.Context, p CreditorCreateParams, opts ...RequestOption) (*Creditor, error)
 	List(ctx context.Context, p CreditorListParams, opts ...RequestOption) (*CreditorListResult, error)
-	All(ctx context.Context, p CreditorListParams, opts ...RequestOption) *CreditorListPagingIterator
+	All(ctx context.Context,
+		p CreditorListParams, opts ...RequestOption) *CreditorListPagingIterator
 	Get(ctx context.Context, identity string, p CreditorGetParams, opts ...RequestOption) (*Creditor, error)
 	Update(ctx context.Context, identity string, p CreditorUpdateParams, opts ...RequestOption) (*Creditor, error)
 }
