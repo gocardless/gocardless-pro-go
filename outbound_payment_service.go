@@ -69,7 +69,6 @@ type OutboundPaymentService interface {
 }
 
 type OutboundPaymentCreateParamsLinks struct {
-	App                  string `url:"app,omitempty" json:"app,omitempty"`
 	Creditor             string `url:"creditor,omitempty" json:"creditor,omitempty"`
 	RecipientBankAccount string `url:"recipient_bank_account,omitempty" json:"recipient_bank_account,omitempty"`
 }
