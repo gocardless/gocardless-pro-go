@@ -37,6 +37,7 @@ type Service struct {
 	PayerAuthorisations            PayerAuthorisationService
 	PayerThemes                    PayerThemeService
 	Payments                       PaymentService
+	PaymentAccounts                PaymentAccountService
 	PaymentAccountTransactions     PaymentAccountTransactionService
 	Payouts                        PayoutService
 	PayoutItems                    PayoutItemService
@@ -120,6 +121,8 @@ func New(config Config) (*Service, error) {
 		}, PayerThemes: &PayerThemeServiceImpl{
 			config: config,
 		}, Payments: &PaymentServiceImpl{
+			config: config,
+		}, PaymentAccounts: &PaymentAccountServiceImpl{
 			config: config,
 		}, PaymentAccountTransactions: &PaymentAccountTransactionServiceImpl{
 			config: config,
