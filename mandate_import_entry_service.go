@@ -86,8 +86,9 @@ type MandateImportEntryCreateParamsLinks struct {
 }
 
 type MandateImportEntryCreateParamsMandate struct {
-	Metadata  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	AuthorisationSource string                 `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
+	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference           string                 `url:"reference,omitempty" json:"reference,omitempty"`
 }
 
 // MandateImportEntryCreateParams parameters
@@ -101,13 +102,14 @@ type MandateImportEntryCreateParams struct {
 }
 
 // Create
-// For an existing [mandate import](#core-endpoints-mandate-imports), this
-// endpoint can
-// be used to add individual mandates to be imported into GoCardless.
 //
-// You can add no more than 30,000 rows to a single mandate import.
-// If you attempt to go over this limit, the API will return a
-// `record_limit_exceeded` error.
+//	For an existing [mandate import](#core-endpoints-mandate-imports), this
+//	endpoint can
+//	be used to add individual mandates to be imported into GoCardless.
+//
+//	You can add no more than 30,000 rows to a single mandate import.
+//	If you attempt to go over this limit, the API will return a
+//	`record_limit_exceeded` error.
 func (s *MandateImportEntryServiceImpl) Create(ctx context.Context, p MandateImportEntryCreateParams, opts ...RequestOption) (*MandateImportEntry, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_import_entries"))
 	if err != nil {
@@ -224,14 +226,15 @@ type MandateImportEntryListResult struct {
 }
 
 // List
-// For an existing mandate import, this endpoint lists all of the entries
-// attached.
 //
-// After a mandate import has been submitted, you can use this endpoint to
-// associate records
-// in your system (using the `record_identifier` that you provided when creating
-// the
-// mandate import).
+//	For an existing mandate import, this endpoint lists all of the entries
+//	attached.
+//
+//	After a mandate import has been submitted, you can use this endpoint to
+//	associate records
+//	in your system (using the `record_identifier` that you provided when
+//	creating the
+//	mandate import).
 func (s *MandateImportEntryServiceImpl) List(ctx context.Context, p MandateImportEntryListParams, opts ...RequestOption) (*MandateImportEntryListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_import_entries"))
 	if err != nil {

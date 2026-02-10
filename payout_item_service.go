@@ -77,12 +77,13 @@ type PayoutItemListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of items in
-// the payout.
 //
-// <strong>This endpoint only serves requests for payouts created in the last 6
-// months. Requests for older payouts will return an HTTP status <code>410
-// Gone</code>.</strong>
+//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of items in
+//	the payout.
+//
+//	<strong>This endpoint only serves requests for payouts created in the last 6
+//	months. Requests for older payouts will return an HTTP status <code>410
+//	Gone</code>.</strong>
 func (s *PayoutItemServiceImpl) List(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) (*PayoutItemListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payout_items"))
 	if err != nil {

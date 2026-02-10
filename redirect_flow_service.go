@@ -91,8 +91,9 @@ type RedirectFlowCreateParams struct {
 }
 
 // Create
-// Creates a redirect flow object which can then be used to redirect your
-// customer to the GoCardless hosted payment pages.
+//
+//	Creates a redirect flow object which can then be used to redirect your
+//	customer to the GoCardless hosted payment pages.
 func (s *RedirectFlowServiceImpl) Create(ctx context.Context, p RedirectFlowCreateParams, opts ...RequestOption) (*RedirectFlow, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/redirect_flows"))
 	if err != nil {
@@ -185,7 +186,8 @@ func (s *RedirectFlowServiceImpl) Create(ctx context.Context, p RedirectFlowCrea
 }
 
 // Get
-// Returns all details about a single redirect flow
+//
+//	Returns all details about a single redirect flow
 func (s *RedirectFlowServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*RedirectFlow, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/redirect_flows/%v",
 		identity))
@@ -270,17 +272,18 @@ type RedirectFlowCompleteParams struct {
 }
 
 // Complete
-// This creates a [customer](#core-endpoints-customers), [customer bank
-// account](#core-endpoints-customer-bank-accounts), and
-// [mandate](#core-endpoints-mandates) using the details supplied by your
-// customer and returns the ID of the created mandate.
 //
-// This will return a `redirect_flow_incomplete` error if your customer has not
-// yet been redirected back to your site, and a
-// `redirect_flow_already_completed` error if your integration has already
-// completed this flow. It will return a `bad_request` error if the
-// `session_token` differs to the one supplied when the redirect flow was
-// created.
+//	This creates a [customer](#core-endpoints-customers), [customer bank
+//	account](#core-endpoints-customer-bank-accounts), and
+//	[mandate](#core-endpoints-mandates) using the details supplied by your
+//	customer and returns the ID of the created mandate.
+//
+//	This will return a `redirect_flow_incomplete` error if your customer has not
+//	yet been redirected back to your site, and a
+//	`redirect_flow_already_completed` error if your integration has already
+//	completed this flow. It will return a `bad_request` error if the
+//	`session_token` differs to the one supplied when the redirect flow was
+//	created.
 func (s *RedirectFlowServiceImpl) Complete(ctx context.Context, identity string, p RedirectFlowCompleteParams, opts ...RequestOption) (*RedirectFlow, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/redirect_flows/%v/actions/complete",
 		identity))

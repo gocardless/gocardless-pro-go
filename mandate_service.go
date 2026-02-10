@@ -85,7 +85,8 @@ type MandateCreateParams struct {
 }
 
 // Create
-// Creates a new mandate object.
+//
+//	Creates a new mandate object.
 func (s *MandateServiceImpl) Create(ctx context.Context, p MandateCreateParams, opts ...RequestOption) (*Mandate, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandates"))
 	if err != nil {
@@ -215,8 +216,9 @@ type MandateListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// mandates.
+//
+//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+//	mandates.
 func (s *MandateServiceImpl) List(ctx context.Context, p MandateListParams, opts ...RequestOption) (*MandateListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandates"))
 	if err != nil {
@@ -422,7 +424,8 @@ func (s *MandateServiceImpl) All(ctx context.Context,
 }
 
 // Get
-// Retrieves the details of an existing mandate.
+//
+//	Retrieves the details of an existing mandate.
 func (s *MandateServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Mandate, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v",
 		identity))
@@ -507,7 +510,8 @@ type MandateUpdateParams struct {
 }
 
 // Update
-// Updates a mandate object. This accepts only the metadata parameter.
+//
+//	Updates a mandate object. This accepts only the metadata parameter.
 func (s *MandateServiceImpl) Update(ctx context.Context, identity string, p MandateUpdateParams, opts ...RequestOption) (*Mandate, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v",
 		identity))
@@ -606,12 +610,13 @@ type MandateCancelParams struct {
 }
 
 // Cancel
-// Immediately cancels a mandate and all associated cancellable payments. Any
-// metadata supplied to this endpoint will be stored on the mandate cancellation
-// event it causes.
 //
-// This will fail with a `cancellation_failed` error if the mandate is already
-// cancelled.
+//	Immediately cancels a mandate and all associated cancellable payments. Any
+//	metadata supplied to this endpoint will be stored on the mandate
+//	cancellation event it causes.
+//
+//	This will fail with a `cancellation_failed` error if the mandate is already
+//	cancelled.
 func (s *MandateServiceImpl) Cancel(ctx context.Context, identity string, p MandateCancelParams, opts ...RequestOption) (*Mandate, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v/actions/cancel",
 		identity))
@@ -710,18 +715,19 @@ type MandateReinstateParams struct {
 }
 
 // Reinstate
-// <a name="mandate_not_inactive"></a>Reinstates a cancelled or expired mandate
-// to the banks. You will receive a `resubmission_requested` webhook, but after
-// that reinstating the mandate follows the same process as its initial
-// creation, so you will receive a `submitted` webhook, followed by a
-// `reinstated` or `failed` webhook up to two working days later. Any metadata
-// supplied to this endpoint will be stored on the `resubmission_requested`
-// event it causes.
 //
-// This will fail with a `mandate_not_inactive` error if the mandate is already
-// being submitted, or is active.
+//	<a name="mandate_not_inactive"></a>Reinstates a cancelled or expired mandate
+//	to the banks. You will receive a `resubmission_requested` webhook, but after
+//	that reinstating the mandate follows the same process as its initial
+//	creation, so you will receive a `submitted` webhook, followed by a
+//	`reinstated` or `failed` webhook up to two working days later. Any metadata
+//	supplied to this endpoint will be stored on the `resubmission_requested`
+//	event it causes.
 //
-// Mandates can be resubmitted up to 10 times.
+//	This will fail with a `mandate_not_inactive` error if the mandate is already
+//	being submitted, or is active.
+//
+//	Mandates can be resubmitted up to 10 times.
 func (s *MandateServiceImpl) Reinstate(ctx context.Context, identity string, p MandateReinstateParams, opts ...RequestOption) (*Mandate, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v/actions/reinstate",
 		identity))

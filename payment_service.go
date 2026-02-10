@@ -74,25 +74,27 @@ type PaymentCreateParamsLinks struct {
 
 // PaymentCreateParams parameters
 type PaymentCreateParams struct {
-	Amount          int                      `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee          int                      `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	ChargeDate      string                   `url:"charge_date,omitempty" json:"charge_date,omitempty"`
-	Currency        string                   `url:"currency,omitempty" json:"currency,omitempty"`
-	Description     string                   `url:"description,omitempty" json:"description,omitempty"`
-	FasterAch       bool                     `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
-	Links           PaymentCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata        map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference       string                   `url:"reference,omitempty" json:"reference,omitempty"`
-	RetryIfPossible bool                     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Amount             int                      `url:"amount,omitempty" json:"amount,omitempty"`
+	AppFee             int                      `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	ChargeDate         string                   `url:"charge_date,omitempty" json:"charge_date,omitempty"`
+	Currency           string                   `url:"currency,omitempty" json:"currency,omitempty"`
+	Description        string                   `url:"description,omitempty" json:"description,omitempty"`
+	FasterAch          bool                     `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
+	Links              PaymentCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata           map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PsuInteractionType string                   `url:"psu_interaction_type,omitempty" json:"psu_interaction_type,omitempty"`
+	Reference          string                   `url:"reference,omitempty" json:"reference,omitempty"`
+	RetryIfPossible    bool                     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
 }
 
 // Create
-// <a name="mandate_is_inactive"></a>Creates a new payment object.
 //
-// This fails with a `mandate_is_inactive` error if the linked
-// [mandate](#core-endpoints-mandates) is cancelled or has failed. Payments can
-// be created against mandates with status of: `pending_customer_approval`,
-// `pending_submission`, `submitted`, and `active`.
+//	<a name="mandate_is_inactive"></a>Creates a new payment object.
+//
+//	This fails with a `mandate_is_inactive` error if the linked
+//	[mandate](#core-endpoints-mandates) is cancelled or has failed. Payments can
+//	be created against mandates with status of: `pending_customer_approval`,
+//	`pending_submission`, `submitted`, and `active`.
 func (s *PaymentServiceImpl) Create(ctx context.Context, p PaymentCreateParams, opts ...RequestOption) (*Payment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payments"))
 	if err != nil {
@@ -232,8 +234,9 @@ type PaymentListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// payments.
+//
+//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+//	payments.
 func (s *PaymentServiceImpl) List(ctx context.Context, p PaymentListParams, opts ...RequestOption) (*PaymentListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payments"))
 	if err != nil {
@@ -439,7 +442,8 @@ func (s *PaymentServiceImpl) All(ctx context.Context,
 }
 
 // Get
-// Retrieves the details of a single existing payment.
+//
+//	Retrieves the details of a single existing payment.
 func (s *PaymentServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Payment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payments/%v",
 		identity))
@@ -525,7 +529,8 @@ type PaymentUpdateParams struct {
 }
 
 // Update
-// Updates a payment object. This accepts only the metadata parameter.
+//
+//	Updates a payment object. This accepts only the metadata parameter.
 func (s *PaymentServiceImpl) Update(ctx context.Context, identity string, p PaymentUpdateParams, opts ...RequestOption) (*Payment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payments/%v",
 		identity))
@@ -624,12 +629,13 @@ type PaymentCancelParams struct {
 }
 
 // Cancel
-// Cancels the payment if it has not already been submitted to the banks. Any
-// metadata supplied to this endpoint will be stored on the payment cancellation
-// event it causes.
 //
-// This will fail with a `cancellation_failed` error unless the payment's status
-// is `pending_submission`.
+//	Cancels the payment if it has not already been submitted to the banks. Any
+//	metadata supplied to this endpoint will be stored on the payment
+//	cancellation event it causes.
+//
+//	This will fail with a `cancellation_failed` error unless the payment's
+//	status is `pending_submission`.
 func (s *PaymentServiceImpl) Cancel(ctx context.Context, identity string, p PaymentCancelParams, opts ...RequestOption) (*Payment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payments/%v/actions/cancel",
 		identity))
@@ -729,16 +735,17 @@ type PaymentRetryParams struct {
 }
 
 // Retry
-// <a name="retry_failed"></a>Retries a failed payment if the underlying mandate
-// is active. You will receive a `resubmission_requested` webhook, but after
-// that retrying the payment follows the same process as its initial creation,
-// so you will receive a `submitted` webhook, followed by a `confirmed` or
-// `failed` event. Any metadata supplied to this endpoint will be stored against
-// the payment submission event it causes.
 //
-// This will return a `retry_failed` error if the payment has not failed.
+//	<a name="retry_failed"></a>Retries a failed payment if the underlying
+//	mandate is active. You will receive a `resubmission_requested` webhook, but
+//	after that retrying the payment follows the same process as its initial
+//	creation, so you will receive a `submitted` webhook, followed by a
+//	`confirmed` or `failed` event. Any metadata supplied to this endpoint will
+//	be stored against the payment submission event it causes.
 //
-// Payments can be retried up to 3 times.
+//	This will return a `retry_failed` error if the payment has not failed.
+//
+//	Payments can be retried up to 3 times.
 func (s *PaymentServiceImpl) Retry(ctx context.Context, identity string, p PaymentRetryParams, opts ...RequestOption) (*Payment, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payments/%v/actions/retry",
 		identity))

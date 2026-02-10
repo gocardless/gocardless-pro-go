@@ -54,12 +54,13 @@ type MandateImportCreateParams struct {
 }
 
 // Create
-// Mandate imports are first created, before mandates are added one-at-a-time,
-// so
-// this endpoint merely signals the start of the import process. Once you've
-// finished
-// adding entries to an import, you should
-// [submit](#mandate-imports-submit-a-mandate-import) it.
+//
+//	Mandate imports are first created, before mandates are added one-at-a-time,
+//	so
+//	this endpoint merely signals the start of the import process. Once you've
+//	finished
+//	adding entries to an import, you should
+//	[submit](#mandate-imports-submit-a-mandate-import) it.
 func (s *MandateImportServiceImpl) Create(ctx context.Context, p MandateImportCreateParams, opts ...RequestOption) (*MandateImport, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_imports"))
 	if err != nil {
@@ -156,7 +157,8 @@ type MandateImportGetParams struct {
 }
 
 // Get
-// Returns a single mandate import.
+//
+//	Returns a single mandate import.
 func (s *MandateImportServiceImpl) Get(ctx context.Context, identity string, p MandateImportGetParams, opts ...RequestOption) (*MandateImport, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandate_imports/%v",
 		identity))
@@ -240,18 +242,19 @@ type MandateImportSubmitParams struct {
 }
 
 // Submit
-// Submits the mandate import, which allows it to be processed by a member of
-// the
-// GoCardless team. Once the import has been submitted, it can no longer have
-// entries
-// added to it.
 //
-// In our sandbox environment, to aid development, we automatically process
-// mandate
-// imports approximately 10 seconds after they are submitted. This will allow
-// you to
-// test both the "submitted" response and wait for the webhook to confirm the
-// processing has begun.
+//	Submits the mandate import, which allows it to be processed by a member of
+//	the
+//	GoCardless team. Once the import has been submitted, it can no longer have
+//	entries
+//	added to it.
+//
+//	In our sandbox environment, to aid development, we automatically process
+//	mandate
+//	imports approximately 10 seconds after they are submitted. This will allow
+//	you to
+//	test both the "submitted" response and wait for the webhook to confirm the
+//	processing has begun.
 func (s *MandateImportServiceImpl) Submit(ctx context.Context, identity string, p MandateImportSubmitParams, opts ...RequestOption) (*MandateImport, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandate_imports/%v/actions/submit",
 		identity))
@@ -349,13 +352,14 @@ type MandateImportCancelParams struct {
 }
 
 // Cancel
-// Cancels the mandate import, which aborts the import process and stops the
-// mandates
-// being set up in GoCardless. Once the import has been cancelled, it can no
-// longer have
-// entries added to it. Mandate imports which have already been submitted or
-// processed
-// cannot be cancelled.
+//
+//	Cancels the mandate import, which aborts the import process and stops the
+//	mandates
+//	being set up in GoCardless. Once the import has been cancelled, it can no
+//	longer have
+//	entries added to it. Mandate imports which have already been submitted or
+//	processed
+//	cannot be cancelled.
 func (s *MandateImportServiceImpl) Cancel(ctx context.Context, identity string, p MandateImportCancelParams, opts ...RequestOption) (*MandateImport, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandate_imports/%v/actions/cancel",
 		identity))

@@ -233,6 +233,8 @@ type BillingRequest struct {
 	Links                     *BillingRequestLinks                     `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequest            *BillingRequestMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata                  map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentContextCode        string                                   `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
+	PaymentPurposeCode        string                                   `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
 	PaymentRequest            *BillingRequestPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 	PurposeCode               string                                   `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 	Resources                 *BillingRequestResources                 `url:"resources,omitempty" json:"resources,omitempty"`
@@ -352,15 +354,18 @@ type BillingRequestCreateParams struct {
 	Links                     *BillingRequestCreateParamsLinks                     `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequest            *BillingRequestCreateParamsMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata                  map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentContextCode        string                                               `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
+	PaymentPurposeCode        string                                               `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
 	PaymentRequest            *BillingRequestCreateParamsPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 	PurposeCode               string                                               `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 	SubscriptionRequest       *BillingRequestCreateParamsSubscriptionRequest       `url:"subscription_request,omitempty" json:"subscription_request,omitempty"`
 }
 
 // Create
-// <p class="notice"><strong>Important</strong>: All properties associated with
-// `subscription_request` and `instalment_schedule_request` are only supported
-// for ACH and PAD schemes.</p>
+//
+//	<p class="notice"><strong>Important</strong>: All properties associated with
+//	`subscription_request` and `instalment_schedule_request` are only supported
+//	for ACH and PAD schemes.</p>
 func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequestCreateParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
 	if err != nil {
@@ -482,16 +487,17 @@ type BillingRequestCollectCustomerDetailsParams struct {
 }
 
 // CollectCustomerDetails
-// If the billing request has a pending <code>collect_customer_details</code>
-// action, this endpoint can be used to collect the details in order to
-// complete it.
 //
-// The endpoint takes the same payload as Customers, but checks that the
-// customer fields are populated correctly for the billing request scheme.
+//	If the billing request has a pending <code>collect_customer_details</code>
+//	action, this endpoint can be used to collect the details in order to
+//	complete it.
 //
-// Whatever is provided to this endpoint is used to update the referenced
-// customer, and will take effect immediately after the request is
-// successful.
+//	The endpoint takes the same payload as Customers, but checks that the
+//	customer fields are populated correctly for the billing request scheme.
+//
+//	Whatever is provided to this endpoint is used to update the referenced
+//	customer, and will take effect immediately after the request is
+//	successful.
 func (s *BillingRequestServiceImpl) CollectCustomerDetails(ctx context.Context, identity string, p BillingRequestCollectCustomerDetailsParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/collect_customer_details",
 		identity))
@@ -600,29 +606,30 @@ type BillingRequestCollectBankAccountParams struct {
 }
 
 // CollectBankAccount
-// If the billing request has a pending
-// <code>collect_bank_account</code> action, this endpoint can be
-// used to collect the details in order to complete it.
 //
-// The endpoint takes the same payload as Customer Bank Accounts, but check
-// the bank account is valid for the billing request scheme before creating
-// and attaching it.
+//	If the billing request has a pending
+//	<code>collect_bank_account</code> action, this endpoint can be
+//	used to collect the details in order to complete it.
 //
-// If the scheme is PayTo and the pay_id is available, this can be included in
-// the payload along with the
-// country_code.
+//	The endpoint takes the same payload as Customer Bank Accounts, but check
+//	the bank account is valid for the billing request scheme before creating
+//	and attaching it.
 //
-// _ACH scheme_ For compliance reasons, an extra validation step is done using
-// a third-party provider to make sure the customer's bank account can accept
-// Direct Debit. If a bank account is discovered to be closed or invalid, the
-// customer is requested to adjust the account number/routing number and
-// succeed in this check to continue with the flow.
+//	If the scheme is PayTo and the pay_id is available, this can be included in
+//	the payload along with the
+//	country_code.
 //
-// _BACS scheme_ [Payer Name
-// Verification](https://hub.gocardless.com/s/article/Introduction-to-Payer-Name-Verification?language=en_GB)
-// is enabled by default for UK based bank accounts, meaning we verify the
-// account holder name and bank account
-// number match the details held by the relevant bank.
+//	_ACH scheme_ For compliance reasons, an extra validation step is done using
+//	a third-party provider to make sure the customer's bank account can accept
+//	Direct Debit. If a bank account is discovered to be closed or invalid, the
+//	customer is requested to adjust the account number/routing number and
+//	succeed in this check to continue with the flow.
+//
+//	_BACS scheme_ [Payer Name
+//	Verification](https://hub.gocardless.com/s/article/Introduction-to-Payer-Name-Verification?language=en_GB)
+//	is enabled by default for UK based bank accounts, meaning we verify the
+//	account holder name and bank account
+//	number match the details held by the relevant bank.
 func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, identity string, p BillingRequestCollectBankAccountParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/collect_bank_account",
 		identity))
@@ -722,9 +729,10 @@ type BillingRequestConfirmPayerDetailsParams struct {
 }
 
 // ConfirmPayerDetails
-// This is needed when you have a mandate request. As a scheme compliance rule
-// we are required to
-// allow the payer to crosscheck the details entered by them and confirm it.
+//
+//	This is needed when you have a mandate request. As a scheme compliance rule
+//	we are required to
+//	allow the payer to crosscheck the details entered by them and confirm it.
 func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, identity string, p BillingRequestConfirmPayerDetailsParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/confirm_payer_details",
 		identity))
@@ -823,8 +831,9 @@ type BillingRequestFulfilParams struct {
 }
 
 // Fulfil
-// If a billing request is ready to be fulfilled, call this endpoint to cause
-// it to fulfil, executing the payment.
+//
+//	If a billing request is ready to be fulfilled, call this endpoint to cause
+//	it to fulfil, executing the payment.
 func (s *BillingRequestServiceImpl) Fulfil(ctx context.Context, identity string, p BillingRequestFulfilParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/fulfil",
 		identity))
@@ -923,8 +932,9 @@ type BillingRequestCancelParams struct {
 }
 
 // Cancel
-// Immediately cancels a billing request, causing all billing request flows
-// to expire.
+//
+//	Immediately cancels a billing request, causing all billing request flows
+//	to expire.
 func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string, p BillingRequestCancelParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/cancel",
 		identity))
@@ -1043,8 +1053,9 @@ type BillingRequestListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// billing requests.
+//
+//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+//	billing requests.
 func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) (*BillingRequestListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
 	if err != nil {
@@ -1250,7 +1261,8 @@ func (s *BillingRequestServiceImpl) All(ctx context.Context,
 }
 
 // Get
-// Fetches a billing request
+//
+//	Fetches a billing request
 func (s *BillingRequestServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v",
 		identity))
@@ -1336,12 +1348,13 @@ type BillingRequestNotifyParams struct {
 }
 
 // Notify
-// Notifies the customer linked to the billing request, asking them to authorise
-// it.
-// Currently, the customer can only be notified by email.
 //
-// This endpoint is currently supported only for Instant Bank Pay Billing
-// Requests.
+//	Notifies the customer linked to the billing request, asking them to
+//	authorise it.
+//	Currently, the customer can only be notified by email.
+//
+//	This endpoint is currently supported only for Instant Bank Pay Billing
+//	Requests.
 func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string, p BillingRequestNotifyParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/notify",
 		identity))
@@ -1439,8 +1452,9 @@ type BillingRequestFallbackParams struct {
 }
 
 // Fallback
-// Triggers a fallback from the open-banking flow to direct debit. Note, the
-// billing request must have fallback enabled.
+//
+//	Triggers a fallback from the open-banking flow to direct debit. Note, the
+//	billing request must have fallback enabled.
 func (s *BillingRequestServiceImpl) Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/fallback",
 		identity))
@@ -1540,13 +1554,14 @@ type BillingRequestChooseCurrencyParams struct {
 }
 
 // ChooseCurrency
-// This will allow for the updating of the currency and subsequently the scheme
-// if
-// needed for a Billing Request. This will only be available for mandate only
-// flows
-// which do not have the lock_currency flag set to true on the Billing Request
-// Flow. It
-// will also not support any request which has a payments request.
+//
+//	This will allow for the updating of the currency and subsequently the scheme
+//	if
+//	needed for a Billing Request. This will only be available for mandate only
+//	flows
+//	which do not have the lock_currency flag set to true on the Billing Request
+//	Flow. It
+//	will also not support any request which has a payments request.
 func (s *BillingRequestServiceImpl) ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/choose_currency",
 		identity))
@@ -1646,7 +1661,8 @@ type BillingRequestSelectInstitutionParams struct {
 }
 
 // SelectInstitution
-// Creates an Institution object and attaches it to the Billing Request
+//
+//	Creates an Institution object and attaches it to the Billing Request
 func (s *BillingRequestServiceImpl) SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/select_institution",
 		identity))

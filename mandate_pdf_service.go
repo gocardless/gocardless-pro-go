@@ -70,57 +70,50 @@ type MandatePdfCreateParams struct {
 }
 
 // Create
-// Generates a PDF mandate and returns its temporary URL.
 //
-// Customer and bank account details can be left blank (for a blank mandate),
-// provided manually, or inferred from the ID of an existing
-// [mandate](#core-endpoints-mandates).
+//	Generates a PDF mandate and returns its temporary URL.
 //
-// By default, we'll generate PDF mandates in English.
+//	Customer and bank account details can be left blank (for a blank mandate),
+//	provided manually, or inferred from the ID of an existing
+//	[mandate](#core-endpoints-mandates).
 //
-// To generate a PDF mandate in another language, set the `Accept-Language`
-// header when creating the PDF mandate to the relevant [ISO
-// 639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code
-// supported for the scheme.
+//	By default, we'll generate PDF mandates in English.
 //
-// | Scheme           | Supported languages
+//	To generate a PDF mandate in another language, set the `Accept-Language`
+//	header when creating the PDF mandate to the relevant [ISO
+//	639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language code
+//	supported for the scheme.
 //
+//	| Scheme           | Supported languages
+//
+//	        |
+//	| :--------------- |
+//	:-------------------------------------------------------------------------------------------------------------------------------------------
 //	|
+//	| ACH              | English (`en`)
 //
-// | :--------------- |
-// :-------------------------------------------------------------------------------------------------------------------------------------------
-// |
-// | ACH              | English (`en`)
+//	        |
+//	| Autogiro         | English (`en`), Swedish (`sv`)
 //
-//	|
+//	        |
+//	| Bacs             | English (`en`)
 //
-// | Autogiro         | English (`en`), Swedish (`sv`)
+//	        |
+//	| BECS             | English (`en`)
 //
-//	|
+//	        |
+//	| BECS NZ          | English (`en`)
 //
-// | Bacs             | English (`en`)
+//	        |
+//	| Betalingsservice | Danish (`da`), English (`en`)
 //
-//	|
+//	        |
+//	| PAD              | English (`en`)
 //
-// | BECS             | English (`en`)
-//
-//	|
-//
-// | BECS NZ          | English (`en`)
-//
-//	|
-//
-// | Betalingsservice | Danish (`da`), English (`en`)
-//
-//	|
-//
-// | PAD              | English (`en`)
-//
-//	|
-//
-// | SEPA Core        | Danish (`da`), Dutch (`nl`), English (`en`), French
-// (`fr`), German (`de`), Italian (`it`), Portuguese (`pt`), Spanish (`es`),
-// Swedish (`sv`) |
+//	        |
+//	| SEPA Core        | Danish (`da`), Dutch (`nl`), English (`en`), French
+//	(`fr`), German (`de`), Italian (`it`), Portuguese (`pt`), Spanish (`es`),
+//	Swedish (`sv`) |
 func (s *MandatePdfServiceImpl) Create(ctx context.Context, p MandatePdfCreateParams, opts ...RequestOption) (*MandatePdf, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_pdfs"))
 	if err != nil {

@@ -58,6 +58,7 @@ type EventLinks struct {
 	NewCustomerBankAccount      string `url:"new_customer_bank_account,omitempty" json:"new_customer_bank_account,omitempty"`
 	NewMandate                  string `url:"new_mandate,omitempty" json:"new_mandate,omitempty"`
 	Organisation                string `url:"organisation,omitempty" json:"organisation,omitempty"`
+	OutboundPayment             string `url:"outbound_payment,omitempty" json:"outbound_payment,omitempty"`
 	ParentEvent                 string `url:"parent_event,omitempty" json:"parent_event,omitempty"`
 	PayerAuthorisation          string `url:"payer_authorisation,omitempty" json:"payer_authorisation,omitempty"`
 	Payment                     string `url:"payment,omitempty" json:"payment,omitempty"`
@@ -158,8 +159,9 @@ type EventListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// events.
+//
+//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+//	events.
 func (s *EventServiceImpl) List(ctx context.Context, p EventListParams, opts ...RequestOption) (*EventListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/events"))
 	if err != nil {
@@ -365,7 +367,8 @@ func (s *EventServiceImpl) All(ctx context.Context,
 }
 
 // Get
-// Retrieves the details of a single event.
+//
+//	Retrieves the details of a single event.
 func (s *EventServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Event, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/events/%v",
 		identity))

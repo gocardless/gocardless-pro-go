@@ -51,13 +51,15 @@ type CustomerNotificationHandleParams struct {
 }
 
 // Handle
-// "Handling" a notification means that you have sent the notification yourself
-// (and
-// don't want GoCardless to send it).
-// If the notification has already been actioned, or the deadline to notify has
-// passed,
-// this endpoint will return an `already_actioned` error and you should not take
-// further action. This endpoint takes no additional parameters.
+//
+//	"Handling" a notification means that you have sent the notification yourself
+//	(and
+//	don't want GoCardless to send it).
+//	If the notification has already been actioned, or the deadline to notify has
+//	passed,
+//	this endpoint will return an `already_actioned` error and you should not
+//	take
+//	further action. This endpoint takes no additional parameters.
 func (s *CustomerNotificationServiceImpl) Handle(ctx context.Context, identity string, p CustomerNotificationHandleParams, opts ...RequestOption) (*CustomerNotification, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_notifications/%v/actions/handle",
 		identity))

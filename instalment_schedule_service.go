@@ -77,25 +77,26 @@ type InstalmentScheduleCreateWithDatesParams struct {
 }
 
 // CreateWithDates
-// Creates a new instalment schedule object, along with the associated payments.
-// This
-// API is recommended if you know the specific dates you wish to charge.
-// Otherwise,
-// please check out the [scheduling
-// version](#instalment-schedules-create-with-schedule).
 //
-// The `instalments` property is an array of payment properties (`amount` and
-// `charge_date`).
+//	Creates a new instalment schedule object, along with the associated
+//	payments. This
+//	API is recommended if you know the specific dates you wish to charge.
+//	Otherwise,
+//	please check out the [scheduling
+//	version](#instalment-schedules-create-with-schedule).
 //
-// It can take quite a while to create the associated payments, so the API will
-// return
-// the status as `pending` initially. When processing has completed, a
-// subsequent GET
-// request for the instalment schedule will either have the status `success` and
-// link
-// to the created payments, or the status `error` and detailed information about
-// the
-// failures.
+//	The `instalments` property is an array of payment properties (`amount` and
+//	`charge_date`).
+//
+//	It can take quite a while to create the associated payments, so the API will
+//	return
+//	the status as `pending` initially. When processing has completed, a
+//	subsequent GET
+//	request for the instalment schedule will either have the status `success`
+//	and link
+//	to the created payments, or the status `error` and detailed information
+//	about the
+//	failures.
 func (s *InstalmentScheduleServiceImpl) CreateWithDates(ctx context.Context, p InstalmentScheduleCreateWithDatesParams, opts ...RequestOption) (*InstalmentSchedule, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
 	if err != nil {
@@ -212,22 +213,23 @@ type InstalmentScheduleCreateWithScheduleParams struct {
 }
 
 // CreateWithSchedule
-// Creates a new instalment schedule object, along with the associated payments.
-// This
-// API is recommended if you wish to use the GoCardless scheduling logic. For
-// finer
-// control over the individual dates, please check out the [alternative
-// version](#instalment-schedules-create-with-dates).
 //
-// It can take quite a while to create the associated payments, so the API will
-// return
-// the status as `pending` initially. When processing has completed, a
-// subsequent
-// GET request for the instalment schedule will either have the status `success`
-// and link to
-// the created payments, or the status `error` and detailed information about
-// the
-// failures.
+//	Creates a new instalment schedule object, along with the associated
+//	payments. This
+//	API is recommended if you wish to use the GoCardless scheduling logic. For
+//	finer
+//	control over the individual dates, please check out the [alternative
+//	version](#instalment-schedules-create-with-dates).
+//
+//	It can take quite a while to create the associated payments, so the API will
+//	return
+//	the status as `pending` initially. When processing has completed, a
+//	subsequent
+//	GET request for the instalment schedule will either have the status
+//	`success` and link to
+//	the created payments, or the status `error` and detailed information about
+//	the
+//	failures.
 func (s *InstalmentScheduleServiceImpl) CreateWithSchedule(ctx context.Context, p InstalmentScheduleCreateWithScheduleParams, opts ...RequestOption) (*InstalmentSchedule, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
 	if err != nil {
@@ -353,8 +355,9 @@ type InstalmentScheduleListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// instalment schedules.
+//
+//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+//	instalment schedules.
 func (s *InstalmentScheduleServiceImpl) List(ctx context.Context, p InstalmentScheduleListParams, opts ...RequestOption) (*InstalmentScheduleListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
 	if err != nil {
@@ -560,7 +563,8 @@ func (s *InstalmentScheduleServiceImpl) All(ctx context.Context,
 }
 
 // Get
-// Retrieves the details of an existing instalment schedule.
+//
+//	Retrieves the details of an existing instalment schedule.
 func (s *InstalmentScheduleServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*InstalmentSchedule, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/instalment_schedules/%v",
 		identity))
@@ -645,7 +649,8 @@ type InstalmentScheduleUpdateParams struct {
 }
 
 // Update
-// Updates an instalment schedule. This accepts only the metadata parameter.
+//
+//	Updates an instalment schedule. This accepts only the metadata parameter.
 func (s *InstalmentScheduleServiceImpl) Update(ctx context.Context, identity string, p InstalmentScheduleUpdateParams, opts ...RequestOption) (*InstalmentSchedule, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/instalment_schedules/%v",
 		identity))
@@ -743,11 +748,12 @@ type InstalmentScheduleCancelParams struct {
 }
 
 // Cancel
-// Immediately cancels an instalment schedule; no further payments will be
-// collected for it.
 //
-// This will fail with a `cancellation_failed` error if the instalment schedule
-// is already cancelled or has completed.
+//	Immediately cancels an instalment schedule; no further payments will be
+//	collected for it.
+//
+//	This will fail with a `cancellation_failed` error if the instalment schedule
+//	is already cancelled or has completed.
 func (s *InstalmentScheduleServiceImpl) Cancel(ctx context.Context, identity string, p InstalmentScheduleCancelParams, opts ...RequestOption) (*InstalmentSchedule, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/instalment_schedules/%v/actions/cancel",
 		identity))

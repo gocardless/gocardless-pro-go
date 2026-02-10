@@ -250,6 +250,8 @@ type BillingRequestWithActionBillingRequests struct {
 	Links                     *BillingRequestWithActionBillingRequestsLinks                     `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequest            *BillingRequestWithActionBillingRequestsMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata                  map[string]interface{}                                            `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentContextCode        string                                                            `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
+	PaymentPurposeCode        string                                                            `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
 	PaymentRequest            *BillingRequestWithActionBillingRequestsPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 	PurposeCode               string                                                            `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 	Resources                 *BillingRequestWithActionBillingRequestsResources                 `url:"resources,omitempty" json:"resources,omitempty"`
@@ -376,22 +378,25 @@ type BillingRequestWithActionCreateWithActionsParamsPaymentRequest struct {
 
 // BillingRequestWithActionCreateWithActionsParams parameters
 type BillingRequestWithActionCreateWithActionsParams struct {
-	Actions         *BillingRequestWithActionCreateWithActionsParamsActions        `url:"actions,omitempty" json:"actions,omitempty"`
-	FallbackEnabled bool                                                           `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
-	Links           *BillingRequestWithActionCreateWithActionsParamsLinks          `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequest  *BillingRequestWithActionCreateWithActionsParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata        map[string]interface{}                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PaymentRequest  *BillingRequestWithActionCreateWithActionsParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
-	PurposeCode     string                                                         `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
+	Actions            *BillingRequestWithActionCreateWithActionsParamsActions        `url:"actions,omitempty" json:"actions,omitempty"`
+	FallbackEnabled    bool                                                           `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
+	Links              *BillingRequestWithActionCreateWithActionsParamsLinks          `url:"links,omitempty" json:"links,omitempty"`
+	MandateRequest     *BillingRequestWithActionCreateWithActionsParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
+	Metadata           map[string]interface{}                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentContextCode string                                                         `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
+	PaymentPurposeCode string                                                         `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
+	PaymentRequest     *BillingRequestWithActionCreateWithActionsParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode        string                                                         `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 }
 
 // CreateWithActions
-// Creates a billing request and completes any specified actions in a single
-// request.
-// This endpoint allows you to create a billing request and immediately complete
-// actions
-// such as collecting customer details, bank account details, or other required
-// actions.
+//
+//	Creates a billing request and completes any specified actions in a single
+//	request.
+//	This endpoint allows you to create a billing request and immediately
+//	complete actions
+//	such as collecting customer details, bank account details, or other required
+//	actions.
 func (s *BillingRequestWithActionServiceImpl) CreateWithActions(ctx context.Context, p BillingRequestWithActionCreateWithActionsParams, opts ...RequestOption) (*BillingRequestWithAction, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests/create_with_actions"))
 	if err != nil {

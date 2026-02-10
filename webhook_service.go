@@ -81,8 +81,9 @@ type WebhookListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// webhooks.
+//
+//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+//	webhooks.
 func (s *WebhookServiceImpl) List(ctx context.Context, p WebhookListParams, opts ...RequestOption) (*WebhookListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/webhooks"))
 	if err != nil {
@@ -288,7 +289,8 @@ func (s *WebhookServiceImpl) All(ctx context.Context,
 }
 
 // Get
-// Retrieves the details of an existing webhook.
+//
+//	Retrieves the details of an existing webhook.
 func (s *WebhookServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Webhook, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/webhooks/%v",
 		identity))
@@ -368,7 +370,8 @@ func (s *WebhookServiceImpl) Get(ctx context.Context, identity string, opts ...R
 }
 
 // Retry
-// Requests for a previous webhook to be sent again
+//
+//	Requests for a previous webhook to be sent again
 func (s *WebhookServiceImpl) Retry(ctx context.Context, identity string, opts ...RequestOption) (*Webhook, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/webhooks/%v/actions/retry",
 		identity))
