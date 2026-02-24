@@ -181,6 +181,7 @@ func (err *APIError) Error() string {
 type ValidationError struct {
 	Message        string     `json:"message"`
 	Field          string     `json:"field"`
+	Reason         string     `json:"reason"`
 	RequestPointer string     `json:"request_pointer"`
 	Links          ErrorLinks `json:"links"`
 }
