@@ -38,19 +38,45 @@ func try(attempts int, fn func() error) error {
 	return err
 }
 
+// FlexError encapsulates an error response that may be a string or an object
+type FlexError struct {
+	Msg *string
+	Err *APIError
+}
+
+func (e *FlexError) UnmarshalJSON(data []byte) error {
+	if len(data) == 0 || string(data) == "null" {
+		return nil
+	}
+	// Read the raw JSON value and see if it's a string
+	if data[0] == '"' {
+		return json.Unmarshal(data, &e.Msg)
+	}
+	e.Err = &APIError{}
+	return json.Unmarshal(data, e.Err)
+}
+
 func responseErr(r *http.Response) error {
 	switch {
 	case 200 <= r.StatusCode && r.StatusCode < 400:
 		return nil
 	default:
 		var cause error
-		var result struct {
-			Err *APIError `json:"error"`
+		var result FlexError
+
+		err := json.NewDecoder(r.Body).Decode(&result)
+		if err != nil {
+			return fmt.Errorf("decoding error response: %w", err)
 		}
 
-		json.NewDecoder(r.Body).Decode(&result)
 		if result.Err != nil {
 			cause = result.Err
+		} else if result.Msg != nil {
+			// Wrap the error message into an API erro
+			cause = &APIError{
+				Message: *result.Msg,
+				Code:    r.StatusCode,
+			}
 		}
 
 		return &responseError{
