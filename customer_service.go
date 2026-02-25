@@ -178,13 +178,14 @@ type CustomerListParamsCreatedAt struct {
 
 // CustomerListParams parameters
 type CustomerListParams struct {
-	After         string                       `url:"after,omitempty" json:"after,omitempty"`
-	Before        string                       `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt     *CustomerListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency      string                       `url:"currency,omitempty" json:"currency,omitempty"`
-	Limit         int                          `url:"limit,omitempty" json:"limit,omitempty"`
-	SortDirection string                       `url:"sort_direction,omitempty" json:"sort_direction,omitempty"`
-	SortField     string                       `url:"sort_field,omitempty" json:"sort_field,omitempty"`
+	ActionRequired string                       `url:"action_required,omitempty" json:"action_required,omitempty"`
+	After          string                       `url:"after,omitempty" json:"after,omitempty"`
+	Before         string                       `url:"before,omitempty" json:"before,omitempty"`
+	CreatedAt      *CustomerListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency       string                       `url:"currency,omitempty" json:"currency,omitempty"`
+	Limit          int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	SortDirection  string                       `url:"sort_direction,omitempty" json:"sort_direction,omitempty"`
+	SortField      string                       `url:"sort_field,omitempty" json:"sort_field,omitempty"`
 }
 
 type CustomerListResultMetaCursors struct {
