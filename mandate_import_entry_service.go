@@ -13,11 +13,6 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
-
 // MandateImportEntryService manages mandate_import_entries
 type MandateImportEntryServiceImpl struct {
 	config Config

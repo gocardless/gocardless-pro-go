@@ -1,7 +1,6 @@
 package gocardless
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -12,11 +11,6 @@ import (
 
 	"github.com/google/go-querystring/query"
 )
-
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
 
 // EventService manages events
 type EventServiceImpl struct {

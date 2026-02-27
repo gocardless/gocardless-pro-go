@@ -9,14 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-
-	"github.com/google/go-querystring/query"
 )
-
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
 
 // BillingRequestWithActionService manages billing_request_with_actions
 type BillingRequestWithActionServiceImpl struct {
