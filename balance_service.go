@@ -66,10 +66,9 @@ type BalanceListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of balances
-//	for a given creditor. This endpoint is rate limited to 60 requests per
-//	minute.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of balances
+// for a given creditor. This endpoint is rate limited to 60 requests per
+// minute.
 func (s *BalanceServiceImpl) List(ctx context.Context, p BalanceListParams, opts ...RequestOption) (*BalanceListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/balances"))
 	if err != nil {

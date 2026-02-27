@@ -68,9 +68,8 @@ type NegativeBalanceLimitListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of negative
-//	balance limits.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of negative
+// balance limits.
 func (s *NegativeBalanceLimitServiceImpl) List(ctx context.Context, p NegativeBalanceLimitListParams, opts ...RequestOption) (*NegativeBalanceLimitListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/negative_balance_limits"))
 	if err != nil {

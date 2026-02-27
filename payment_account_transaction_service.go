@@ -76,8 +76,7 @@ type PaymentAccountTransactionListResult struct {
 }
 
 // List
-//
-//	List transactions for a given payment account.
+// List transactions for a given payment account.
 func (s *PaymentAccountTransactionServiceImpl) List(ctx context.Context, identity string, p PaymentAccountTransactionListParams, opts ...RequestOption) (*PaymentAccountTransactionListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payment_accounts/%v/transactions",
 		identity))

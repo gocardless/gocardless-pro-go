@@ -73,20 +73,19 @@ type CustomerBankAccountCreateParams struct {
 }
 
 // Create
+// Creates a new customer bank account object.
 //
-//	Creates a new customer bank account object.
+// There are three different ways to supply bank account details:
 //
-//	There are three different ways to supply bank account details:
+// - [Local details](#appendix-local-bank-details)
 //
-//	- [Local details](#appendix-local-bank-details)
+// - IBAN
 //
-//	- IBAN
+// - [Customer Bank Account
+// Tokens](#javascript-flow-create-a-customer-bank-account-token)
 //
-//	- [Customer Bank Account
-//	Tokens](#javascript-flow-create-a-customer-bank-account-token)
-//
-//	For more information on the different fields required in each country, see
-//	[local bank details](#appendix-local-bank-details).
+// For more information on the different fields required in each country, see
+// [local bank details](#appendix-local-bank-details).
 func (s *CustomerBankAccountServiceImpl) Create(ctx context.Context, p CustomerBankAccountCreateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
 	if err != nil {
@@ -211,9 +210,8 @@ type CustomerBankAccountListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your bank
-//	accounts.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your bank
+// accounts.
 func (s *CustomerBankAccountServiceImpl) List(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) (*CustomerBankAccountListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
 	if err != nil {
@@ -419,8 +417,7 @@ func (s *CustomerBankAccountServiceImpl) All(ctx context.Context,
 }
 
 // Get
-//
-//	Retrieves the details of an existing bank account.
+// Retrieves the details of an existing bank account.
 func (s *CustomerBankAccountServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_bank_accounts/%v",
 		identity))
@@ -505,9 +502,8 @@ type CustomerBankAccountUpdateParams struct {
 }
 
 // Update
-//
-//	Updates a customer bank account object. Only the metadata parameter is
-//	allowed.
+// Updates a customer bank account object. Only the metadata parameter is
+// allowed.
 func (s *CustomerBankAccountServiceImpl) Update(ctx context.Context, identity string, p CustomerBankAccountUpdateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_bank_accounts/%v",
 		identity))
@@ -601,14 +597,13 @@ func (s *CustomerBankAccountServiceImpl) Update(ctx context.Context, identity st
 }
 
 // Disable
+// Immediately cancels all associated mandates and cancellable payments.
 //
-//	Immediately cancels all associated mandates and cancellable payments.
+// This will return a `disable_failed` error if the bank account has already
+// been disabled.
 //
-//	This will return a `disable_failed` error if the bank account has already
-//	been disabled.
-//
-//	A disabled bank account can be re-enabled by creating a new bank account
-//	resource with the same details.
+// A disabled bank account can be re-enabled by creating a new bank account
+// resource with the same details.
 func (s *CustomerBankAccountServiceImpl) Disable(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_bank_accounts/%v/actions/disable",
 		identity))

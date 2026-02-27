@@ -390,13 +390,12 @@ type BillingRequestWithActionCreateWithActionsParams struct {
 }
 
 // CreateWithActions
-//
-//	Creates a billing request and completes any specified actions in a single
-//	request.
-//	This endpoint allows you to create a billing request and immediately
-//	complete actions
-//	such as collecting customer details, bank account details, or other required
-//	actions.
+// Creates a billing request and completes any specified actions in a single
+// request.
+// This endpoint allows you to create a billing request and immediately complete
+// actions
+// such as collecting customer details, bank account details, or other required
+// actions.
 func (s *BillingRequestWithActionServiceImpl) CreateWithActions(ctx context.Context, p BillingRequestWithActionCreateWithActionsParams, opts ...RequestOption) (*BillingRequestWithAction, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests/create_with_actions"))
 	if err != nil {

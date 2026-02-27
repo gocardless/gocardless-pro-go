@@ -118,8 +118,7 @@ type BillingRequestFlowCreateParams struct {
 }
 
 // Create
-//
-//	Creates a new billing request flow.
+// Creates a new billing request flow.
 func (s *BillingRequestFlowServiceImpl) Create(ctx context.Context, p BillingRequestFlowCreateParams, opts ...RequestOption) (*BillingRequestFlow, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_flows"))
 	if err != nil {
@@ -216,10 +215,9 @@ type BillingRequestFlowInitialiseParams struct {
 }
 
 // Initialise
-//
-//	Returns the flow having generated a fresh session token which can be used to
-//	power
-//	integrations that manipulate the flow.
+// Returns the flow having generated a fresh session token which can be used to
+// power
+// integrations that manipulate the flow.
 func (s *BillingRequestFlowServiceImpl) Initialise(ctx context.Context, identity string, p BillingRequestFlowInitialiseParams, opts ...RequestOption) (*BillingRequestFlow, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_request_flows/%v/actions/initialise",
 		identity))

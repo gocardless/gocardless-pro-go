@@ -64,9 +64,8 @@ type TaxRateListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of all tax
-//	rates.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of all tax
+// rates.
 func (s *TaxRateServiceImpl) List(ctx context.Context, p TaxRateListParams, opts ...RequestOption) (*TaxRateListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/tax_rates"))
 	if err != nil {
@@ -272,8 +271,7 @@ func (s *TaxRateServiceImpl) All(ctx context.Context,
 }
 
 // Get
-//
-//	Retrieves the details of a tax rate.
+// Retrieves the details of a tax rate.
 func (s *TaxRateServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*TaxRate, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/tax_rates/%v",
 		identity))

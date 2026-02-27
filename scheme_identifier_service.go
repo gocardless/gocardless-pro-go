@@ -65,46 +65,49 @@ type SchemeIdentifierCreateParams struct {
 }
 
 // Create
+// Creates a new scheme identifier. The scheme identifier status will be
+// `pending` while GoCardless is
+// processing the request. Once the scheme identifier is ready to be used the
+// status will be updated to `active`.
+// At this point, GoCardless will emit a scheme identifier activated event via
+// webhook to notify you of this change.
+// In Bacs, it will take up to five working days for a scheme identifier to
+// become active. On other schemes, including SEPA,
+// this happens instantly.
 //
-//	Creates a new scheme identifier. The scheme identifier status will be
-//	`pending` while GoCardless is
-//	processing the request. Once the scheme identifier is ready to be used the
-//	status will be updated to `active`.
-//	At this point, GoCardless will emit a scheme identifier activated event via
-//	webhook to notify you of this change.
-//	In Bacs, it will take up to five working days for a scheme identifier to
-//	become active. On other schemes, including SEPA,
-//	this happens instantly.
+// #### Scheme identifier name validations
 //
-//	#### Scheme identifier name validations
+// The `name` field of a scheme identifier can contain alphanumeric characters,
+// spaces and
+// special characters.
 //
-//	The `name` field of a scheme identifier can contain alphanumeric characters,
-//	spaces and
-//	special characters.
+// Its maximum length and the special characters it supports depend on the
+// scheme:
 //
-//	Its maximum length and the special characters it supports depend on the
-//	scheme:
+// | __scheme__        | __maximum length__ | __special characters allowed__
 //
-//	| __scheme__        | __maximum length__ | __special characters allowed__
-//	                  |
-//	| :---------------- | :----------------- |
-//	:-------------------------------------------------- |
-//	| `bacs`            | 18 characters      | `/` `.` `&` `-`
-//	                  |
-//	| `sepa`            | 70 characters      | `/` `?` `:` `(` `)` `.` `,` `+`
-//	`&` `<` `>` `'` `"` |
-//	| `ach`             | 16 characters      | `/` `?` `:` `(` `)` `.` `,` `'`
-//	`+` `-`             |
-//	| `faster_payments` | 18 characters      | `/` `?` `:` `(` `)` `.` `,` `'`
-//	`+` `-`             |
+//	|
 //
-//	The validation error that gets returned for an invalid name will contain a
-//	suggested name
-//	in the metadata that is guaranteed to pass name validations.
+// | :---------------- | :----------------- |
+// :-------------------------------------------------- |
+// | `bacs`            | 18 characters      | `/` `.` `&` `-`
 //
-//	You should ensure that the name you set matches the legal name or the
-//	trading name of
-//	the creditor, otherwise, there is an increased risk of chargeback.
+//	|
+//
+// | `sepa`            | 70 characters      | `/` `?` `:` `(` `)` `.` `,` `+`
+// `&` `<` `>` `'` `"` |
+// | `ach`             | 16 characters      | `/` `?` `:` `(` `)` `.` `,` `'`
+// `+` `-`             |
+// | `faster_payments` | 18 characters      | `/` `?` `:` `(` `)` `.` `,` `'`
+// `+` `-`             |
+//
+// The validation error that gets returned for an invalid name will contain a
+// suggested name
+// in the metadata that is guaranteed to pass name validations.
+//
+// You should ensure that the name you set matches the legal name or the trading
+// name of
+// the creditor, otherwise, there is an increased risk of chargeback.
 func (s *SchemeIdentifierServiceImpl) Create(ctx context.Context, p SchemeIdentifierCreateParams, opts ...RequestOption) (*SchemeIdentifier, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/scheme_identifiers"))
 	if err != nil {
@@ -220,9 +223,8 @@ type SchemeIdentifierListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-//	scheme identifiers.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// scheme identifiers.
 func (s *SchemeIdentifierServiceImpl) List(ctx context.Context, p SchemeIdentifierListParams, opts ...RequestOption) (*SchemeIdentifierListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/scheme_identifiers"))
 	if err != nil {
@@ -428,8 +430,7 @@ func (s *SchemeIdentifierServiceImpl) All(ctx context.Context,
 }
 
 // Get
-//
-//	Retrieves the details of an existing scheme identifier.
+// Retrieves the details of an existing scheme identifier.
 func (s *SchemeIdentifierServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*SchemeIdentifier, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/scheme_identifiers/%v",
 		identity))

@@ -87,8 +87,7 @@ type VerificationDetailCreateParams struct {
 }
 
 // Create
-//
-//	Creates a new verification detail
+// Creates a new verification detail
 func (s *VerificationDetailServiceImpl) Create(ctx context.Context, p VerificationDetailCreateParams, opts ...RequestOption) (*VerificationDetail, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/verification_details"))
 	if err != nil {
@@ -204,8 +203,7 @@ type VerificationDetailListResult struct {
 }
 
 // List
-//
-//	Returns a list of verification details belonging to a creditor.
+// Returns a list of verification details belonging to a creditor.
 func (s *VerificationDetailServiceImpl) List(ctx context.Context, p VerificationDetailListParams, opts ...RequestOption) (*VerificationDetailListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/verification_details"))
 	if err != nil {

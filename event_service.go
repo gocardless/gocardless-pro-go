@@ -159,9 +159,8 @@ type EventListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-//	events.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// events.
 func (s *EventServiceImpl) List(ctx context.Context, p EventListParams, opts ...RequestOption) (*EventListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/events"))
 	if err != nil {
@@ -367,8 +366,7 @@ func (s *EventServiceImpl) All(ctx context.Context,
 }
 
 // Get
-//
-//	Retrieves the details of a single event.
+// Retrieves the details of a single event.
 func (s *EventServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Event, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/events/%v",
 		identity))

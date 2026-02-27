@@ -72,8 +72,7 @@ type CreditorBankAccountCreateParams struct {
 }
 
 // Create
-//
-//	Creates a new creditor bank account object.
+// Creates a new creditor bank account object.
 func (s *CreditorBankAccountServiceImpl) Create(ctx context.Context, p CreditorBankAccountCreateParams, opts ...RequestOption) (*CreditorBankAccount, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/creditor_bank_accounts"))
 	if err != nil {
@@ -198,9 +197,8 @@ type CreditorBankAccountListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-//	creditor bank accounts.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// creditor bank accounts.
 func (s *CreditorBankAccountServiceImpl) List(ctx context.Context, p CreditorBankAccountListParams, opts ...RequestOption) (*CreditorBankAccountListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/creditor_bank_accounts"))
 	if err != nil {
@@ -406,8 +404,7 @@ func (s *CreditorBankAccountServiceImpl) All(ctx context.Context,
 }
 
 // Get
-//
-//	Retrieves the details of an existing creditor bank account.
+// Retrieves the details of an existing creditor bank account.
 func (s *CreditorBankAccountServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*CreditorBankAccount, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditor_bank_accounts/%v",
 		identity))
@@ -487,15 +484,14 @@ func (s *CreditorBankAccountServiceImpl) Get(ctx context.Context, identity strin
 }
 
 // Disable
+// Immediately disables the bank account, no money can be paid out to a disabled
+// account.
 //
-//	Immediately disables the bank account, no money can be paid out to a
-//	disabled account.
+// This will return a `disable_failed` error if the bank account has already
+// been disabled.
 //
-//	This will return a `disable_failed` error if the bank account has already
-//	been disabled.
-//
-//	A disabled bank account can be re-enabled by creating a new bank account
-//	resource with the same details.
+// A disabled bank account can be re-enabled by creating a new bank account
+// resource with the same details.
 func (s *CreditorBankAccountServiceImpl) Disable(ctx context.Context, identity string, opts ...RequestOption) (*CreditorBankAccount, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditor_bank_accounts/%v/actions/disable",
 		identity))

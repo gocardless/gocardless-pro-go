@@ -76,8 +76,7 @@ type CustomerCreateParams struct {
 }
 
 // Create
-//
-//	Creates a new customer object.
+// Creates a new customer object.
 func (s *CustomerServiceImpl) Create(ctx context.Context, p CustomerCreateParams, opts ...RequestOption) (*Customer, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customers"))
 	if err != nil {
@@ -204,9 +203,8 @@ type CustomerListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-//	customers.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// customers.
 func (s *CustomerServiceImpl) List(ctx context.Context, p CustomerListParams, opts ...RequestOption) (*CustomerListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customers"))
 	if err != nil {
@@ -412,8 +410,7 @@ func (s *CustomerServiceImpl) All(ctx context.Context,
 }
 
 // Get
-//
-//	Retrieves the details of an existing customer.
+// Retrieves the details of an existing customer.
 func (s *CustomerServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Customer, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))
@@ -513,9 +510,8 @@ type CustomerUpdateParams struct {
 }
 
 // Update
-//
-//	Updates a customer object. Supports all of the fields supported when
-//	creating a customer.
+// Updates a customer object. Supports all of the fields supported when creating
+// a customer.
 func (s *CustomerServiceImpl) Update(ctx context.Context, identity string, p CustomerUpdateParams, opts ...RequestOption) (*Customer, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))
@@ -613,15 +609,14 @@ type CustomerRemoveParams struct {
 }
 
 // Remove
+// Removed customers will not appear in search results or lists of customers (in
+// our API
+// or exports), and it will not be possible to load an individually removed
+// customer by
+// ID.
 //
-//	Removed customers will not appear in search results or lists of customers
-//	(in our API
-//	or exports), and it will not be possible to load an individually removed
-//	customer by
-//	ID.
-//
-//	<p class="restricted-notice"><strong>The action of removing a customer
-//	cannot be reversed, so please use with care.</strong></p>
+// <p class="restricted-notice"><strong>The action of removing a customer cannot
+// be reversed, so please use with care.</strong></p>
 func (s *CustomerServiceImpl) Remove(ctx context.Context, identity string, p CustomerRemoveParams, opts ...RequestOption) (*Customer, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))

@@ -57,8 +57,7 @@ type BlockCreateParams struct {
 }
 
 // Create
-//
-//	Creates a new Block of a given type. By default it will be active.
+// Creates a new Block of a given type. By default it will be active.
 func (s *BlockServiceImpl) Create(ctx context.Context, p BlockCreateParams, opts ...RequestOption) (*Block, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks"))
 	if err != nil {
@@ -151,8 +150,7 @@ func (s *BlockServiceImpl) Create(ctx context.Context, p BlockCreateParams, opts
 }
 
 // Get
-//
-//	Retrieves the details of an existing block.
+// Retrieves the details of an existing block.
 func (s *BlockServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/blocks/%v",
 		identity))
@@ -259,9 +257,8 @@ type BlockListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-//	blocks.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// blocks.
 func (s *BlockServiceImpl) List(ctx context.Context, p BlockListParams, opts ...RequestOption) (*BlockListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks"))
 	if err != nil {
@@ -467,8 +464,7 @@ func (s *BlockServiceImpl) All(ctx context.Context,
 }
 
 // Disable
-//
-//	Disables a block so that it no longer will prevent mandate creation.
+// Disables a block so that it no longer will prevent mandate creation.
 func (s *BlockServiceImpl) Disable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/blocks/%v/actions/disable",
 		identity))
@@ -553,8 +549,7 @@ func (s *BlockServiceImpl) Disable(ctx context.Context, identity string, opts ..
 }
 
 // Enable
-//
-//	Enables a previously disabled block so that it will prevent mandate creation
+// Enables a previously disabled block so that it will prevent mandate creation
 func (s *BlockServiceImpl) Enable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/blocks/%v/actions/enable",
 		identity))
@@ -663,11 +658,10 @@ type BlockBlockByRefResult struct {
 }
 
 // BlockByRef
-//
-//	Creates new blocks for a given reference. By default blocks will be active.
-//	Returns 201 if at least one block was created. Returns 200 if there were no
-//	new
-//	blocks created.
+// Creates new blocks for a given reference. By default blocks will be active.
+// Returns 201 if at least one block was created. Returns 200 if there were no
+// new
+// blocks created.
 func (s *BlockServiceImpl) BlockByRef(ctx context.Context, p BlockBlockByRefParams, opts ...RequestOption) (
 	*BlockBlockByRefResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks/block_by_ref"))

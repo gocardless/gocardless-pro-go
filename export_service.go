@@ -40,8 +40,7 @@ type ExportService interface {
 }
 
 // Get
-//
-//	Returns a single export.
+// Returns a single export.
 func (s *ExportServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Export, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/exports/%v",
 		identity))
@@ -143,8 +142,7 @@ type ExportListResult struct {
 }
 
 // List
-//
-//	Returns a list of exports which are available for download.
+// Returns a list of exports which are available for download.
 func (s *ExportServiceImpl) List(ctx context.Context, p ExportListParams, opts ...RequestOption) (*ExportListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/exports"))
 	if err != nil {

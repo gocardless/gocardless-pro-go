@@ -93,8 +93,7 @@ type SubscriptionCreateParams struct {
 }
 
 // Create
-//
-//	Creates a new subscription object
+// Creates a new subscription object
 func (s *SubscriptionServiceImpl) Create(ctx context.Context, p SubscriptionCreateParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/subscriptions"))
 	if err != nil {
@@ -220,10 +219,9 @@ type SubscriptionListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-//	subscriptions. Please note if the subscriptions are related to customers who
-//	have been removed, they will not be shown in the response.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// subscriptions. Please note if the subscriptions are related to customers who
+// have been removed, they will not be shown in the response.
 func (s *SubscriptionServiceImpl) List(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) (*SubscriptionListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/subscriptions"))
 	if err != nil {
@@ -429,8 +427,7 @@ func (s *SubscriptionServiceImpl) All(ctx context.Context,
 }
 
 // Get
-//
-//	Retrieves the details of a single subscription.
+// Retrieves the details of a single subscription.
 func (s *SubscriptionServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v",
 		identity))
@@ -520,31 +517,30 @@ type SubscriptionUpdateParams struct {
 }
 
 // Update
+// Updates a subscription object.
 //
-//	Updates a subscription object.
+// This fails with:
 //
-//	This fails with:
+// - `validation_failed` if invalid data is provided when attempting to update a
+// subscription.
 //
-//	- `validation_failed` if invalid data is provided when attempting to update
-//	a subscription.
+// - `subscription_not_active` if the subscription is no longer active.
 //
-//	- `subscription_not_active` if the subscription is no longer active.
+// - `subscription_already_ended` if the subscription has taken all payments.
 //
-//	- `subscription_already_ended` if the subscription has taken all payments.
+// - `mandate_payments_require_approval` if the amount is being changed and the
+// mandate requires approval.
 //
-//	- `mandate_payments_require_approval` if the amount is being changed and the
-//	mandate requires approval.
+// - `number_of_subscription_amendments_exceeded` error if the subscription
+// amount has already been changed 10 times.
 //
-//	- `number_of_subscription_amendments_exceeded` error if the subscription
-//	amount has already been changed 10 times.
+// - `forbidden` if the amount is being changed, and the subscription was
+// created by an app and you are not authenticated as that app, or if the
+// subscription was not created by an app and you are authenticated as an app
 //
-//	- `forbidden` if the amount is being changed, and the subscription was
-//	created by an app and you are not authenticated as that app, or if the
-//	subscription was not created by an app and you are authenticated as an app
-//
-//	- `resource_created_by_another_app` if the app fee is being changed, and the
-//	subscription was created by an app other than the app you are authenticated
-//	as
+// - `resource_created_by_another_app` if the app fee is being changed, and the
+// subscription was created by an app other than the app you are authenticated
+// as
 func (s *SubscriptionServiceImpl) Update(ctx context.Context, identity string, p SubscriptionUpdateParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v",
 		identity))
@@ -644,47 +640,46 @@ type SubscriptionPauseParams struct {
 }
 
 // Pause
+// Pause a subscription object.
+// No payments will be created until it is resumed.
 //
-//	Pause a subscription object.
-//	No payments will be created until it is resumed.
+// This can only be used when a subscription is collecting a fixed number of
+// payments (created using `count`),
+// when they continue forever (created without `count` or `end_date`) or
+// the subscription is already paused for a number of cycles.
 //
-//	This can only be used when a subscription is collecting a fixed number of
-//	payments (created using `count`),
-//	when they continue forever (created without `count` or `end_date`) or
-//	the subscription is already paused for a number of cycles.
+// When `pause_cycles` is omitted the subscription is paused until the [resume
+// endpoint](#subscriptions-resume-a-subscription) is called.
+// If the subscription is collecting a fixed number of payments, `end_date` will
+// be set to `null`.
+// When paused indefinitely, `upcoming_payments` will be empty.
 //
-//	When `pause_cycles` is omitted the subscription is paused until the [resume
-//	endpoint](#subscriptions-resume-a-subscription) is called.
-//	If the subscription is collecting a fixed number of payments, `end_date`
-//	will be set to `null`.
-//	When paused indefinitely, `upcoming_payments` will be empty.
+// When `pause_cycles` is provided the subscription will be paused for the
+// number of cycles requested.
+// If the subscription is collecting a fixed number of payments, `end_date` will
+// be set to a new value.
+// When paused for a number of cycles, `upcoming_payments` will still contain
+// the upcoming charge dates.
 //
-//	When `pause_cycles` is provided the subscription will be paused for the
-//	number of cycles requested.
-//	If the subscription is collecting a fixed number of payments, `end_date`
-//	will be set to a new value.
-//	When paused for a number of cycles, `upcoming_payments` will still contain
-//	the upcoming charge dates.
+// This fails with:
 //
-//	This fails with:
+// - `forbidden` if the subscription was created by an app and you are not
+// authenticated as that app, or if the subscription was not created by an app
+// and you are authenticated as an app
 //
-//	- `forbidden` if the subscription was created by an app and you are not
-//	authenticated as that app, or if the subscription was not created by an app
-//	and you are authenticated as an app
+// - `validation_failed` if invalid data is provided when attempting to pause a
+// subscription.
 //
-//	- `validation_failed` if invalid data is provided when attempting to pause a
-//	subscription.
+// - `subscription_paused_cannot_update_cycles` if the subscription is already
+// paused for a number of cycles and the request provides a value for
+// `pause_cycle`.
 //
-//	- `subscription_paused_cannot_update_cycles` if the subscription is already
-//	paused for a number of cycles and the request provides a value for
-//	`pause_cycle`.
+// - `subscription_cannot_be_paused` if the subscription cannot be paused.
 //
-//	- `subscription_cannot_be_paused` if the subscription cannot be paused.
+// - `subscription_already_ended` if the subscription has taken all payments.
 //
-//	- `subscription_already_ended` if the subscription has taken all payments.
-//
-//	- `pause_cycles_must_be_greater_than_or_equal_to` if the provided value for
-//	`pause_cycles` cannot be satisfied.
+// - `pause_cycles_must_be_greater_than_or_equal_to` if the provided value for
+// `pause_cycles` cannot be satisfied.
 func (s *SubscriptionServiceImpl) Pause(ctx context.Context, identity string, p SubscriptionPauseParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/pause",
 		identity))
@@ -783,23 +778,22 @@ type SubscriptionResumeParams struct {
 }
 
 // Resume
+// Resume a subscription object.
+// Payments will start to be created again based on the subscriptions recurrence
+// rules.
+// The `charge_date` on the next payment will be the same as the subscriptions
+// `earliest_charge_date_after_resume`
 //
-//	Resume a subscription object.
-//	Payments will start to be created again based on the subscriptions
-//	recurrence rules.
-//	The `charge_date` on the next payment will be the same as the subscriptions
-//	`earliest_charge_date_after_resume`
+// This fails with:
 //
-//	This fails with:
+// - `forbidden` if the subscription was created by an app and you are not
+// authenticated as that app, or if the subscription was not created by an app
+// and you are authenticated as an app
 //
-//	- `forbidden` if the subscription was created by an app and you are not
-//	authenticated as that app, or if the subscription was not created by an app
-//	and you are authenticated as an app
+// - `validation_failed` if invalid data is provided when attempting to resume a
+// subscription.
 //
-//	- `validation_failed` if invalid data is provided when attempting to resume
-//	a subscription.
-//
-//	- `subscription_not_paused` if the subscription is not paused.
+// - `subscription_not_paused` if the subscription is not paused.
 func (s *SubscriptionServiceImpl) Resume(ctx context.Context, identity string, p SubscriptionResumeParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/resume",
 		identity))
@@ -898,13 +892,12 @@ type SubscriptionCancelParams struct {
 }
 
 // Cancel
+// Immediately cancels a subscription; no more payments will be created under
+// it. Any metadata supplied to this endpoint will be stored on the payment
+// cancellation event it causes.
 //
-//	Immediately cancels a subscription; no more payments will be created under
-//	it. Any metadata supplied to this endpoint will be stored on the payment
-//	cancellation event it causes.
-//
-//	This will fail with a cancellation_failed error if the subscription is
-//	already cancelled or finished.
+// This will fail with a cancellation_failed error if the subscription is
+// already cancelled or finished.
 func (s *SubscriptionServiceImpl) Cancel(ctx context.Context, identity string, p SubscriptionCancelParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/cancel",
 		identity))

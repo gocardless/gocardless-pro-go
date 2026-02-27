@@ -99,8 +99,7 @@ type CreditorCreateParams struct {
 }
 
 // Create
-//
-//	Creates a new creditor.
+// Creates a new creditor.
 func (s *CreditorServiceImpl) Create(ctx context.Context, p CreditorCreateParams, opts ...RequestOption) (*Creditor, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/creditors"))
 	if err != nil {
@@ -223,9 +222,8 @@ type CreditorListResult struct {
 }
 
 // List
-//
-//	Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-//	creditors.
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// creditors.
 func (s *CreditorServiceImpl) List(ctx context.Context, p CreditorListParams, opts ...RequestOption) (*CreditorListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/creditors"))
 	if err != nil {
@@ -435,8 +433,7 @@ type CreditorGetParams struct {
 }
 
 // Get
-//
-//	Retrieves the details of an existing creditor.
+// Retrieves the details of an existing creditor.
 func (s *CreditorServiceImpl) Get(ctx context.Context, identity string, p CreditorGetParams, opts ...RequestOption) (*Creditor, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditors/%v",
 		identity))
@@ -541,9 +538,8 @@ type CreditorUpdateParams struct {
 }
 
 // Update
-//
-//	Updates a creditor object. Supports all of the fields supported when
-//	creating a creditor.
+// Updates a creditor object. Supports all of the fields supported when creating
+// a creditor.
 func (s *CreditorServiceImpl) Update(ctx context.Context, identity string, p CreditorUpdateParams, opts ...RequestOption) (*Creditor, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditors/%v",
 		identity))
