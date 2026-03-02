@@ -1,0 +1,10 @@
+{
+  
+  
+  "create": {
+    "body": {"bank_account_holder_verifications":{"actual_account_name":"Jo Doe","id":"BAHV123","result":"partial_match","status":"pending","type":"confirmation_of_payee"}}
+  },
+  "get": {
+    "body": {"bank_account_holder_verifications":{"actual_account_name":"Jo Doe","id":"BAHV123","result":"partial_match","status":"pending","type":"confirmation_of_payee"}}
+  }
+}

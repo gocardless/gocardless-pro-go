@@ -13,11 +13,6 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
-
 // CreditorBankAccountService manages creditor_bank_accounts
 type CreditorBankAccountServiceImpl struct {
 	config Config

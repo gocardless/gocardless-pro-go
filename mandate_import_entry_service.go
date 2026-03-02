@@ -13,11 +13,6 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
-
 // MandateImportEntryService manages mandate_import_entries
 type MandateImportEntryServiceImpl struct {
 	config Config
@@ -86,8 +81,9 @@ type MandateImportEntryCreateParamsLinks struct {
 }
 
 type MandateImportEntryCreateParamsMandate struct {
-	Metadata  map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	AuthorisationSource string                 `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
+	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference           string                 `url:"reference,omitempty" json:"reference,omitempty"`
 }
 
 // MandateImportEntryCreateParams parameters

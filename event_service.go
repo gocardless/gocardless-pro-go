@@ -1,7 +1,6 @@
 package gocardless
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -12,11 +11,6 @@ import (
 
 	"github.com/google/go-querystring/query"
 )
-
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
 
 // EventService manages events
 type EventServiceImpl struct {
@@ -58,6 +52,7 @@ type EventLinks struct {
 	NewCustomerBankAccount      string `url:"new_customer_bank_account,omitempty" json:"new_customer_bank_account,omitempty"`
 	NewMandate                  string `url:"new_mandate,omitempty" json:"new_mandate,omitempty"`
 	Organisation                string `url:"organisation,omitempty" json:"organisation,omitempty"`
+	OutboundPayment             string `url:"outbound_payment,omitempty" json:"outbound_payment,omitempty"`
 	ParentEvent                 string `url:"parent_event,omitempty" json:"parent_event,omitempty"`
 	PayerAuthorisation          string `url:"payer_authorisation,omitempty" json:"payer_authorisation,omitempty"`
 	Payment                     string `url:"payment,omitempty" json:"payment,omitempty"`

@@ -13,11 +13,6 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
-
 // PaymentService manages payments
 type PaymentServiceImpl struct {
 	config Config
@@ -74,16 +69,17 @@ type PaymentCreateParamsLinks struct {
 
 // PaymentCreateParams parameters
 type PaymentCreateParams struct {
-	Amount          int                      `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee          int                      `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	ChargeDate      string                   `url:"charge_date,omitempty" json:"charge_date,omitempty"`
-	Currency        string                   `url:"currency,omitempty" json:"currency,omitempty"`
-	Description     string                   `url:"description,omitempty" json:"description,omitempty"`
-	FasterAch       bool                     `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
-	Links           PaymentCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata        map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference       string                   `url:"reference,omitempty" json:"reference,omitempty"`
-	RetryIfPossible bool                     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Amount             int                      `url:"amount,omitempty" json:"amount,omitempty"`
+	AppFee             int                      `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	ChargeDate         string                   `url:"charge_date,omitempty" json:"charge_date,omitempty"`
+	Currency           string                   `url:"currency,omitempty" json:"currency,omitempty"`
+	Description        string                   `url:"description,omitempty" json:"description,omitempty"`
+	FasterAch          bool                     `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
+	Links              PaymentCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata           map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PsuInteractionType string                   `url:"psu_interaction_type,omitempty" json:"psu_interaction_type,omitempty"`
+	Reference          string                   `url:"reference,omitempty" json:"reference,omitempty"`
+	RetryIfPossible    bool                     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
 }
 
 // Create

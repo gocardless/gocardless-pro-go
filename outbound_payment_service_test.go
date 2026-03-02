@@ -198,3 +198,31 @@ func TestOutboundPaymentUpdate(t *testing.T) {
 
 	}
 }
+
+func TestOutboundPaymentStats(t *testing.T) {
+	fixtureFile := "testdata/outbound_payments.json"
+	server := runServer(t, fixtureFile, "stats")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := OutboundPaymentStatsParams{}
+
+	o, err :=
+		client.OutboundPayments.Stats(
+			ctx, p)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected OutboundPayment, got nil")
+
+	}
+}

@@ -1,4 +1,6 @@
-{ 
+{
+  
+  
   "create": {
     "body": {"mandate_imports":{"created_at":"2014-01-01T12:00:00.000Z","id":"IM123","links":{"creditor":"CR123"},"scheme":"bacs","status":"created"}}
   },

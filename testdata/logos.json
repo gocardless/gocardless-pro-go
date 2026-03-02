@@ -1,4 +1,6 @@
-{ 
+{
+  
+  
   "create_for_creditor": {
     "body": {"logos":{"id":"LO123"}}
   }

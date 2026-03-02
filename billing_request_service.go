@@ -13,11 +13,6 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
-
 // BillingRequestService manages billing_requests
 type BillingRequestServiceImpl struct {
 	config Config
@@ -233,6 +228,8 @@ type BillingRequest struct {
 	Links                     *BillingRequestLinks                     `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequest            *BillingRequestMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata                  map[string]interface{}                   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentContextCode        string                                   `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
+	PaymentPurposeCode        string                                   `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
 	PaymentRequest            *BillingRequestPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 	PurposeCode               string                                   `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 	Resources                 *BillingRequestResources                 `url:"resources,omitempty" json:"resources,omitempty"`
@@ -352,6 +349,8 @@ type BillingRequestCreateParams struct {
 	Links                     *BillingRequestCreateParamsLinks                     `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequest            *BillingRequestCreateParamsMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata                  map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentContextCode        string                                               `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
+	PaymentPurposeCode        string                                               `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
 	PaymentRequest            *BillingRequestCreateParamsPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 	PurposeCode               string                                               `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 	SubscriptionRequest       *BillingRequestCreateParamsSubscriptionRequest       `url:"subscription_request,omitempty" json:"subscription_request,omitempty"`

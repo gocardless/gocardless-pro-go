@@ -9,14 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-
-	"github.com/google/go-querystring/query"
 )
-
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
 
 // BillingRequestWithActionService manages billing_request_with_actions
 type BillingRequestWithActionServiceImpl struct {
@@ -250,6 +243,8 @@ type BillingRequestWithActionBillingRequests struct {
 	Links                     *BillingRequestWithActionBillingRequestsLinks                     `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequest            *BillingRequestWithActionBillingRequestsMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
 	Metadata                  map[string]interface{}                                            `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentContextCode        string                                                            `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
+	PaymentPurposeCode        string                                                            `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
 	PaymentRequest            *BillingRequestWithActionBillingRequestsPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
 	PurposeCode               string                                                            `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 	Resources                 *BillingRequestWithActionBillingRequestsResources                 `url:"resources,omitempty" json:"resources,omitempty"`
@@ -376,13 +371,15 @@ type BillingRequestWithActionCreateWithActionsParamsPaymentRequest struct {
 
 // BillingRequestWithActionCreateWithActionsParams parameters
 type BillingRequestWithActionCreateWithActionsParams struct {
-	Actions         *BillingRequestWithActionCreateWithActionsParamsActions        `url:"actions,omitempty" json:"actions,omitempty"`
-	FallbackEnabled bool                                                           `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
-	Links           *BillingRequestWithActionCreateWithActionsParamsLinks          `url:"links,omitempty" json:"links,omitempty"`
-	MandateRequest  *BillingRequestWithActionCreateWithActionsParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata        map[string]interface{}                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PaymentRequest  *BillingRequestWithActionCreateWithActionsParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
-	PurposeCode     string                                                         `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
+	Actions            *BillingRequestWithActionCreateWithActionsParamsActions        `url:"actions,omitempty" json:"actions,omitempty"`
+	FallbackEnabled    bool                                                           `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
+	Links              *BillingRequestWithActionCreateWithActionsParamsLinks          `url:"links,omitempty" json:"links,omitempty"`
+	MandateRequest     *BillingRequestWithActionCreateWithActionsParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
+	Metadata           map[string]interface{}                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PaymentContextCode string                                                         `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
+	PaymentPurposeCode string                                                         `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
+	PaymentRequest     *BillingRequestWithActionCreateWithActionsParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
+	PurposeCode        string                                                         `url:"purpose_code,omitempty" json:"purpose_code,omitempty"`
 }
 
 // CreateWithActions

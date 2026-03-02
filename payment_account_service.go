@@ -12,31 +12,37 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-// ExportService manages exports
-type ExportServiceImpl struct {
+// PaymentAccountService manages payment_accounts
+type PaymentAccountServiceImpl struct {
 	config Config
 }
 
-// Export model
-type Export struct {
-	CreatedAt   string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency    string `url:"currency,omitempty" json:"currency,omitempty"`
-	DownloadUrl string `url:"download_url,omitempty" json:"download_url,omitempty"`
-	ExportType  string `url:"export_type,omitempty" json:"export_type,omitempty"`
-	Id          string `url:"id,omitempty" json:"id,omitempty"`
+type PaymentAccountLinks struct {
+	Creditor string `url:"creditor,omitempty" json:"creditor,omitempty"`
 }
 
-type ExportService interface {
-	Get(ctx context.Context, identity string, opts ...RequestOption) (*Export, error)
-	List(ctx context.Context, p ExportListParams, opts ...RequestOption) (*ExportListResult, error)
+// PaymentAccount model
+type PaymentAccount struct {
+	AccountBalance      int                  `url:"account_balance,omitempty" json:"account_balance,omitempty"`
+	AccountHolderName   string               `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumberEnding string               `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
+	BankName            string               `url:"bank_name,omitempty" json:"bank_name,omitempty"`
+	Currency            string               `url:"currency,omitempty" json:"currency,omitempty"`
+	Id                  string               `url:"id,omitempty" json:"id,omitempty"`
+	Links               *PaymentAccountLinks `url:"links,omitempty" json:"links,omitempty"`
+}
+
+type PaymentAccountService interface {
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*PaymentAccount, error)
+	List(ctx context.Context, p PaymentAccountListParams, opts ...RequestOption) (*PaymentAccountListResult, error)
 	All(ctx context.Context,
-		p ExportListParams, opts ...RequestOption) *ExportListPagingIterator
+		p PaymentAccountListParams, opts ...RequestOption) *PaymentAccountListPagingIterator
 }
 
 // Get
-// Returns a single export.
-func (s *ExportServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Export, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/exports/%v",
+// Retrieves the details of an existing payment account.
+func (s *PaymentAccountServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*PaymentAccount, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payment_accounts/%v",
 		identity))
 	if err != nil {
 		return nil, err
@@ -75,8 +81,8 @@ func (s *ExportServiceImpl) Get(ctx context.Context, identity string, opts ...Re
 	}
 
 	var result struct {
-		Err    *APIError `json:"error"`
-		Export *Export   `json:"exports"`
+		Err            *APIError       `json:"error"`
+		PaymentAccount *PaymentAccount `json:"payment_accounts"`
 	}
 
 	err = try(o.retries, func() error {
@@ -106,39 +112,40 @@ func (s *ExportServiceImpl) Get(ctx context.Context, identity string, opts ...Re
 		return nil, err
 	}
 
-	if result.Export == nil {
+	if result.PaymentAccount == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.Export, nil
+	return result.PaymentAccount, nil
 }
 
-// ExportListParams parameters
-type ExportListParams struct {
+// PaymentAccountListParams parameters
+type PaymentAccountListParams struct {
 	After  string `url:"after,omitempty" json:"after,omitempty"`
 	Before string `url:"before,omitempty" json:"before,omitempty"`
 	Limit  int    `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
-type ExportListResultMetaCursors struct {
+type PaymentAccountListResultMetaCursors struct {
 	After  string `url:"after,omitempty" json:"after,omitempty"`
 	Before string `url:"before,omitempty" json:"before,omitempty"`
 }
 
-type ExportListResultMeta struct {
-	Cursors *ExportListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+type PaymentAccountListResultMeta struct {
+	Cursors *PaymentAccountListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                  `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
-type ExportListResult struct {
-	Exports []Export             `json:"exports"`
-	Meta    ExportListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
+type PaymentAccountListResult struct {
+	PaymentAccounts []PaymentAccount             `json:"payment_accounts"`
+	Meta            PaymentAccountListResultMeta `url:"meta,omitempty" json:"meta,omitempty"`
 }
 
 // List
-// Returns a list of exports which are available for download.
-func (s *ExportServiceImpl) List(ctx context.Context, p ExportListParams, opts ...RequestOption) (*ExportListResult, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/exports"))
+// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
+// payment accounts.
+func (s *PaymentAccountServiceImpl) List(ctx context.Context, p PaymentAccountListParams, opts ...RequestOption) (*PaymentAccountListResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payment_accounts"))
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +190,7 @@ func (s *ExportServiceImpl) List(ctx context.Context, p ExportListParams, opts .
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*ExportListResult
+		*PaymentAccountListResult
 	}
 
 	err = try(o.retries, func() error {
@@ -213,22 +220,22 @@ func (s *ExportServiceImpl) List(ctx context.Context, p ExportListParams, opts .
 		return nil, err
 	}
 
-	if result.ExportListResult == nil {
+	if result.PaymentAccountListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	return result.ExportListResult, nil
+	return result.PaymentAccountListResult, nil
 }
 
-type ExportListPagingIterator struct {
+type PaymentAccountListPagingIterator struct {
 	cursor         string
-	response       *ExportListResult
-	params         ExportListParams
-	service        *ExportServiceImpl
+	response       *PaymentAccountListResult
+	params         PaymentAccountListParams
+	service        *PaymentAccountServiceImpl
 	requestOptions []RequestOption
 }
 
-func (c *ExportListPagingIterator) Next() bool {
+func (c *PaymentAccountListPagingIterator) Next() bool {
 	if c.cursor == "" && c.response != nil {
 		return false
 	}
@@ -236,7 +243,7 @@ func (c *ExportListPagingIterator) Next() bool {
 	return true
 }
 
-func (c *ExportListPagingIterator) Value(ctx context.Context) (*ExportListResult, error) {
+func (c *PaymentAccountListPagingIterator) Value(ctx context.Context) (*PaymentAccountListResult, error) {
 	if !c.Next() {
 		return c.response, nil
 	}
@@ -245,7 +252,7 @@ func (c *ExportListPagingIterator) Value(ctx context.Context) (*ExportListResult
 	p := c.params
 	p.After = c.cursor
 
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/exports"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payment_accounts"))
 
 	if err != nil {
 		return nil, err
@@ -291,7 +298,7 @@ func (c *ExportListPagingIterator) Value(ctx context.Context) (*ExportListResult
 
 	var result struct {
 		Err *APIError `json:"error"`
-		*ExportListResult
+		*PaymentAccountListResult
 	}
 
 	err = try(o.retries, func() error {
@@ -322,19 +329,19 @@ func (c *ExportListPagingIterator) Value(ctx context.Context) (*ExportListResult
 		return nil, err
 	}
 
-	if result.ExportListResult == nil {
+	if result.PaymentAccountListResult == nil {
 		return nil, errors.New("missing result")
 	}
 
-	c.response = result.ExportListResult
+	c.response = result.PaymentAccountListResult
 	c.cursor = c.response.Meta.Cursors.After
 	return c.response, nil
 }
 
-func (s *ExportServiceImpl) All(ctx context.Context,
-	p ExportListParams,
-	opts ...RequestOption) *ExportListPagingIterator {
-	return &ExportListPagingIterator{
+func (s *PaymentAccountServiceImpl) All(ctx context.Context,
+	p PaymentAccountListParams,
+	opts ...RequestOption) *PaymentAccountListPagingIterator {
+	return &PaymentAccountListPagingIterator{
 		params:         p,
 		service:        s,
 		requestOptions: opts,

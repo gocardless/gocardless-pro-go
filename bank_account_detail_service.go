@@ -1,7 +1,6 @@
 package gocardless
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -9,14 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-
-	"github.com/google/go-querystring/query"
 )
-
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
 
 // BankAccountDetailService manages bank_account_details
 type BankAccountDetailServiceImpl struct {

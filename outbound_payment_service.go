@@ -13,11 +13,6 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-var _ = query.Values
-var _ = bytes.NewBuffer
-var _ = json.NewDecoder
-var _ = errors.New
-
 // OutboundPaymentService manages outbound_payments
 type OutboundPaymentServiceImpl struct {
 	config Config
@@ -66,10 +61,11 @@ type OutboundPaymentService interface {
 	All(ctx context.Context,
 		p OutboundPaymentListParams, opts ...RequestOption) *OutboundPaymentListPagingIterator
 	Update(ctx context.Context, identity string, p OutboundPaymentUpdateParams, opts ...RequestOption) (*OutboundPayment, error)
+	Stats(ctx context.Context, p OutboundPaymentStatsParams, opts ...RequestOption) (
+		*OutboundPaymentStatsResult, error)
 }
 
 type OutboundPaymentCreateParamsLinks struct {
-	App                  string `url:"app,omitempty" json:"app,omitempty"`
 	Creditor             string `url:"creditor,omitempty" json:"creditor,omitempty"`
 	RecipientBankAccount string `url:"recipient_bank_account,omitempty" json:"recipient_bank_account,omitempty"`
 }
@@ -896,4 +892,93 @@ func (s *OutboundPaymentServiceImpl) Update(ctx context.Context, identity string
 	}
 
 	return result.OutboundPayment, nil
+}
+
+// OutboundPaymentStatsParams parameters
+type OutboundPaymentStatsParams struct {
+}
+
+type OutboundPaymentStatsResult struct {
+	OutboundPayments map[string]interface{} `json:"outbound_payments"`
+}
+
+// Stats
+// Retrieve aggregate statistics on outbound payments.
+func (s *OutboundPaymentServiceImpl) Stats(ctx context.Context, p OutboundPaymentStatsParams, opts ...RequestOption) (
+	*OutboundPaymentStatsResult, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/outbound_payments/stats"))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	var body io.Reader
+
+	req, err := http.NewRequest("GET", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("User-Agent", userAgent)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err *APIError `json:"error"`
+
+		*OutboundPaymentStatsResult
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.OutboundPaymentStatsResult == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.OutboundPaymentStatsResult, nil
 }
