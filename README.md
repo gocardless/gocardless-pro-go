@@ -1,4 +1,4 @@
-# Go Client Library for GoCardless Pro API [![CircleCI](https://circleci.com/gh/gocardless/gocardless-pro-go-template/tree/master.svg?style=svg&circle-token=68c31e704d9b0020a5f42b4b89b0a77a17bdac6c)](https://circleci.com/gh/gocardless/gocardless-pro-go-template/tree/master)
+# Go Client Library for GoCardless API
 
 This library provides a simple wrapper around the [GoCardless API](http://developer.gocardless.com/api-reference).
 
