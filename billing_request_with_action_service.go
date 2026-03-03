@@ -84,7 +84,7 @@ type BillingRequestWithActionBillingRequestsInstalmentScheduleRequest struct {
 	InstalmentsWithDates    []BillingRequestWithActionBillingRequestsInstalmentScheduleRequestInstalmentsWithDates   `url:"instalments_with_dates,omitempty" json:"instalments_with_dates,omitempty"`
 	InstalmentsWithSchedule *BillingRequestWithActionBillingRequestsInstalmentScheduleRequestInstalmentsWithSchedule `url:"instalments_with_schedule,omitempty" json:"instalments_with_schedule,omitempty"`
 	Links                   *BillingRequestWithActionBillingRequestsInstalmentScheduleRequestLinks                   `url:"links,omitempty" json:"links,omitempty"`
-	Metadata                map[string]interface{}                                                                   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata                map[string]string                                                                        `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Name                    string                                                                                   `url:"name,omitempty" json:"name,omitempty"`
 	PaymentReference        string                                                                                   `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
 	RetryIfPossible         bool                                                                                     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
@@ -136,7 +136,7 @@ type BillingRequestWithActionBillingRequestsMandateRequest struct {
 	Description                 string                                                            `url:"description,omitempty" json:"description,omitempty"`
 	FundsSettlement             string                                                            `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Links                       *BillingRequestWithActionBillingRequestsMandateRequestLinks       `url:"links,omitempty" json:"links,omitempty"`
-	Metadata                    map[string]interface{}                                            `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata                    map[string]string                                                 `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PayerRequestedDualSignature bool                                                              `url:"payer_requested_dual_signature,omitempty" json:"payer_requested_dual_signature,omitempty"`
 	Scheme                      string                                                            `url:"scheme,omitempty" json:"scheme,omitempty"`
 	Sweeping                    bool                                                              `url:"sweeping,omitempty" json:"sweeping,omitempty"`
@@ -154,21 +154,21 @@ type BillingRequestWithActionBillingRequestsPaymentRequest struct {
 	Description     string                                                      `url:"description,omitempty" json:"description,omitempty"`
 	FundsSettlement string                                                      `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Links           *BillingRequestWithActionBillingRequestsPaymentRequestLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata        map[string]interface{}                                      `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata        map[string]string                                           `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference       string                                                      `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme          string                                                      `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 type BillingRequestWithActionBillingRequestsResourcesCustomer struct {
-	CompanyName string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
-	CreatedAt   string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Email       string                 `url:"email,omitempty" json:"email,omitempty"`
-	FamilyName  string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
-	GivenName   string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
-	Id          string                 `url:"id,omitempty" json:"id,omitempty"`
-	Language    string                 `url:"language,omitempty" json:"language,omitempty"`
-	Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PhoneNumber string                 `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	CompanyName string            `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CreatedAt   string            `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Email       string            `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName  string            `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName   string            `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Id          string            `url:"id,omitempty" json:"id,omitempty"`
+	Language    string            `url:"language,omitempty" json:"language,omitempty"`
+	Metadata    map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PhoneNumber string            `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 }
 
 type BillingRequestWithActionBillingRequestsResourcesCustomerBankAccountLinks struct {
@@ -187,7 +187,7 @@ type BillingRequestWithActionBillingRequestsResourcesCustomerBankAccount struct 
 	Enabled             bool                                                                      `url:"enabled,omitempty" json:"enabled,omitempty"`
 	Id                  string                                                                    `url:"id,omitempty" json:"id,omitempty"`
 	Links               *BillingRequestWithActionBillingRequestsResourcesCustomerBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata            map[string]interface{}                                                    `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata            map[string]string                                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 type BillingRequestWithActionBillingRequestsResourcesCustomerBillingDetail struct {
@@ -225,7 +225,7 @@ type BillingRequestWithActionBillingRequestsSubscriptionRequest struct {
 	Interval         int                                                              `url:"interval,omitempty" json:"interval,omitempty"`
 	IntervalUnit     string                                                           `url:"interval_unit,omitempty" json:"interval_unit,omitempty"`
 	Links            *BillingRequestWithActionBillingRequestsSubscriptionRequestLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         map[string]interface{}                                           `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata         map[string]string                                                `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Month            string                                                           `url:"month,omitempty" json:"month,omitempty"`
 	Name             string                                                           `url:"name,omitempty" json:"name,omitempty"`
 	PaymentReference string                                                           `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
@@ -242,7 +242,7 @@ type BillingRequestWithActionBillingRequests struct {
 	InstalmentScheduleRequest *BillingRequestWithActionBillingRequestsInstalmentScheduleRequest `url:"instalment_schedule_request,omitempty" json:"instalment_schedule_request,omitempty"`
 	Links                     *BillingRequestWithActionBillingRequestsLinks                     `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequest            *BillingRequestWithActionBillingRequestsMandateRequest            `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata                  map[string]interface{}                                            `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata                  map[string]string                                                 `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentContextCode        string                                                            `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
 	PaymentPurposeCode        string                                                            `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
 	PaymentRequest            *BillingRequestWithActionBillingRequestsPaymentRequest            `url:"payment_request,omitempty" json:"payment_request,omitempty"`
@@ -263,27 +263,27 @@ type BillingRequestWithActionService interface {
 }
 
 type BillingRequestWithActionCreateWithActionsParamsActionsCollectBankAccount struct {
-	AccountHolderName   string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumber       string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
-	AccountNumberSuffix string                 `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
-	AccountType         string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankCode            string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-	BranchCode          string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	CountryCode         string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Currency            string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Iban                string                 `url:"iban,omitempty" json:"iban,omitempty"`
-	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayId               string                 `url:"pay_id,omitempty" json:"pay_id,omitempty"`
+	AccountHolderName   string            `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber       string            `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountNumberSuffix string            `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
+	AccountType         string            `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankCode            string            `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode          string            `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode         string            `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Currency            string            `url:"currency,omitempty" json:"currency,omitempty"`
+	Iban                string            `url:"iban,omitempty" json:"iban,omitempty"`
+	Metadata            map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayId               string            `url:"pay_id,omitempty" json:"pay_id,omitempty"`
 }
 
 type BillingRequestWithActionCreateWithActionsParamsActionsCollectCustomerDetailsCustomer struct {
-	CompanyName string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
-	Email       string                 `url:"email,omitempty" json:"email,omitempty"`
-	FamilyName  string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
-	GivenName   string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
-	Language    string                 `url:"language,omitempty" json:"language,omitempty"`
-	Metadata    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PhoneNumber string                 `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	CompanyName string            `url:"company_name,omitempty" json:"company_name,omitempty"`
+	Email       string            `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName  string            `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName   string            `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language    string            `url:"language,omitempty" json:"language,omitempty"`
+	Metadata    map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PhoneNumber string            `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 }
 
 type BillingRequestWithActionCreateWithActionsParamsActionsCollectCustomerDetailsCustomerBillingDetail struct {
@@ -305,8 +305,8 @@ type BillingRequestWithActionCreateWithActionsParamsActionsCollectCustomerDetail
 }
 
 type BillingRequestWithActionCreateWithActionsParamsActionsConfirmPayerDetails struct {
-	Metadata                    map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PayerRequestedDualSignature bool                   `url:"payer_requested_dual_signature,omitempty" json:"payer_requested_dual_signature,omitempty"`
+	Metadata                    map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerRequestedDualSignature bool              `url:"payer_requested_dual_signature,omitempty" json:"payer_requested_dual_signature,omitempty"`
 }
 
 type BillingRequestWithActionCreateWithActionsParamsActionsSelectInstitution struct {
@@ -350,7 +350,7 @@ type BillingRequestWithActionCreateWithActionsParamsMandateRequest struct {
 	Currency            string                                                                    `url:"currency,omitempty" json:"currency,omitempty"`
 	Description         string                                                                    `url:"description,omitempty" json:"description,omitempty"`
 	FundsSettlement     string                                                                    `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
-	Metadata            map[string]interface{}                                                    `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata            map[string]string                                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference           string                                                                    `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme              string                                                                    `url:"scheme,omitempty" json:"scheme,omitempty"`
 	Sweeping            bool                                                                      `url:"sweeping,omitempty" json:"sweeping,omitempty"`
@@ -358,15 +358,15 @@ type BillingRequestWithActionCreateWithActionsParamsMandateRequest struct {
 }
 
 type BillingRequestWithActionCreateWithActionsParamsPaymentRequest struct {
-	Amount          int                    `url:"amount,omitempty" json:"amount,omitempty"`
-	AppFee          int                    `url:"app_fee,omitempty" json:"app_fee,omitempty"`
-	Currency        string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Description     string                 `url:"description,omitempty" json:"description,omitempty"`
-	FundsSettlement string                 `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
-	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference       string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	Scheme          string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Amount          int               `url:"amount,omitempty" json:"amount,omitempty"`
+	AppFee          int               `url:"app_fee,omitempty" json:"app_fee,omitempty"`
+	Currency        string            `url:"currency,omitempty" json:"currency,omitempty"`
+	Description     string            `url:"description,omitempty" json:"description,omitempty"`
+	FundsSettlement string            `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
+	Metadata        map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference       string            `url:"reference,omitempty" json:"reference,omitempty"`
+	RetryIfPossible bool              `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Scheme          string            `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 // BillingRequestWithActionCreateWithActionsParams parameters
@@ -375,7 +375,7 @@ type BillingRequestWithActionCreateWithActionsParams struct {
 	FallbackEnabled    bool                                                           `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
 	Links              *BillingRequestWithActionCreateWithActionsParamsLinks          `url:"links,omitempty" json:"links,omitempty"`
 	MandateRequest     *BillingRequestWithActionCreateWithActionsParamsMandateRequest `url:"mandate_request,omitempty" json:"mandate_request,omitempty"`
-	Metadata           map[string]interface{}                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata           map[string]string                                              `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PaymentContextCode string                                                         `url:"payment_context_code,omitempty" json:"payment_context_code,omitempty"`
 	PaymentPurposeCode string                                                         `url:"payment_purpose_code,omitempty" json:"payment_purpose_code,omitempty"`
 	PaymentRequest     *BillingRequestWithActionCreateWithActionsParamsPaymentRequest `url:"payment_request,omitempty" json:"payment_request,omitempty"`
@@ -427,7 +427,7 @@ func (s *BillingRequestWithActionServiceImpl) CreateWithActions(ctx context.Cont
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

@@ -92,7 +92,7 @@ func (s *TaxRateServiceImpl) List(ctx context.Context, p TaxRateListParams, opts
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -201,7 +201,7 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -293,7 +293,7 @@ func (s *TaxRateServiceImpl) Get(ctx context.Context, identity string, opts ...R
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

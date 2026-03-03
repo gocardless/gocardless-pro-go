@@ -34,7 +34,7 @@ type CreditorBankAccount struct {
 	Enabled             bool                      `url:"enabled,omitempty" json:"enabled,omitempty"`
 	Id                  string                    `url:"id,omitempty" json:"id,omitempty"`
 	Links               *CreditorBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata            map[string]interface{}    `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata            map[string]string         `url:"metadata,omitempty" json:"metadata,omitempty"`
 	VerificationStatus  string                    `url:"verification_status,omitempty" json:"verification_status,omitempty"`
 }
 
@@ -62,7 +62,7 @@ type CreditorBankAccountCreateParams struct {
 	Currency                  string                               `url:"currency,omitempty" json:"currency,omitempty"`
 	Iban                      string                               `url:"iban,omitempty" json:"iban,omitempty"`
 	Links                     CreditorBankAccountCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata                  map[string]interface{}               `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata                  map[string]string                    `url:"metadata,omitempty" json:"metadata,omitempty"`
 	SetAsDefaultPayoutAccount bool                                 `url:"set_as_default_payout_account,omitempty" json:"set_as_default_payout_account,omitempty"`
 }
 
@@ -106,7 +106,7 @@ func (s *CreditorBankAccountServiceImpl) Create(ctx context.Context, p CreditorB
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -226,7 +226,7 @@ func (s *CreditorBankAccountServiceImpl) List(ctx context.Context, p CreditorBan
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -335,7 +335,7 @@ func (c *CreditorBankAccountListPagingIterator) Value(ctx context.Context) (*Cre
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -427,7 +427,7 @@ func (s *CreditorBankAccountServiceImpl) Get(ctx context.Context, identity strin
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -517,7 +517,7 @@ func (s *CreditorBankAccountServiceImpl) Disable(ctx context.Context, identity s
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

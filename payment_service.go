@@ -35,21 +35,21 @@ type PaymentLinks struct {
 
 // Payment model
 type Payment struct {
-	Amount          int                    `url:"amount,omitempty" json:"amount,omitempty"`
-	AmountRefunded  int                    `url:"amount_refunded,omitempty" json:"amount_refunded,omitempty"`
-	ChargeDate      string                 `url:"charge_date,omitempty" json:"charge_date,omitempty"`
-	CreatedAt       string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency        string                 `url:"currency,omitempty" json:"currency,omitempty"`
-	Description     string                 `url:"description,omitempty" json:"description,omitempty"`
-	FasterAch       bool                   `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
-	Fx              *PaymentFx             `url:"fx,omitempty" json:"fx,omitempty"`
-	Id              string                 `url:"id,omitempty" json:"id,omitempty"`
-	Links           *PaymentLinks          `url:"links,omitempty" json:"links,omitempty"`
-	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference       string                 `url:"reference,omitempty" json:"reference,omitempty"`
-	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
-	Scheme          string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Status          string                 `url:"status,omitempty" json:"status,omitempty"`
+	Amount          int               `url:"amount,omitempty" json:"amount,omitempty"`
+	AmountRefunded  int               `url:"amount_refunded,omitempty" json:"amount_refunded,omitempty"`
+	ChargeDate      string            `url:"charge_date,omitempty" json:"charge_date,omitempty"`
+	CreatedAt       string            `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency        string            `url:"currency,omitempty" json:"currency,omitempty"`
+	Description     string            `url:"description,omitempty" json:"description,omitempty"`
+	FasterAch       bool              `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
+	Fx              *PaymentFx        `url:"fx,omitempty" json:"fx,omitempty"`
+	Id              string            `url:"id,omitempty" json:"id,omitempty"`
+	Links           *PaymentLinks     `url:"links,omitempty" json:"links,omitempty"`
+	Metadata        map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference       string            `url:"reference,omitempty" json:"reference,omitempty"`
+	RetryIfPossible bool              `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Scheme          string            `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Status          string            `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type PaymentService interface {
@@ -76,7 +76,7 @@ type PaymentCreateParams struct {
 	Description        string                   `url:"description,omitempty" json:"description,omitempty"`
 	FasterAch          bool                     `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
 	Links              PaymentCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata           map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata           map[string]string        `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PsuInteractionType string                   `url:"psu_interaction_type,omitempty" json:"psu_interaction_type,omitempty"`
 	Reference          string                   `url:"reference,omitempty" json:"reference,omitempty"`
 	RetryIfPossible    bool                     `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
@@ -127,7 +127,7 @@ func (s *PaymentServiceImpl) Create(ctx context.Context, p PaymentCreateParams, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -262,7 +262,7 @@ func (s *PaymentServiceImpl) List(ctx context.Context, p PaymentListParams, opts
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -371,7 +371,7 @@ func (c *PaymentListPagingIterator) Value(ctx context.Context) (*PaymentListResu
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -463,7 +463,7 @@ func (s *PaymentServiceImpl) Get(ctx context.Context, identity string, opts ...R
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -516,8 +516,8 @@ func (s *PaymentServiceImpl) Get(ctx context.Context, identity string, opts ...R
 
 // PaymentUpdateParams parameters
 type PaymentUpdateParams struct {
-	Metadata        map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	RetryIfPossible bool                   `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
+	Metadata        map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
+	RetryIfPossible bool              `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
 }
 
 // Update
@@ -561,7 +561,7 @@ func (s *PaymentServiceImpl) Update(ctx context.Context, identity string, p Paym
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -616,7 +616,7 @@ func (s *PaymentServiceImpl) Update(ctx context.Context, identity string, p Paym
 
 // PaymentCancelParams parameters
 type PaymentCancelParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Cancel
@@ -665,7 +665,7 @@ func (s *PaymentServiceImpl) Cancel(ctx context.Context, identity string, p Paym
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -720,8 +720,8 @@ func (s *PaymentServiceImpl) Cancel(ctx context.Context, identity string, p Paym
 
 // PaymentRetryParams parameters
 type PaymentRetryParams struct {
-	ChargeDate string                 `url:"charge_date,omitempty" json:"charge_date,omitempty"`
-	Metadata   map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	ChargeDate string            `url:"charge_date,omitempty" json:"charge_date,omitempty"`
+	Metadata   map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Retry
@@ -774,7 +774,7 @@ func (s *PaymentServiceImpl) Retry(ctx context.Context, identity string, p Payme
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

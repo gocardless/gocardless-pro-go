@@ -30,7 +30,7 @@ type InstalmentSchedule struct {
 	Currency      string                   `url:"currency,omitempty" json:"currency,omitempty"`
 	Id            string                   `url:"id,omitempty" json:"id,omitempty"`
 	Links         *InstalmentScheduleLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata      map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata      map[string]string        `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Name          string                   `url:"name,omitempty" json:"name,omitempty"`
 	PaymentErrors map[string]interface{}   `url:"payment_errors,omitempty" json:"payment_errors,omitempty"`
 	Status        string                   `url:"status,omitempty" json:"status,omitempty"`
@@ -64,7 +64,7 @@ type InstalmentScheduleCreateWithDatesParams struct {
 	Currency         string                                               `url:"currency,omitempty" json:"currency,omitempty"`
 	Instalments      []InstalmentScheduleCreateWithDatesParamsInstalments `url:"instalments,omitempty" json:"instalments,omitempty"`
 	Links            InstalmentScheduleCreateWithDatesParamsLinks         `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         map[string]interface{}                               `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata         map[string]string                                    `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Name             string                                               `url:"name,omitempty" json:"name,omitempty"`
 	PaymentReference string                                               `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
 	RetryIfPossible  bool                                                 `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
@@ -129,7 +129,7 @@ func (s *InstalmentScheduleServiceImpl) CreateWithDates(ctx context.Context, p I
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -199,7 +199,7 @@ type InstalmentScheduleCreateWithScheduleParams struct {
 	Currency         string                                                `url:"currency,omitempty" json:"currency,omitempty"`
 	Instalments      InstalmentScheduleCreateWithScheduleParamsInstalments `url:"instalments,omitempty" json:"instalments,omitempty"`
 	Links            InstalmentScheduleCreateWithScheduleParamsLinks       `url:"links,omitempty" json:"links,omitempty"`
-	Metadata         map[string]interface{}                                `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata         map[string]string                                     `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Name             string                                                `url:"name,omitempty" json:"name,omitempty"`
 	PaymentReference string                                                `url:"payment_reference,omitempty" json:"payment_reference,omitempty"`
 	RetryIfPossible  bool                                                  `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
@@ -261,7 +261,7 @@ func (s *InstalmentScheduleServiceImpl) CreateWithSchedule(ctx context.Context, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -382,7 +382,7 @@ func (s *InstalmentScheduleServiceImpl) List(ctx context.Context, p InstalmentSc
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -491,7 +491,7 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -583,7 +583,7 @@ func (s *InstalmentScheduleServiceImpl) Get(ctx context.Context, identity string
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -636,7 +636,7 @@ func (s *InstalmentScheduleServiceImpl) Get(ctx context.Context, identity string
 
 // InstalmentScheduleUpdateParams parameters
 type InstalmentScheduleUpdateParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Update
@@ -680,7 +680,7 @@ func (s *InstalmentScheduleServiceImpl) Update(ctx context.Context, identity str
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -782,7 +782,7 @@ func (s *InstalmentScheduleServiceImpl) Cancel(ctx context.Context, identity str
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

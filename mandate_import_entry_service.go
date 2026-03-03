@@ -47,33 +47,33 @@ type MandateImportEntryCreateParamsAmendment struct {
 }
 
 type MandateImportEntryCreateParamsBankAccount struct {
-	AccountHolderName string                 `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumber     string                 `url:"account_number,omitempty" json:"account_number,omitempty"`
-	AccountType       string                 `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankCode          string                 `url:"bank_code,omitempty" json:"bank_code,omitempty"`
-	BranchCode        string                 `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	CountryCode       string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Iban              string                 `url:"iban,omitempty" json:"iban,omitempty"`
-	Metadata          map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	AccountHolderName string            `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumber     string            `url:"account_number,omitempty" json:"account_number,omitempty"`
+	AccountType       string            `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankCode          string            `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BranchCode        string            `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode       string            `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Iban              string            `url:"iban,omitempty" json:"iban,omitempty"`
+	Metadata          map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 type MandateImportEntryCreateParamsCustomer struct {
-	AddressLine1          string                 `url:"address_line1,omitempty" json:"address_line1,omitempty"`
-	AddressLine2          string                 `url:"address_line2,omitempty" json:"address_line2,omitempty"`
-	AddressLine3          string                 `url:"address_line3,omitempty" json:"address_line3,omitempty"`
-	City                  string                 `url:"city,omitempty" json:"city,omitempty"`
-	CompanyName           string                 `url:"company_name,omitempty" json:"company_name,omitempty"`
-	CountryCode           string                 `url:"country_code,omitempty" json:"country_code,omitempty"`
-	DanishIdentityNumber  string                 `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
-	Email                 string                 `url:"email,omitempty" json:"email,omitempty"`
-	FamilyName            string                 `url:"family_name,omitempty" json:"family_name,omitempty"`
-	GivenName             string                 `url:"given_name,omitempty" json:"given_name,omitempty"`
-	Language              string                 `url:"language,omitempty" json:"language,omitempty"`
-	Metadata              map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	PhoneNumber           string                 `url:"phone_number,omitempty" json:"phone_number,omitempty"`
-	PostalCode            string                 `url:"postal_code,omitempty" json:"postal_code,omitempty"`
-	Region                string                 `url:"region,omitempty" json:"region,omitempty"`
-	SwedishIdentityNumber string                 `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
+	AddressLine1          string            `url:"address_line1,omitempty" json:"address_line1,omitempty"`
+	AddressLine2          string            `url:"address_line2,omitempty" json:"address_line2,omitempty"`
+	AddressLine3          string            `url:"address_line3,omitempty" json:"address_line3,omitempty"`
+	City                  string            `url:"city,omitempty" json:"city,omitempty"`
+	CompanyName           string            `url:"company_name,omitempty" json:"company_name,omitempty"`
+	CountryCode           string            `url:"country_code,omitempty" json:"country_code,omitempty"`
+	DanishIdentityNumber  string            `url:"danish_identity_number,omitempty" json:"danish_identity_number,omitempty"`
+	Email                 string            `url:"email,omitempty" json:"email,omitempty"`
+	FamilyName            string            `url:"family_name,omitempty" json:"family_name,omitempty"`
+	GivenName             string            `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language              string            `url:"language,omitempty" json:"language,omitempty"`
+	Metadata              map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PhoneNumber           string            `url:"phone_number,omitempty" json:"phone_number,omitempty"`
+	PostalCode            string            `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region                string            `url:"region,omitempty" json:"region,omitempty"`
+	SwedishIdentityNumber string            `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
 }
 
 type MandateImportEntryCreateParamsLinks struct {
@@ -81,9 +81,9 @@ type MandateImportEntryCreateParamsLinks struct {
 }
 
 type MandateImportEntryCreateParamsMandate struct {
-	AuthorisationSource string                 `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
-	Metadata            map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	Reference           string                 `url:"reference,omitempty" json:"reference,omitempty"`
+	AuthorisationSource string            `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
+	Metadata            map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Reference           string            `url:"reference,omitempty" json:"reference,omitempty"`
 }
 
 // MandateImportEntryCreateParams parameters
@@ -142,7 +142,7 @@ func (s *MandateImportEntryServiceImpl) Create(ctx context.Context, p MandateImp
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -260,7 +260,7 @@ func (s *MandateImportEntryServiceImpl) List(ctx context.Context, p MandateImpor
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -369,7 +369,7 @@ func (c *MandateImportEntryListPagingIterator) Value(ctx context.Context) (*Mand
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
