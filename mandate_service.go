@@ -43,7 +43,7 @@ type Mandate struct {
 	FundsSettlement                   string                    `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Id                                string                    `url:"id,omitempty" json:"id,omitempty"`
 	Links                             *MandateLinks             `url:"links,omitempty" json:"links,omitempty"`
-	Metadata                          map[string]interface{}    `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata                          map[string]string         `url:"metadata,omitempty" json:"metadata,omitempty"`
 	NextPossibleChargeDate            string                    `url:"next_possible_charge_date,omitempty" json:"next_possible_charge_date,omitempty"`
 	NextPossibleStandardAchChargeDate string                    `url:"next_possible_standard_ach_charge_date,omitempty" json:"next_possible_standard_ach_charge_date,omitempty"`
 	PaymentsRequireApproval           bool                      `url:"payments_require_approval,omitempty" json:"payments_require_approval,omitempty"`
@@ -73,7 +73,7 @@ type MandateCreateParamsLinks struct {
 type MandateCreateParams struct {
 	AuthorisationSource string                   `url:"authorisation_source,omitempty" json:"authorisation_source,omitempty"`
 	Links               MandateCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata            map[string]interface{}   `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata            map[string]string        `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PayerIpAddress      string                   `url:"payer_ip_address,omitempty" json:"payer_ip_address,omitempty"`
 	Reference           string                   `url:"reference,omitempty" json:"reference,omitempty"`
 	Scheme              string                   `url:"scheme,omitempty" json:"scheme,omitempty"`
@@ -119,7 +119,7 @@ func (s *MandateServiceImpl) Create(ctx context.Context, p MandateCreateParams, 
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -244,7 +244,7 @@ func (s *MandateServiceImpl) List(ctx context.Context, p MandateListParams, opts
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -353,7 +353,7 @@ func (c *MandateListPagingIterator) Value(ctx context.Context) (*MandateListResu
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -445,7 +445,7 @@ func (s *MandateServiceImpl) Get(ctx context.Context, identity string, opts ...R
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -498,7 +498,7 @@ func (s *MandateServiceImpl) Get(ctx context.Context, identity string, opts ...R
 
 // MandateUpdateParams parameters
 type MandateUpdateParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Update
@@ -542,7 +542,7 @@ func (s *MandateServiceImpl) Update(ctx context.Context, identity string, p Mand
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -597,7 +597,7 @@ func (s *MandateServiceImpl) Update(ctx context.Context, identity string, p Mand
 
 // MandateCancelParams parameters
 type MandateCancelParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Cancel
@@ -646,7 +646,7 @@ func (s *MandateServiceImpl) Cancel(ctx context.Context, identity string, p Mand
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -701,7 +701,7 @@ func (s *MandateServiceImpl) Cancel(ctx context.Context, identity string, p Mand
 
 // MandateReinstateParams parameters
 type MandateReinstateParams struct {
-	Metadata map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 }
 
 // Reinstate
@@ -756,7 +756,7 @@ func (s *MandateServiceImpl) Reinstate(ctx context.Context, identity string, p M
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

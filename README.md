@@ -18,7 +18,7 @@ go mod tidy
 Then, reference gocardless-pro-go in a Go program with `import`:
 ``` go
 import (
-    gocardless "github.com/gocardless/gocardless-pro-go/v5"
+    gocardless "github.com/gocardless/gocardless-pro-go/v6"
 )
 ```
 
@@ -29,7 +29,7 @@ toolchain will resolve and fetch the gocardless-pro-go module automatically.
 Alternatively, you can also explicitly `go get` the package into a project:
 
 ```
-go get -u github.com/gocardless/gocardless-pro-go@v5.3.0
+go get -u github.com/gocardless/gocardless-pro-go@v6.0.0
 ```
 
 ## Initializing the client
@@ -243,9 +243,9 @@ When the library returns an `error` defined by us rather than the stdlib, it can
 
 This library requires go 1.20 and above.
 
-## Documentation
+## Upgrading from older versions
 
-TODO
+If you're upgrading from v5 or earlier to v6 or later, see: [MIGRATION_V6.md](./MIGRATION_V6.md)
 
 ## Contributing
 

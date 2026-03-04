@@ -26,17 +26,17 @@ type RedirectFlowLinks struct {
 
 // RedirectFlow model
 type RedirectFlow struct {
-	ConfirmationUrl    string                 `url:"confirmation_url,omitempty" json:"confirmation_url,omitempty"`
-	CreatedAt          string                 `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Description        string                 `url:"description,omitempty" json:"description,omitempty"`
-	Id                 string                 `url:"id,omitempty" json:"id,omitempty"`
-	Links              *RedirectFlowLinks     `url:"links,omitempty" json:"links,omitempty"`
-	MandateReference   string                 `url:"mandate_reference,omitempty" json:"mandate_reference,omitempty"`
-	Metadata           map[string]interface{} `url:"metadata,omitempty" json:"metadata,omitempty"`
-	RedirectUrl        string                 `url:"redirect_url,omitempty" json:"redirect_url,omitempty"`
-	Scheme             string                 `url:"scheme,omitempty" json:"scheme,omitempty"`
-	SessionToken       string                 `url:"session_token,omitempty" json:"session_token,omitempty"`
-	SuccessRedirectUrl string                 `url:"success_redirect_url,omitempty" json:"success_redirect_url,omitempty"`
+	ConfirmationUrl    string             `url:"confirmation_url,omitempty" json:"confirmation_url,omitempty"`
+	CreatedAt          string             `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Description        string             `url:"description,omitempty" json:"description,omitempty"`
+	Id                 string             `url:"id,omitempty" json:"id,omitempty"`
+	Links              *RedirectFlowLinks `url:"links,omitempty" json:"links,omitempty"`
+	MandateReference   string             `url:"mandate_reference,omitempty" json:"mandate_reference,omitempty"`
+	Metadata           map[string]string  `url:"metadata,omitempty" json:"metadata,omitempty"`
+	RedirectUrl        string             `url:"redirect_url,omitempty" json:"redirect_url,omitempty"`
+	Scheme             string             `url:"scheme,omitempty" json:"scheme,omitempty"`
+	SessionToken       string             `url:"session_token,omitempty" json:"session_token,omitempty"`
+	SuccessRedirectUrl string             `url:"success_redirect_url,omitempty" json:"success_redirect_url,omitempty"`
 }
 
 type RedirectFlowService interface {
@@ -75,7 +75,7 @@ type RedirectFlowCreateParamsPrefilledCustomer struct {
 type RedirectFlowCreateParams struct {
 	Description          string                                        `url:"description,omitempty" json:"description,omitempty"`
 	Links                *RedirectFlowCreateParamsLinks                `url:"links,omitempty" json:"links,omitempty"`
-	Metadata             map[string]interface{}                        `url:"metadata,omitempty" json:"metadata,omitempty"`
+	Metadata             map[string]string                             `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PrefilledBankAccount *RedirectFlowCreateParamsPrefilledBankAccount `url:"prefilled_bank_account,omitempty" json:"prefilled_bank_account,omitempty"`
 	PrefilledCustomer    *RedirectFlowCreateParamsPrefilledCustomer    `url:"prefilled_customer,omitempty" json:"prefilled_customer,omitempty"`
 	Scheme               string                                        `url:"scheme,omitempty" json:"scheme,omitempty"`
@@ -124,7 +124,7 @@ func (s *RedirectFlowServiceImpl) Create(ctx context.Context, p RedirectFlowCrea
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -206,7 +206,7 @@ func (s *RedirectFlowServiceImpl) Get(ctx context.Context, identity string, opts
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -313,7 +313,7 @@ func (s *RedirectFlowServiceImpl) Complete(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "5.3.0")
+	req.Header.Set("GoCardless-Client-Version", "6.0.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
