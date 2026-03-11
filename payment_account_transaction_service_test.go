@@ -5,6 +5,32 @@ import (
 	"testing"
 )
 
+func TestPaymentAccountTransactionGet(t *testing.T) {
+	fixtureFile := "testdata/payment_account_transactions.json"
+	server := runServer(t, fixtureFile, "get")
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, err := getClient(t, server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	o, err :=
+		client.PaymentAccountTransactions.Get(
+			ctx, "ID123")
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if o == nil {
+
+		t.Fatalf("Expected PaymentAccountTransaction, got nil")
+
+	}
+}
+
 func TestPaymentAccountTransactionList(t *testing.T) {
 	fixtureFile := "testdata/payment_account_transactions.json"
 	server := runServer(t, fixtureFile, "list")

@@ -124,7 +124,7 @@ func (s *RedirectFlowServiceImpl) Create(ctx context.Context, p RedirectFlowCrea
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "6.0.0")
+	req.Header.Set("GoCardless-Client-Version", "6.1.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)
@@ -206,7 +206,7 @@ func (s *RedirectFlowServiceImpl) Get(ctx context.Context, identity string, opts
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "6.0.0")
+	req.Header.Set("GoCardless-Client-Version", "6.1.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -313,7 +313,7 @@ func (s *RedirectFlowServiceImpl) Complete(ctx context.Context, identity string,
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "6.0.0")
+	req.Header.Set("GoCardless-Client-Version", "6.1.0")
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Idempotency-Key", o.idempotencyKey)

@@ -38,10 +38,91 @@ type PaymentAccountTransaction struct {
 }
 
 type PaymentAccountTransactionService interface {
+	Get(ctx context.Context, identity string, opts ...RequestOption) (*PaymentAccountTransaction, error)
 	List(ctx context.Context, identity string, p PaymentAccountTransactionListParams, opts ...RequestOption) (*PaymentAccountTransactionListResult, error)
 	All(ctx context.Context,
 		identity string,
 		p PaymentAccountTransactionListParams, opts ...RequestOption) *PaymentAccountTransactionListPagingIterator
+}
+
+// Get
+// Retrieves the details of an existing payment account transaction.
+func (s *PaymentAccountTransactionServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*PaymentAccountTransaction, error) {
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payment_account_transactions/%v",
+		identity))
+	if err != nil {
+		return nil, err
+	}
+
+	o := &requestOptions{
+		retries: 3,
+	}
+	for _, opt := range opts {
+		err := opt(o)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	var body io.Reader
+
+	req, err := http.NewRequest("GET", uri.String(), body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	req.Header.Set("Authorization", "Bearer "+s.config.Token())
+	req.Header.Set("GoCardless-Version", "2015-07-06")
+	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
+	req.Header.Set("GoCardless-Client-Version", "6.1.0")
+	req.Header.Set("User-Agent", userAgent)
+
+	for key, value := range o.headers {
+		req.Header.Set(key, value)
+	}
+
+	client := s.config.Client()
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	var result struct {
+		Err                       *APIError                  `json:"error"`
+		PaymentAccountTransaction *PaymentAccountTransaction `json:"payment_account_transactions"`
+	}
+
+	err = try(o.retries, func() error {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+
+		err = responseErr(res)
+		if err != nil {
+			return err
+		}
+
+		err = json.NewDecoder(res.Body).Decode(&result)
+		if err != nil {
+			return err
+		}
+
+		if result.Err != nil {
+			return result.Err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if result.PaymentAccountTransaction == nil {
+		return nil, errors.New("missing result")
+	}
+
+	return result.PaymentAccountTransaction, nil
 }
 
 // PaymentAccountTransactionListParams parameters
@@ -104,7 +185,7 @@ func (s *PaymentAccountTransactionServiceImpl) List(ctx context.Context, identit
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "6.0.0")
+	req.Header.Set("GoCardless-Client-Version", "6.1.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -215,7 +296,7 @@ func (c *PaymentAccountTransactionListPagingIterator) Value(ctx context.Context)
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "6.0.0")
+	req.Header.Set("GoCardless-Client-Version", "6.1.0")
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {

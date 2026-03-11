@@ -65,7 +65,7 @@ func TestResponseErr_Success(t *testing.T) {
 }
 
 func TestResponseErr_StringError(t *testing.T) {
-	body := `"internal server error"`
+	body := `{"error":"internal server error"}`
 	resp := &http.Response{
 		StatusCode: 500,
 		Status:     "500 Internal Server Error",
@@ -95,7 +95,7 @@ func TestResponseErr_StringError(t *testing.T) {
 }
 
 func TestResponseErr_ObjectError(t *testing.T) {
-	body := `{"message":"not found","type":"invalid_api_usage","code":404}`
+	body := `{"error":{"message":"not found","type":"invalid_api_usage","code":404}}`
 	resp := &http.Response{
 		StatusCode: 404,
 		Status:     "404 Not Found",
@@ -118,6 +118,39 @@ func TestResponseErr_ObjectError(t *testing.T) {
 	}
 	if apiErr.Message != "not found" {
 		t.Fatalf("expected message %q, got %q", "not found", apiErr.Message)
+	}
+}
+
+func TestResponseErr_ValidationError(t *testing.T) {
+	body := `{"error":{"message":"validation failed","type":"validation_failed","errors":[{"field":"amount","reason":"too_small","message":"Amount is below minimum"}]}}`
+	resp := &http.Response{
+		StatusCode: 422,
+		Status:     "422 Unprocessable Entity",
+		Body:       io.NopCloser(strings.NewReader(body)),
+	}
+
+	err := responseErr(resp)
+	if err == nil {
+		t.Fatal("expected error for 422 response")
+	}
+
+	var re *responseError
+	if !errors.As(err, &re) {
+		t.Fatalf("expected *responseError, got %T", err)
+	}
+
+	var apiErr *APIError
+	if !errors.As(re.err, &apiErr) {
+		t.Fatalf("expected *APIError cause, got %T", re.err)
+	}
+	if apiErr.Message != "validation failed" {
+		t.Fatalf("expected message %q, got %q", "validation failed", apiErr.Message)
+	}
+	if len(apiErr.Errors) != 1 {
+		t.Fatalf("expected 1 validation error, got %d", len(apiErr.Errors))
+	}
+	if apiErr.Errors[0].Reason != "too_small" {
+		t.Fatalf("expected reason %q, got %q", "too_small", apiErr.Errors[0].Reason)
 	}
 }
 
