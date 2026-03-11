@@ -62,19 +62,21 @@ func responseErr(r *http.Response) error {
 		return nil
 	default:
 		var cause error
-		var result FlexError
+		var result struct {
+			Error FlexError `json:"error"`
+		}
 
 		err := json.NewDecoder(r.Body).Decode(&result)
 		if err != nil {
 			return fmt.Errorf("decoding error response: %w", err)
 		}
 
-		if result.Err != nil {
-			cause = result.Err
-		} else if result.Msg != nil {
+		if result.Error.Err != nil {
+			cause = result.Error.Err
+		} else if result.Error.Msg != nil {
 			// Wrap the error message into an API erro
 			cause = &APIError{
-				Message: *result.Msg,
+				Message: *result.Error.Msg,
 				Code:    r.StatusCode,
 			}
 		}
