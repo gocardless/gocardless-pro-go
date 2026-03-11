@@ -95,7 +95,7 @@ func (s *BalanceServiceImpl) List(ctx context.Context, p BalanceListParams, opts
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "6.1.0")
+	req.Header.Set("GoCardless-Client-Version", ClientLibVersion)
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
@@ -204,7 +204,7 @@ func (c *BalanceListPagingIterator) Value(ctx context.Context) (*BalanceListResu
 	req.Header.Set("Authorization", "Bearer "+s.config.Token())
 	req.Header.Set("GoCardless-Version", "2015-07-06")
 	req.Header.Set("GoCardless-Client-Library", "gocardless-pro-go")
-	req.Header.Set("GoCardless-Client-Version", "6.1.0")
+	req.Header.Set("GoCardless-Client-Version", ClientLibVersion)
 	req.Header.Set("User-Agent", userAgent)
 
 	for key, value := range o.headers {
