@@ -19,9 +19,10 @@ type OutboundPaymentServiceImpl struct {
 }
 
 type OutboundPaymentLinks struct {
-	Creditor             string `url:"creditor,omitempty" json:"creditor,omitempty"`
-	Customer             string `url:"customer,omitempty" json:"customer,omitempty"`
-	RecipientBankAccount string `url:"recipient_bank_account,omitempty" json:"recipient_bank_account,omitempty"`
+	Creditor              string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Customer              string `url:"customer,omitempty" json:"customer,omitempty"`
+	OutboundPaymentImport string `url:"outbound_payment_import,omitempty" json:"outbound_payment_import,omitempty"`
+	RecipientBankAccount  string `url:"recipient_bank_account,omitempty" json:"recipient_bank_account,omitempty"`
 }
 
 type OutboundPaymentVerificationsRecipientBankAccountHolderVerification struct {
@@ -66,8 +67,9 @@ type OutboundPaymentService interface {
 }
 
 type OutboundPaymentCreateParamsLinks struct {
-	Creditor             string `url:"creditor,omitempty" json:"creditor,omitempty"`
-	RecipientBankAccount string `url:"recipient_bank_account,omitempty" json:"recipient_bank_account,omitempty"`
+	Creditor              string `url:"creditor,omitempty" json:"creditor,omitempty"`
+	OutboundPaymentImport string `url:"outbound_payment_import,omitempty" json:"outbound_payment_import,omitempty"`
+	RecipientBankAccount  string `url:"recipient_bank_account,omitempty" json:"recipient_bank_account,omitempty"`
 }
 
 // OutboundPaymentCreateParams parameters
