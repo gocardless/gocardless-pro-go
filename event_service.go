@@ -56,6 +56,7 @@ type EventLinks struct {
 	ParentEvent                 string `url:"parent_event,omitempty" json:"parent_event,omitempty"`
 	PayerAuthorisation          string `url:"payer_authorisation,omitempty" json:"payer_authorisation,omitempty"`
 	Payment                     string `url:"payment,omitempty" json:"payment,omitempty"`
+	PaymentAccountTransaction   string `url:"payment_account_transaction,omitempty" json:"payment_account_transaction,omitempty"`
 	PaymentRequestPayment       string `url:"payment_request_payment,omitempty" json:"payment_request_payment,omitempty"`
 	Payout                      string `url:"payout,omitempty" json:"payout,omitempty"`
 	PreviousCustomerBankAccount string `url:"previous_customer_bank_account,omitempty" json:"previous_customer_bank_account,omitempty"`
@@ -99,26 +100,27 @@ type EventListParamsCreatedAt struct {
 
 // EventListParams parameters
 type EventListParams struct {
-	Action             string                    `url:"action,omitempty" json:"action,omitempty"`
-	After              string                    `url:"after,omitempty" json:"after,omitempty"`
-	Before             string                    `url:"before,omitempty" json:"before,omitempty"`
-	BillingRequest     string                    `url:"billing_request,omitempty" json:"billing_request,omitempty"`
-	CreatedAt          *EventListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Creditor           string                    `url:"creditor,omitempty" json:"creditor,omitempty"`
-	Export             string                    `url:"export,omitempty" json:"export,omitempty"`
-	Include            string                    `url:"include,omitempty" json:"include,omitempty"`
-	InstalmentSchedule string                    `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
-	Limit              int                       `url:"limit,omitempty" json:"limit,omitempty"`
-	Mandate            string                    `url:"mandate,omitempty" json:"mandate,omitempty"`
-	OutboundPayment    string                    `url:"outbound_payment,omitempty" json:"outbound_payment,omitempty"`
-	ParentEvent        string                    `url:"parent_event,omitempty" json:"parent_event,omitempty"`
-	PayerAuthorisation string                    `url:"payer_authorisation,omitempty" json:"payer_authorisation,omitempty"`
-	Payment            string                    `url:"payment,omitempty" json:"payment,omitempty"`
-	Payout             string                    `url:"payout,omitempty" json:"payout,omitempty"`
-	Refund             string                    `url:"refund,omitempty" json:"refund,omitempty"`
-	ResourceType       string                    `url:"resource_type,omitempty" json:"resource_type,omitempty"`
-	SchemeIdentifier   string                    `url:"scheme_identifier,omitempty" json:"scheme_identifier,omitempty"`
-	Subscription       string                    `url:"subscription,omitempty" json:"subscription,omitempty"`
+	Action                    string                    `url:"action,omitempty" json:"action,omitempty"`
+	After                     string                    `url:"after,omitempty" json:"after,omitempty"`
+	Before                    string                    `url:"before,omitempty" json:"before,omitempty"`
+	BillingRequest            string                    `url:"billing_request,omitempty" json:"billing_request,omitempty"`
+	CreatedAt                 *EventListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Creditor                  string                    `url:"creditor,omitempty" json:"creditor,omitempty"`
+	Export                    string                    `url:"export,omitempty" json:"export,omitempty"`
+	Include                   string                    `url:"include,omitempty" json:"include,omitempty"`
+	InstalmentSchedule        string                    `url:"instalment_schedule,omitempty" json:"instalment_schedule,omitempty"`
+	Limit                     int                       `url:"limit,omitempty" json:"limit,omitempty"`
+	Mandate                   string                    `url:"mandate,omitempty" json:"mandate,omitempty"`
+	OutboundPayment           string                    `url:"outbound_payment,omitempty" json:"outbound_payment,omitempty"`
+	ParentEvent               string                    `url:"parent_event,omitempty" json:"parent_event,omitempty"`
+	PayerAuthorisation        string                    `url:"payer_authorisation,omitempty" json:"payer_authorisation,omitempty"`
+	Payment                   string                    `url:"payment,omitempty" json:"payment,omitempty"`
+	PaymentAccountTransaction string                    `url:"payment_account_transaction,omitempty" json:"payment_account_transaction,omitempty"`
+	Payout                    string                    `url:"payout,omitempty" json:"payout,omitempty"`
+	Refund                    string                    `url:"refund,omitempty" json:"refund,omitempty"`
+	ResourceType              string                    `url:"resource_type,omitempty" json:"resource_type,omitempty"`
+	SchemeIdentifier          string                    `url:"scheme_identifier,omitempty" json:"scheme_identifier,omitempty"`
+	Subscription              string                    `url:"subscription,omitempty" json:"subscription,omitempty"`
 }
 
 type EventListResultMetaCursors struct {
@@ -132,18 +134,19 @@ type EventListResultMeta struct {
 }
 
 type EventListResultLinked struct {
-	BillingRequests     []BillingRequest     `url:"billing_requests,omitempty" json:"billing_requests,omitempty"`
-	Creditors           []Creditor           `url:"creditors,omitempty" json:"creditors,omitempty"`
-	Customers           []Customer           `url:"customers,omitempty" json:"customers,omitempty"`
-	InstalmentSchedules []InstalmentSchedule `url:"instalment_schedules,omitempty" json:"instalment_schedules,omitempty"`
-	Mandates            []Mandate            `url:"mandates,omitempty" json:"mandates,omitempty"`
-	OutboundPayments    []OutboundPayment    `url:"outbound_payments,omitempty" json:"outbound_payments,omitempty"`
-	PayerAuthorisations []PayerAuthorisation `url:"payer_authorisations,omitempty" json:"payer_authorisations,omitempty"`
-	Payments            []Payment            `url:"payments,omitempty" json:"payments,omitempty"`
-	Payouts             []Payout             `url:"payouts,omitempty" json:"payouts,omitempty"`
-	Refunds             []Refund             `url:"refunds,omitempty" json:"refunds,omitempty"`
-	SchemeIdentifiers   []SchemeIdentifier   `url:"scheme_identifiers,omitempty" json:"scheme_identifiers,omitempty"`
-	Subscriptions       []Subscription       `url:"subscriptions,omitempty" json:"subscriptions,omitempty"`
+	BillingRequests            []BillingRequest            `url:"billing_requests,omitempty" json:"billing_requests,omitempty"`
+	Creditors                  []Creditor                  `url:"creditors,omitempty" json:"creditors,omitempty"`
+	Customers                  []Customer                  `url:"customers,omitempty" json:"customers,omitempty"`
+	InstalmentSchedules        []InstalmentSchedule        `url:"instalment_schedules,omitempty" json:"instalment_schedules,omitempty"`
+	Mandates                   []Mandate                   `url:"mandates,omitempty" json:"mandates,omitempty"`
+	OutboundPayments           []OutboundPayment           `url:"outbound_payments,omitempty" json:"outbound_payments,omitempty"`
+	PayerAuthorisations        []PayerAuthorisation        `url:"payer_authorisations,omitempty" json:"payer_authorisations,omitempty"`
+	PaymentAccountTransactions []PaymentAccountTransaction `url:"payment_account_transactions,omitempty" json:"payment_account_transactions,omitempty"`
+	Payments                   []Payment                   `url:"payments,omitempty" json:"payments,omitempty"`
+	Payouts                    []Payout                    `url:"payouts,omitempty" json:"payouts,omitempty"`
+	Refunds                    []Refund                    `url:"refunds,omitempty" json:"refunds,omitempty"`
+	SchemeIdentifiers          []SchemeIdentifier          `url:"scheme_identifiers,omitempty" json:"scheme_identifiers,omitempty"`
+	Subscriptions              []Subscription              `url:"subscriptions,omitempty" json:"subscriptions,omitempty"`
 }
 
 type EventListResult struct {
