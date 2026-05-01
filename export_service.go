@@ -19,11 +19,12 @@ type ExportServiceImpl struct {
 
 // Export model
 type Export struct {
-	CreatedAt   string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency    string `url:"currency,omitempty" json:"currency,omitempty"`
-	DownloadUrl string `url:"download_url,omitempty" json:"download_url,omitempty"`
-	ExportType  string `url:"export_type,omitempty" json:"export_type,omitempty"`
-	Id          string `url:"id,omitempty" json:"id,omitempty"`
+	CreatedAt    string `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency     string `url:"currency,omitempty" json:"currency,omitempty"`
+	DownloadUrl  string `url:"download_url,omitempty" json:"download_url,omitempty"`
+	ErrorMessage string `url:"error_message,omitempty" json:"error_message,omitempty"`
+	ExportType   string `url:"export_type,omitempty" json:"export_type,omitempty"`
+	Id           string `url:"id,omitempty" json:"id,omitempty"`
 }
 
 type ExportService interface {
