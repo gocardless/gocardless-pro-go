@@ -65,7 +65,7 @@ func (s *PayerThemeServiceImpl) CreateForCreditor(ctx context.Context, p PayerTh
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"payer_themes": p,
 	})
 	if err != nil {
 		return nil, err

@@ -631,7 +631,7 @@ func (s *MandateServiceImpl) Cancel(ctx context.Context, identity string, p Mand
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"mandates": p,
 	})
 	if err != nil {
 		return nil, err
@@ -741,7 +741,7 @@ func (s *MandateServiceImpl) Reinstate(ctx context.Context, identity string, p M
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"mandates": p,
 	})
 	if err != nil {
 		return nil, err

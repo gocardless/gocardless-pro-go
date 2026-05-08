@@ -412,7 +412,7 @@ func (s *BillingRequestWithActionServiceImpl) CreateWithActions(ctx context.Cont
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_request_with_actions": p,
 	})
 	if err != nil {
 		return nil, err

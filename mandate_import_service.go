@@ -269,7 +269,7 @@ func (s *MandateImportServiceImpl) Submit(ctx context.Context, identity string, 
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"mandate_imports": p,
 	})
 	if err != nil {
 		return nil, err
@@ -373,7 +373,7 @@ func (s *MandateImportServiceImpl) Cancel(ctx context.Context, identity string, 
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"mandate_imports": p,
 	})
 	if err != nil {
 		return nil, err

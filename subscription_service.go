@@ -699,7 +699,7 @@ func (s *SubscriptionServiceImpl) Pause(ctx context.Context, identity string, p 
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"subscriptions": p,
 	})
 	if err != nil {
 		return nil, err
@@ -813,7 +813,7 @@ func (s *SubscriptionServiceImpl) Resume(ctx context.Context, identity string, p
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"subscriptions": p,
 	})
 	if err != nil {
 		return nil, err
@@ -917,7 +917,7 @@ func (s *SubscriptionServiceImpl) Cancel(ctx context.Context, identity string, p
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"subscriptions": p,
 	})
 	if err != nil {
 		return nil, err

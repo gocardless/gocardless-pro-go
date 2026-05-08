@@ -515,7 +515,7 @@ func (s *BillingRequestServiceImpl) CollectCustomerDetails(ctx context.Context, 
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_requests": p,
 	})
 	if err != nil {
 		return nil, err
@@ -646,7 +646,7 @@ func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, iden
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_requests": p,
 	})
 	if err != nil {
 		return nil, err
@@ -748,7 +748,7 @@ func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, ide
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_requests": p,
 	})
 	if err != nil {
 		return nil, err
@@ -848,7 +848,7 @@ func (s *BillingRequestServiceImpl) Fulfil(ctx context.Context, identity string,
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_requests": p,
 	})
 	if err != nil {
 		return nil, err
@@ -948,7 +948,7 @@ func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string,
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_requests": p,
 	})
 	if err != nil {
 		return nil, err
@@ -1365,7 +1365,7 @@ func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string,
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_requests": p,
 	})
 	if err != nil {
 		return nil, err
@@ -1464,7 +1464,7 @@ func (s *BillingRequestServiceImpl) Fallback(ctx context.Context, identity strin
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_requests": p,
 	})
 	if err != nil {
 		return nil, err
@@ -1570,7 +1570,7 @@ func (s *BillingRequestServiceImpl) ChooseCurrency(ctx context.Context, identity
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_requests": p,
 	})
 	if err != nil {
 		return nil, err
@@ -1670,7 +1670,7 @@ func (s *BillingRequestServiceImpl) SelectInstitution(ctx context.Context, ident
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"billing_requests": p,
 	})
 	if err != nil {
 		return nil, err

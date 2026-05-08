@@ -298,7 +298,7 @@ func (s *RedirectFlowServiceImpl) Complete(ctx context.Context, identity string,
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"data": p,
+		"redirect_flows": p,
 	})
 	if err != nil {
 		return nil, err
