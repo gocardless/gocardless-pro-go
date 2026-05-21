@@ -222,7 +222,22 @@ The client allows you to validate that a webhook you receive is genuinely from G
     func parseEvents(event Event) {
         // work through list of events
     }
-``` 
+```
+
+#### Accessing the webhook ID
+
+If you need to access the webhook ID for debugging purposes, you can use `ParseWebhook` to get both the events and webhook metadata:
+
+```go
+    result, err := gocardless.ParseWebhook(requestBody, signatureHeader, webhookEndpointSecret)
+    if err != nil {
+        // Handle invalid signature error
+    }
+    events := result.Events
+    webhookId := result.WebhookId  // e.g. "WB123" - useful for debugging
+```
+
+Note: The webhook ID is intended for debugging and logging purposes only. It should not be used for deduplication - instead, use the event IDs to deduplicate, as each event has a unique ID that remains consistent if the same event is sent multiple times.
 
 ### Error Handling
 

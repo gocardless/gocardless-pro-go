@@ -15,6 +15,18 @@ type EventHandler interface {
 	HandleEvent(Event) error
 }
 
+// EventWithMetaHandler is an optional interface that can be implemented to receive
+// the webhook ID along with each event.
+type EventWithMetaHandler interface {
+	HandleEventWithMeta(event Event, webhookID string) error
+}
+
+// WebhookParseResult contains the parsed events and metadata from a webhook.
+type WebhookParseResult struct {
+	Events    []Event
+	WebhookID string
+}
+
 // EventHandlerFunc can be used to convert a function into an EventHandler
 type EventHandlerFunc func(Event) error
 
@@ -50,10 +62,13 @@ func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	hash := hmac.New(sha256.New, []byte(h.secret))
 	body := io.TeeReader(r.Body, hash)
 
-	var events struct {
+	var webhook struct {
 		Events []Event `json:"events"`
+		Meta   struct {
+			WebhookID string `json:"webhook_id"`
+		} `json:"meta"`
 	}
-	err = json.NewDecoder(body).Decode(&events)
+	err = json.NewDecoder(body).Decode(&webhook)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -64,13 +79,57 @@ func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, event := range events.Events {
-		err := h.HandleEvent(event)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+	// Check if handler implements EventWithMetaHandler
+	if metaHandler, ok := h.EventHandler.(EventWithMetaHandler); ok {
+		for _, event := range webhook.Events {
+			err := metaHandler.HandleEventWithMeta(event, webhook.Meta.WebhookID)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+	} else {
+		for _, event := range webhook.Events {
+			err := h.HandleEvent(event)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 		}
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+// ParseWebhook validates the signature and parses a webhook body, returning
+// the events and webhook ID. This is useful when you need direct access to
+// the parsed webhook data outside of an HTTP handler context.
+func ParseWebhook(body []byte, secret string, signatureHeader string) (*WebhookParseResult, error) {
+	sig, err := hex.DecodeString(signatureHeader)
+	if err != nil || len(sig) == 0 {
+		return nil, errors.New("invalid signature")
+	}
+
+	hash := hmac.New(sha256.New, []byte(secret))
+	hash.Write(body)
+
+	if !hmac.Equal(sig, hash.Sum(nil)) {
+		return nil, errors.New("invalid signature")
+	}
+
+	var webhook struct {
+		Events []Event `json:"events"`
+		Meta   struct {
+			WebhookID string `json:"webhook_id"`
+		} `json:"meta"`
+	}
+	err = json.Unmarshal(body, &webhook)
+	if err != nil {
+		return nil, err
+	}
+
+	return &WebhookParseResult{
+		Events:    webhook.Events,
+		WebhookID: webhook.Meta.WebhookID,
+	}, nil
 }
