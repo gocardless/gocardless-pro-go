@@ -49,3 +49,9 @@ func getClient(t *testing.T, url string) (*Service, error) {
 	}
 	return service, nil
 }
+
+// GetClient creates a test client for use in code sample tests.
+// It's exported so it can be used by tests in separate packages (e.g., gocardless_test).
+func GetClient(t *testing.T, url string) (*Service, error) {
+	return getClient(t, url)
+}
