@@ -681,7 +681,7 @@ func (s *BlockServiceImpl) BlockByRef(ctx context.Context, p BlockBlockByRefPara
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"blocks": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err

@@ -235,7 +235,7 @@ func (s *BillingRequestFlowServiceImpl) Initialise(ctx context.Context, identity
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"billing_request_flows": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err

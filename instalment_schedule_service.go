@@ -114,7 +114,7 @@ func (s *InstalmentScheduleServiceImpl) CreateWithDates(ctx context.Context, p I
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"instalment_schedules": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err
@@ -246,7 +246,7 @@ func (s *InstalmentScheduleServiceImpl) CreateWithSchedule(ctx context.Context, 
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"instalment_schedules": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err
@@ -767,7 +767,7 @@ func (s *InstalmentScheduleServiceImpl) Cancel(ctx context.Context, identity str
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"instalment_schedules": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err

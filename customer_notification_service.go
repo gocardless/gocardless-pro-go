@@ -75,7 +75,7 @@ func (s *CustomerNotificationServiceImpl) Handle(ctx context.Context, identity s
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"customer_notifications": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err

@@ -650,7 +650,7 @@ func (s *PaymentServiceImpl) Cancel(ctx context.Context, identity string, p Paym
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"payments": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err
@@ -759,7 +759,7 @@ func (s *PaymentServiceImpl) Retry(ctx context.Context, identity string, p Payme
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"payments": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err

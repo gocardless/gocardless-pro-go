@@ -66,7 +66,7 @@ func (s *LogoServiceImpl) CreateForCreditor(ctx context.Context, p LogoCreateFor
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"logos": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err

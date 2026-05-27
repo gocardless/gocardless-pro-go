@@ -636,7 +636,7 @@ func (s *CustomerServiceImpl) Remove(ctx context.Context, identity string, p Cus
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"customers": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err

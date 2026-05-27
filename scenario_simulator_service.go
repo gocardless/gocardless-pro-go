@@ -60,7 +60,7 @@ func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string,
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"scenario_simulators": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err

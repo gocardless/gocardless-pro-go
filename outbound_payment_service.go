@@ -216,7 +216,7 @@ func (s *OutboundPaymentServiceImpl) Withdraw(ctx context.Context, p OutboundPay
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"outbound_payments": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err
@@ -318,7 +318,7 @@ func (s *OutboundPaymentServiceImpl) Cancel(ctx context.Context, identity string
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"outbound_payments": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err
@@ -417,7 +417,7 @@ func (s *OutboundPaymentServiceImpl) Approve(ctx context.Context, identity strin
 
 	var buf bytes.Buffer
 	err = json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"outbound_payments": p,
+		"data": p,
 	})
 	if err != nil {
 		return nil, err
