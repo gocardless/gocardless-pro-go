@@ -154,3 +154,29 @@ func TestBillingRequestNotifyCodeSample(t *testing.T) {
 	billingRequest, err := client.BillingRequests.Notify(ctx, "BR123", billingRequestNotifyParams)
 
 }
+
+func TestBillingRequestFallbackCodeSample(t *testing.T) {
+	server := gocardless.RunCodeSampleServer("billing_requests", false)
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, _ := gocardless.GetClient(t, server.URL)
+
+	billingRequest, err := client.BillingRequests.Fallback(ctx, "BR123")
+
+}
+
+func TestBillingRequestChooseCurrencyCodeSample(t *testing.T) {
+	server := gocardless.RunCodeSampleServer("billing_requests", false)
+	defer server.Close()
+
+	ctx := context.TODO()
+	client, _ := gocardless.GetClient(t, server.URL)
+
+	billingRequestChooseCurrencyParams := gocardless.BillingRequestChooseCurrencyParams{
+		Currency: "GBP",
+	}
+
+	billingRequest, err := client.BillingRequests.ChooseCurrency(ctx, "BR123", billingRequestChooseCurrencyParams)
+
+}
