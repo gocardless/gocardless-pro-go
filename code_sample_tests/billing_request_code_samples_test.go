@@ -162,7 +162,7 @@ func TestBillingRequestFallbackCodeSample(t *testing.T) {
 	ctx := context.TODO()
 	client, _ := gocardless.GetClient(t, server.URL)
 
-	billingRequest, err := client.BillingRequests.Fallback(ctx, "BR123")
+	billingRequest, err := client.BillingRequests.Fallback(ctx, "BR123", gocardless.BillingRequestFallbackParams{})
 
 }
 
