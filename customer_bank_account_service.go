@@ -36,6 +36,7 @@ type CustomerBankAccount struct {
 	Id                  string                    `url:"id,omitempty" json:"id,omitempty"`
 	Links               *CustomerBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
 	Metadata            map[string]string         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	TrustedRecipient    bool                      `url:"trusted_recipient,omitempty" json:"trusted_recipient,omitempty"`
 }
 
 type CustomerBankAccountService interface {

@@ -43,6 +43,7 @@ type Mandate struct {
 	FundsSettlement                   string                    `url:"funds_settlement,omitempty" json:"funds_settlement,omitempty"`
 	Id                                string                    `url:"id,omitempty" json:"id,omitempty"`
 	Links                             *MandateLinks             `url:"links,omitempty" json:"links,omitempty"`
+	MandateType                       string                    `url:"mandate_type,omitempty" json:"mandate_type,omitempty"`
 	Metadata                          map[string]string         `url:"metadata,omitempty" json:"metadata,omitempty"`
 	NextPossibleChargeDate            string                    `url:"next_possible_charge_date,omitempty" json:"next_possible_charge_date,omitempty"`
 	NextPossibleStandardAchChargeDate string                    `url:"next_possible_standard_ach_charge_date,omitempty" json:"next_possible_standard_ach_charge_date,omitempty"`
