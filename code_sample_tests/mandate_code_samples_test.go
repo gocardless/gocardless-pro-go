@@ -16,11 +16,14 @@ import (
 )
 
 func TestMandateCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandates", false)
+	server := RunCodeSampleServer("mandates", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateCreateParams := gocardless.MandateCreateParams{
 		Scheme: "bacs",
@@ -30,23 +33,32 @@ func TestMandateCreateCodeSample(t *testing.T) {
 		},
 		Metadata: map[string]string{"contract": "ABCD1234"},
 	}
+	_ = mandateCreateParams
 
 	mandate, err := client.Mandates.Create(ctx, mandateCreateParams)
+	_ = mandate
+	_ = err
 
 }
 
 func TestMandateListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandates", true)
+	server := RunCodeSampleServer("mandates", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateListParams := gocardless.MandateListParams{
 		Customer: "CU123",
 	}
+	_ = mandateListParams
 
 	mandateListResult, err := client.Mandates.List(ctx, mandateListParams)
+	_ = mandateListResult
+	_ = err
 	for _, mandate := range mandateListResult.Mandates {
 		fmt.Println(mandate.Id)
 	}
@@ -54,51 +66,74 @@ func TestMandateListCodeSample(t *testing.T) {
 }
 
 func TestMandateGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandates", false)
+	server := RunCodeSampleServer("mandates", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandate, err := client.Mandates.Get(ctx, "MD123")
+	_ = mandate
+	_ = err
 
 }
 
 func TestMandateUpdateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandates", false)
+	server := RunCodeSampleServer("mandates", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateUpdateParams := gocardless.MandateUpdateParams{
 		Metadata: map[string]string{"key": "value"},
 	}
+	_ = mandateUpdateParams
 
 	mandate, err := client.Mandates.Update(ctx, "MD123", mandateUpdateParams)
+	_ = mandate
+	_ = err
 
 }
 
 func TestMandateCancelCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandates", false)
+	server := RunCodeSampleServer("mandates", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateCancelParams := gocardless.MandateCancelParams{}
+	_ = mandateCancelParams
 	mandate, err := client.Mandates.Cancel(ctx, "MD123", mandateCancelParams)
+	_ = mandate
+	_ = err
 
 }
 
 func TestMandateReinstateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandates", false)
+	server := RunCodeSampleServer("mandates", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateReinstateParams := gocardless.MandateReinstateParams{}
+	_ = mandateReinstateParams
 	mandate, err := client.Mandates.Reinstate(ctx, "MD123", mandateReinstateParams)
+	_ = mandate
+	_ = err
 
 }

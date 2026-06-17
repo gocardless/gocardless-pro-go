@@ -15,11 +15,14 @@ import (
 )
 
 func TestRedirectFlowCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("redirect_flows", false)
+	server := RunCodeSampleServer("redirect_flows", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	redirectFlowCreateParams := gocardless.RedirectFlowCreateParams{
 		Description: "Cider Barrels",
@@ -38,33 +41,47 @@ func TestRedirectFlowCreateCodeSample(t *testing.T) {
 		SessionToken:       "dummy_session_token",
 		SuccessRedirectUrl: "https://developer.gocardless.com/example-redirect-uri/",
 	}
+	_ = redirectFlowCreateParams
 
 	redirectFlow, err := client.RedirectFlows.Create(ctx, redirectFlowCreateParams)
+	_ = redirectFlow
+	_ = err
 
 }
 
 func TestRedirectFlowGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("redirect_flows", false)
+	server := RunCodeSampleServer("redirect_flows", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	redirectFlow, err := client.RedirectFlows.Get(ctx, "RE123")
+	_ = redirectFlow
+	_ = err
 
 }
 
 func TestRedirectFlowCompleteCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("redirect_flows", false)
+	server := RunCodeSampleServer("redirect_flows", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	redirectFlowCompleteParams := gocardless.RedirectFlowCompleteParams{
 		SessionToken: "dummy_session_token",
 	}
+	_ = redirectFlowCompleteParams
 
 	redirectFlow, err := client.RedirectFlows.Complete(ctx, "RE0003QNP5DE2101R80QZHJ2X12P93Q4", redirectFlowCompleteParams)
+	_ = redirectFlow
+	_ = err
 
 }

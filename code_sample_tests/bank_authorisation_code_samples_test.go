@@ -15,11 +15,14 @@ import (
 )
 
 func TestBankAuthorisationCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("bank_authorisations", false)
+	server := RunCodeSampleServer("bank_authorisations", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	bankAuthorisationCreateParams := gocardless.BankAuthorisationCreateParams{
 		RedirectUri: "https://my-company.com/landing",
@@ -27,18 +30,26 @@ func TestBankAuthorisationCreateCodeSample(t *testing.T) {
 			BillingRequest: "BR123",
 		},
 	}
+	_ = bankAuthorisationCreateParams
 
 	bankAuthorisation, err := client.BankAuthorisations.Create(ctx, bankAuthorisationCreateParams)
+	_ = bankAuthorisation
+	_ = err
 
 }
 
 func TestBankAuthorisationGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("bank_authorisations", false)
+	server := RunCodeSampleServer("bank_authorisations", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	bankAuthorisation, err := client.BankAuthorisations.Get(ctx, "BAU123")
+	_ = bankAuthorisation
+	_ = err
 
 }

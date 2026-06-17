@@ -15,19 +15,26 @@ import (
 )
 
 func TestScenarioSimulatorRunCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("scenario_simulators", false)
+	server := RunCodeSampleServer("scenario_simulators", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	scenarioSimulatorRunParams := gocardless.ScenarioSimulatorRunParams{
 		Links: &gocardless.ScenarioSimulatorRunParamsLinks{
 			Resource: "PM123",
 		},
 	}
+	_ = scenarioSimulatorRunParams
 
 	action := "payment_failed"
+	_ = action
 	scenarioSimulator, err := client.ScenarioSimulators.Run(ctx, action, scenarioSimulatorRunParams)
+	_ = scenarioSimulator
+	_ = err
 
 }

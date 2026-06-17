@@ -15,17 +15,23 @@ import (
 )
 
 func TestNegativeBalanceLimitListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("negative_balance_limits", true)
+	server := RunCodeSampleServer("negative_balance_limits", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	params := gocardless.NegativeBalanceLimitListParams{
 		Currency: "GBP",
 		Creditor: "CR123",
 	}
+	_ = params
 
 	response, err := client.NegativeBalanceLimits.List(ctx, params)
+	_ = response
+	_ = err
 
 }

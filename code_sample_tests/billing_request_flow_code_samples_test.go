@@ -15,11 +15,14 @@ import (
 )
 
 func TestBillingRequestFlowCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("billing_request_flows", false)
+	server := RunCodeSampleServer("billing_request_flows", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	billingRequestFlowCreateParams := gocardless.BillingRequestFlowCreateParams{
 		RedirectUri: "https://my-company.com/landing",
@@ -36,19 +39,28 @@ func TestBillingRequestFlowCreateCodeSample(t *testing.T) {
 			BillingRequest: "BR123",
 		},
 	}
+	_ = billingRequestFlowCreateParams
 
 	billingRequestFlow, err := client.BillingRequestFlows.Create(ctx, billingRequestFlowCreateParams)
+	_ = billingRequestFlow
+	_ = err
 
 }
 
 func TestBillingRequestFlowInitialiseCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("billing_request_flows", false)
+	server := RunCodeSampleServer("billing_request_flows", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	billingRequestFlowInitialiseParams := gocardless.BillingRequestFlowInitialiseParams{}
+	_ = billingRequestFlowInitialiseParams
 	billingRequestFlow, err := client.BillingRequestFlows.Initialise(ctx, "BRF123", billingRequestFlowInitialiseParams)
+	_ = billingRequestFlow
+	_ = err
 
 }

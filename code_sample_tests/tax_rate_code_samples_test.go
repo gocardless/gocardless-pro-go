@@ -15,27 +15,38 @@ import (
 )
 
 func TestTaxRateListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("tax_rates", true)
+	server := RunCodeSampleServer("tax_rates", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	taxRateListParams := gocardless.TaxRateListParams{
 		Jurisdiction: "GB",
 	}
+	_ = taxRateListParams
 
 	taxRateListResult, err := client.TaxRates.List(ctx, taxRateListParams)
+	_ = taxRateListResult
+	_ = err
 
 }
 
 func TestTaxRateGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("tax_rates", false)
+	server := RunCodeSampleServer("tax_rates", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	taxRate, err := client.TaxRates.Get(ctx, "GB_VAT_1")
+	_ = taxRate
+	_ = err
 
 }

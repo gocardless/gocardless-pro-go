@@ -15,11 +15,14 @@ import (
 )
 
 func TestOutboundPaymentImportCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payment_imports", false)
+	server := RunCodeSampleServer("outbound_payment_imports", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPaymentImportCreateParams := gocardless.OutboundPaymentImportCreateParams{
 		EntryItems: []gocardless.OutboundPaymentImportCreateParamsEntryItems{
@@ -43,33 +46,47 @@ func TestOutboundPaymentImportCreateCodeSample(t *testing.T) {
 			Creditor: "CR123",
 		},
 	}
+	_ = outboundPaymentImportCreateParams
 
 	outboundPaymentImport, err := client.OutboundPaymentImports.Create(ctx, outboundPaymentImportCreateParams)
+	_ = outboundPaymentImport
+	_ = err
 
 }
 
 func TestOutboundPaymentImportGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payment_imports", false)
+	server := RunCodeSampleServer("outbound_payment_imports", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPaymentImport, err := client.OutboundPaymentImports.Get(ctx, "IM123", gocardless.OutboundPaymentImportGetParams{})
+	_ = outboundPaymentImport
+	_ = err
 
 }
 
 func TestOutboundPaymentImportListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payment_imports", true)
+	server := RunCodeSampleServer("outbound_payment_imports", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPaymentImportListParams := gocardless.OutboundPaymentImportListParams{
 		Limit: 10,
 	}
+	_ = outboundPaymentImportListParams
 
 	outboundPaymentImportListResult, err := client.OutboundPaymentImports.List(ctx, outboundPaymentImportListParams)
+	_ = outboundPaymentImportListResult
+	_ = err
 
 }

@@ -15,16 +15,22 @@ import (
 )
 
 func TestBalanceListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("balances", true)
+	server := RunCodeSampleServer("balances", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	params := gocardless.BalanceListParams{
 		Creditor: "CR123",
 	}
+	_ = params
 
 	response, err := client.Balances.List(ctx, params)
+	_ = response
+	_ = err
 
 }

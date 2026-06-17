@@ -15,51 +15,74 @@ import (
 )
 
 func TestMandateImportCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandate_imports", false)
+	server := RunCodeSampleServer("mandate_imports", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateImportCreateParams := gocardless.MandateImportCreateParams{
 		Scheme: "bacs",
 	}
+	_ = mandateImportCreateParams
 
 	mandateImport, err := client.MandateImports.Create(ctx, mandateImportCreateParams)
+	_ = mandateImport
+	_ = err
 
 }
 
 func TestMandateImportGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandate_imports", false)
+	server := RunCodeSampleServer("mandate_imports", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateImport, err := client.MandateImports.Get(ctx, "IM123", gocardless.MandateImportGetParams{})
+	_ = mandateImport
+	_ = err
 
 }
 
 func TestMandateImportSubmitCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandate_imports", false)
+	server := RunCodeSampleServer("mandate_imports", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateImportSubmitParams := gocardless.MandateImportSubmitParams{}
+	_ = mandateImportSubmitParams
 	mandateImport, err := client.MandateImports.Submit(ctx, "IM123", mandateImportSubmitParams)
+	_ = mandateImport
+	_ = err
 
 }
 
 func TestMandateImportCancelCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandate_imports", false)
+	server := RunCodeSampleServer("mandate_imports", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateImportCancelParams := gocardless.MandateImportCancelParams{}
+	_ = mandateImportCancelParams
 	mandateImport, err := client.MandateImports.Cancel(ctx, "IM123", mandateImportCancelParams)
+	_ = mandateImport
+	_ = err
 
 }

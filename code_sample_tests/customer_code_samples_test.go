@@ -16,11 +16,14 @@ import (
 )
 
 func TestCustomerCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customers", false)
+	server := RunCodeSampleServer("customers", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customerCreateParams := gocardless.CustomerCreateParams{
 		AddressLine1: "27 Acer Road",
@@ -32,23 +35,32 @@ func TestCustomerCreateCodeSample(t *testing.T) {
 		GivenName:    "Frank",
 		FamilyName:   "Osborne",
 	}
+	_ = customerCreateParams
 
 	customer, err := client.Customers.Create(ctx, customerCreateParams)
+	_ = customer
+	_ = err
 
 }
 
 func TestCustomerListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customers", true)
+	server := RunCodeSampleServer("customers", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customerListParams := gocardless.CustomerListParams{
 		Currency: "GBP",
 	}
+	_ = customerListParams
 
 	customerListResult, err := client.Customers.List(ctx, customerListParams)
+	_ = customerListResult
+	_ = err
 	for _, customer := range customerListResult.Customers {
 		fmt.Println(customer.GivenName)
 	}
@@ -56,38 +68,54 @@ func TestCustomerListCodeSample(t *testing.T) {
 }
 
 func TestCustomerGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customers", false)
+	server := RunCodeSampleServer("customers", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customer, err := client.Customers.Get(ctx, "CU123")
+	_ = customer
+	_ = err
 
 }
 
 func TestCustomerUpdateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customers", false)
+	server := RunCodeSampleServer("customers", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customerUpdateParams := gocardless.CustomerUpdateParams{
 		Email: "updated_user@example.com",
 	}
+	_ = customerUpdateParams
 
 	customer, err := client.Customers.Update(ctx, "CU123", customerUpdateParams)
+	_ = customer
+	_ = err
 
 }
 
 func TestCustomerRemoveCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customers", false)
+	server := RunCodeSampleServer("customers", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customer, err := client.Customers.Remove(ctx, "CU123", gocardless.CustomerRemoveParams{})
+	_ = customer
+	_ = err
 
 }

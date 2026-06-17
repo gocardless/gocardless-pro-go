@@ -16,25 +16,36 @@ import (
 )
 
 func TestExportGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("exports", false)
+	server := RunCodeSampleServer("exports", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	export, err := client.Exports.Get(ctx, "EX123")
+	_ = export
+	_ = err
 
 }
 
 func TestExportListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("exports", true)
+	server := RunCodeSampleServer("exports", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	exportListParams := gocardless.ExportListParams{}
+	_ = exportListParams
 	exportListResult, err := client.Exports.List(ctx, exportListParams)
+	_ = exportListResult
+	_ = err
 	for _, export := range exportListResult.Exports {
 		fmt.Println(export.Id)
 	}

@@ -15,18 +15,24 @@ import (
 )
 
 func TestBankDetailsLookupCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("bank_details_lookups", false)
+	server := RunCodeSampleServer("bank_details_lookups", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	bankDetailsLookupCreateParams := gocardless.BankDetailsLookupCreateParams{
 		AccountNumber: "55779911",
 		BranchCode:    "200000",
 		CountryCode:   "GB",
 	}
+	_ = bankDetailsLookupCreateParams
 
 	bankDetailsLookup, err := client.BankDetailsLookups.Create(ctx, bankDetailsLookupCreateParams)
+	_ = bankDetailsLookup
+	_ = err
 
 }

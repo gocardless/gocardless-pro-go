@@ -15,11 +15,14 @@ import (
 )
 
 func TestLogoCreateForCreditorCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("logos", false)
+	server := RunCodeSampleServer("logos", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	logoCreateForCreditorParams := gocardless.LogoCreateForCreditorParams{
 		Image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAA",
@@ -27,7 +30,10 @@ func TestLogoCreateForCreditorCodeSample(t *testing.T) {
 			Creditor: "CR123",
 		},
 	}
+	_ = logoCreateForCreditorParams
 
 	logo, err := client.Logos.CreateForCreditor(ctx, logoCreateForCreditorParams)
+	_ = logo
+	_ = err
 
 }

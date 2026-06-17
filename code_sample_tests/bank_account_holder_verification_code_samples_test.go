@@ -15,11 +15,14 @@ import (
 )
 
 func TestBankAccountHolderVerificationCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("bank_account_holder_verifications", false)
+	server := RunCodeSampleServer("bank_account_holder_verifications", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	bankAccountHolderVerificationCreateParams := gocardless.BankAccountHolderVerificationCreateParams{
 		Type: "confirmation_of_payee",
@@ -27,18 +30,26 @@ func TestBankAccountHolderVerificationCreateCodeSample(t *testing.T) {
 			BankAccount: "BA123",
 		},
 	}
+	_ = bankAccountHolderVerificationCreateParams
 
 	verification, err := client.BankAccountHolderVerifications.Create(ctx, bankAccountHolderVerificationCreateParams)
+	_ = verification
+	_ = err
 
 }
 
 func TestBankAccountHolderVerificationGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("bank_account_holder_verifications", false)
+	server := RunCodeSampleServer("bank_account_holder_verifications", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	verification, err := client.BankAccountHolderVerifications.Get(ctx, "BAHV123")
+	_ = verification
+	_ = err
 
 }

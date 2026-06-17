@@ -16,42 +16,59 @@ import (
 )
 
 func TestBlockCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("blocks", false)
+	server := RunCodeSampleServer("blocks", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	blockCreateParams := gocardless.BlockCreateParams{
 		BlockType:         "email",
 		ReasonType:        "no_intent_to_pay",
 		ResourceReference: "example@example.com",
 	}
+	_ = blockCreateParams
 
 	block, err := client.Blocks.Create(ctx, blockCreateParams)
+	_ = block
+	_ = err
 
 }
 
 func TestBlockGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("blocks", false)
+	server := RunCodeSampleServer("blocks", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	block, err := client.Blocks.Get(ctx, "BLC456")
+	_ = block
+	_ = err
 
 }
 
 func TestBlockListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("blocks", true)
+	server := RunCodeSampleServer("blocks", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	blockListParams := gocardless.BlockListParams{}
+	_ = blockListParams
 	blockListResult, err := client.Blocks.List(ctx, blockListParams)
+	_ = blockListResult
+	_ = err
 	for _, block := range blockListResult.Blocks {
 		fmt.Println(block.Id)
 	}
@@ -59,41 +76,57 @@ func TestBlockListCodeSample(t *testing.T) {
 }
 
 func TestBlockDisableCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("blocks", false)
+	server := RunCodeSampleServer("blocks", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	block, err := client.Blocks.Disable(ctx, "BLC123")
+	_ = block
+	_ = err
 
 }
 
 func TestBlockEnableCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("blocks", false)
+	server := RunCodeSampleServer("blocks", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	block, err := client.Blocks.Enable(ctx, "BLC123")
+	_ = block
+	_ = err
 
 }
 
 func TestBlockBlockByRefCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("blocks", true)
+	server := RunCodeSampleServer("blocks", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	blockBlockByRefParams := gocardless.BlockBlockByRefParams{
 		ReferenceType:  "customer",
 		ReferenceValue: "CU123",
 		ReasonType:     "no_intent_to_pay",
 	}
+	_ = blockBlockByRefParams
 
 	blockBlockByRefResult, err := client.Blocks.BlockByRef(ctx, blockBlockByRefParams)
+	_ = blockBlockByRefResult
+	_ = err
 	for _, block := range blockBlockByRefResult.Blocks {
 		fmt.Println(block.Id)
 	}

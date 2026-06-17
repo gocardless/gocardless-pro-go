@@ -15,24 +15,32 @@ import (
 )
 
 func TestMandatePdfCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandate_pdfs", false)
+	server := RunCodeSampleServer("mandate_pdfs", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandatePdfCreateParams := gocardless.MandatePdfCreateParams{
 		Links: &gocardless.MandatePdfCreateParamsLinks{
 			Mandate: "MD123",
 		},
 	}
+	_ = mandatePdfCreateParams
 
 	mandatePdf, err := client.MandatePdfs.Create(ctx, mandatePdfCreateParams)
+	_ = mandatePdf
+	_ = err
 
 	requestOption := gocardless.WithIdempotencyKey("mandate_pdfs_idempotency_key")
+	_ = requestOption
 	mandatePdf, err = client.MandatePdfs.Create(ctx, mandatePdfCreateParams, requestOption)
 
 	headers := map[string]string{"Accept-Language": "fr"}
+	_ = headers
 	requestOption = gocardless.WithHeaders(headers)
 	mandatePdf, err = client.MandatePdfs.Create(ctx, mandatePdfCreateParams, requestOption)
 

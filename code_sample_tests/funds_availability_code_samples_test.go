@@ -15,16 +15,22 @@ import (
 )
 
 func TestFundsAvailabilityCheckCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("funds_availability", false)
+	server := RunCodeSampleServer("funds_availability", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	fundsAvailabilityCheckParams := gocardless.FundsAvailabilityCheckParams{
 		Amount: "1000",
 	}
+	_ = fundsAvailabilityCheckParams
 
 	fundsAvailability, err := client.FundsAvailabilities.Check(ctx, "MD123", fundsAvailabilityCheckParams)
+	_ = fundsAvailability
+	_ = err
 
 }

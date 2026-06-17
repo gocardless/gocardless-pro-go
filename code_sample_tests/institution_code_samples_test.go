@@ -16,14 +16,20 @@ import (
 )
 
 func TestInstitutionListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("institutions", true)
+	server := RunCodeSampleServer("institutions", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	institutionListParams := gocardless.InstitutionListParams{}
+	_ = institutionListParams
 	institutionListResult, err := client.Institutions.List(ctx, institutionListParams)
+	_ = institutionListResult
+	_ = err
 	for _, institution := range institutionListResult.Institutions {
 		fmt.Println(institution.Id)
 	}
@@ -31,16 +37,22 @@ func TestInstitutionListCodeSample(t *testing.T) {
 }
 
 func TestInstitutionListForBillingRequestCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("institutions", true)
+	server := RunCodeSampleServer("institutions", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	institutionListForBillingRequestParams := gocardless.InstitutionListForBillingRequestParams{
 		CountryCode: "GB",
 	}
+	_ = institutionListForBillingRequestParams
 	institutionListForBillingRequestResult, err := client.Institutions.ListForBillingRequest(ctx, "BR123", institutionListForBillingRequestParams)
+	_ = institutionListForBillingRequestResult
+	_ = err
 	for _, institution := range institutionListForBillingRequestResult.Institutions {
 		fmt.Println(institution.Id)
 	}

@@ -15,17 +15,23 @@ import (
 )
 
 func TestOutboundPaymentImportEntryListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payment_import_entries", true)
+	server := RunCodeSampleServer("outbound_payment_import_entries", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPaymentImportEntryListParams := gocardless.OutboundPaymentImportEntryListParams{
 		OutboundPaymentImport: "IM123",
 		Limit:                 10,
 	}
+	_ = outboundPaymentImportEntryListParams
 
 	outboundPaymentImportEntryListResult, err := client.OutboundPaymentImportEntries.List(ctx, outboundPaymentImportEntryListParams)
+	_ = outboundPaymentImportEntryListResult
+	_ = err
 
 }

@@ -16,11 +16,14 @@ import (
 )
 
 func TestInstalmentScheduleCreateWithDatesCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("instalment_schedules", false)
+	server := RunCodeSampleServer("instalment_schedules", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	instalmentScheduleCreateWithDatesParams := gocardless.InstalmentScheduleCreateWithDatesParams{
 		TotalAmount: 10000,
@@ -45,18 +48,25 @@ func TestInstalmentScheduleCreateWithDatesCodeSample(t *testing.T) {
 		},
 		Metadata: map[string]string{"invoiceId": "001"},
 	}
+	_ = instalmentScheduleCreateWithDatesParams
 
 	requestOption := gocardless.WithIdempotencyKey("random_instalment_schedule_specific_string")
+	_ = requestOption
 	instalmentSchedule, err := client.InstalmentSchedules.CreateWithDates(ctx, instalmentScheduleCreateWithDatesParams, requestOption)
+	_ = instalmentSchedule
+	_ = err
 
 }
 
 func TestInstalmentScheduleCreateWithScheduleCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("instalment_schedules", false)
+	server := RunCodeSampleServer("instalment_schedules", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	instalmentScheduleCreateWithScheduleParams := gocardless.InstalmentScheduleCreateWithScheduleParams{
 		TotalAmount: 10000,
@@ -69,21 +79,31 @@ func TestInstalmentScheduleCreateWithScheduleCodeSample(t *testing.T) {
 		},
 		Metadata: map[string]string{"invoiceId": "001"},
 	}
+	_ = instalmentScheduleCreateWithScheduleParams
 
 	requestOption := gocardless.WithIdempotencyKey("random_instalment_schedule_specific_string")
+	_ = requestOption
 	instalmentSchedule, err := client.InstalmentSchedules.CreateWithSchedule(ctx, instalmentScheduleCreateWithScheduleParams, requestOption)
+	_ = instalmentSchedule
+	_ = err
 
 }
 
 func TestInstalmentScheduleListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("instalment_schedules", true)
+	server := RunCodeSampleServer("instalment_schedules", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	instalmentScheduleListParams := gocardless.InstalmentScheduleListParams{}
+	_ = instalmentScheduleListParams
 	instalmentScheduleListResult, err := client.InstalmentSchedules.List(ctx, instalmentScheduleListParams)
+	_ = instalmentScheduleListResult
+	_ = err
 	for _, instalmentSchedule := range instalmentScheduleListResult.InstalmentSchedules {
 		fmt.Println(instalmentSchedule.Name)
 	}
@@ -91,39 +111,56 @@ func TestInstalmentScheduleListCodeSample(t *testing.T) {
 }
 
 func TestInstalmentScheduleGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("instalment_schedules", false)
+	server := RunCodeSampleServer("instalment_schedules", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	instalmentSchedule, err := client.InstalmentSchedules.Get(ctx, "IS123")
+	_ = instalmentSchedule
+	_ = err
 
 }
 
 func TestInstalmentScheduleUpdateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("instalment_schedules", false)
+	server := RunCodeSampleServer("instalment_schedules", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	instalmentScheduleUpdateParams := gocardless.InstalmentScheduleUpdateParams{
 		Metadata: map[string]string{"key": "value"},
 	}
+	_ = instalmentScheduleUpdateParams
 
 	instalmentSchedule, err := client.InstalmentSchedules.Update(ctx, "IS123", instalmentScheduleUpdateParams)
+	_ = instalmentSchedule
+	_ = err
 
 }
 
 func TestInstalmentScheduleCancelCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("instalment_schedules", false)
+	server := RunCodeSampleServer("instalment_schedules", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	instalmentScheduleCancelParams := gocardless.InstalmentScheduleCancelParams{}
+	_ = instalmentScheduleCancelParams
 	instalmentSchedule, err := client.InstalmentSchedules.Cancel(ctx, "IS123", instalmentScheduleCancelParams)
+	_ = instalmentSchedule
+	_ = err
 
 }

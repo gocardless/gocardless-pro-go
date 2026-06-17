@@ -16,19 +16,25 @@ import (
 )
 
 func TestWebhookListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("webhooks", true)
+	server := RunCodeSampleServer("webhooks", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	webhookListParams := gocardless.WebhookListParams{
 		CreatedAt: &gocardless.WebhookListParamsCreatedAt{
 			Gt: "2020-01-01T17:01:06.000Z",
 		},
 	}
+	_ = webhookListParams
 
 	webhookListResult, err := client.Webhooks.List(ctx, webhookListParams)
+	_ = webhookListResult
+	_ = err
 	for _, webhook := range webhookListResult.Webhooks {
 		fmt.Println(webhook.Id)
 	}
@@ -36,23 +42,33 @@ func TestWebhookListCodeSample(t *testing.T) {
 }
 
 func TestWebhookGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("webhooks", false)
+	server := RunCodeSampleServer("webhooks", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	webhook, err := client.Webhooks.Get(ctx, "WB123")
+	_ = webhook
+	_ = err
 
 }
 
 func TestWebhookRetryCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("webhooks", false)
+	server := RunCodeSampleServer("webhooks", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	webhook, err := client.Webhooks.Retry(ctx, "WB123")
+	_ = webhook
+	_ = err
 
 }

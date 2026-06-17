@@ -16,11 +16,14 @@ import (
 )
 
 func TestCreditorCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("creditors", false)
+	server := RunCodeSampleServer("creditors", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	creditorCreateParams := gocardless.CreditorCreateParams{
 		Name:                "Acme",
@@ -28,24 +31,33 @@ func TestCreditorCreateCodeSample(t *testing.T) {
 		CreditorType:        "company",
 		BankReferencePrefix: "ACME",
 	}
+	_ = creditorCreateParams
 
 	creditor, err := client.Creditors.Create(ctx, creditorCreateParams)
+	_ = creditor
+	_ = err
 
 }
 
 func TestCreditorListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("creditors", true)
+	server := RunCodeSampleServer("creditors", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	creditorListParams := gocardless.CreditorListParams{
 		Limit: 3,
 	}
+	_ = creditorListParams
 
 	// List the first three creditors.
 	creditorListResult, err := client.Creditors.List(ctx, creditorListParams)
+	_ = creditorListResult
+	_ = err
 	for _, creditor := range creditorListResult.Creditors {
 		fmt.Println(creditor.Name)
 	}
@@ -53,29 +65,40 @@ func TestCreditorListCodeSample(t *testing.T) {
 }
 
 func TestCreditorGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("creditors", false)
+	server := RunCodeSampleServer("creditors", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	creditor, err := client.Creditors.Get(ctx, "CR123", gocardless.CreditorGetParams{})
+	_ = creditor
+	_ = err
 
 }
 
 func TestCreditorUpdateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("creditors", false)
+	server := RunCodeSampleServer("creditors", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	creditorUpdateParams := gocardless.CreditorUpdateParams{
 		Links: &gocardless.CreditorUpdateParamsLinks{
 			DefaultGbpPayoutAccount: "BA789",
 		},
 	}
+	_ = creditorUpdateParams
 
 	creditor, err := client.Creditors.Update(ctx, "CR123", creditorUpdateParams)
+	_ = creditor
+	_ = err
 
 }

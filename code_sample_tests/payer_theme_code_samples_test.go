@@ -15,11 +15,14 @@ import (
 )
 
 func TestPayerThemeCreateForCreditorCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("payer_themes", false)
+	server := RunCodeSampleServer("payer_themes", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	payerThemeCreateForCreditorParams := gocardless.PayerThemeCreateForCreditorParams{
 		ButtonBackgroundColour: "#128DAA",
@@ -30,7 +33,10 @@ func TestPayerThemeCreateForCreditorCodeSample(t *testing.T) {
 			Creditor: "CR123",
 		},
 	}
+	_ = payerThemeCreateForCreditorParams
 
 	payerThemes, err := client.PayerThemes.CreateForCreditor(ctx, payerThemeCreateForCreditorParams)
+	_ = payerThemes
+	_ = err
 
 }

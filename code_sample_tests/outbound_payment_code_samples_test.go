@@ -15,11 +15,14 @@ import (
 )
 
 func TestOutboundPaymentCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payments", false)
+	server := RunCodeSampleServer("outbound_payments", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPaymentCreateParams := gocardless.OutboundPaymentCreateParams{
 		Amount:      1000,
@@ -31,17 +34,23 @@ func TestOutboundPaymentCreateCodeSample(t *testing.T) {
 			RecipientBankAccount: "BA123",
 		},
 	}
+	_ = outboundPaymentCreateParams
 
 	outboundPayment, err := client.OutboundPayments.Create(ctx, outboundPaymentCreateParams)
+	_ = outboundPayment
+	_ = err
 
 }
 
 func TestOutboundPaymentWithdrawCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payments", false)
+	server := RunCodeSampleServer("outbound_payments", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPaymentWithdrawParams := gocardless.OutboundPaymentWithdrawParams{
 		Amount:      5000,
@@ -51,83 +60,118 @@ func TestOutboundPaymentWithdrawCodeSample(t *testing.T) {
 			Creditor: "CR123",
 		},
 	}
+	_ = outboundPaymentWithdrawParams
 
 	outboundPayment, err := client.OutboundPayments.Withdraw(ctx, outboundPaymentWithdrawParams)
+	_ = outboundPayment
+	_ = err
 
 }
 
 func TestOutboundPaymentCancelCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payments", false)
+	server := RunCodeSampleServer("outbound_payments", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPayment, err := client.OutboundPayments.Cancel(ctx, "OUT123", gocardless.OutboundPaymentCancelParams{})
+	_ = outboundPayment
+	_ = err
 
 }
 
 func TestOutboundPaymentApproveCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payments", false)
+	server := RunCodeSampleServer("outbound_payments", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPayment, err := client.OutboundPayments.Approve(ctx, "OUT123", gocardless.OutboundPaymentApproveParams{})
+	_ = outboundPayment
+	_ = err
 
 }
 
 func TestOutboundPaymentGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payments", false)
+	server := RunCodeSampleServer("outbound_payments", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPayment, err := client.OutboundPayments.Get(ctx, "OUT123")
+	_ = outboundPayment
+	_ = err
 
 }
 
 func TestOutboundPaymentListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payments", true)
+	server := RunCodeSampleServer("outbound_payments", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPaymentListParams := gocardless.OutboundPaymentListParams{
 		Limit: 10,
 	}
+	_ = outboundPaymentListParams
 
 	outboundPaymentListResult, err := client.OutboundPayments.List(ctx, outboundPaymentListParams)
+	_ = outboundPaymentListResult
+	_ = err
 
 }
 
 func TestOutboundPaymentUpdateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payments", false)
+	server := RunCodeSampleServer("outbound_payments", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	outboundPaymentUpdateParams := gocardless.OutboundPaymentUpdateParams{
 		Metadata: map[string]string{
 			"invoice_id": "INV-1234",
 		},
 	}
+	_ = outboundPaymentUpdateParams
 
 	outboundPayment, err := client.OutboundPayments.Update(ctx, "OUT123", outboundPaymentUpdateParams)
+	_ = outboundPayment
+	_ = err
 
 }
 
 func TestOutboundPaymentStatsCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("outbound_payments", false)
+	server := RunCodeSampleServer("outbound_payments", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	stats, err := client.OutboundPayments.Stats(ctx, gocardless.OutboundPaymentStatsParams{})
+	_ = stats
+	_ = err
 
 }

@@ -15,15 +15,19 @@ import (
 )
 
 func TestBankAccountDetailGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("bank_account_details", false)
+	server := RunCodeSampleServer("bank_account_details", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	headers := map[string]string{
 		"Gc-Key-Id": "PK123",
 	}
+	_ = headers
 
 	bankAccountDetails, err := client.BankAccountDetails.Get(
 		ctx,
@@ -31,5 +35,7 @@ func TestBankAccountDetailGetCodeSample(t *testing.T) {
 		gocardless.BankAccountDetailGetParams{},
 		gocardless.WithHeaders(headers),
 	)
+	_ = bankAccountDetails
+	_ = err
 
 }

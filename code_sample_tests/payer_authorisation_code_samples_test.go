@@ -15,22 +15,30 @@ import (
 )
 
 func TestPayerAuthorisationGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("payer_authorisations", false)
+	server := RunCodeSampleServer("payer_authorisations", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	payerAuthorisation, err := client.PayerAuthorisations.Get(ctx, "PAU123")
+	_ = payerAuthorisation
+	_ = err
 
 }
 
 func TestPayerAuthorisationCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("payer_authorisations", false)
+	server := RunCodeSampleServer("payer_authorisations", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	payerAuthorisationCreateParams := gocardless.PayerAuthorisationCreateParams{
 		Customer: gocardless.PayerAuthorisationCreateParamsCustomer{
@@ -48,17 +56,23 @@ func TestPayerAuthorisationCreateCodeSample(t *testing.T) {
 			Reference: "XYZ789",
 		},
 	}
+	_ = payerAuthorisationCreateParams
 
 	payerAuthorisation, err := client.PayerAuthorisations.Create(ctx, payerAuthorisationCreateParams)
+	_ = payerAuthorisation
+	_ = err
 
 }
 
 func TestPayerAuthorisationUpdateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("payer_authorisations", false)
+	server := RunCodeSampleServer("payer_authorisations", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	payerAuthorisationUpdateParams := gocardless.PayerAuthorisationUpdateParams{
 		Customer: gocardless.PayerAuthorisationUpdateParamsCustomer{
@@ -76,29 +90,42 @@ func TestPayerAuthorisationUpdateCodeSample(t *testing.T) {
 			Reference: "XYZ789",
 		},
 	}
+	_ = payerAuthorisationUpdateParams
 
 	payerAuthorisation, err := client.PayerAuthorisations.Update(ctx, "PA123", payerAuthorisationUpdateParams)
+	_ = payerAuthorisation
+	_ = err
 
 }
 
 func TestPayerAuthorisationSubmitCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("payer_authorisations", false)
+	server := RunCodeSampleServer("payer_authorisations", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	payerAuthorisation, err := client.PayerAuthorisations.Submit(ctx, "PAU123")
+	_ = payerAuthorisation
+	_ = err
 
 }
 
 func TestPayerAuthorisationConfirmCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("payer_authorisations", false)
+	server := RunCodeSampleServer("payer_authorisations", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	payerAuthorisation, err := client.PayerAuthorisations.Confirm(ctx, "PAU123")
+	_ = payerAuthorisation
+	_ = err
 
 }

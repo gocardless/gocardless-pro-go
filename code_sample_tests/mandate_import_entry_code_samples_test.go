@@ -16,11 +16,14 @@ import (
 )
 
 func TestMandateImportEntryCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandate_import_entries", false)
+	server := RunCodeSampleServer("mandate_import_entries", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateImportEntryCreateParams := gocardless.MandateImportEntryCreateParams{
 		Customer: gocardless.MandateImportEntryCreateParamsCustomer{
@@ -40,25 +43,35 @@ func TestMandateImportEntryCreateCodeSample(t *testing.T) {
 			MandateImport: "IM000010790WX1",
 		},
 	}
+	_ = mandateImportEntryCreateParams
 
 	mandateImportEntry, err := client.MandateImportEntries.Create(ctx, mandateImportEntryCreateParams)
+	_ = mandateImportEntry
+	_ = err
 
 }
 
 func TestMandateImportEntryListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("mandate_import_entries", true)
+	server := RunCodeSampleServer("mandate_import_entries", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	mandateImportEntryListParams := gocardless.MandateImportEntryListParams{
 		MandateImport: "IM000010790WX1",
 	}
+	_ = mandateImportEntryListParams
 
 	mandateImportEntryListPagingIterator := client.MandateImportEntries.All(ctx, mandateImportEntryListParams)
+	_ = mandateImportEntryListPagingIterator
 	for mandateImportEntryListPagingIterator.Next() {
 		mandateImportEntryListResult, err := mandateImportEntryListPagingIterator.Value(ctx)
+		_ = mandateImportEntryListResult
+		_ = err
 		for _, mandateImportEntry := range mandateImportEntryListResult.MandateImportEntries {
 			fmt.Println(mandateImportEntry.RecordIdentifier)
 		}

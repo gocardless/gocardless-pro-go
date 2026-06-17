@@ -15,28 +15,39 @@ import (
 )
 
 func TestPaymentAccountTransactionGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("payment_account_transactions", false)
+	server := RunCodeSampleServer("payment_account_transactions", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	transaction, err := client.PaymentAccountTransactions.Get(ctx, "PATR1234")
+	_ = transaction
+	_ = err
 
 }
 
 func TestPaymentAccountTransactionListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("payment_account_transactions", true)
+	server := RunCodeSampleServer("payment_account_transactions", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	paymentAccountTransactionListParams := gocardless.PaymentAccountTransactionListParams{
 		ValueDateFrom: "2024-01-01",
 		ValueDateTo:   "2024-01-31",
 	}
+	_ = paymentAccountTransactionListParams
 
 	transactionListResult, err := client.PaymentAccountTransactions.List(ctx, "BA12345", paymentAccountTransactionListParams)
+	_ = transactionListResult
+	_ = err
 
 }

@@ -16,11 +16,14 @@ import (
 )
 
 func TestRefundCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("refunds", false)
+	server := RunCodeSampleServer("refunds", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	refundCreateParams := gocardless.RefundCreateParams{
 		Amount:                  100,
@@ -31,22 +34,31 @@ func TestRefundCreateCodeSample(t *testing.T) {
 			Payment: "PM123",
 		},
 	}
+	_ = refundCreateParams
 
 	refund, err := client.Refunds.Create(ctx, refundCreateParams)
+	_ = refund
+	_ = err
 
 }
 
 func TestRefundListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("refunds", true)
+	server := RunCodeSampleServer("refunds", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	refundListParams := gocardless.RefundListParams{
 		Mandate: "MD123",
 	}
+	_ = refundListParams
 	refundListResult, err := client.Refunds.List(ctx, refundListParams)
+	_ = refundListResult
+	_ = err
 	for _, refund := range refundListResult.Refunds {
 		fmt.Println(refund.Id)
 	}
@@ -54,26 +66,37 @@ func TestRefundListCodeSample(t *testing.T) {
 }
 
 func TestRefundGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("refunds", false)
+	server := RunCodeSampleServer("refunds", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	refund, err := client.Refunds.Get(ctx, "RF123")
+	_ = refund
+	_ = err
 
 }
 
 func TestRefundUpdateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("refunds", false)
+	server := RunCodeSampleServer("refunds", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	refundUpdateParams := gocardless.RefundUpdateParams{
 		Metadata: map[string]string{"key": "value"},
 	}
+	_ = refundUpdateParams
 	refund, err := client.Refunds.Update(ctx, "RF123", refundUpdateParams)
+	_ = refund
+	_ = err
 
 }

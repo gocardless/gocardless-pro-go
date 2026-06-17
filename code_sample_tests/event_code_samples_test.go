@@ -16,17 +16,23 @@ import (
 )
 
 func TestEventListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("events", true)
+	server := RunCodeSampleServer("events", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	eventListParams := gocardless.EventListParams{
 		ResourceType: "payments",
 	}
+	_ = eventListParams
 
 	eventListResult, err := client.Events.List(ctx, eventListParams)
+	_ = eventListResult
+	_ = err
 	for _, event := range eventListResult.Events {
 		fmt.Println(event.Action)
 	}
@@ -34,12 +40,17 @@ func TestEventListCodeSample(t *testing.T) {
 }
 
 func TestEventGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("events", false)
+	server := RunCodeSampleServer("events", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	event, err := client.Events.Get(ctx, "EV123")
+	_ = event
+	_ = err
 
 }

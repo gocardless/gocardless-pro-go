@@ -16,11 +16,14 @@ import (
 )
 
 func TestCustomerBankAccountCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customer_bank_accounts", false)
+	server := RunCodeSampleServer("customer_bank_accounts", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customerBankAccountCreateParams := gocardless.CustomerBankAccountCreateParams{
 		AccountNumber:     "55779911",
@@ -31,23 +34,32 @@ func TestCustomerBankAccountCreateCodeSample(t *testing.T) {
 			Customer: "CU123",
 		},
 	}
+	_ = customerBankAccountCreateParams
 
 	customerBankAccount, err := client.CustomerBankAccounts.Create(ctx, customerBankAccountCreateParams)
+	_ = customerBankAccount
+	_ = err
 
 }
 
 func TestCustomerBankAccountListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customer_bank_accounts", true)
+	server := RunCodeSampleServer("customer_bank_accounts", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customerBankAccountListParams := gocardless.CustomerBankAccountListParams{
 		Enabled: true,
 	}
+	_ = customerBankAccountListParams
 
 	customerBankAccountListResult, err := client.CustomerBankAccounts.List(ctx, customerBankAccountListParams)
+	_ = customerBankAccountListResult
+	_ = err
 	for _, customerBankAccount := range customerBankAccountListResult.CustomerBankAccounts {
 		fmt.Println(customerBankAccount.Id)
 	}
@@ -55,38 +67,54 @@ func TestCustomerBankAccountListCodeSample(t *testing.T) {
 }
 
 func TestCustomerBankAccountGetCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customer_bank_accounts", false)
+	server := RunCodeSampleServer("customer_bank_accounts", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customerBankAccount, err := client.CustomerBankAccounts.Get(ctx, "BA123")
+	_ = customerBankAccount
+	_ = err
 
 }
 
 func TestCustomerBankAccountUpdateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customer_bank_accounts", false)
+	server := RunCodeSampleServer("customer_bank_accounts", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customerBankAccountUpdateParams := gocardless.CustomerBankAccountUpdateParams{
 		Metadata: map[string]string{"key": "value"},
 	}
+	_ = customerBankAccountUpdateParams
 
 	customerBankAccount, err := client.CustomerBankAccounts.Update(ctx, "BA123", customerBankAccountUpdateParams)
+	_ = customerBankAccount
+	_ = err
 
 }
 
 func TestCustomerBankAccountDisableCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customer_bank_accounts", false)
+	server := RunCodeSampleServer("customer_bank_accounts", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customerBankAccount, err := client.CustomerBankAccounts.Disable(ctx, "BA123")
+	_ = customerBankAccount
+	_ = err
 
 }

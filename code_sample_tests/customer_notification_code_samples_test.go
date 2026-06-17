@@ -15,13 +15,19 @@ import (
 )
 
 func TestCustomerNotificationHandleCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("customer_notifications", false)
+	server := RunCodeSampleServer("customer_notifications", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	customerNotificationHandleParams := gocardless.CustomerNotificationHandleParams{}
+	_ = customerNotificationHandleParams
 	customerNotification, err := client.CustomerNotifications.Handle(ctx, "PCN123", customerNotificationHandleParams)
+	_ = customerNotification
+	_ = err
 
 }

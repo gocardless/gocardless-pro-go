@@ -16,11 +16,14 @@ import (
 )
 
 func TestVerificationDetailCreateCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("verification_details", false)
+	server := RunCodeSampleServer("verification_details", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	verificationDetailCreateParams := gocardless.VerificationDetailCreateParams{
 		Name:          "Acme",
@@ -44,8 +47,11 @@ func TestVerificationDetailCreateCodeSample(t *testing.T) {
 			Creditor: "CR123",
 		},
 	}
+	_ = verificationDetailCreateParams
 
 	verificationDetail, err := client.VerificationDetails.Create(ctx, verificationDetailCreateParams)
+	_ = verificationDetail
+	_ = err
 	if err != nil {
 		fmt.Printf("error creating verification detail: %s", err.Error())
 		return
@@ -54,16 +60,22 @@ func TestVerificationDetailCreateCodeSample(t *testing.T) {
 }
 
 func TestVerificationDetailListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("verification_details", true)
+	server := RunCodeSampleServer("verification_details", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	verificationDetailListParams := gocardless.VerificationDetailListParams{
 		Creditor: "CR123",
 	}
+	_ = verificationDetailListParams
 	verificationDetailList, err := client.VerificationDetails.List(ctx, verificationDetailListParams)
+	_ = verificationDetailList
+	_ = err
 	if err != nil {
 		fmt.Printf("error listing verification details: %+v", err)
 		return

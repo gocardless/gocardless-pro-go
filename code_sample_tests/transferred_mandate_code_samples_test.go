@@ -15,12 +15,17 @@ import (
 )
 
 func TestTransferredMandateTransferredMandatesCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("transferred_mandates", false)
+	server := RunCodeSampleServer("transferred_mandates", false)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	transferredMandate, err := client.TransferredMandates.TransferredMandates(ctx, "MD123", gocardless.TransferredMandateTransferredMandatesParams{})
+	_ = transferredMandate
+	_ = err
 
 }

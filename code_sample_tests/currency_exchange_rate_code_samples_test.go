@@ -16,18 +16,24 @@ import (
 )
 
 func TestCurrencyExchangeRateListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("currency_exchange_rates", true)
+	server := RunCodeSampleServer("currency_exchange_rates", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	currencyExchangeRateListParams := gocardless.CurrencyExchangeRateListParams{
 		Source: "EUR",
 		Target: "GBP",
 	}
+	_ = currencyExchangeRateListParams
 
 	currencyExchangeRateListResult, err := client.CurrencyExchangeRates.List(ctx, currencyExchangeRateListParams)
+	_ = currencyExchangeRateListResult
+	_ = err
 	for _, currencyExchangeRate := range currencyExchangeRateListResult.CurrencyExchangeRates {
 		fmt.Println(currencyExchangeRate.Rate)
 	}

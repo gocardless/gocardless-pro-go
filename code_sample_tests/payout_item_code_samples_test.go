@@ -16,17 +16,23 @@ import (
 )
 
 func TestPayoutItemListCodeSample(t *testing.T) {
-	server := gocardless.RunCodeSampleServer("payout_items", true)
+	server := RunCodeSampleServer("payout_items", true)
+	_ = server
 	defer server.Close()
 
 	ctx := context.TODO()
+	_ = ctx
 	client, _ := gocardless.GetClient(t, server.URL)
+	_ = client
 
 	payoutItemsListParams := gocardless.PayoutItemListParams{
 		Payout: "PO123",
 	}
+	_ = payoutItemsListParams
 
 	payoutItemsListResult, err := client.PayoutItems.List(ctx, payoutItemsListParams)
+	_ = payoutItemsListResult
+	_ = err
 	for _, payoutItem := range payoutItemsListResult.PayoutItems {
 		fmt.Println(payoutItem.Amount)
 	}
