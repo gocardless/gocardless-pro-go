@@ -39,11 +39,13 @@ type VerificationDetail struct {
 	AddressLine3  string                        `url:"address_line3,omitempty" json:"address_line3,omitempty"`
 	City          string                        `url:"city,omitempty" json:"city,omitempty"`
 	CompanyNumber string                        `url:"company_number,omitempty" json:"company_number,omitempty"`
+	CountryCode   string                        `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Description   string                        `url:"description,omitempty" json:"description,omitempty"`
 	Directors     []VerificationDetailDirectors `url:"directors,omitempty" json:"directors,omitempty"`
 	Links         *VerificationDetailLinks      `url:"links,omitempty" json:"links,omitempty"`
 	Name          string                        `url:"name,omitempty" json:"name,omitempty"`
 	PostalCode    string                        `url:"postal_code,omitempty" json:"postal_code,omitempty"`
+	Region        string                        `url:"region,omitempty" json:"region,omitempty"`
 }
 
 type VerificationDetailService interface {
