@@ -158,6 +158,10 @@ type EventListResult struct {
 // List
 // Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
 // events.
+// <p class="notice"><strong>Important</strong>: This endpoint will no longer
+// return events older than 18 months, including when filtering by resource.
+// This takes effect no sooner than 1 August 2026 in sandbox environments, and
+// no sooner than 1 October 2026 in live environments.</p>
 func (s *EventServiceImpl) List(ctx context.Context, p EventListParams, opts ...RequestOption) (*EventListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/events"))
 	if err != nil {
