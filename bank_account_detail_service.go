@@ -36,9 +36,9 @@ type BankAccountDetailGetParams struct {
 // Returns bank account details in the flattened JSON Web Encryption format
 // described in RFC 7516.
 //
-// You must specify a `Gc-Key-Id` header when using this endpoint. See [Public
-// Key
-// Setup](https://developer.gocardless.com/gc-embed/bank-details-access#public_key_setup)
+// You must specify a `Gc-Key-Id` header when using this endpoint. See Public
+// Key Setup
+// (https://developer.gocardless.com/gc-embed/bank-details-access#public_key_setup)
 // for more details.
 func (s *BankAccountDetailServiceImpl) Get(ctx context.Context, identity string, p BankAccountDetailGetParams, opts ...RequestOption) (*BankAccountDetail, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/bank_account_details/%v",

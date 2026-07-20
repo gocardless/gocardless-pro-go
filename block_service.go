@@ -252,8 +252,9 @@ type BlockListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// blocks.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your blocks.
 func (s *BlockServiceImpl) List(ctx context.Context, p BlockListParams, opts ...RequestOption) (*BlockListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks"))
 	if err != nil {

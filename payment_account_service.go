@@ -142,8 +142,9 @@ type PaymentAccountListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// payment accounts.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your payment accounts.
 func (s *PaymentAccountServiceImpl) List(ctx context.Context, p PaymentAccountListParams, opts ...RequestOption) (*PaymentAccountListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payment_accounts"))
 	if err != nil {

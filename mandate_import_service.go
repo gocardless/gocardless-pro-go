@@ -52,7 +52,9 @@ type MandateImportCreateParams struct {
 // this endpoint merely signals the start of the import process. Once you've
 // finished
 // adding entries to an import, you should
-// [submit](#mandate-imports-submit-a-mandate-import) it.
+// submit
+// (https://developer.gocardless.com/api-reference/#mandate-imports-submit-a-mandate-import)
+// it.
 func (s *MandateImportServiceImpl) Create(ctx context.Context, p MandateImportCreateParams, opts ...RequestOption) (*MandateImport, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_imports"))
 	if err != nil {

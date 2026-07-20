@@ -281,8 +281,9 @@ type OutboundPaymentImportListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// outbound payment imports.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your outbound payment imports.
 func (s *OutboundPaymentImportServiceImpl) List(ctx context.Context, p OutboundPaymentImportListParams, opts ...RequestOption) (*OutboundPaymentImportListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/outbound_payment_imports"))
 	if err != nil {

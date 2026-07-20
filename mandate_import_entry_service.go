@@ -97,8 +97,9 @@ type MandateImportEntryCreateParams struct {
 }
 
 // Create
-// For an existing [mandate import](#core-endpoints-mandate-imports), this
-// endpoint can
+// For an existing mandate import
+// (https://developer.gocardless.com/api-reference/#core-endpoints-mandate-imports),
+// this endpoint can
 // be used to add individual mandates to be imported into GoCardless.
 //
 // You can add no more than 30,000 rows to a single mandate import.

@@ -76,8 +76,8 @@ type InstalmentScheduleCreateWithDatesParams struct {
 // This
 // API is recommended if you know the specific dates you wish to charge.
 // Otherwise,
-// please check out the [scheduling
-// version](#instalment-schedules-create-with-schedule).
+// please check out the scheduling version
+// (https://developer.gocardless.com/api-reference/#instalment-schedules-create-with-schedule).
 //
 // The `instalments` property is an array of payment properties (`amount` and
 // `charge_date`).
@@ -211,8 +211,9 @@ type InstalmentScheduleCreateWithScheduleParams struct {
 // This
 // API is recommended if you wish to use the GoCardless scheduling logic. For
 // finer
-// control over the individual dates, please check out the [alternative
-// version](#instalment-schedules-create-with-dates).
+// control over the individual dates, please check out the alternative
+// version
+// (https://developer.gocardless.com/api-reference/#instalment-schedules-create-with-dates).
 //
 // It can take quite a while to create the associated payments, so the API will
 // return
@@ -348,8 +349,9 @@ type InstalmentScheduleListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// instalment schedules.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your instalment schedules.
 func (s *InstalmentScheduleServiceImpl) List(ctx context.Context, p InstalmentScheduleListParams, opts ...RequestOption) (*InstalmentScheduleListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
 	if err != nil {

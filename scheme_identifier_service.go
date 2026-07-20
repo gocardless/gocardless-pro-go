@@ -70,7 +70,7 @@ type SchemeIdentifierCreateParams struct {
 // become active. On other schemes, including SEPA,
 // this happens instantly.
 //
-// #### Scheme identifier name validations
+// # Scheme identifier name validations
 //
 // The `name` field of a scheme identifier can contain alphanumeric characters,
 // spaces and
@@ -79,7 +79,7 @@ type SchemeIdentifierCreateParams struct {
 // Its maximum length and the special characters it supports depend on the
 // scheme:
 //
-// | __scheme__        | __maximum length__ | __special characters allowed__
+// | scheme        | maximum length | special characters allowed
 //
 //	|
 //
@@ -218,8 +218,9 @@ type SchemeIdentifierListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// scheme identifiers.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your scheme identifiers.
 func (s *SchemeIdentifierServiceImpl) List(ctx context.Context, p SchemeIdentifierListParams, opts ...RequestOption) (*SchemeIdentifierListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/scheme_identifiers"))
 	if err != nil {

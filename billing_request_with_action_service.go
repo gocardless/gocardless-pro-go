@@ -176,18 +176,19 @@ type BillingRequestWithActionBillingRequestsResourcesCustomerBankAccountLinks st
 }
 
 type BillingRequestWithActionBillingRequestsResourcesCustomerBankAccount struct {
-	AccountHolderName   string                                                                    `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumberEnding string                                                                    `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
-	AccountType         string                                                                    `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankAccountToken    string                                                                    `url:"bank_account_token,omitempty" json:"bank_account_token,omitempty"`
-	BankName            string                                                                    `url:"bank_name,omitempty" json:"bank_name,omitempty"`
-	CountryCode         string                                                                    `url:"country_code,omitempty" json:"country_code,omitempty"`
-	CreatedAt           string                                                                    `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency            string                                                                    `url:"currency,omitempty" json:"currency,omitempty"`
-	Enabled             bool                                                                      `url:"enabled,omitempty" json:"enabled,omitempty"`
-	Id                  string                                                                    `url:"id,omitempty" json:"id,omitempty"`
-	Links               *BillingRequestWithActionBillingRequestsResourcesCustomerBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata            map[string]string                                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	AccountHolderName           string                                                                    `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumberEnding         string                                                                    `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
+	AccountType                 string                                                                    `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankAccountToken            string                                                                    `url:"bank_account_token,omitempty" json:"bank_account_token,omitempty"`
+	BankName                    string                                                                    `url:"bank_name,omitempty" json:"bank_name,omitempty"`
+	CountryCode                 string                                                                    `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreatedAt                   string                                                                    `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency                    string                                                                    `url:"currency,omitempty" json:"currency,omitempty"`
+	Enabled                     bool                                                                      `url:"enabled,omitempty" json:"enabled,omitempty"`
+	Id                          string                                                                    `url:"id,omitempty" json:"id,omitempty"`
+	Links                       *BillingRequestWithActionBillingRequestsResourcesCustomerBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata                    map[string]string                                                         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerNameVerificationResult string                                                                    `url:"payer_name_verification_result,omitempty" json:"payer_name_verification_result,omitempty"`
 }
 
 type BillingRequestWithActionBillingRequestsResourcesCustomerBillingDetail struct {
