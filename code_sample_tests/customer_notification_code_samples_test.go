@@ -26,7 +26,7 @@ func TestCustomerNotificationHandleCodeSample(t *testing.T) {
 
 	customerNotificationHandleParams := gocardless.CustomerNotificationHandleParams{}
 	_ = customerNotificationHandleParams
-	customerNotification, err := client.CustomerNotifications.Handle(ctx, "PCN123", customerNotificationHandleParams)
+	customerNotification, err := client.CustomerNotifications.Handle(ctx, "EV1D18JEXAMPLE", customerNotificationHandleParams)
 	_ = customerNotification
 	_ = err
 
