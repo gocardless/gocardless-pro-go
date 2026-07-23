@@ -358,8 +358,8 @@ type BillingRequestCreateParams struct {
 }
 
 // Create
-// Important: All properties associated with `subscription_request` and
-// `instalment_schedule_request` are only supported for ACH and PAD schemes.
+// Important: All properties associated with subscription_request and
+// instalment_schedule_request are only supported for ACH and PAD schemes.
 func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequestCreateParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
 	if err != nil {
