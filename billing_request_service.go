@@ -1018,12 +1018,11 @@ func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string,
 
 // BillingRequestListParams parameters
 type BillingRequestListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer  string `url:"customer,omitempty" json:"customer,omitempty"`
-	Limit     int    `url:"limit,omitempty" json:"limit,omitempty"`
-	Status    string `url:"status,omitempty" json:"status,omitempty"`
+	After    string `url:"after,omitempty" json:"after,omitempty"`
+	Before   string `url:"before,omitempty" json:"before,omitempty"`
+	Customer string `url:"customer,omitempty" json:"customer,omitempty"`
+	Limit    int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Status   string `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type BillingRequestListResultMetaCursors struct {
