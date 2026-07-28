@@ -160,18 +160,19 @@ type BillingRequestResourcesCustomerBankAccountLinks struct {
 }
 
 type BillingRequestResourcesCustomerBankAccount struct {
-	AccountHolderName   string                                           `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumberEnding string                                           `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
-	AccountType         string                                           `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankAccountToken    string                                           `url:"bank_account_token,omitempty" json:"bank_account_token,omitempty"`
-	BankName            string                                           `url:"bank_name,omitempty" json:"bank_name,omitempty"`
-	CountryCode         string                                           `url:"country_code,omitempty" json:"country_code,omitempty"`
-	CreatedAt           string                                           `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency            string                                           `url:"currency,omitempty" json:"currency,omitempty"`
-	Enabled             bool                                             `url:"enabled,omitempty" json:"enabled,omitempty"`
-	Id                  string                                           `url:"id,omitempty" json:"id,omitempty"`
-	Links               *BillingRequestResourcesCustomerBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata            map[string]string                                `url:"metadata,omitempty" json:"metadata,omitempty"`
+	AccountHolderName           string                                           `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumberEnding         string                                           `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
+	AccountType                 string                                           `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankAccountToken            string                                           `url:"bank_account_token,omitempty" json:"bank_account_token,omitempty"`
+	BankName                    string                                           `url:"bank_name,omitempty" json:"bank_name,omitempty"`
+	CountryCode                 string                                           `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreatedAt                   string                                           `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency                    string                                           `url:"currency,omitempty" json:"currency,omitempty"`
+	Enabled                     bool                                             `url:"enabled,omitempty" json:"enabled,omitempty"`
+	Id                          string                                           `url:"id,omitempty" json:"id,omitempty"`
+	Links                       *BillingRequestResourcesCustomerBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata                    map[string]string                                `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerNameVerificationResult string                                           `url:"payer_name_verification_result,omitempty" json:"payer_name_verification_result,omitempty"`
 }
 
 type BillingRequestResourcesCustomerBillingDetail struct {
@@ -357,9 +358,8 @@ type BillingRequestCreateParams struct {
 }
 
 // Create
-// <p class="notice"><strong>Important</strong>: All properties associated with
-// `subscription_request` and `instalment_schedule_request` are only supported
-// for ACH and PAD schemes.</p>
+// Important: All properties associated with subscription_request and
+// instalment_schedule_request are only supported for ACH and PAD schemes.
 func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequestCreateParams, opts ...RequestOption) (*BillingRequest, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
 	if err != nil {
@@ -481,7 +481,7 @@ type BillingRequestCollectCustomerDetailsParams struct {
 }
 
 // CollectCustomerDetails
-// If the billing request has a pending <code>collect_customer_details</code>
+// If the billing request has a pending collect_customer_details
 // action, this endpoint can be used to collect the details in order to
 // complete it.
 //
@@ -600,7 +600,7 @@ type BillingRequestCollectBankAccountParams struct {
 
 // CollectBankAccount
 // If the billing request has a pending
-// <code>collect_bank_account</code> action, this endpoint can be
+// collect_bank_account action, this endpoint can be
 // used to collect the details in order to complete it.
 //
 // The endpoint takes the same payload as Customer Bank Accounts, but check
@@ -611,14 +611,14 @@ type BillingRequestCollectBankAccountParams struct {
 // the payload along with the
 // country_code.
 //
-// _ACH scheme_ For compliance reasons, an extra validation step is done using
+// ACH scheme For compliance reasons, an extra validation step is done using
 // a third-party provider to make sure the customer's bank account can accept
 // Direct Debit. If a bank account is discovered to be closed or invalid, the
 // customer is requested to adjust the account number/routing number and
 // succeed in this check to continue with the flow.
 //
-// _BACS scheme_ [Payer Name
-// Verification](https://hub.gocardless.com/s/article/Introduction-to-Payer-Name-Verification?language=en_GB)
+// BACS scheme Payer Name Verification
+// (https://hub.gocardless.com/s/article/Introduction-to-Payer-Name-Verification?language=en_GB)
 // is enabled by default for UK based bank accounts, meaning we verify the
 // account holder name and bank account
 // number match the details held by the relevant bank.
@@ -1018,12 +1018,11 @@ func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string,
 
 // BillingRequestListParams parameters
 type BillingRequestListParams struct {
-	After     string `url:"after,omitempty" json:"after,omitempty"`
-	Before    string `url:"before,omitempty" json:"before,omitempty"`
-	CreatedAt string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer  string `url:"customer,omitempty" json:"customer,omitempty"`
-	Limit     int    `url:"limit,omitempty" json:"limit,omitempty"`
-	Status    string `url:"status,omitempty" json:"status,omitempty"`
+	After    string `url:"after,omitempty" json:"after,omitempty"`
+	Before   string `url:"before,omitempty" json:"before,omitempty"`
+	Customer string `url:"customer,omitempty" json:"customer,omitempty"`
+	Limit    int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Status   string `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type BillingRequestListResultMetaCursors struct {
@@ -1042,8 +1041,9 @@ type BillingRequestListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// billing requests.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your billing requests.
 func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) (*BillingRequestListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
 	if err != nil {

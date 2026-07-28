@@ -58,8 +58,9 @@ type TaxRateListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of all tax
-// rates.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of all tax rates.
 func (s *TaxRateServiceImpl) List(ctx context.Context, p TaxRateListParams, opts ...RequestOption) (*TaxRateListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/tax_rates"))
 	if err != nil {

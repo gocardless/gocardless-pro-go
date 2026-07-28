@@ -217,8 +217,9 @@ type CreditorListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// creditors.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your creditors.
 func (s *CreditorServiceImpl) List(ctx context.Context, p CreditorListParams, opts ...RequestOption) (*CreditorListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/creditors"))
 	if err != nil {

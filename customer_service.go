@@ -198,8 +198,9 @@ type CustomerListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// customers.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your customers.
 func (s *CustomerServiceImpl) List(ctx context.Context, p CustomerListParams, opts ...RequestOption) (*CustomerListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customers"))
 	if err != nil {
@@ -610,8 +611,8 @@ type CustomerRemoveParams struct {
 // customer by
 // ID.
 //
-// <p class="restricted-notice"><strong>The action of removing a customer cannot
-// be reversed, so please use with care.</strong></p>
+// The action of removing a customer cannot be reversed, so please use with
+// care.
 func (s *CustomerServiceImpl) Remove(ctx context.Context, identity string, p CustomerRemoveParams, opts ...RequestOption) (*Customer, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))

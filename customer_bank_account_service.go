@@ -24,19 +24,20 @@ type CustomerBankAccountLinks struct {
 
 // CustomerBankAccount model
 type CustomerBankAccount struct {
-	AccountHolderName   string                    `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
-	AccountNumberEnding string                    `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
-	AccountType         string                    `url:"account_type,omitempty" json:"account_type,omitempty"`
-	BankAccountToken    string                    `url:"bank_account_token,omitempty" json:"bank_account_token,omitempty"`
-	BankName            string                    `url:"bank_name,omitempty" json:"bank_name,omitempty"`
-	CountryCode         string                    `url:"country_code,omitempty" json:"country_code,omitempty"`
-	CreatedAt           string                    `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency            string                    `url:"currency,omitempty" json:"currency,omitempty"`
-	Enabled             bool                      `url:"enabled,omitempty" json:"enabled,omitempty"`
-	Id                  string                    `url:"id,omitempty" json:"id,omitempty"`
-	Links               *CustomerBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
-	Metadata            map[string]string         `url:"metadata,omitempty" json:"metadata,omitempty"`
-	TrustedRecipient    bool                      `url:"trusted_recipient,omitempty" json:"trusted_recipient,omitempty"`
+	AccountHolderName           string                    `url:"account_holder_name,omitempty" json:"account_holder_name,omitempty"`
+	AccountNumberEnding         string                    `url:"account_number_ending,omitempty" json:"account_number_ending,omitempty"`
+	AccountType                 string                    `url:"account_type,omitempty" json:"account_type,omitempty"`
+	BankAccountToken            string                    `url:"bank_account_token,omitempty" json:"bank_account_token,omitempty"`
+	BankName                    string                    `url:"bank_name,omitempty" json:"bank_name,omitempty"`
+	CountryCode                 string                    `url:"country_code,omitempty" json:"country_code,omitempty"`
+	CreatedAt                   string                    `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency                    string                    `url:"currency,omitempty" json:"currency,omitempty"`
+	Enabled                     bool                      `url:"enabled,omitempty" json:"enabled,omitempty"`
+	Id                          string                    `url:"id,omitempty" json:"id,omitempty"`
+	Links                       *CustomerBankAccountLinks `url:"links,omitempty" json:"links,omitempty"`
+	Metadata                    map[string]string         `url:"metadata,omitempty" json:"metadata,omitempty"`
+	PayerNameVerificationResult string                    `url:"payer_name_verification_result,omitempty" json:"payer_name_verification_result,omitempty"`
+	TrustedRecipient            bool                      `url:"trusted_recipient,omitempty" json:"trusted_recipient,omitempty"`
 }
 
 type CustomerBankAccountService interface {
@@ -73,15 +74,18 @@ type CustomerBankAccountCreateParams struct {
 //
 // There are three different ways to supply bank account details:
 //
-// - [Local details](#appendix-local-bank-details)
-//
-// - IBAN
-//
-// - [Customer Bank Account
-// Tokens](#javascript-flow-create-a-customer-bank-account-token)
+// -
+// Local details
+// (https://developer.gocardless.com/api-reference/#appendix-local-bank-details)
+// -
+// IBAN
+// -
+// Customer Bank Account Tokens
+// (https://developer.gocardless.com/api-reference/#javascript-flow-create-a-customer-bank-account-token)
 //
 // For more information on the different fields required in each country, see
-// [local bank details](#appendix-local-bank-details).
+// local bank details
+// (https://developer.gocardless.com/api-reference/#appendix-local-bank-details).
 func (s *CustomerBankAccountServiceImpl) Create(ctx context.Context, p CustomerBankAccountCreateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
 	if err != nil {
@@ -206,8 +210,9 @@ type CustomerBankAccountListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your bank
-// accounts.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your bank accounts.
 func (s *CustomerBankAccountServiceImpl) List(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) (*CustomerBankAccountListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
 	if err != nil {

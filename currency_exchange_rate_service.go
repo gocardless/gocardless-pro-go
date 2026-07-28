@@ -56,8 +56,9 @@ type CurrencyExchangeRateListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of all
-// exchange rates.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of all exchange rates.
 func (s *CurrencyExchangeRateServiceImpl) List(ctx context.Context, p CurrencyExchangeRateListParams, opts ...RequestOption) (*CurrencyExchangeRateListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/currency_exchange_rates"))
 	if err != nil {

@@ -93,8 +93,9 @@ type PayoutListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// payouts.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your payouts.
 func (s *PayoutServiceImpl) List(ctx context.Context, p PayoutListParams, opts ...RequestOption) (*PayoutListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payouts"))
 	if err != nil {
@@ -301,8 +302,8 @@ func (s *PayoutServiceImpl) All(ctx context.Context,
 
 // Get
 // Retrieves the details of a single payout. For an example of how to reconcile
-// the transactions in a payout, see [this
-// guide](#events-reconciling-payouts-with-events).
+// the transactions in a payout, see this guide
+// (https://developer.gocardless.com/api-reference/#events-reconciling-payouts-with-events).
 func (s *PayoutServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Payout, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payouts/%v",
 		identity))

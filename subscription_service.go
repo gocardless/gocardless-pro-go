@@ -214,9 +214,10 @@ type SubscriptionListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// subscriptions. Please note if the subscriptions are related to customers who
-// have been removed, they will not be shown in the response.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your subscriptions. Please note if the subscriptions are related to
+// customers who have been removed, they will not be shown in the response.
 func (s *SubscriptionServiceImpl) List(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) (*SubscriptionListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/subscriptions"))
 	if err != nil {
@@ -516,24 +517,25 @@ type SubscriptionUpdateParams struct {
 //
 // This fails with:
 //
-// - `validation_failed` if invalid data is provided when attempting to update a
+// -
+// `validation_failed` if invalid data is provided when attempting to update a
 // subscription.
-//
-// - `subscription_not_active` if the subscription is no longer active.
-//
-// - `subscription_already_ended` if the subscription has taken all payments.
-//
-// - `mandate_payments_require_approval` if the amount is being changed and the
+// -
+// `subscription_not_active` if the subscription is no longer active.
+// -
+// `subscription_already_ended` if the subscription has taken all payments.
+// -
+// `mandate_payments_require_approval` if the amount is being changed and the
 // mandate requires approval.
-//
-// - `number_of_subscription_amendments_exceeded` error if the subscription
-// amount has already been changed 10 times.
-//
-// - `forbidden` if the amount is being changed, and the subscription was
-// created by an app and you are not authenticated as that app, or if the
-// subscription was not created by an app and you are authenticated as an app
-//
-// - `resource_created_by_another_app` if the app fee is being changed, and the
+// -
+// `number_of_subscription_amendments_exceeded` error if the subscription amount
+// has already been changed 10 times.
+// -
+// `forbidden` if the amount is being changed, and the subscription was created
+// by an app and you are not authenticated as that app, or if the subscription
+// was not created by an app and you are authenticated as an app
+// -
+// `resource_created_by_another_app` if the app fee is being changed, and the
 // subscription was created by an app other than the app you are authenticated
 // as
 func (s *SubscriptionServiceImpl) Update(ctx context.Context, identity string, p SubscriptionUpdateParams, opts ...RequestOption) (*Subscription, error) {
@@ -643,8 +645,10 @@ type SubscriptionPauseParams struct {
 // when they continue forever (created without `count` or `end_date`) or
 // the subscription is already paused for a number of cycles.
 //
-// When `pause_cycles` is omitted the subscription is paused until the [resume
-// endpoint](#subscriptions-resume-a-subscription) is called.
+// When `pause_cycles` is omitted the subscription is paused until the resume
+// endpoint
+// (https://developer.gocardless.com/api-reference/#subscriptions-resume-a-subscription)
+// is called.
 // If the subscription is collecting a fixed number of payments, `end_date` will
 // be set to `null`.
 // When paused indefinitely, `upcoming_payments` will be empty.
@@ -658,22 +662,23 @@ type SubscriptionPauseParams struct {
 //
 // This fails with:
 //
-// - `forbidden` if the subscription was created by an app and you are not
+// -
+// `forbidden` if the subscription was created by an app and you are not
 // authenticated as that app, or if the subscription was not created by an app
 // and you are authenticated as an app
-//
-// - `validation_failed` if invalid data is provided when attempting to pause a
+// -
+// `validation_failed` if invalid data is provided when attempting to pause a
 // subscription.
-//
-// - `subscription_paused_cannot_update_cycles` if the subscription is already
+// -
+// `subscription_paused_cannot_update_cycles` if the subscription is already
 // paused for a number of cycles and the request provides a value for
 // `pause_cycle`.
-//
-// - `subscription_cannot_be_paused` if the subscription cannot be paused.
-//
-// - `subscription_already_ended` if the subscription has taken all payments.
-//
-// - `pause_cycles_must_be_greater_than_or_equal_to` if the provided value for
+// -
+// `subscription_cannot_be_paused` if the subscription cannot be paused.
+// -
+// `subscription_already_ended` if the subscription has taken all payments.
+// -
+// `pause_cycles_must_be_greater_than_or_equal_to` if the provided value for
 // `pause_cycles` cannot be satisfied.
 func (s *SubscriptionServiceImpl) Pause(ctx context.Context, identity string, p SubscriptionPauseParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/pause",
@@ -781,14 +786,15 @@ type SubscriptionResumeParams struct {
 //
 // This fails with:
 //
-// - `forbidden` if the subscription was created by an app and you are not
+// -
+// `forbidden` if the subscription was created by an app and you are not
 // authenticated as that app, or if the subscription was not created by an app
 // and you are authenticated as an app
-//
-// - `validation_failed` if invalid data is provided when attempting to resume a
+// -
+// `validation_failed` if invalid data is provided when attempting to resume a
 // subscription.
-//
-// - `subscription_not_paused` if the subscription is not paused.
+// -
+// `subscription_not_paused` if the subscription is not paused.
 func (s *SubscriptionServiceImpl) Resume(ctx context.Context, identity string, p SubscriptionResumeParams, opts ...RequestOption) (*Subscription, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/resume",
 		identity))

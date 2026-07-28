@@ -88,8 +88,9 @@ type BillingRequestTemplateListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// Billing Request Templates.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your Billing Request Templates.
 func (s *BillingRequestTemplateServiceImpl) List(ctx context.Context, p BillingRequestTemplateListParams, opts ...RequestOption) (*BillingRequestTemplateListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_templates"))
 	if err != nil {

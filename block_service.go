@@ -224,16 +224,21 @@ func (s *BlockServiceImpl) Get(ctx context.Context, identity string, opts ...Req
 	return result.Block, nil
 }
 
+type BlockListParamsCreatedAt struct {
+	Gt  string `url:"gt,omitempty" json:"gt,omitempty"`
+	Gte string `url:"gte,omitempty" json:"gte,omitempty"`
+	Lt  string `url:"lt,omitempty" json:"lt,omitempty"`
+	Lte string `url:"lte,omitempty" json:"lte,omitempty"`
+}
+
 // BlockListParams parameters
 type BlockListParams struct {
-	After      string `url:"after,omitempty" json:"after,omitempty"`
-	Before     string `url:"before,omitempty" json:"before,omitempty"`
-	Block      string `url:"block,omitempty" json:"block,omitempty"`
-	BlockType  string `url:"block_type,omitempty" json:"block_type,omitempty"`
-	CreatedAt  string `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Limit      int    `url:"limit,omitempty" json:"limit,omitempty"`
-	ReasonType string `url:"reason_type,omitempty" json:"reason_type,omitempty"`
-	UpdatedAt  string `url:"updated_at,omitempty" json:"updated_at,omitempty"`
+	After      string                    `url:"after,omitempty" json:"after,omitempty"`
+	Before     string                    `url:"before,omitempty" json:"before,omitempty"`
+	BlockType  string                    `url:"block_type,omitempty" json:"block_type,omitempty"`
+	CreatedAt  *BlockListParamsCreatedAt `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Limit      int                       `url:"limit,omitempty" json:"limit,omitempty"`
+	ReasonType string                    `url:"reason_type,omitempty" json:"reason_type,omitempty"`
 }
 
 type BlockListResultMetaCursors struct {
@@ -252,8 +257,9 @@ type BlockListResult struct {
 }
 
 // List
-// Returns a [cursor-paginated](#api-usage-cursor-pagination) list of your
-// blocks.
+// Returns a cursor-paginated
+// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// list of your blocks.
 func (s *BlockServiceImpl) List(ctx context.Context, p BlockListParams, opts ...RequestOption) (*BlockListResult, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks"))
 	if err != nil {
