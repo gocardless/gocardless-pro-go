@@ -42,9 +42,9 @@ type BankAccountHolderVerificationCreateParams struct {
 
 // Create
 // Verify the account holder of the bank account. A complete verification can be
-// attached when creating an outbound payment. This endpoint allows partner
-// merchants to create Confirmation of Payee checks on customer bank accounts
-// before sending outbound payments.
+// attached when creating an outbound payment.
+// This endpoint allows partner merchants to create Confirmation of Payee checks
+// on customer bank accounts before sending outbound payments.
 func (s *BankAccountHolderVerificationServiceImpl) Create(ctx context.Context, p BankAccountHolderVerificationCreateParams, opts ...RequestOption) (*BankAccountHolderVerification, error) {
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/bank_account_holder_verifications"))
 	if err != nil {
