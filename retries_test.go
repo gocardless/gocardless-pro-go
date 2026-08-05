@@ -154,6 +154,40 @@ func TestResponseErr_ValidationError(t *testing.T) {
 	}
 }
 
+func TestResponseError_Error_ReturnsCauseMessage(t *testing.T) {
+	body := `{"error":{"message":"validation failed","type":"validation_failed","errors":[{"field":"postal_code","reason":"invalid","message":"Postal code is invalid"}]}}`
+	resp := &http.Response{
+		StatusCode: 409,
+		Status:     "409 Conflict",
+		Body:       io.NopCloser(strings.NewReader(body)),
+	}
+
+	err := responseErr(resp)
+	if err == nil {
+		t.Fatal("expected error for 409 response")
+	}
+
+	got := err.Error()
+	if !strings.Contains(got, "validation failed") {
+		t.Fatalf("expected Error() to contain the API error message, got %q", got)
+	}
+	if !strings.Contains(got, "postal_code") {
+		t.Fatalf("expected Error() to contain validation field detail, got %q", got)
+	}
+	if got == "409 Conflict" {
+		t.Fatal("Error() should not fall back to the bare HTTP status when a cause is available")
+	}
+}
+
+func TestResponseError_Error_FallsBackToStatusWithoutCause(t *testing.T) {
+	re := &responseError{
+		res: &http.Response{Status: "409 Conflict"},
+	}
+	if got := re.Error(); got != "409 Conflict" {
+		t.Fatalf("expected fallback to status %q, got %q", "409 Conflict", got)
+	}
+}
+
 func TestResponseError_Temporary(t *testing.T) {
 	tests := []struct {
 		code int
