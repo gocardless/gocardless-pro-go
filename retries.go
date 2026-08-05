@@ -102,6 +102,9 @@ func (r *responseError) Unwrap() error {
 }
 
 func (r *responseError) Error() string {
+	if r.err != nil {
+		return r.err.Error()
+	}
 	return r.res.Status
 }
 
