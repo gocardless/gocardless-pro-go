@@ -37,6 +37,7 @@ type PaymentLinks struct {
 type Payment struct {
 	Amount          int               `url:"amount,omitempty" json:"amount,omitempty"`
 	AmountRefunded  int               `url:"amount_refunded,omitempty" json:"amount_refunded,omitempty"`
+	AppFee          int               `url:"app_fee,omitempty" json:"app_fee,omitempty"`
 	ChargeDate      string            `url:"charge_date,omitempty" json:"charge_date,omitempty"`
 	CreatedAt       string            `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Currency        string            `url:"currency,omitempty" json:"currency,omitempty"`
