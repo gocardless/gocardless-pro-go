@@ -29,7 +29,7 @@ toolchain will resolve and fetch the gocardless-pro-go module automatically.
 Alternatively, you can also explicitly `go get` the package into a project:
 
 ```
-go get -u github.com/gocardless/gocardless-pro-go@v6.4.2
+go get -u github.com/gocardless/gocardless-pro-go@v6.4.3
 ```
 
 ## Initializing the client
