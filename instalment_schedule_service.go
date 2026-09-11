@@ -92,7 +92,7 @@ type InstalmentScheduleCreateWithDatesParams struct {
 // the
 // failures.
 func (s *InstalmentScheduleServiceImpl) CreateWithDates(ctx context.Context, p InstalmentScheduleCreateWithDatesParams, opts ...RequestOption) (*InstalmentSchedule, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules/create_with_dates"))
 	if err != nil {
 		return nil, err
 	}
@@ -225,7 +225,7 @@ type InstalmentScheduleCreateWithScheduleParams struct {
 // the
 // failures.
 func (s *InstalmentScheduleServiceImpl) CreateWithSchedule(ctx context.Context, p InstalmentScheduleCreateWithScheduleParams, opts ...RequestOption) (*InstalmentSchedule, error) {
-	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
+	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules/create_with_schedule"))
 	if err != nil {
 		return nil, err
 	}
