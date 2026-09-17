@@ -36,8 +36,9 @@ type BankAccountHolderVerificationCreateParamsLinks struct {
 
 // BankAccountHolderVerificationCreateParams parameters
 type BankAccountHolderVerificationCreateParams struct {
-	Links BankAccountHolderVerificationCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
-	Type  string                                         `url:"type,omitempty" json:"type,omitempty"`
+	Links     BankAccountHolderVerificationCreateParamsLinks `url:"links,omitempty" json:"links,omitempty"`
+	Reference string                                         `url:"reference,omitempty" json:"reference,omitempty"`
+	Type      string                                         `url:"type,omitempty" json:"type,omitempty"`
 }
 
 // Create
