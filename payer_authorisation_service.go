@@ -23,6 +23,7 @@ type PayerAuthorisationBankAccount struct {
 	AccountNumberSuffix string            `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
 	AccountType         string            `url:"account_type,omitempty" json:"account_type,omitempty"`
 	BankCode            string            `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BankName            string            `url:"bank_name,omitempty" json:"bank_name,omitempty"`
 	BranchCode          string            `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	CountryCode         string            `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Currency            string            `url:"currency,omitempty" json:"currency,omitempty"`
@@ -175,6 +176,7 @@ type PayerAuthorisationCreateParamsBankAccount struct {
 	AccountNumberSuffix string            `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
 	AccountType         string            `url:"account_type,omitempty" json:"account_type,omitempty"`
 	BankCode            string            `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BankName            string            `url:"bank_name,omitempty" json:"bank_name,omitempty"`
 	BranchCode          string            `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	CountryCode         string            `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Currency            string            `url:"currency,omitempty" json:"currency,omitempty"`
@@ -319,6 +321,7 @@ type PayerAuthorisationUpdateParamsBankAccount struct {
 	AccountNumberSuffix string            `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
 	AccountType         string            `url:"account_type,omitempty" json:"account_type,omitempty"`
 	BankCode            string            `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BankName            string            `url:"bank_name,omitempty" json:"bank_name,omitempty"`
 	BranchCode          string            `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	CountryCode         string            `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Currency            string            `url:"currency,omitempty" json:"currency,omitempty"`
