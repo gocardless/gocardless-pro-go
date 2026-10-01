@@ -24,15 +24,13 @@ type InstitutionLimits struct {
 
 // Institution model
 type Institution struct {
-	AutocompletesCollectBankAccount bool               `url:"autocompletes_collect_bank_account,omitempty" json:"autocompletes_collect_bank_account,omitempty"`
-	CountryCode                     string             `url:"country_code,omitempty" json:"country_code,omitempty"`
-	IconUrl                         string             `url:"icon_url,omitempty" json:"icon_url,omitempty"`
-	Id                              string             `url:"id,omitempty" json:"id,omitempty"`
-	Limits                          *InstitutionLimits `url:"limits,omitempty" json:"limits,omitempty"`
-	LogoUrl                         string             `url:"logo_url,omitempty" json:"logo_url,omitempty"`
-	Name                            string             `url:"name,omitempty" json:"name,omitempty"`
-	Roles                           []string           `url:"roles,omitempty" json:"roles,omitempty"`
-	Status                          string             `url:"status,omitempty" json:"status,omitempty"`
+	CountryCode string             `url:"country_code,omitempty" json:"country_code,omitempty"`
+	IconUrl     string             `url:"icon_url,omitempty" json:"icon_url,omitempty"`
+	Id          string             `url:"id,omitempty" json:"id,omitempty"`
+	Limits      *InstitutionLimits `url:"limits,omitempty" json:"limits,omitempty"`
+	LogoUrl     string             `url:"logo_url,omitempty" json:"logo_url,omitempty"`
+	Name        string             `url:"name,omitempty" json:"name,omitempty"`
+	Roles       []string           `url:"roles,omitempty" json:"roles,omitempty"`
 }
 
 type InstitutionService interface {
