@@ -19,13 +19,17 @@ type MandateServiceImpl struct {
 }
 
 type MandateConsentParameters struct {
-	EndDate              string `url:"end_date,omitempty" json:"end_date,omitempty"`
-	MaxAmountPerPayment  int    `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
-	MaxAmountPerPeriod   int    `url:"max_amount_per_period,omitempty" json:"max_amount_per_period,omitempty"`
-	MaxPaymentsPerPeriod int    `url:"max_payments_per_period,omitempty" json:"max_payments_per_period,omitempty"`
-	Period               string `url:"period,omitempty" json:"period,omitempty"`
-	PeriodAlignment      string `url:"period_alignment,omitempty" json:"period_alignment,omitempty"`
-	StartDate            string `url:"start_date,omitempty" json:"start_date,omitempty"`
+	Currency              string `url:"currency,omitempty" json:"currency,omitempty"`
+	EndDate               string `url:"end_date,omitempty" json:"end_date,omitempty"`
+	FixedAmountPerPayment int    `url:"fixed_amount_per_payment,omitempty" json:"fixed_amount_per_payment,omitempty"`
+	Id                    string `url:"id,omitempty" json:"id,omitempty"`
+	MaxAmountPerPayment   int    `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+	MaxAmountPerPeriod    int    `url:"max_amount_per_period,omitempty" json:"max_amount_per_period,omitempty"`
+	MaxPaymentsPerPeriod  int    `url:"max_payments_per_period,omitempty" json:"max_payments_per_period,omitempty"`
+	Period                string `url:"period,omitempty" json:"period,omitempty"`
+	PeriodAlignment       string `url:"period_alignment,omitempty" json:"period_alignment,omitempty"`
+	Scheme                string `url:"scheme,omitempty" json:"scheme,omitempty"`
+	StartDate             string `url:"start_date,omitempty" json:"start_date,omitempty"`
 }
 
 type MandateLinks struct {
