@@ -339,8 +339,8 @@ type InstalmentScheduleListResultMetaCursors struct {
 }
 
 type InstalmentScheduleListResultMeta struct {
-	Cursors *InstalmentScheduleListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors InstalmentScheduleListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                     `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type InstalmentScheduleListResult struct {

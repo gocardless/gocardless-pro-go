@@ -46,8 +46,8 @@ type CurrencyExchangeRateListResultMetaCursors struct {
 }
 
 type CurrencyExchangeRateListResultMeta struct {
-	Cursors *CurrencyExchangeRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                        `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors CurrencyExchangeRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                       `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type CurrencyExchangeRateListResult struct {

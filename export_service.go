@@ -127,8 +127,8 @@ type ExportListResultMetaCursors struct {
 }
 
 type ExportListResultMeta struct {
-	Cursors *ExportListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors ExportListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type ExportListResult struct {

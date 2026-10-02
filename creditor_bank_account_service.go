@@ -182,8 +182,8 @@ type CreditorBankAccountListResultMetaCursors struct {
 }
 
 type CreditorBankAccountListResultMeta struct {
-	Cursors *CreditorBankAccountListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                       `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors CreditorBankAccountListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type CreditorBankAccountListResult struct {

@@ -61,8 +61,8 @@ type PayoutItemListResultMetaCursors struct {
 }
 
 type PayoutItemListResultMeta struct {
-	Cursors *PayoutItemListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                              `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors PayoutItemListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                             `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type PayoutItemListResult struct {
