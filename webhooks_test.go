@@ -33,7 +33,7 @@ func TestWebhookFailsWithInvalidSignature(t *testing.T) {
 	}
 }
 
-func TestWebhookFailsWithValidSignature(t *testing.T) {
+func TestWebhookSucceedsWithValidSignature(t *testing.T) {
 	var called int
 
 	wh, err := NewWebhookHandler("testing", EventHandlerFunc(func(e Event) error {
@@ -77,9 +77,6 @@ func TestWebhookWhenHandlerFails(t *testing.T) {
 		expectedID := "EVTESTNE86TNZS"
 		if e.Id != expectedID {
 			t.Fatalf("Expected %q, got %q", expectedID, e.Id)
-		}
-		if called == 0 {
-			return nil
 		}
 		return errors.New("failed")
 	}))
