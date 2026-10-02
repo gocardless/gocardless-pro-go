@@ -271,8 +271,8 @@ type OutboundPaymentImportListResultMetaCursors struct {
 }
 
 type OutboundPaymentImportListResultMeta struct {
-	Cursors *OutboundPaymentImportListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                         `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors OutboundPaymentImportListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                        `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type OutboundPaymentImportListResult struct {

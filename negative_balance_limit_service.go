@@ -52,8 +52,8 @@ type NegativeBalanceLimitListResultMetaCursors struct {
 }
 
 type NegativeBalanceLimitListResultMeta struct {
-	Cursors *NegativeBalanceLimitListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                        `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors NegativeBalanceLimitListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                       `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type NegativeBalanceLimitListResult struct {

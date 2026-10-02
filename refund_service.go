@@ -194,8 +194,8 @@ type RefundListResultMetaCursors struct {
 }
 
 type RefundListResultMeta struct {
-	Cursors *RefundListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors RefundListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type RefundListResult struct {

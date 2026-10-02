@@ -211,8 +211,8 @@ type MandateImportEntryListResultMetaCursors struct {
 }
 
 type MandateImportEntryListResultMeta struct {
-	Cursors *MandateImportEntryListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors MandateImportEntryListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                     `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type MandateImportEntryListResult struct {

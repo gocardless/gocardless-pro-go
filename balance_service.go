@@ -50,8 +50,8 @@ type BalanceListResultMetaCursors struct {
 }
 
 type BalanceListResultMeta struct {
-	Cursors *BalanceListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors BalanceListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type BalanceListResult struct {

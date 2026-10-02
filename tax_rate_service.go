@@ -48,8 +48,8 @@ type TaxRateListResultMetaCursors struct {
 }
 
 type TaxRateListResultMeta struct {
-	Cursors *TaxRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors TaxRateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type TaxRateListResult struct {

@@ -247,8 +247,8 @@ type BlockListResultMetaCursors struct {
 }
 
 type BlockListResultMeta struct {
-	Cursors *BlockListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors BlockListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                        `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type BlockListResult struct {
@@ -649,8 +649,8 @@ type BlockBlockByRefResultMetaCursors struct {
 }
 
 type BlockBlockByRefResultMeta struct {
-	Cursors *BlockBlockByRefResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                               `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors BlockBlockByRefResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                              `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type BlockBlockByRefResult struct {

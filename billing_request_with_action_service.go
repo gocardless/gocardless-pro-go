@@ -256,7 +256,7 @@ type BillingRequestWithActionBillingRequests struct {
 // BillingRequestWithAction model
 type BillingRequestWithAction struct {
 	BankAuthorisations *BillingRequestWithActionBankAuthorisations `url:"bank_authorisations,omitempty" json:"bank_authorisations,omitempty"`
-	BillingRequests    *BillingRequestWithActionBillingRequests    `url:"billing_requests,omitempty" json:"billing_requests,omitempty"`
+	BillingRequests    BillingRequestWithActionBillingRequests     `url:"billing_requests,omitempty" json:"billing_requests,omitempty"`
 }
 
 type BillingRequestWithActionService interface {
