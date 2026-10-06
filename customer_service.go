@@ -73,6 +73,7 @@ type CustomerCreateParams struct {
 // Create
 // Creates a new customer object.
 func (s *CustomerServiceImpl) Create(ctx context.Context, p CustomerCreateParams, opts ...RequestOption) (*Customer, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customers"))
 	if err != nil {
 		return nil, err
@@ -202,6 +203,7 @@ type CustomerListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your customers.
 func (s *CustomerServiceImpl) List(ctx context.Context, p CustomerListParams, opts ...RequestOption) (*CustomerListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customers"))
 	if err != nil {
 		return nil, err
@@ -408,6 +410,12 @@ func (s *CustomerServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of an existing customer.
 func (s *CustomerServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Customer, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))
 	if err != nil {
@@ -509,6 +517,12 @@ type CustomerUpdateParams struct {
 // Updates a customer object. Supports all of the fields supported when creating
 // a customer.
 func (s *CustomerServiceImpl) Update(ctx context.Context, identity string, p CustomerUpdateParams, opts ...RequestOption) (*Customer, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))
 	if err != nil {
@@ -614,6 +628,12 @@ type CustomerRemoveParams struct {
 // The action of removing a customer cannot be reversed, so please use with
 // care.
 func (s *CustomerServiceImpl) Remove(ctx context.Context, identity string, p CustomerRemoveParams, opts ...RequestOption) (*Customer, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customers/%v",
 		identity))
 	if err != nil {

@@ -361,6 +361,7 @@ type BillingRequestCreateParams struct {
 // Important: All properties associated with subscription_request and
 // instalment_schedule_request are only supported for ACH and PAD schemes.
 func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequestCreateParams, opts ...RequestOption) (*BillingRequest, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
 	if err != nil {
 		return nil, err
@@ -492,6 +493,12 @@ type BillingRequestCollectCustomerDetailsParams struct {
 // customer, and will take effect immediately after the request is
 // successful.
 func (s *BillingRequestServiceImpl) CollectCustomerDetails(ctx context.Context, identity string, p BillingRequestCollectCustomerDetailsParams, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/collect_customer_details",
 		identity))
 	if err != nil {
@@ -627,6 +634,12 @@ type BillingRequestCollectBankAccountParams struct {
 // instructions are here
 // (https://developer.gocardless.com/developer-tools/scenario-simulators/#payer_name_verification)
 func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, identity string, p BillingRequestCollectBankAccountParams, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/collect_bank_account",
 		identity))
 	if err != nil {
@@ -729,6 +742,12 @@ type BillingRequestConfirmPayerDetailsParams struct {
 // we are required to
 // allow the payer to crosscheck the details entered by them and confirm it.
 func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, identity string, p BillingRequestConfirmPayerDetailsParams, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/confirm_payer_details",
 		identity))
 	if err != nil {
@@ -829,6 +848,12 @@ type BillingRequestFulfilParams struct {
 // If a billing request is ready to be fulfilled, call this endpoint to cause
 // it to fulfil, executing the payment.
 func (s *BillingRequestServiceImpl) Fulfil(ctx context.Context, identity string, p BillingRequestFulfilParams, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/fulfil",
 		identity))
 	if err != nil {
@@ -929,6 +954,12 @@ type BillingRequestCancelParams struct {
 // Immediately cancels a billing request, causing all billing request flows
 // to expire.
 func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string, p BillingRequestCancelParams, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/cancel",
 		identity))
 	if err != nil {
@@ -1049,6 +1080,7 @@ type BillingRequestListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your billing requests.
 func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) (*BillingRequestListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests"))
 	if err != nil {
 		return nil, err
@@ -1255,6 +1287,12 @@ func (s *BillingRequestServiceImpl) All(ctx context.Context,
 // Get
 // Fetches a billing request
 func (s *BillingRequestServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v",
 		identity))
 	if err != nil {
@@ -1345,6 +1383,12 @@ type BillingRequestNotifyParams struct {
 //
 // This endpoint is currently supported only for Pay by Bank Billing Requests.
 func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string, p BillingRequestNotifyParams, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/notify",
 		identity))
 	if err != nil {
@@ -1444,6 +1488,12 @@ type BillingRequestFallbackParams struct {
 // Triggers a fallback from the open-banking flow to direct debit. Note, the
 // billing request must have fallback enabled.
 func (s *BillingRequestServiceImpl) Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/fallback",
 		identity))
 	if err != nil {
@@ -1550,6 +1600,12 @@ type BillingRequestChooseCurrencyParams struct {
 // Flow. It
 // will also not support any request which has a payments request.
 func (s *BillingRequestServiceImpl) ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/choose_currency",
 		identity))
 	if err != nil {
@@ -1650,6 +1706,12 @@ type BillingRequestSelectInstitutionParams struct {
 // SelectInstitution
 // Creates an Institution object and attaches it to the Billing Request
 func (s *BillingRequestServiceImpl) SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/actions/select_institution",
 		identity))
 	if err != nil {

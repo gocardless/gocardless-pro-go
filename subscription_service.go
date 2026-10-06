@@ -90,6 +90,7 @@ type SubscriptionCreateParams struct {
 // Create
 // Creates a new subscription object
 func (s *SubscriptionServiceImpl) Create(ctx context.Context, p SubscriptionCreateParams, opts ...RequestOption) (*Subscription, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/subscriptions"))
 	if err != nil {
 		return nil, err
@@ -219,6 +220,7 @@ type SubscriptionListResult struct {
 // list of your subscriptions. Please note if the subscriptions are related to
 // customers who have been removed, they will not be shown in the response.
 func (s *SubscriptionServiceImpl) List(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) (*SubscriptionListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/subscriptions"))
 	if err != nil {
 		return nil, err
@@ -425,6 +427,12 @@ func (s *SubscriptionServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of a single subscription.
 func (s *SubscriptionServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Subscription, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v",
 		identity))
 	if err != nil {
@@ -539,6 +547,12 @@ type SubscriptionUpdateParams struct {
 // subscription was created by an app other than the app you are authenticated
 // as
 func (s *SubscriptionServiceImpl) Update(ctx context.Context, identity string, p SubscriptionUpdateParams, opts ...RequestOption) (*Subscription, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v",
 		identity))
 	if err != nil {
@@ -681,6 +695,12 @@ type SubscriptionPauseParams struct {
 // `pause_cycles_must_be_greater_than_or_equal_to` if the provided value for
 // `pause_cycles` cannot be satisfied.
 func (s *SubscriptionServiceImpl) Pause(ctx context.Context, identity string, p SubscriptionPauseParams, opts ...RequestOption) (*Subscription, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/pause",
 		identity))
 	if err != nil {
@@ -796,6 +816,12 @@ type SubscriptionResumeParams struct {
 // -
 // `subscription_not_paused` if the subscription is not paused.
 func (s *SubscriptionServiceImpl) Resume(ctx context.Context, identity string, p SubscriptionResumeParams, opts ...RequestOption) (*Subscription, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/resume",
 		identity))
 	if err != nil {
@@ -900,6 +926,12 @@ type SubscriptionCancelParams struct {
 // This will fail with a cancellation_failed error if the subscription is
 // already cancelled or finished.
 func (s *SubscriptionServiceImpl) Cancel(ctx context.Context, identity string, p SubscriptionCancelParams, opts ...RequestOption) (*Subscription, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/subscriptions/%v/actions/cancel",
 		identity))
 	if err != nil {

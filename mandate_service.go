@@ -88,6 +88,7 @@ type MandateCreateParams struct {
 // Create
 // Creates a new mandate object.
 func (s *MandateServiceImpl) Create(ctx context.Context, p MandateCreateParams, opts ...RequestOption) (*Mandate, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandates"))
 	if err != nil {
 		return nil, err
@@ -220,6 +221,7 @@ type MandateListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your mandates.
 func (s *MandateServiceImpl) List(ctx context.Context, p MandateListParams, opts ...RequestOption) (*MandateListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandates"))
 	if err != nil {
 		return nil, err
@@ -426,6 +428,12 @@ func (s *MandateServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of an existing mandate.
 func (s *MandateServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Mandate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v",
 		identity))
 	if err != nil {
@@ -511,6 +519,12 @@ type MandateUpdateParams struct {
 // Update
 // Updates a mandate object. This accepts only the metadata parameter.
 func (s *MandateServiceImpl) Update(ctx context.Context, identity string, p MandateUpdateParams, opts ...RequestOption) (*Mandate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v",
 		identity))
 	if err != nil {
@@ -615,6 +629,12 @@ type MandateCancelParams struct {
 // This will fail with a `cancellation_failed` error if the mandate is already
 // cancelled.
 func (s *MandateServiceImpl) Cancel(ctx context.Context, identity string, p MandateCancelParams, opts ...RequestOption) (*Mandate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v/actions/cancel",
 		identity))
 	if err != nil {
@@ -724,6 +744,12 @@ type MandateReinstateParams struct {
 //
 // Mandates can be resubmitted up to 10 times.
 func (s *MandateServiceImpl) Reinstate(ctx context.Context, identity string, p MandateReinstateParams, opts ...RequestOption) (*Mandate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v/actions/reinstate",
 		identity))
 	if err != nil {

@@ -87,6 +87,7 @@ type CustomerBankAccountCreateParams struct {
 // local bank details
 // (https://developer.gocardless.com/api-reference/#appendix-local-bank-details).
 func (s *CustomerBankAccountServiceImpl) Create(ctx context.Context, p CustomerBankAccountCreateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
 	if err != nil {
 		return nil, err
@@ -214,6 +215,7 @@ type CustomerBankAccountListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your bank accounts.
 func (s *CustomerBankAccountServiceImpl) List(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) (*CustomerBankAccountListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
 	if err != nil {
 		return nil, err
@@ -420,6 +422,12 @@ func (s *CustomerBankAccountServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of an existing bank account.
 func (s *CustomerBankAccountServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_bank_accounts/%v",
 		identity))
 	if err != nil {
@@ -506,6 +514,12 @@ type CustomerBankAccountUpdateParams struct {
 // Updates a customer bank account object. Only the metadata parameter is
 // allowed.
 func (s *CustomerBankAccountServiceImpl) Update(ctx context.Context, identity string, p CustomerBankAccountUpdateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_bank_accounts/%v",
 		identity))
 	if err != nil {
@@ -606,6 +620,12 @@ func (s *CustomerBankAccountServiceImpl) Update(ctx context.Context, identity st
 // A disabled bank account can be re-enabled by creating a new bank account
 // resource with the same details.
 func (s *CustomerBankAccountServiceImpl) Disable(ctx context.Context, identity string, opts ...RequestOption) (*CustomerBankAccount, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_bank_accounts/%v/actions/disable",
 		identity))
 	if err != nil {

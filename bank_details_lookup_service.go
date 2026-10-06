@@ -76,6 +76,7 @@ type BankDetailsLookupCreateParams struct {
 // modulus or reachability checking but not for payment collection, please get
 // in touch.
 func (s *BankDetailsLookupServiceImpl) Create(ctx context.Context, p BankDetailsLookupCreateParams, opts ...RequestOption) (*BankDetailsLookup, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/bank_details_lookups"))
 	if err != nil {
 		return nil, err

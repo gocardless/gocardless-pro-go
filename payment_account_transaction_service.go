@@ -48,6 +48,12 @@ type PaymentAccountTransactionService interface {
 // Get
 // Retrieves the details of an existing payment account transaction.
 func (s *PaymentAccountTransactionServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*PaymentAccountTransaction, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payment_account_transactions/%v",
 		identity))
 	if err != nil {
@@ -153,6 +159,12 @@ type PaymentAccountTransactionListResult struct {
 // List
 // List transactions for a given payment account.
 func (s *PaymentAccountTransactionServiceImpl) List(ctx context.Context, identity string, p PaymentAccountTransactionListParams, opts ...RequestOption) (*PaymentAccountTransactionListResult, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payment_accounts/%v/transactions",
 		identity))
 	if err != nil {
@@ -261,9 +273,13 @@ func (c *PaymentAccountTransactionListPagingIterator) Value(ctx context.Context)
 	s := c.service
 	p := c.params
 	p.After = c.cursor
+	identity, err := escapeURLParam("identity", c.identity)
+	if err != nil {
+		return nil, err
+	}
 
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payment_accounts/%v/transactions",
-		c.identity))
+		identity))
 
 	if err != nil {
 		return nil, err

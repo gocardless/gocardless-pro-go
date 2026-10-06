@@ -96,6 +96,7 @@ type CreditorCreateParams struct {
 // Create
 // Creates a new creditor.
 func (s *CreditorServiceImpl) Create(ctx context.Context, p CreditorCreateParams, opts ...RequestOption) (*Creditor, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/creditors"))
 	if err != nil {
 		return nil, err
@@ -221,6 +222,7 @@ type CreditorListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your creditors.
 func (s *CreditorServiceImpl) List(ctx context.Context, p CreditorListParams, opts ...RequestOption) (*CreditorListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/creditors"))
 	if err != nil {
 		return nil, err
@@ -431,6 +433,12 @@ type CreditorGetParams struct {
 // Get
 // Retrieves the details of an existing creditor.
 func (s *CreditorServiceImpl) Get(ctx context.Context, identity string, p CreditorGetParams, opts ...RequestOption) (*Creditor, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditors/%v",
 		identity))
 	if err != nil {
@@ -537,6 +545,12 @@ type CreditorUpdateParams struct {
 // Updates a creditor object. Supports all of the fields supported when creating
 // a creditor.
 func (s *CreditorServiceImpl) Update(ctx context.Context, identity string, p CreditorUpdateParams, opts ...RequestOption) (*Creditor, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditors/%v",
 		identity))
 	if err != nil {

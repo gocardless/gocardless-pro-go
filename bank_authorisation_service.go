@@ -53,6 +53,7 @@ type BankAuthorisationCreateParams struct {
 // Create
 // Create a Bank Authorisation.
 func (s *BankAuthorisationServiceImpl) Create(ctx context.Context, p BankAuthorisationCreateParams, opts ...RequestOption) (*BankAuthorisation, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/bank_authorisations"))
 	if err != nil {
 		return nil, err
@@ -146,6 +147,12 @@ func (s *BankAuthorisationServiceImpl) Create(ctx context.Context, p BankAuthori
 // Get
 // Get a single bank authorisation.
 func (s *BankAuthorisationServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*BankAuthorisation, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/bank_authorisations/%v",
 		identity))
 	if err != nil {

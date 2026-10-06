@@ -65,6 +65,7 @@ type BalanceListResult struct {
 // list of balances for a given creditor. This endpoint is rate limited to 60
 // requests per minute.
 func (s *BalanceServiceImpl) List(ctx context.Context, p BalanceListParams, opts ...RequestOption) (*BalanceListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/balances"))
 	if err != nil {
 		return nil, err

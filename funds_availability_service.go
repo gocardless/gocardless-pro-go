@@ -36,6 +36,12 @@ type FundsAvailabilityCheckParams struct {
 // the merchant wants to charge within the consent parameters defined on the
 // mandate.
 func (s *FundsAvailabilityServiceImpl) Check(ctx context.Context, identity string, p FundsAvailabilityCheckParams, opts ...RequestOption) (*FundsAvailability, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/funds_availability/%v",
 		identity))
 	if err != nil {

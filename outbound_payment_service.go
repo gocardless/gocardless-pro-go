@@ -85,6 +85,7 @@ type OutboundPaymentCreateParams struct {
 
 // Create
 func (s *OutboundPaymentServiceImpl) Create(ctx context.Context, p OutboundPaymentCreateParams, opts ...RequestOption) (*OutboundPayment, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/outbound_payments"))
 	if err != nil {
 		return nil, err
@@ -194,6 +195,7 @@ type OutboundPaymentWithdrawParams struct {
 // Creates an outbound payment to your verified business bank account as the
 // recipient.
 func (s *OutboundPaymentServiceImpl) Withdraw(ctx context.Context, p OutboundPaymentWithdrawParams, opts ...RequestOption) (*OutboundPayment, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/outbound_payments/withdrawal"))
 	if err != nil {
 		return nil, err
@@ -295,6 +297,12 @@ type OutboundPaymentCancelParams struct {
 // Once an outbound payment is `executing`, the money moving process has begun
 // and cannot be reversed.
 func (s *OutboundPaymentServiceImpl) Cancel(ctx context.Context, identity string, p OutboundPaymentCancelParams, opts ...RequestOption) (*OutboundPayment, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payments/%v/actions/cancel",
 		identity))
 	if err != nil {
@@ -394,6 +402,12 @@ type OutboundPaymentApproveParams struct {
 // Approves an outbound payment. Only outbound payments with the
 // "pending_approval" status can be approved.
 func (s *OutboundPaymentServiceImpl) Approve(ctx context.Context, identity string, p OutboundPaymentApproveParams, opts ...RequestOption) (*OutboundPayment, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payments/%v/actions/approve",
 		identity))
 	if err != nil {
@@ -488,6 +502,12 @@ func (s *OutboundPaymentServiceImpl) Approve(ctx context.Context, identity strin
 // Get
 // Fetches an outbound_payment by ID
 func (s *OutboundPaymentServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*OutboundPayment, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payments/%v",
 		identity))
 	if err != nil {
@@ -595,6 +615,7 @@ type OutboundPaymentListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of outbound payments.
 func (s *OutboundPaymentServiceImpl) List(ctx context.Context, p OutboundPaymentListParams, opts ...RequestOption) (*OutboundPaymentListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/outbound_payments"))
 	if err != nil {
 		return nil, err
@@ -806,6 +827,12 @@ type OutboundPaymentUpdateParams struct {
 // Update
 // Updates an outbound payment object. This accepts only the metadata parameter.
 func (s *OutboundPaymentServiceImpl) Update(ctx context.Context, identity string, p OutboundPaymentUpdateParams, opts ...RequestOption) (*OutboundPayment, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payments/%v",
 		identity))
 	if err != nil {
@@ -909,6 +936,7 @@ type OutboundPaymentStatsResult struct {
 // Retrieve aggregate statistics on outbound payments.
 func (s *OutboundPaymentServiceImpl) Stats(ctx context.Context, p OutboundPaymentStatsParams, opts ...RequestOption) (
 	*OutboundPaymentStatsResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/outbound_payments/stats"))
 	if err != nil {
 		return nil, err

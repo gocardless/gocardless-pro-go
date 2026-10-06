@@ -69,6 +69,7 @@ type CreditorBankAccountCreateParams struct {
 // Create
 // Creates a new creditor bank account object.
 func (s *CreditorBankAccountServiceImpl) Create(ctx context.Context, p CreditorBankAccountCreateParams, opts ...RequestOption) (*CreditorBankAccount, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/creditor_bank_accounts"))
 	if err != nil {
 		return nil, err
@@ -196,6 +197,7 @@ type CreditorBankAccountListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your creditor bank accounts.
 func (s *CreditorBankAccountServiceImpl) List(ctx context.Context, p CreditorBankAccountListParams, opts ...RequestOption) (*CreditorBankAccountListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/creditor_bank_accounts"))
 	if err != nil {
 		return nil, err
@@ -402,6 +404,12 @@ func (s *CreditorBankAccountServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of an existing creditor bank account.
 func (s *CreditorBankAccountServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*CreditorBankAccount, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditor_bank_accounts/%v",
 		identity))
 	if err != nil {
@@ -489,6 +497,12 @@ func (s *CreditorBankAccountServiceImpl) Get(ctx context.Context, identity strin
 // A disabled bank account can be re-enabled by creating a new bank account
 // resource with the same details.
 func (s *CreditorBankAccountServiceImpl) Disable(ctx context.Context, identity string, opts ...RequestOption) (*CreditorBankAccount, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/creditor_bank_accounts/%v/actions/disable",
 		identity))
 	if err != nil {

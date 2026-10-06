@@ -42,6 +42,12 @@ type PaymentAccountService interface {
 // Get
 // Retrieves the details of an existing payment account.
 func (s *PaymentAccountServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*PaymentAccount, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payment_accounts/%v",
 		identity))
 	if err != nil {
@@ -146,6 +152,7 @@ type PaymentAccountListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your payment accounts.
 func (s *PaymentAccountServiceImpl) List(ctx context.Context, p PaymentAccountListParams, opts ...RequestOption) (*PaymentAccountListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payment_accounts"))
 	if err != nil {
 		return nil, err

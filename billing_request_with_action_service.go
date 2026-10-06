@@ -391,6 +391,7 @@ type BillingRequestWithActionCreateWithActionsParams struct {
 // such as collecting customer details, bank account details, or other required
 // actions.
 func (s *BillingRequestWithActionServiceImpl) CreateWithActions(ctx context.Context, p BillingRequestWithActionCreateWithActionsParams, opts ...RequestOption) (*BillingRequestWithAction, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_requests/create_with_actions"))
 	if err != nil {
 		return nil, err

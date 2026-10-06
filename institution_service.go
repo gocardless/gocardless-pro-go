@@ -65,6 +65,7 @@ type InstitutionListResult struct {
 // List
 // Returns a list of supported institutions.
 func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListParams, opts ...RequestOption) (*InstitutionListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/institutions"))
 	if err != nil {
 		return nil, err
@@ -176,6 +177,12 @@ type InstitutionListForBillingRequestResult struct {
 // This endpoint is currently supported only for FasterPayments.
 func (s *InstitutionServiceImpl) ListForBillingRequest(ctx context.Context, identity string, p InstitutionListForBillingRequestParams, opts ...RequestOption) (
 	*InstitutionListForBillingRequestResult, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/institutions",
 		identity))
 	if err != nil {

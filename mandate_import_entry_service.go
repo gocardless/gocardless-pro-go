@@ -106,6 +106,7 @@ type MandateImportEntryCreateParams struct {
 // If you attempt to go over this limit, the API will return a
 // `record_limit_exceeded` error.
 func (s *MandateImportEntryServiceImpl) Create(ctx context.Context, p MandateImportEntryCreateParams, opts ...RequestOption) (*MandateImportEntry, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_import_entries"))
 	if err != nil {
 		return nil, err
@@ -230,6 +231,7 @@ type MandateImportEntryListResult struct {
 // the
 // mandate import).
 func (s *MandateImportEntryServiceImpl) List(ctx context.Context, p MandateImportEntryListParams, opts ...RequestOption) (*MandateImportEntryListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_import_entries"))
 	if err != nil {
 		return nil, err

@@ -47,6 +47,7 @@ type BankAccountHolderVerificationCreateParams struct {
 // This endpoint allows partner merchants to create Confirmation of Payee checks
 // on customer bank accounts before sending outbound payments.
 func (s *BankAccountHolderVerificationServiceImpl) Create(ctx context.Context, p BankAccountHolderVerificationCreateParams, opts ...RequestOption) (*BankAccountHolderVerification, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/bank_account_holder_verifications"))
 	if err != nil {
 		return nil, err
@@ -140,6 +141,12 @@ func (s *BankAccountHolderVerificationServiceImpl) Create(ctx context.Context, p
 // Get
 // Fetches a bank account holder verification by ID.
 func (s *BankAccountHolderVerificationServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*BankAccountHolderVerification, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/bank_account_holder_verifications/%v",
 		identity))
 	if err != nil {
