@@ -44,7 +44,7 @@ type InstitutionListParams struct {
 	BranchCode      string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	CountryCode     string `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Feature         string `url:"feature,omitempty" json:"feature,omitempty"`
-	IncludeDisabled bool   `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
+	IncludeDisabled string `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
 	Scheme          string `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
@@ -153,7 +153,7 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 type InstitutionListForBillingRequestParams struct {
 	CountryCode     string   `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Ids             []string `url:"ids,omitempty" json:"ids,omitempty"`
-	IncludeDisabled bool     `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
+	IncludeDisabled string   `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
 	Search          string   `url:"search,omitempty" json:"search,omitempty"`
 }
 
