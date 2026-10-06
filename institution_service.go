@@ -41,10 +41,11 @@ type InstitutionService interface {
 
 // InstitutionListParams parameters
 type InstitutionListParams struct {
-	BranchCode  string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	CountryCode string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Feature     string `url:"feature,omitempty" json:"feature,omitempty"`
-	Scheme      string `url:"scheme,omitempty" json:"scheme,omitempty"`
+	BranchCode      string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode     string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Feature         string `url:"feature,omitempty" json:"feature,omitempty"`
+	IncludeDisabled bool   `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
+	Scheme          string `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 type InstitutionListResultMetaCursors struct {
