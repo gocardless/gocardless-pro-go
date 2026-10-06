@@ -78,6 +78,7 @@ type PayoutItemListResult struct {
 // This endpoint only serves requests for payouts created in the last 6 months.
 // Requests for older payouts will return an HTTP status 410 Gone.
 func (s *PayoutItemServiceImpl) List(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) (*PayoutItemListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payout_items"))
 	if err != nil {
 		return nil, err

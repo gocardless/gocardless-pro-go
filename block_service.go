@@ -54,6 +54,7 @@ type BlockCreateParams struct {
 // Create
 // Creates a new Block of a given type. By default it will be active.
 func (s *BlockServiceImpl) Create(ctx context.Context, p BlockCreateParams, opts ...RequestOption) (*Block, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks"))
 	if err != nil {
 		return nil, err
@@ -147,6 +148,12 @@ func (s *BlockServiceImpl) Create(ctx context.Context, p BlockCreateParams, opts
 // Get
 // Retrieves the details of an existing block.
 func (s *BlockServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/blocks/%v",
 		identity))
 	if err != nil {
@@ -261,6 +268,7 @@ type BlockListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your blocks.
 func (s *BlockServiceImpl) List(ctx context.Context, p BlockListParams, opts ...RequestOption) (*BlockListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks"))
 	if err != nil {
 		return nil, err
@@ -467,6 +475,12 @@ func (s *BlockServiceImpl) All(ctx context.Context,
 // Disable
 // Disables a block so that it no longer will prevent mandate creation.
 func (s *BlockServiceImpl) Disable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/blocks/%v/actions/disable",
 		identity))
 	if err != nil {
@@ -552,6 +566,12 @@ func (s *BlockServiceImpl) Disable(ctx context.Context, identity string, opts ..
 // Enable
 // Enables a previously disabled block so that it will prevent mandate creation
 func (s *BlockServiceImpl) Enable(ctx context.Context, identity string, opts ...RequestOption) (*Block, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/blocks/%v/actions/enable",
 		identity))
 	if err != nil {
@@ -665,6 +685,7 @@ type BlockBlockByRefResult struct {
 // blocks created.
 func (s *BlockServiceImpl) BlockByRef(ctx context.Context, p BlockBlockByRefParams, opts ...RequestOption) (
 	*BlockBlockByRefResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/blocks/block_by_ref"))
 	if err != nil {
 		return nil, err

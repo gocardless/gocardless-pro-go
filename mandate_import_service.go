@@ -56,6 +56,7 @@ type MandateImportCreateParams struct {
 // (https://developer.gocardless.com/api-reference/#mandate-imports-submit-a-mandate-import)
 // it.
 func (s *MandateImportServiceImpl) Create(ctx context.Context, p MandateImportCreateParams, opts ...RequestOption) (*MandateImport, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_imports"))
 	if err != nil {
 		return nil, err
@@ -153,6 +154,12 @@ type MandateImportGetParams struct {
 // Get
 // Returns a single mandate import.
 func (s *MandateImportServiceImpl) Get(ctx context.Context, identity string, p MandateImportGetParams, opts ...RequestOption) (*MandateImport, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandate_imports/%v",
 		identity))
 	if err != nil {
@@ -248,6 +255,12 @@ type MandateImportSubmitParams struct {
 // test both the "submitted" response and wait for the webhook to confirm the
 // processing has begun.
 func (s *MandateImportServiceImpl) Submit(ctx context.Context, identity string, p MandateImportSubmitParams, opts ...RequestOption) (*MandateImport, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandate_imports/%v/actions/submit",
 		identity))
 	if err != nil {
@@ -352,6 +365,12 @@ type MandateImportCancelParams struct {
 // processed
 // cannot be cancelled.
 func (s *MandateImportServiceImpl) Cancel(ctx context.Context, identity string, p MandateImportCancelParams, opts ...RequestOption) (*MandateImport, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandate_imports/%v/actions/cancel",
 		identity))
 	if err != nil {

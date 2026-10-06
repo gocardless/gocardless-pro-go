@@ -97,6 +97,7 @@ type PayoutListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your payouts.
 func (s *PayoutServiceImpl) List(ctx context.Context, p PayoutListParams, opts ...RequestOption) (*PayoutListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payouts"))
 	if err != nil {
 		return nil, err
@@ -305,6 +306,12 @@ func (s *PayoutServiceImpl) All(ctx context.Context,
 // the transactions in a payout, see this guide
 // (https://developer.gocardless.com/api-reference/#events-reconciling-payouts-with-events).
 func (s *PayoutServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Payout, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payouts/%v",
 		identity))
 	if err != nil {
@@ -390,6 +397,12 @@ type PayoutUpdateParams struct {
 // Update
 // Updates a payout object. This accepts only the metadata parameter.
 func (s *PayoutServiceImpl) Update(ctx context.Context, identity string, p PayoutUpdateParams, opts ...RequestOption) (*Payout, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payouts/%v",
 		identity))
 	if err != nil {

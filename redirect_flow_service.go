@@ -87,6 +87,7 @@ type RedirectFlowCreateParams struct {
 // Creates a redirect flow object which can then be used to redirect your
 // customer to the GoCardless hosted payment pages.
 func (s *RedirectFlowServiceImpl) Create(ctx context.Context, p RedirectFlowCreateParams, opts ...RequestOption) (*RedirectFlow, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/redirect_flows"))
 	if err != nil {
 		return nil, err
@@ -180,6 +181,12 @@ func (s *RedirectFlowServiceImpl) Create(ctx context.Context, p RedirectFlowCrea
 // Get
 // Returns all details about a single redirect flow
 func (s *RedirectFlowServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*RedirectFlow, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/redirect_flows/%v",
 		identity))
 	if err != nil {
@@ -279,6 +286,12 @@ type RedirectFlowCompleteParams struct {
 // `session_token` differs to the one supplied when the redirect flow was
 // created.
 func (s *RedirectFlowServiceImpl) Complete(ctx context.Context, identity string, p RedirectFlowCompleteParams, opts ...RequestOption) (*RedirectFlow, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/redirect_flows/%v/actions/complete",
 		identity))
 	if err != nil {

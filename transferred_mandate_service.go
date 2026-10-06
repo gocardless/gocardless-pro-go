@@ -40,6 +40,12 @@ type TransferredMandateTransferredMandatesParams struct {
 // Returns new customer bank details for a mandate that's been recently
 // transferred
 func (s *TransferredMandateServiceImpl) TransferredMandates(ctx context.Context, identity string, p TransferredMandateTransferredMandatesParams, opts ...RequestOption) (*TransferredMandate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/transferred_mandates/%v",
 		identity))
 	if err != nil {

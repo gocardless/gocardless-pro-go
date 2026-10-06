@@ -92,6 +92,7 @@ type BillingRequestTemplateListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your Billing Request Templates.
 func (s *BillingRequestTemplateServiceImpl) List(ctx context.Context, p BillingRequestTemplateListParams, opts ...RequestOption) (*BillingRequestTemplateListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_templates"))
 	if err != nil {
 		return nil, err
@@ -298,6 +299,12 @@ func (s *BillingRequestTemplateServiceImpl) All(ctx context.Context,
 // Get
 // Fetches a Billing Request Template
 func (s *BillingRequestTemplateServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*BillingRequestTemplate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_request_templates/%v",
 		identity))
 	if err != nil {
@@ -415,6 +422,7 @@ type BillingRequestTemplateCreateParams struct {
 
 // Create
 func (s *BillingRequestTemplateServiceImpl) Create(ctx context.Context, p BillingRequestTemplateCreateParams, opts ...RequestOption) (*BillingRequestTemplate, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_templates"))
 	if err != nil {
 		return nil, err
@@ -542,6 +550,12 @@ type BillingRequestTemplateUpdateParams struct {
 // Updates a Billing Request Template, which will affect all future Billing
 // Requests created by this template.
 func (s *BillingRequestTemplateServiceImpl) Update(ctx context.Context, identity string, p BillingRequestTemplateUpdateParams, opts ...RequestOption) (*BillingRequestTemplate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_request_templates/%v",
 		identity))
 	if err != nil {

@@ -80,6 +80,7 @@ type RefundCreateParams struct {
 // sufficient balance for refunds available to cover the cost of the requested
 // refund.
 func (s *RefundServiceImpl) Create(ctx context.Context, p RefundCreateParams, opts ...RequestOption) (*Refund, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/refunds"))
 	if err != nil {
 		return nil, err
@@ -208,6 +209,7 @@ type RefundListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your refunds.
 func (s *RefundServiceImpl) List(ctx context.Context, p RefundListParams, opts ...RequestOption) (*RefundListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/refunds"))
 	if err != nil {
 		return nil, err
@@ -414,6 +416,12 @@ func (s *RefundServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves all details for a single refund
 func (s *RefundServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Refund, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/refunds/%v",
 		identity))
 	if err != nil {
@@ -499,6 +507,12 @@ type RefundUpdateParams struct {
 // Update
 // Updates a refund object.
 func (s *RefundServiceImpl) Update(ctx context.Context, identity string, p RefundUpdateParams, opts ...RequestOption) (*Refund, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/refunds/%v",
 		identity))
 	if err != nil {

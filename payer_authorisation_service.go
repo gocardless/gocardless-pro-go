@@ -92,6 +92,12 @@ type PayerAuthorisationService interface {
 // Retrieves the details of a single existing Payer Authorisation. It can be
 // used for polling the status of a Payer Authorisation.
 func (s *PayerAuthorisationServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payer_authorisations/%v",
 		identity))
 	if err != nil {
@@ -224,6 +230,7 @@ type PayerAuthorisationCreateParams struct {
 // servers or the browser while still being able to implement a progressive
 // solution, such as a multi-step form.
 func (s *PayerAuthorisationServiceImpl) Create(ctx context.Context, p PayerAuthorisationCreateParams, opts ...RequestOption) (*PayerAuthorisation, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payer_authorisations"))
 	if err != nil {
 		return nil, err
@@ -371,6 +378,12 @@ type PayerAuthorisationUpdateParams struct {
 // in order to update the `metadata` attribute values it must be sent completely
 // as it overrides the previously existing values.
 func (s *PayerAuthorisationServiceImpl) Update(ctx context.Context, identity string, p PayerAuthorisationUpdateParams, opts ...RequestOption) (*PayerAuthorisation, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payer_authorisations/%v",
 		identity))
 	if err != nil {
@@ -468,6 +481,12 @@ func (s *PayerAuthorisationServiceImpl) Update(ctx context.Context, identity str
 // valid and a 422 error response in case of validation errors. After it is
 // successfully submitted, the Payer Authorisation can no longer be edited.
 func (s *PayerAuthorisationServiceImpl) Submit(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payer_authorisations/%v/actions/submit",
 		identity))
 	if err != nil {
@@ -562,6 +581,12 @@ func (s *PayerAuthorisationServiceImpl) Submit(ctx context.Context, identity str
 // through our flow or make them go through the necessary verification mechanism
 // (upcoming feature).
 func (s *PayerAuthorisationServiceImpl) Confirm(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payer_authorisations/%v/actions/confirm",
 		identity))
 	if err != nil {

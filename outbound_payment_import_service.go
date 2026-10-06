@@ -75,6 +75,7 @@ type OutboundPaymentImportCreateParams struct {
 
 // Create
 func (s *OutboundPaymentImportServiceImpl) Create(ctx context.Context, p OutboundPaymentImportCreateParams, opts ...RequestOption) (*OutboundPaymentImport, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/outbound_payment_imports"))
 	if err != nil {
 		return nil, err
@@ -172,6 +173,12 @@ type OutboundPaymentImportGetParams struct {
 // Get
 // Returns a single outbound payment import.
 func (s *OutboundPaymentImportServiceImpl) Get(ctx context.Context, identity string, p OutboundPaymentImportGetParams, opts ...RequestOption) (*OutboundPaymentImport, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/outbound_payment_imports/%v",
 		identity))
 	if err != nil {
@@ -285,6 +292,7 @@ type OutboundPaymentImportListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your outbound payment imports.
 func (s *OutboundPaymentImportServiceImpl) List(ctx context.Context, p OutboundPaymentImportListParams, opts ...RequestOption) (*OutboundPaymentImportListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/outbound_payment_imports"))
 	if err != nil {
 		return nil, err

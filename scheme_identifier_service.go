@@ -104,6 +104,7 @@ type SchemeIdentifierCreateParams struct {
 // name of
 // the creditor, otherwise, there is an increased risk of chargeback.
 func (s *SchemeIdentifierServiceImpl) Create(ctx context.Context, p SchemeIdentifierCreateParams, opts ...RequestOption) (*SchemeIdentifier, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/scheme_identifiers"))
 	if err != nil {
 		return nil, err
@@ -222,6 +223,7 @@ type SchemeIdentifierListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your scheme identifiers.
 func (s *SchemeIdentifierServiceImpl) List(ctx context.Context, p SchemeIdentifierListParams, opts ...RequestOption) (*SchemeIdentifierListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/scheme_identifiers"))
 	if err != nil {
 		return nil, err
@@ -428,6 +430,12 @@ func (s *SchemeIdentifierServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of an existing scheme identifier.
 func (s *SchemeIdentifierServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*SchemeIdentifier, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/scheme_identifiers/%v",
 		identity))
 	if err != nil {

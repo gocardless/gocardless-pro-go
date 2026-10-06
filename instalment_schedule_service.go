@@ -92,6 +92,7 @@ type InstalmentScheduleCreateWithDatesParams struct {
 // the
 // failures.
 func (s *InstalmentScheduleServiceImpl) CreateWithDates(ctx context.Context, p InstalmentScheduleCreateWithDatesParams, opts ...RequestOption) (*InstalmentSchedule, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules/create_with_dates"))
 	if err != nil {
 		return nil, err
@@ -225,6 +226,7 @@ type InstalmentScheduleCreateWithScheduleParams struct {
 // the
 // failures.
 func (s *InstalmentScheduleServiceImpl) CreateWithSchedule(ctx context.Context, p InstalmentScheduleCreateWithScheduleParams, opts ...RequestOption) (*InstalmentSchedule, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules/create_with_schedule"))
 	if err != nil {
 		return nil, err
@@ -353,6 +355,7 @@ type InstalmentScheduleListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your instalment schedules.
 func (s *InstalmentScheduleServiceImpl) List(ctx context.Context, p InstalmentScheduleListParams, opts ...RequestOption) (*InstalmentScheduleListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/instalment_schedules"))
 	if err != nil {
 		return nil, err
@@ -559,6 +562,12 @@ func (s *InstalmentScheduleServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of an existing instalment schedule.
 func (s *InstalmentScheduleServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*InstalmentSchedule, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/instalment_schedules/%v",
 		identity))
 	if err != nil {
@@ -644,6 +653,12 @@ type InstalmentScheduleUpdateParams struct {
 // Update
 // Updates an instalment schedule. This accepts only the metadata parameter.
 func (s *InstalmentScheduleServiceImpl) Update(ctx context.Context, identity string, p InstalmentScheduleUpdateParams, opts ...RequestOption) (*InstalmentSchedule, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/instalment_schedules/%v",
 		identity))
 	if err != nil {
@@ -746,6 +761,12 @@ type InstalmentScheduleCancelParams struct {
 // This will fail with a `cancellation_failed` error if the instalment schedule
 // is already cancelled or has completed.
 func (s *InstalmentScheduleServiceImpl) Cancel(ctx context.Context, identity string, p InstalmentScheduleCancelParams, opts ...RequestOption) (*InstalmentSchedule, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/instalment_schedules/%v/actions/cancel",
 		identity))
 	if err != nil {
