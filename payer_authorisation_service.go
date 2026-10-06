@@ -70,13 +70,13 @@ type PayerAuthorisationMandate struct {
 
 // PayerAuthorisation model
 type PayerAuthorisation struct {
-	BankAccount      *PayerAuthorisationBankAccount       `url:"bank_account,omitempty" json:"bank_account,omitempty"`
+	BankAccount      PayerAuthorisationBankAccount        `url:"bank_account,omitempty" json:"bank_account,omitempty"`
 	CreatedAt        string                               `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer         *PayerAuthorisationCustomer          `url:"customer,omitempty" json:"customer,omitempty"`
+	Customer         PayerAuthorisationCustomer           `url:"customer,omitempty" json:"customer,omitempty"`
 	Id               string                               `url:"id,omitempty" json:"id,omitempty"`
 	IncompleteFields []PayerAuthorisationIncompleteFields `url:"incomplete_fields,omitempty" json:"incomplete_fields,omitempty"`
-	Links            *PayerAuthorisationLinks             `url:"links,omitempty" json:"links,omitempty"`
-	Mandate          *PayerAuthorisationMandate           `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Links            PayerAuthorisationLinks              `url:"links,omitempty" json:"links,omitempty"`
+	Mandate          PayerAuthorisationMandate            `url:"mandate,omitempty" json:"mandate,omitempty"`
 	Status           string                               `url:"status,omitempty" json:"status,omitempty"`
 }
 

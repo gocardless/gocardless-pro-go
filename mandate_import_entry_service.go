@@ -27,10 +27,10 @@ type MandateImportEntryLinks struct {
 
 // MandateImportEntry model
 type MandateImportEntry struct {
-	CreatedAt        string                   `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Links            *MandateImportEntryLinks `url:"links,omitempty" json:"links,omitempty"`
-	ProcessingErrors map[string]interface{}   `url:"processing_errors,omitempty" json:"processing_errors,omitempty"`
-	RecordIdentifier string                   `url:"record_identifier,omitempty" json:"record_identifier,omitempty"`
+	CreatedAt        string                  `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Links            MandateImportEntryLinks `url:"links,omitempty" json:"links,omitempty"`
+	ProcessingErrors map[string]interface{}  `url:"processing_errors,omitempty" json:"processing_errors,omitempty"`
+	RecordIdentifier string                  `url:"record_identifier,omitempty" json:"record_identifier,omitempty"`
 }
 
 type MandateImportEntryService interface {

@@ -24,11 +24,11 @@ type NegativeBalanceLimitLinks struct {
 
 // NegativeBalanceLimit model
 type NegativeBalanceLimit struct {
-	BalanceLimit int                        `url:"balance_limit,omitempty" json:"balance_limit,omitempty"`
-	CreatedAt    string                     `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency     string                     `url:"currency,omitempty" json:"currency,omitempty"`
-	Id           string                     `url:"id,omitempty" json:"id,omitempty"`
-	Links        *NegativeBalanceLimitLinks `url:"links,omitempty" json:"links,omitempty"`
+	BalanceLimit int                       `url:"balance_limit,omitempty" json:"balance_limit,omitempty"`
+	CreatedAt    string                    `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency     string                    `url:"currency,omitempty" json:"currency,omitempty"`
+	Id           string                    `url:"id,omitempty" json:"id,omitempty"`
+	Links        NegativeBalanceLimitLinks `url:"links,omitempty" json:"links,omitempty"`
 }
 
 type NegativeBalanceLimitService interface {
