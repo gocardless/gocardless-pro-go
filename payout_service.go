@@ -37,9 +37,9 @@ type Payout struct {
 	CreatedAt    string            `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Currency     string            `url:"currency,omitempty" json:"currency,omitempty"`
 	DeductedFees int               `url:"deducted_fees,omitempty" json:"deducted_fees,omitempty"`
-	Fx           *PayoutFx         `url:"fx,omitempty" json:"fx,omitempty"`
+	Fx           PayoutFx          `url:"fx,omitempty" json:"fx,omitempty"`
 	Id           string            `url:"id,omitempty" json:"id,omitempty"`
-	Links        *PayoutLinks      `url:"links,omitempty" json:"links,omitempty"`
+	Links        PayoutLinks       `url:"links,omitempty" json:"links,omitempty"`
 	Metadata     map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PayoutType   string            `url:"payout_type,omitempty" json:"payout_type,omitempty"`
 	Reference    string            `url:"reference,omitempty" json:"reference,omitempty"`

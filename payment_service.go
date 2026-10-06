@@ -43,9 +43,9 @@ type Payment struct {
 	Currency        string            `url:"currency,omitempty" json:"currency,omitempty"`
 	Description     string            `url:"description,omitempty" json:"description,omitempty"`
 	FasterAch       bool              `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
-	Fx              *PaymentFx        `url:"fx,omitempty" json:"fx,omitempty"`
+	Fx              PaymentFx         `url:"fx,omitempty" json:"fx,omitempty"`
 	Id              string            `url:"id,omitempty" json:"id,omitempty"`
-	Links           *PaymentLinks     `url:"links,omitempty" json:"links,omitempty"`
+	Links           PaymentLinks      `url:"links,omitempty" json:"links,omitempty"`
 	Metadata        map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference       string            `url:"reference,omitempty" json:"reference,omitempty"`
 	RetryIfPossible bool              `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`

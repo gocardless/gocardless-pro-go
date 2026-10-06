@@ -42,7 +42,7 @@ type VerificationDetail struct {
 	CountryCode   string                        `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Description   string                        `url:"description,omitempty" json:"description,omitempty"`
 	Directors     []VerificationDetailDirectors `url:"directors,omitempty" json:"directors,omitempty"`
-	Links         *VerificationDetailLinks      `url:"links,omitempty" json:"links,omitempty"`
+	Links         VerificationDetailLinks       `url:"links,omitempty" json:"links,omitempty"`
 	Name          string                        `url:"name,omitempty" json:"name,omitempty"`
 	PostalCode    string                        `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region        string                        `url:"region,omitempty" json:"region,omitempty"`

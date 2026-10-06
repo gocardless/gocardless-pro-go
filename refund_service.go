@@ -35,9 +35,9 @@ type Refund struct {
 	Amount    int               `url:"amount,omitempty" json:"amount,omitempty"`
 	CreatedAt string            `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Currency  string            `url:"currency,omitempty" json:"currency,omitempty"`
-	Fx        *RefundFx         `url:"fx,omitempty" json:"fx,omitempty"`
+	Fx        RefundFx          `url:"fx,omitempty" json:"fx,omitempty"`
 	Id        string            `url:"id,omitempty" json:"id,omitempty"`
-	Links     *RefundLinks      `url:"links,omitempty" json:"links,omitempty"`
+	Links     RefundLinks       `url:"links,omitempty" json:"links,omitempty"`
 	Metadata  map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference string            `url:"reference,omitempty" json:"reference,omitempty"`
 	Status    string            `url:"status,omitempty" json:"status,omitempty"`

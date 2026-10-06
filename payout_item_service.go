@@ -35,7 +35,7 @@ type PayoutItemTaxes struct {
 // PayoutItem model
 type PayoutItem struct {
 	Amount string            `url:"amount,omitempty" json:"amount,omitempty"`
-	Links  *PayoutItemLinks  `url:"links,omitempty" json:"links,omitempty"`
+	Links  PayoutItemLinks   `url:"links,omitempty" json:"links,omitempty"`
 	Taxes  []PayoutItemTaxes `url:"taxes,omitempty" json:"taxes,omitempty"`
 	Type   string            `url:"type,omitempty" json:"type,omitempty"`
 }

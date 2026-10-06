@@ -22,11 +22,11 @@ type MandateImportLinks struct {
 
 // MandateImport model
 type MandateImport struct {
-	CreatedAt string              `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Id        string              `url:"id,omitempty" json:"id,omitempty"`
-	Links     *MandateImportLinks `url:"links,omitempty" json:"links,omitempty"`
-	Scheme    string              `url:"scheme,omitempty" json:"scheme,omitempty"`
-	Status    string              `url:"status,omitempty" json:"status,omitempty"`
+	CreatedAt string             `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Id        string             `url:"id,omitempty" json:"id,omitempty"`
+	Links     MandateImportLinks `url:"links,omitempty" json:"links,omitempty"`
+	Scheme    string             `url:"scheme,omitempty" json:"scheme,omitempty"`
+	Status    string             `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type MandateImportService interface {
