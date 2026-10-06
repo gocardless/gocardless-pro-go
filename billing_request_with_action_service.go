@@ -50,6 +50,7 @@ type BillingRequestWithActionBillingRequestsActionsCollectCustomerDetails struct
 }
 
 type BillingRequestWithActionBillingRequestsActions struct {
+	AvailableCountryCodes  []string                                                              `url:"available_country_codes,omitempty" json:"available_country_codes,omitempty"`
 	AvailableCurrencies    []string                                                              `url:"available_currencies,omitempty" json:"available_currencies,omitempty"`
 	BankAuthorisation      *BillingRequestWithActionBillingRequestsActionsBankAuthorisation      `url:"bank_authorisation,omitempty" json:"bank_authorisation,omitempty"`
 	CollectCustomerDetails *BillingRequestWithActionBillingRequestsActionsCollectCustomerDetails `url:"collect_customer_details,omitempty" json:"collect_customer_details,omitempty"`
@@ -156,6 +157,7 @@ type BillingRequestWithActionBillingRequestsPaymentRequest struct {
 	Links           *BillingRequestWithActionBillingRequestsPaymentRequestLinks `url:"links,omitempty" json:"links,omitempty"`
 	Metadata        map[string]string                                           `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference       string                                                      `url:"reference,omitempty" json:"reference,omitempty"`
+	RetryIfPossible bool                                                        `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
 	Scheme          string                                                      `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
