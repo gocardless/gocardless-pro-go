@@ -1,6 +1,12 @@
 <!-- This file is generated, please add to it using `knope document-change` in the client-library-templates repo -->
 # Changelog
 
+## 6.18.2 (2026-10-07)
+
+### Fixes
+
+- Remove unused definitions from schema
+
 ## 6.18.1 (2026-10-06)
 
 ### Fixes
