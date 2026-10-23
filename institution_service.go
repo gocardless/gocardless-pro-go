@@ -24,15 +24,13 @@ type InstitutionLimits struct {
 
 // Institution model
 type Institution struct {
-	AutocompletesCollectBankAccount bool               `url:"autocompletes_collect_bank_account,omitempty" json:"autocompletes_collect_bank_account,omitempty"`
-	CountryCode                     string             `url:"country_code,omitempty" json:"country_code,omitempty"`
-	IconUrl                         string             `url:"icon_url,omitempty" json:"icon_url,omitempty"`
-	Id                              string             `url:"id,omitempty" json:"id,omitempty"`
-	Limits                          *InstitutionLimits `url:"limits,omitempty" json:"limits,omitempty"`
-	LogoUrl                         string             `url:"logo_url,omitempty" json:"logo_url,omitempty"`
-	Name                            string             `url:"name,omitempty" json:"name,omitempty"`
-	Roles                           []string           `url:"roles,omitempty" json:"roles,omitempty"`
-	Status                          string             `url:"status,omitempty" json:"status,omitempty"`
+	CountryCode string             `url:"country_code,omitempty" json:"country_code,omitempty"`
+	IconUrl     string             `url:"icon_url,omitempty" json:"icon_url,omitempty"`
+	Id          string             `url:"id,omitempty" json:"id,omitempty"`
+	Limits      *InstitutionLimits `url:"limits,omitempty" json:"limits,omitempty"`
+	LogoUrl     string             `url:"logo_url,omitempty" json:"logo_url,omitempty"`
+	Name        string             `url:"name,omitempty" json:"name,omitempty"`
+	Roles       []string           `url:"roles,omitempty" json:"roles,omitempty"`
 }
 
 type InstitutionService interface {
@@ -43,10 +41,11 @@ type InstitutionService interface {
 
 // InstitutionListParams parameters
 type InstitutionListParams struct {
-	BranchCode  string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
-	CountryCode string `url:"country_code,omitempty" json:"country_code,omitempty"`
-	Feature     string `url:"feature,omitempty" json:"feature,omitempty"`
-	Scheme      string `url:"scheme,omitempty" json:"scheme,omitempty"`
+	BranchCode      string `url:"branch_code,omitempty" json:"branch_code,omitempty"`
+	CountryCode     string `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Feature         string `url:"feature,omitempty" json:"feature,omitempty"`
+	IncludeDisabled string `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
+	Scheme          string `url:"scheme,omitempty" json:"scheme,omitempty"`
 }
 
 type InstitutionListResultMetaCursors struct {
@@ -55,8 +54,8 @@ type InstitutionListResultMetaCursors struct {
 }
 
 type InstitutionListResultMeta struct {
-	Cursors *InstitutionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                               `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors InstitutionListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                              `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type InstitutionListResult struct {
@@ -67,6 +66,7 @@ type InstitutionListResult struct {
 // List
 // Returns a list of supported institutions.
 func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListParams, opts ...RequestOption) (*InstitutionListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/institutions"))
 	if err != nil {
 		return nil, err
@@ -153,7 +153,7 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 type InstitutionListForBillingRequestParams struct {
 	CountryCode     string   `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Ids             []string `url:"ids,omitempty" json:"ids,omitempty"`
-	IncludeDisabled bool     `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
+	IncludeDisabled string   `url:"include_disabled,omitempty" json:"include_disabled,omitempty"`
 	Search          string   `url:"search,omitempty" json:"search,omitempty"`
 }
 
@@ -163,8 +163,8 @@ type InstitutionListForBillingRequestResultMetaCursors struct {
 }
 
 type InstitutionListForBillingRequestResultMeta struct {
-	Cursors *InstitutionListForBillingRequestResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                                `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors InstitutionListForBillingRequestResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                               `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type InstitutionListForBillingRequestResult struct {
@@ -178,6 +178,12 @@ type InstitutionListForBillingRequestResult struct {
 // This endpoint is currently supported only for FasterPayments.
 func (s *InstitutionServiceImpl) ListForBillingRequest(ctx context.Context, identity string, p InstitutionListForBillingRequestParams, opts ...RequestOption) (
 	*InstitutionListForBillingRequestResult, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_requests/%v/institutions",
 		identity))
 	if err != nil {

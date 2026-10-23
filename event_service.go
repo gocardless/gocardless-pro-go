@@ -129,8 +129,8 @@ type EventListResultMetaCursors struct {
 }
 
 type EventListResultMeta struct {
-	Cursors *EventListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors EventListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                        `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type EventListResultLinked struct {
@@ -165,6 +165,7 @@ type EventListResult struct {
 // August 2026 in sandbox environments, and no sooner than 1 October 2026 in
 // live environments.
 func (s *EventServiceImpl) List(ctx context.Context, p EventListParams, opts ...RequestOption) (*EventListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/events"))
 	if err != nil {
 		return nil, err
@@ -371,6 +372,12 @@ func (s *EventServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of a single event.
 func (s *EventServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Event, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/events/%v",
 		identity))
 	if err != nil {

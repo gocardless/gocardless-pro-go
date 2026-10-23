@@ -52,6 +52,12 @@ type CustomerNotificationHandleParams struct {
 // this endpoint will return an `already_actioned` error and you should not take
 // further action. This endpoint takes no additional parameters.
 func (s *CustomerNotificationServiceImpl) Handle(ctx context.Context, identity string, p CustomerNotificationHandleParams, opts ...RequestOption) (*CustomerNotification, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/customer_notifications/%v/actions/handle",
 		identity))
 	if err != nil {

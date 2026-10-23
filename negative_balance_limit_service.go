@@ -24,11 +24,11 @@ type NegativeBalanceLimitLinks struct {
 
 // NegativeBalanceLimit model
 type NegativeBalanceLimit struct {
-	BalanceLimit int                        `url:"balance_limit,omitempty" json:"balance_limit,omitempty"`
-	CreatedAt    string                     `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Currency     string                     `url:"currency,omitempty" json:"currency,omitempty"`
-	Id           string                     `url:"id,omitempty" json:"id,omitempty"`
-	Links        *NegativeBalanceLimitLinks `url:"links,omitempty" json:"links,omitempty"`
+	BalanceLimit int                       `url:"balance_limit,omitempty" json:"balance_limit,omitempty"`
+	CreatedAt    string                    `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Currency     string                    `url:"currency,omitempty" json:"currency,omitempty"`
+	Id           string                    `url:"id,omitempty" json:"id,omitempty"`
+	Links        NegativeBalanceLimitLinks `url:"links,omitempty" json:"links,omitempty"`
 }
 
 type NegativeBalanceLimitService interface {
@@ -52,8 +52,8 @@ type NegativeBalanceLimitListResultMetaCursors struct {
 }
 
 type NegativeBalanceLimitListResultMeta struct {
-	Cursors *NegativeBalanceLimitListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                        `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors NegativeBalanceLimitListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                       `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type NegativeBalanceLimitListResult struct {
@@ -66,6 +66,7 @@ type NegativeBalanceLimitListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of negative balance limits.
 func (s *NegativeBalanceLimitServiceImpl) List(ctx context.Context, p NegativeBalanceLimitListParams, opts ...RequestOption) (*NegativeBalanceLimitListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/negative_balance_limits"))
 	if err != nil {
 		return nil, err

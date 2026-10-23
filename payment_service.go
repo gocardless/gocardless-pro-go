@@ -43,9 +43,9 @@ type Payment struct {
 	Currency        string            `url:"currency,omitempty" json:"currency,omitempty"`
 	Description     string            `url:"description,omitempty" json:"description,omitempty"`
 	FasterAch       bool              `url:"faster_ach,omitempty" json:"faster_ach,omitempty"`
-	Fx              *PaymentFx        `url:"fx,omitempty" json:"fx,omitempty"`
+	Fx              PaymentFx         `url:"fx,omitempty" json:"fx,omitempty"`
 	Id              string            `url:"id,omitempty" json:"id,omitempty"`
-	Links           *PaymentLinks     `url:"links,omitempty" json:"links,omitempty"`
+	Links           PaymentLinks      `url:"links,omitempty" json:"links,omitempty"`
 	Metadata        map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference       string            `url:"reference,omitempty" json:"reference,omitempty"`
 	RetryIfPossible bool              `url:"retry_if_possible,omitempty" json:"retry_if_possible,omitempty"`
@@ -92,6 +92,7 @@ type PaymentCreateParams struct {
 // of: `pending_customer_approval`, `pending_submission`, `submitted`, and
 // `active`.
 func (s *PaymentServiceImpl) Create(ctx context.Context, p PaymentCreateParams, opts ...RequestOption) (*Payment, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payments"))
 	if err != nil {
 		return nil, err
@@ -220,8 +221,8 @@ type PaymentListResultMetaCursors struct {
 }
 
 type PaymentListResultMeta struct {
-	Cursors *PaymentListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors PaymentListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type PaymentListResult struct {
@@ -234,6 +235,7 @@ type PaymentListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your payments.
 func (s *PaymentServiceImpl) List(ctx context.Context, p PaymentListParams, opts ...RequestOption) (*PaymentListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payments"))
 	if err != nil {
 		return nil, err
@@ -440,6 +442,12 @@ func (s *PaymentServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of a single existing payment.
 func (s *PaymentServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Payment, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payments/%v",
 		identity))
 	if err != nil {
@@ -526,6 +534,12 @@ type PaymentUpdateParams struct {
 // Update
 // Updates a payment object. This accepts only the metadata parameter.
 func (s *PaymentServiceImpl) Update(ctx context.Context, identity string, p PaymentUpdateParams, opts ...RequestOption) (*Payment, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payments/%v",
 		identity))
 	if err != nil {
@@ -630,6 +644,12 @@ type PaymentCancelParams struct {
 // This will fail with a `cancellation_failed` error unless the payment's status
 // is `pending_submission`.
 func (s *PaymentServiceImpl) Cancel(ctx context.Context, identity string, p PaymentCancelParams, opts ...RequestOption) (*Payment, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payments/%v/actions/cancel",
 		identity))
 	if err != nil {
@@ -739,6 +759,12 @@ type PaymentRetryParams struct {
 //
 // Payments can be retried up to 3 times.
 func (s *PaymentServiceImpl) Retry(ctx context.Context, identity string, p PaymentRetryParams, opts ...RequestOption) (*Payment, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payments/%v/actions/retry",
 		identity))
 	if err != nil {

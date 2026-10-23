@@ -82,6 +82,7 @@ type OutboundPaymentImportEntryListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of the entries for a given outbound payment import.
 func (s *OutboundPaymentImportEntryServiceImpl) List(ctx context.Context, p OutboundPaymentImportEntryListParams, opts ...RequestOption) (*OutboundPaymentImportEntryListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/outbound_payment_import_entries"))
 	if err != nil {
 		return nil, err

@@ -55,12 +55,24 @@ func NewWebhookHandler(secret string, h EventHandler) (*WebhookHandler, error) {
 // ServeHTTP processes incoming webhooks and dispatches events to the corresponsing handlers.
 func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	sig, err := hex.DecodeString(r.Header.Get("Webhook-Signature"))
-	if len(sig) == 0 {
+	if err != nil || len(sig) == 0 {
 		http.Error(w, "invalid signature", 498)
 		return
 	}
+
+	bodyBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "error reading body", http.StatusInternalServerError)
+		return
+	}
+
 	hash := hmac.New(sha256.New, []byte(h.secret))
-	body := io.TeeReader(r.Body, hash)
+	hash.Write(bodyBytes)
+
+	if !hmac.Equal(sig, hash.Sum(nil)) {
+		http.Error(w, "invalid signature", 498)
+		return
+	}
 
 	var webhook struct {
 		Events []Event `json:"events"`
@@ -68,14 +80,9 @@ func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			WebhookID string `json:"webhook_id"`
 		} `json:"meta"`
 	}
-	err = json.NewDecoder(body).Decode(&webhook)
+	err = json.Unmarshal(bodyBytes, &webhook)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	if !hmac.Equal(sig, hash.Sum(nil)) {
-		http.Error(w, "invalid signature", 498)
 		return
 	}
 

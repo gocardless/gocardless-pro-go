@@ -23,6 +23,7 @@ type PayerAuthorisationBankAccount struct {
 	AccountNumberSuffix string            `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
 	AccountType         string            `url:"account_type,omitempty" json:"account_type,omitempty"`
 	BankCode            string            `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BankName            string            `url:"bank_name,omitempty" json:"bank_name,omitempty"`
 	BranchCode          string            `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	CountryCode         string            `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Currency            string            `url:"currency,omitempty" json:"currency,omitempty"`
@@ -69,13 +70,13 @@ type PayerAuthorisationMandate struct {
 
 // PayerAuthorisation model
 type PayerAuthorisation struct {
-	BankAccount      *PayerAuthorisationBankAccount       `url:"bank_account,omitempty" json:"bank_account,omitempty"`
+	BankAccount      PayerAuthorisationBankAccount        `url:"bank_account,omitempty" json:"bank_account,omitempty"`
 	CreatedAt        string                               `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Customer         *PayerAuthorisationCustomer          `url:"customer,omitempty" json:"customer,omitempty"`
+	Customer         PayerAuthorisationCustomer           `url:"customer,omitempty" json:"customer,omitempty"`
 	Id               string                               `url:"id,omitempty" json:"id,omitempty"`
 	IncompleteFields []PayerAuthorisationIncompleteFields `url:"incomplete_fields,omitempty" json:"incomplete_fields,omitempty"`
-	Links            *PayerAuthorisationLinks             `url:"links,omitempty" json:"links,omitempty"`
-	Mandate          *PayerAuthorisationMandate           `url:"mandate,omitempty" json:"mandate,omitempty"`
+	Links            PayerAuthorisationLinks              `url:"links,omitempty" json:"links,omitempty"`
+	Mandate          PayerAuthorisationMandate            `url:"mandate,omitempty" json:"mandate,omitempty"`
 	Status           string                               `url:"status,omitempty" json:"status,omitempty"`
 }
 
@@ -91,6 +92,12 @@ type PayerAuthorisationService interface {
 // Retrieves the details of a single existing Payer Authorisation. It can be
 // used for polling the status of a Payer Authorisation.
 func (s *PayerAuthorisationServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payer_authorisations/%v",
 		identity))
 	if err != nil {
@@ -175,6 +182,7 @@ type PayerAuthorisationCreateParamsBankAccount struct {
 	AccountNumberSuffix string            `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
 	AccountType         string            `url:"account_type,omitempty" json:"account_type,omitempty"`
 	BankCode            string            `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BankName            string            `url:"bank_name,omitempty" json:"bank_name,omitempty"`
 	BranchCode          string            `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	CountryCode         string            `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Currency            string            `url:"currency,omitempty" json:"currency,omitempty"`
@@ -222,6 +230,7 @@ type PayerAuthorisationCreateParams struct {
 // servers or the browser while still being able to implement a progressive
 // solution, such as a multi-step form.
 func (s *PayerAuthorisationServiceImpl) Create(ctx context.Context, p PayerAuthorisationCreateParams, opts ...RequestOption) (*PayerAuthorisation, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payer_authorisations"))
 	if err != nil {
 		return nil, err
@@ -319,6 +328,7 @@ type PayerAuthorisationUpdateParamsBankAccount struct {
 	AccountNumberSuffix string            `url:"account_number_suffix,omitempty" json:"account_number_suffix,omitempty"`
 	AccountType         string            `url:"account_type,omitempty" json:"account_type,omitempty"`
 	BankCode            string            `url:"bank_code,omitempty" json:"bank_code,omitempty"`
+	BankName            string            `url:"bank_name,omitempty" json:"bank_name,omitempty"`
 	BranchCode          string            `url:"branch_code,omitempty" json:"branch_code,omitempty"`
 	CountryCode         string            `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Currency            string            `url:"currency,omitempty" json:"currency,omitempty"`
@@ -368,6 +378,12 @@ type PayerAuthorisationUpdateParams struct {
 // in order to update the `metadata` attribute values it must be sent completely
 // as it overrides the previously existing values.
 func (s *PayerAuthorisationServiceImpl) Update(ctx context.Context, identity string, p PayerAuthorisationUpdateParams, opts ...RequestOption) (*PayerAuthorisation, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payer_authorisations/%v",
 		identity))
 	if err != nil {
@@ -465,6 +481,12 @@ func (s *PayerAuthorisationServiceImpl) Update(ctx context.Context, identity str
 // valid and a 422 error response in case of validation errors. After it is
 // successfully submitted, the Payer Authorisation can no longer be edited.
 func (s *PayerAuthorisationServiceImpl) Submit(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payer_authorisations/%v/actions/submit",
 		identity))
 	if err != nil {
@@ -559,6 +581,12 @@ func (s *PayerAuthorisationServiceImpl) Submit(ctx context.Context, identity str
 // through our flow or make them go through the necessary verification mechanism
 // (upcoming feature).
 func (s *PayerAuthorisationServiceImpl) Confirm(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payer_authorisations/%v/actions/confirm",
 		identity))
 	if err != nil {

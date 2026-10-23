@@ -18,9 +18,10 @@ type BankDetailsLookupServiceImpl struct {
 
 // BankDetailsLookup model
 type BankDetailsLookup struct {
-	AvailableDebitSchemes []string `url:"available_debit_schemes,omitempty" json:"available_debit_schemes,omitempty"`
-	BankName              string   `url:"bank_name,omitempty" json:"bank_name,omitempty"`
-	Bic                   string   `url:"bic,omitempty" json:"bic,omitempty"`
+	AvailableDebitSchemes       []string `url:"available_debit_schemes,omitempty" json:"available_debit_schemes,omitempty"`
+	BankName                    string   `url:"bank_name,omitempty" json:"bank_name,omitempty"`
+	Bic                         string   `url:"bic,omitempty" json:"bic,omitempty"`
+	PayerNameVerificationResult string   `url:"payer_name_verification_result,omitempty" json:"payer_name_verification_result,omitempty"`
 }
 
 type BankDetailsLookupService interface {
@@ -75,6 +76,7 @@ type BankDetailsLookupCreateParams struct {
 // modulus or reachability checking but not for payment collection, please get
 // in touch.
 func (s *BankDetailsLookupServiceImpl) Create(ctx context.Context, p BankDetailsLookupCreateParams, opts ...RequestOption) (*BankDetailsLookup, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/bank_details_lookups"))
 	if err != nil {
 		return nil, err

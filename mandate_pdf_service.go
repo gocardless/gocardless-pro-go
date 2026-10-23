@@ -115,6 +115,7 @@ type MandatePdfCreateParams struct {
 // (`fr`), German (`de`), Italian (`it`), Portuguese (`pt`), Spanish (`es`),
 // Swedish (`sv`) |
 func (s *MandatePdfServiceImpl) Create(ctx context.Context, p MandatePdfCreateParams, opts ...RequestOption) (*MandatePdf, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_pdfs"))
 	if err != nil {
 		return nil, err

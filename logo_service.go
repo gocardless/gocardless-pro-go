@@ -44,6 +44,7 @@ type LogoCreateForCreditorParams struct {
 // great across your customer payment page and notification emails see here
 // (https://developer.gocardless.com/gc-embed/setting-up-branding#tips_for_uploading_your_logo).
 func (s *LogoServiceImpl) CreateForCreditor(ctx context.Context, p LogoCreateForCreditorParams, opts ...RequestOption) (*Logo, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/branding/logos"))
 	if err != nil {
 		return nil, err

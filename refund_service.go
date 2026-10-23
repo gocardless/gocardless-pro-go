@@ -35,9 +35,9 @@ type Refund struct {
 	Amount    int               `url:"amount,omitempty" json:"amount,omitempty"`
 	CreatedAt string            `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Currency  string            `url:"currency,omitempty" json:"currency,omitempty"`
-	Fx        *RefundFx         `url:"fx,omitempty" json:"fx,omitempty"`
+	Fx        RefundFx          `url:"fx,omitempty" json:"fx,omitempty"`
 	Id        string            `url:"id,omitempty" json:"id,omitempty"`
-	Links     *RefundLinks      `url:"links,omitempty" json:"links,omitempty"`
+	Links     RefundLinks       `url:"links,omitempty" json:"links,omitempty"`
 	Metadata  map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 	Reference string            `url:"reference,omitempty" json:"reference,omitempty"`
 	Status    string            `url:"status,omitempty" json:"status,omitempty"`
@@ -80,6 +80,7 @@ type RefundCreateParams struct {
 // sufficient balance for refunds available to cover the cost of the requested
 // refund.
 func (s *RefundServiceImpl) Create(ctx context.Context, p RefundCreateParams, opts ...RequestOption) (*Refund, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/refunds"))
 	if err != nil {
 		return nil, err
@@ -194,8 +195,8 @@ type RefundListResultMetaCursors struct {
 }
 
 type RefundListResultMeta struct {
-	Cursors *RefundListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors RefundListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type RefundListResult struct {
@@ -208,6 +209,7 @@ type RefundListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your refunds.
 func (s *RefundServiceImpl) List(ctx context.Context, p RefundListParams, opts ...RequestOption) (*RefundListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/refunds"))
 	if err != nil {
 		return nil, err
@@ -414,6 +416,12 @@ func (s *RefundServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves all details for a single refund
 func (s *RefundServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Refund, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/refunds/%v",
 		identity))
 	if err != nil {
@@ -499,6 +507,12 @@ type RefundUpdateParams struct {
 // Update
 // Updates a refund object.
 func (s *RefundServiceImpl) Update(ctx context.Context, identity string, p RefundUpdateParams, opts ...RequestOption) (*Refund, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/refunds/%v",
 		identity))
 	if err != nil {

@@ -37,9 +37,9 @@ type Payout struct {
 	CreatedAt    string            `url:"created_at,omitempty" json:"created_at,omitempty"`
 	Currency     string            `url:"currency,omitempty" json:"currency,omitempty"`
 	DeductedFees int               `url:"deducted_fees,omitempty" json:"deducted_fees,omitempty"`
-	Fx           *PayoutFx         `url:"fx,omitempty" json:"fx,omitempty"`
+	Fx           PayoutFx          `url:"fx,omitempty" json:"fx,omitempty"`
 	Id           string            `url:"id,omitempty" json:"id,omitempty"`
-	Links        *PayoutLinks      `url:"links,omitempty" json:"links,omitempty"`
+	Links        PayoutLinks       `url:"links,omitempty" json:"links,omitempty"`
 	Metadata     map[string]string `url:"metadata,omitempty" json:"metadata,omitempty"`
 	PayoutType   string            `url:"payout_type,omitempty" json:"payout_type,omitempty"`
 	Reference    string            `url:"reference,omitempty" json:"reference,omitempty"`
@@ -83,8 +83,8 @@ type PayoutListResultMetaCursors struct {
 }
 
 type PayoutListResultMeta struct {
-	Cursors *PayoutListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors PayoutListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type PayoutListResult struct {
@@ -97,6 +97,7 @@ type PayoutListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your payouts.
 func (s *PayoutServiceImpl) List(ctx context.Context, p PayoutListParams, opts ...RequestOption) (*PayoutListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payouts"))
 	if err != nil {
 		return nil, err
@@ -305,6 +306,12 @@ func (s *PayoutServiceImpl) All(ctx context.Context,
 // the transactions in a payout, see this guide
 // (https://developer.gocardless.com/api-reference/#events-reconciling-payouts-with-events).
 func (s *PayoutServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Payout, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payouts/%v",
 		identity))
 	if err != nil {
@@ -390,6 +397,12 @@ type PayoutUpdateParams struct {
 // Update
 // Updates a payout object. This accepts only the metadata parameter.
 func (s *PayoutServiceImpl) Update(ctx context.Context, identity string, p PayoutUpdateParams, opts ...RequestOption) (*Payout, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/payouts/%v",
 		identity))
 	if err != nil {

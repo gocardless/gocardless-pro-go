@@ -35,7 +35,7 @@ type PayoutItemTaxes struct {
 // PayoutItem model
 type PayoutItem struct {
 	Amount string            `url:"amount,omitempty" json:"amount,omitempty"`
-	Links  *PayoutItemLinks  `url:"links,omitempty" json:"links,omitempty"`
+	Links  PayoutItemLinks   `url:"links,omitempty" json:"links,omitempty"`
 	Taxes  []PayoutItemTaxes `url:"taxes,omitempty" json:"taxes,omitempty"`
 	Type   string            `url:"type,omitempty" json:"type,omitempty"`
 }
@@ -61,8 +61,8 @@ type PayoutItemListResultMetaCursors struct {
 }
 
 type PayoutItemListResultMeta struct {
-	Cursors *PayoutItemListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                              `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors PayoutItemListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                             `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type PayoutItemListResult struct {
@@ -78,6 +78,7 @@ type PayoutItemListResult struct {
 // This endpoint only serves requests for payouts created in the last 6 months.
 // Requests for older payouts will return an HTTP status 410 Gone.
 func (s *PayoutItemServiceImpl) List(ctx context.Context, p PayoutItemListParams, opts ...RequestOption) (*PayoutItemListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payout_items"))
 	if err != nil {
 		return nil, err

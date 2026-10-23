@@ -43,6 +43,7 @@ type PayerThemeCreateForCreditorParams struct {
 // has payer themes, this will update the existing payer theme linked to the
 // creditor.
 func (s *PayerThemeServiceImpl) CreateForCreditor(ctx context.Context, p PayerThemeCreateForCreditorParams, opts ...RequestOption) (*PayerTheme, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/branding/payer_themes"))
 	if err != nil {
 		return nil, err

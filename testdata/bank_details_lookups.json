@@ -2,6 +2,6 @@
   
   
   "create": {
-    "body": {"bank_details_lookups":{"available_debit_schemes":["bacs"],"bank_name":"NATWEST BANK PLC","bic":"BARCGB22XXX"}}
+    "body": {"bank_details_lookups":{"available_debit_schemes":["bacs"],"bank_name":"NATWEST BANK PLC","bic":"BARCGB22XXX","payer_name_verification_result":"full"}}
   }
 }

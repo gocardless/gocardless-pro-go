@@ -35,6 +35,8 @@ type BillingRequestFlowPrefilledCustomer struct {
 	Email                 string `url:"email,omitempty" json:"email,omitempty"`
 	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
 	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language              string `url:"language,omitempty" json:"language,omitempty"`
+	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region                string `url:"region,omitempty" json:"region,omitempty"`
 	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
@@ -87,6 +89,8 @@ type BillingRequestFlowCreateParamsPrefilledCustomer struct {
 	Email                 string `url:"email,omitempty" json:"email,omitempty"`
 	FamilyName            string `url:"family_name,omitempty" json:"family_name,omitempty"`
 	GivenName             string `url:"given_name,omitempty" json:"given_name,omitempty"`
+	Language              string `url:"language,omitempty" json:"language,omitempty"`
+	PhoneNumber           string `url:"phone_number,omitempty" json:"phone_number,omitempty"`
 	PostalCode            string `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region                string `url:"region,omitempty" json:"region,omitempty"`
 	SwedishIdentityNumber string `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
@@ -113,6 +117,7 @@ type BillingRequestFlowCreateParams struct {
 // Create
 // Creates a new billing request flow.
 func (s *BillingRequestFlowServiceImpl) Create(ctx context.Context, p BillingRequestFlowCreateParams, opts ...RequestOption) (*BillingRequestFlow, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/billing_request_flows"))
 	if err != nil {
 		return nil, err
@@ -212,6 +217,12 @@ type BillingRequestFlowInitialiseParams struct {
 // power
 // integrations that manipulate the flow.
 func (s *BillingRequestFlowServiceImpl) Initialise(ctx context.Context, identity string, p BillingRequestFlowInitialiseParams, opts ...RequestOption) (*BillingRequestFlow, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/billing_request_flows/%v/actions/initialise",
 		identity))
 	if err != nil {

@@ -42,7 +42,7 @@ type VerificationDetail struct {
 	CountryCode   string                        `url:"country_code,omitempty" json:"country_code,omitempty"`
 	Description   string                        `url:"description,omitempty" json:"description,omitempty"`
 	Directors     []VerificationDetailDirectors `url:"directors,omitempty" json:"directors,omitempty"`
-	Links         *VerificationDetailLinks      `url:"links,omitempty" json:"links,omitempty"`
+	Links         VerificationDetailLinks       `url:"links,omitempty" json:"links,omitempty"`
 	Name          string                        `url:"name,omitempty" json:"name,omitempty"`
 	PostalCode    string                        `url:"postal_code,omitempty" json:"postal_code,omitempty"`
 	Region        string                        `url:"region,omitempty" json:"region,omitempty"`
@@ -86,6 +86,7 @@ type VerificationDetailCreateParams struct {
 // Create
 // Creates a new verification detail
 func (s *VerificationDetailServiceImpl) Create(ctx context.Context, p VerificationDetailCreateParams, opts ...RequestOption) (*VerificationDetail, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/verification_details"))
 	if err != nil {
 		return nil, err
@@ -190,8 +191,8 @@ type VerificationDetailListResultMetaCursors struct {
 }
 
 type VerificationDetailListResultMeta struct {
-	Cursors *VerificationDetailListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors VerificationDetailListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                     `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type VerificationDetailListResult struct {
@@ -202,6 +203,7 @@ type VerificationDetailListResult struct {
 // List
 // Returns a list of verification details belonging to a creditor.
 func (s *VerificationDetailServiceImpl) List(ctx context.Context, p VerificationDetailListParams, opts ...RequestOption) (*VerificationDetailListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/verification_details"))
 	if err != nil {
 		return nil, err

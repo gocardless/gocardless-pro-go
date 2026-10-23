@@ -37,6 +37,12 @@ type ExportService interface {
 // Get
 // Returns a single export.
 func (s *ExportServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Export, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/exports/%v",
 		identity))
 	if err != nil {
@@ -127,8 +133,8 @@ type ExportListResultMetaCursors struct {
 }
 
 type ExportListResultMeta struct {
-	Cursors *ExportListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors ExportListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                         `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type ExportListResult struct {
@@ -139,6 +145,7 @@ type ExportListResult struct {
 // List
 // Returns a list of exports which are available for download.
 func (s *ExportServiceImpl) List(ctx context.Context, p ExportListParams, opts ...RequestOption) (*ExportListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/exports"))
 	if err != nil {
 		return nil, err

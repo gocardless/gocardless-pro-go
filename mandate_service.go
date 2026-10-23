@@ -19,12 +19,17 @@ type MandateServiceImpl struct {
 }
 
 type MandateConsentParameters struct {
-	EndDate              string `url:"end_date,omitempty" json:"end_date,omitempty"`
-	MaxAmountPerPayment  int    `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
-	MaxAmountPerPeriod   int    `url:"max_amount_per_period,omitempty" json:"max_amount_per_period,omitempty"`
-	MaxPaymentsPerPeriod int    `url:"max_payments_per_period,omitempty" json:"max_payments_per_period,omitempty"`
-	Period               string `url:"period,omitempty" json:"period,omitempty"`
-	StartDate            string `url:"start_date,omitempty" json:"start_date,omitempty"`
+	Currency              string `url:"currency,omitempty" json:"currency,omitempty"`
+	EndDate               string `url:"end_date,omitempty" json:"end_date,omitempty"`
+	FixedAmountPerPayment int    `url:"fixed_amount_per_payment,omitempty" json:"fixed_amount_per_payment,omitempty"`
+	Id                    string `url:"id,omitempty" json:"id,omitempty"`
+	MaxAmountPerPayment   int    `url:"max_amount_per_payment,omitempty" json:"max_amount_per_payment,omitempty"`
+	MaxAmountPerPeriod    int    `url:"max_amount_per_period,omitempty" json:"max_amount_per_period,omitempty"`
+	MaxPaymentsPerPeriod  int    `url:"max_payments_per_period,omitempty" json:"max_payments_per_period,omitempty"`
+	Period                string `url:"period,omitempty" json:"period,omitempty"`
+	PeriodAlignment       string `url:"period_alignment,omitempty" json:"period_alignment,omitempty"`
+	Scheme                string `url:"scheme,omitempty" json:"scheme,omitempty"`
+	StartDate             string `url:"start_date,omitempty" json:"start_date,omitempty"`
 }
 
 type MandateLinks struct {
@@ -83,6 +88,7 @@ type MandateCreateParams struct {
 // Create
 // Creates a new mandate object.
 func (s *MandateServiceImpl) Create(ctx context.Context, p MandateCreateParams, opts ...RequestOption) (*Mandate, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandates"))
 	if err != nil {
 		return nil, err
@@ -188,6 +194,7 @@ type MandateListParams struct {
 	Creditor            string                      `url:"creditor,omitempty" json:"creditor,omitempty"`
 	Customer            string                      `url:"customer,omitempty" json:"customer,omitempty"`
 	CustomerBankAccount string                      `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
+	Include             []string                    `url:"include,omitempty" json:"include,omitempty"`
 	Limit               int                         `url:"limit,omitempty" json:"limit,omitempty"`
 	MandateType         string                      `url:"mandate_type,omitempty" json:"mandate_type,omitempty"`
 	Reference           string                      `url:"reference,omitempty" json:"reference,omitempty"`
@@ -201,8 +208,8 @@ type MandateListResultMetaCursors struct {
 }
 
 type MandateListResultMeta struct {
-	Cursors *MandateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors MandateListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type MandateListResult struct {
@@ -215,6 +222,7 @@ type MandateListResult struct {
 // (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
 // list of your mandates.
 func (s *MandateServiceImpl) List(ctx context.Context, p MandateListParams, opts ...RequestOption) (*MandateListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandates"))
 	if err != nil {
 		return nil, err
@@ -421,6 +429,12 @@ func (s *MandateServiceImpl) All(ctx context.Context,
 // Get
 // Retrieves the details of an existing mandate.
 func (s *MandateServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*Mandate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v",
 		identity))
 	if err != nil {
@@ -506,6 +520,12 @@ type MandateUpdateParams struct {
 // Update
 // Updates a mandate object. This accepts only the metadata parameter.
 func (s *MandateServiceImpl) Update(ctx context.Context, identity string, p MandateUpdateParams, opts ...RequestOption) (*Mandate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v",
 		identity))
 	if err != nil {
@@ -610,6 +630,12 @@ type MandateCancelParams struct {
 // This will fail with a `cancellation_failed` error if the mandate is already
 // cancelled.
 func (s *MandateServiceImpl) Cancel(ctx context.Context, identity string, p MandateCancelParams, opts ...RequestOption) (*Mandate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v/actions/cancel",
 		identity))
 	if err != nil {
@@ -719,6 +745,12 @@ type MandateReinstateParams struct {
 //
 // Mandates can be resubmitted up to 10 times.
 func (s *MandateServiceImpl) Reinstate(ctx context.Context, identity string, p MandateReinstateParams, opts ...RequestOption) (*Mandate, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/mandates/%v/actions/reinstate",
 		identity))
 	if err != nil {

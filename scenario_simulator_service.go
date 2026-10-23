@@ -37,6 +37,12 @@ type ScenarioSimulatorRunParams struct {
 // Run
 // Runs the specific scenario simulator against the specific resource
 func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string, p ScenarioSimulatorRunParams, opts ...RequestOption) (*ScenarioSimulator, error) {
+
+	identity, err := escapeURLParam("identity", identity)
+	if err != nil {
+		return nil, err
+	}
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint()+"/scenario_simulators/%v/actions/run",
 		identity))
 	if err != nil {

@@ -50,8 +50,8 @@ type BalanceListResultMetaCursors struct {
 }
 
 type BalanceListResultMeta struct {
-	Cursors *BalanceListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                           `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors BalanceListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                          `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type BalanceListResult struct {
@@ -65,6 +65,7 @@ type BalanceListResult struct {
 // list of balances for a given creditor. This endpoint is rate limited to 60
 // requests per minute.
 func (s *BalanceServiceImpl) List(ctx context.Context, p BalanceListParams, opts ...RequestOption) (*BalanceListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/balances"))
 	if err != nil {
 		return nil, err

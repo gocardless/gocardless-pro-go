@@ -27,10 +27,10 @@ type MandateImportEntryLinks struct {
 
 // MandateImportEntry model
 type MandateImportEntry struct {
-	CreatedAt        string                   `url:"created_at,omitempty" json:"created_at,omitempty"`
-	Links            *MandateImportEntryLinks `url:"links,omitempty" json:"links,omitempty"`
-	ProcessingErrors map[string]interface{}   `url:"processing_errors,omitempty" json:"processing_errors,omitempty"`
-	RecordIdentifier string                   `url:"record_identifier,omitempty" json:"record_identifier,omitempty"`
+	CreatedAt        string                  `url:"created_at,omitempty" json:"created_at,omitempty"`
+	Links            MandateImportEntryLinks `url:"links,omitempty" json:"links,omitempty"`
+	ProcessingErrors map[string]interface{}  `url:"processing_errors,omitempty" json:"processing_errors,omitempty"`
+	RecordIdentifier string                  `url:"record_identifier,omitempty" json:"record_identifier,omitempty"`
 }
 
 type MandateImportEntryService interface {
@@ -106,6 +106,7 @@ type MandateImportEntryCreateParams struct {
 // If you attempt to go over this limit, the API will return a
 // `record_limit_exceeded` error.
 func (s *MandateImportEntryServiceImpl) Create(ctx context.Context, p MandateImportEntryCreateParams, opts ...RequestOption) (*MandateImportEntry, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_import_entries"))
 	if err != nil {
 		return nil, err
@@ -211,8 +212,8 @@ type MandateImportEntryListResultMetaCursors struct {
 }
 
 type MandateImportEntryListResultMeta struct {
-	Cursors *MandateImportEntryListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
-	Limit   int                                      `url:"limit,omitempty" json:"limit,omitempty"`
+	Cursors MandateImportEntryListResultMetaCursors `url:"cursors,omitempty" json:"cursors,omitempty"`
+	Limit   int                                     `url:"limit,omitempty" json:"limit,omitempty"`
 }
 
 type MandateImportEntryListResult struct {
@@ -230,6 +231,7 @@ type MandateImportEntryListResult struct {
 // the
 // mandate import).
 func (s *MandateImportEntryServiceImpl) List(ctx context.Context, p MandateImportEntryListParams, opts ...RequestOption) (*MandateImportEntryListResult, error) {
+
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/mandate_import_entries"))
 	if err != nil {
 		return nil, err
