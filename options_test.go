@@ -1,6 +1,10 @@
 package gocardless
 
-import "testing"
+import (
+	"net/http"
+	"testing"
+	"time"
+)
 
 func TestEndpointForToken(t *testing.T) {
 	tests := []struct {
@@ -48,5 +52,31 @@ func TestEndpointForConfig(t *testing.T) {
 		if err != nil {
 			t.Fatalf("unexepcted error if endpoint is valid, got endpoint: %v, err: %v", tt.endpoint, err)
 		}
+	}
+}
+
+func TestDefaultClientHasTimeout(t *testing.T) {
+	cfg, err := NewConfig("dummy_token")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if DefaultTimeout != 60*time.Second {
+		t.Fatalf("expected DefaultTimeout of 60s, got %v", DefaultTimeout)
+	}
+	if got := cfg.Client().Timeout; got != DefaultTimeout {
+		t.Fatalf("expected default client timeout of %v, got %v", DefaultTimeout, got)
+	}
+}
+
+func TestWithClientReplacesDefaultClient(t *testing.T) {
+	custom := &http.Client{Timeout: 5 * time.Second}
+	cfg, err := NewConfig("dummy_token", WithClient(custom))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if cfg.Client() != custom {
+		t.Fatal("expected the configured client to be used")
 	}
 }

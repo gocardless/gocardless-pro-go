@@ -65,7 +65,8 @@ Optionally, the client can be customised with endpoint, for ex: sandbox environm
 	}
 ```
 
-the client can also be initialised with a customised http client, for ex;
+By default requests time out after 60 seconds (`gocardless.DefaultTimeout`). The client can also be initialised
+with a customised http client to change this, for ex;
 ```go
     customHttpClient := &http.Client{
         Timeout: time.Second * 10,

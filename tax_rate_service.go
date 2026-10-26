@@ -103,7 +103,7 @@ func (s *TaxRateServiceImpl) List(ctx context.Context, p TaxRateListParams, opts
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -211,7 +211,7 @@ func (c *TaxRateListPagingIterator) Value(ctx context.Context) (*TaxRateListResu
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -310,7 +310,7 @@ func (s *TaxRateServiceImpl) Get(ctx context.Context, identity string, opts ...R
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

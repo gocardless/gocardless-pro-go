@@ -4,7 +4,14 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
+	"time"
 )
+
+// DefaultTimeout is the timeout of the HTTP client used when none is supplied
+// with WithClient. It covers the whole request, including reading the response body.
+const DefaultTimeout = 60 * time.Second
+
+var defaultClient = &http.Client{Timeout: DefaultTimeout}
 
 const (
 
@@ -58,7 +65,8 @@ func WithEndpoint(endpoint string) ConfigOption {
 	}
 }
 
-// WithClient configures the net/http client
+// WithClient configures the net/http client, replacing the default one that
+// times out after DefaultTimeout. Set Timeout on the client you pass to choose your own.
 func WithClient(client *http.Client) ConfigOption {
 	return func(cfg Config) error {
 		if c, ok := cfg.(*config); ok {
@@ -78,6 +86,7 @@ func NewConfig(token string, configOpts ...ConfigOption) (Config, error) {
 	config := &config{
 		token:    token,
 		endpoint: LiveEndpoint,
+		client:   defaultClient,
 	}
 
 	for _, configOpt := range configOpts {

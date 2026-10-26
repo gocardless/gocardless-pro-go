@@ -107,7 +107,7 @@ func (s *InstitutionServiceImpl) List(ctx context.Context, p InstitutionListPara
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -225,7 +225,7 @@ func (s *InstitutionServiceImpl) ListForBillingRequest(ctx context.Context, iden
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

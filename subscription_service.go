@@ -139,7 +139,7 @@ func (s *SubscriptionServiceImpl) Create(ctx context.Context, p SubscriptionCrea
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -261,7 +261,7 @@ func (s *SubscriptionServiceImpl) List(ctx context.Context, p SubscriptionListPa
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -369,7 +369,7 @@ func (c *SubscriptionListPagingIterator) Value(ctx context.Context) (*Subscripti
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -468,7 +468,7 @@ func (s *SubscriptionServiceImpl) Get(ctx context.Context, identity string, opts
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -602,7 +602,7 @@ func (s *SubscriptionServiceImpl) Update(ctx context.Context, identity string, p
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -750,7 +750,7 @@ func (s *SubscriptionServiceImpl) Pause(ctx context.Context, identity string, p 
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -871,7 +871,7 @@ func (s *SubscriptionServiceImpl) Resume(ctx context.Context, identity string, p
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -981,7 +981,7 @@ func (s *SubscriptionServiceImpl) Cancel(ctx context.Context, identity string, p
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

@@ -106,7 +106,7 @@ func (s *BalanceServiceImpl) List(ctx context.Context, p BalanceListParams, opts
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -214,7 +214,7 @@ func (c *BalanceListPagingIterator) Value(ctx context.Context) (*BalanceListResu
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

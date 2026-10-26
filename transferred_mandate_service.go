@@ -81,7 +81,7 @@ func (s *TransferredMandateServiceImpl) TransferredMandates(ctx context.Context,
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

@@ -412,7 +412,7 @@ func (s *BillingRequestServiceImpl) Create(ctx context.Context, p BillingRequest
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -550,7 +550,7 @@ func (s *BillingRequestServiceImpl) CollectCustomerDetails(ctx context.Context, 
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -691,7 +691,7 @@ func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, iden
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -799,7 +799,7 @@ func (s *BillingRequestServiceImpl) ConfirmPayerDetails(ctx context.Context, ide
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -905,7 +905,7 @@ func (s *BillingRequestServiceImpl) Fulfil(ctx context.Context, identity string,
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -1011,7 +1011,7 @@ func (s *BillingRequestServiceImpl) Cancel(ctx context.Context, identity string,
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -1123,7 +1123,7 @@ func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestLi
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -1231,7 +1231,7 @@ func (c *BillingRequestListPagingIterator) Value(ctx context.Context) (*BillingR
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -1330,7 +1330,7 @@ func (s *BillingRequestServiceImpl) Get(ctx context.Context, identity string, op
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -1440,7 +1440,7 @@ func (s *BillingRequestServiceImpl) Notify(ctx context.Context, identity string,
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -1545,7 +1545,7 @@ func (s *BillingRequestServiceImpl) Fallback(ctx context.Context, identity strin
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -1657,7 +1657,7 @@ func (s *BillingRequestServiceImpl) ChooseCurrency(ctx context.Context, identity
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -1763,7 +1763,7 @@ func (s *BillingRequestServiceImpl) SelectInstitution(ctx context.Context, ident
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

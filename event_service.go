@@ -206,7 +206,7 @@ func (s *EventServiceImpl) List(ctx context.Context, p EventListParams, opts ...
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -314,7 +314,7 @@ func (c *EventListPagingIterator) Value(ctx context.Context) (*EventListResult, 
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -413,7 +413,7 @@ func (s *EventServiceImpl) Get(ctx context.Context, identity string, opts ...Req
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

@@ -129,7 +129,7 @@ func (s *RefundServiceImpl) Create(ctx context.Context, p RefundCreateParams, op
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -250,7 +250,7 @@ func (s *RefundServiceImpl) List(ctx context.Context, p RefundListParams, opts .
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -358,7 +358,7 @@ func (c *RefundListPagingIterator) Value(ctx context.Context) (*RefundListResult
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -457,7 +457,7 @@ func (s *RefundServiceImpl) Get(ctx context.Context, identity string, opts ...Re
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -562,7 +562,7 @@ func (s *RefundServiceImpl) Update(ctx context.Context, identity string, p Refun
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

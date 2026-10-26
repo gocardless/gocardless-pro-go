@@ -118,7 +118,7 @@ func (s *CreditorBankAccountServiceImpl) Create(ctx context.Context, p CreditorB
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -238,7 +238,7 @@ func (s *CreditorBankAccountServiceImpl) List(ctx context.Context, p CreditorBan
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -346,7 +346,7 @@ func (c *CreditorBankAccountListPagingIterator) Value(ctx context.Context) (*Cre
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -445,7 +445,7 @@ func (s *CreditorBankAccountServiceImpl) Get(ctx context.Context, identity strin
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -543,7 +543,7 @@ func (s *CreditorBankAccountServiceImpl) Disable(ctx context.Context, identity s
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

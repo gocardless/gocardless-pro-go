@@ -124,7 +124,7 @@ func (s *OutboundPaymentImportServiceImpl) Create(ctx context.Context, p Outboun
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -214,7 +214,7 @@ func (s *OutboundPaymentImportServiceImpl) Get(ctx context.Context, identity str
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -333,7 +333,7 @@ func (s *OutboundPaymentImportServiceImpl) List(ctx context.Context, p OutboundP
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -441,7 +441,7 @@ func (c *OutboundPaymentImportListPagingIterator) Value(ctx context.Context) (*O
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

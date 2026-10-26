@@ -136,7 +136,7 @@ func (s *CustomerBankAccountServiceImpl) Create(ctx context.Context, p CustomerB
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -256,7 +256,7 @@ func (s *CustomerBankAccountServiceImpl) List(ctx context.Context, p CustomerBan
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -364,7 +364,7 @@ func (c *CustomerBankAccountListPagingIterator) Value(ctx context.Context) (*Cus
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -463,7 +463,7 @@ func (s *CustomerBankAccountServiceImpl) Get(ctx context.Context, identity strin
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -569,7 +569,7 @@ func (s *CustomerBankAccountServiceImpl) Update(ctx context.Context, identity st
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -666,7 +666,7 @@ func (s *CustomerBankAccountServiceImpl) Disable(ctx context.Context, identity s
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

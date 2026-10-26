@@ -120,7 +120,7 @@ func (s *WebhookServiceImpl) List(ctx context.Context, p WebhookListParams, opts
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -228,7 +228,7 @@ func (c *WebhookListPagingIterator) Value(ctx context.Context) (*WebhookListResu
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -327,7 +327,7 @@ func (s *WebhookServiceImpl) Get(ctx context.Context, identity string, opts ...R
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -418,7 +418,7 @@ func (s *WebhookServiceImpl) Retry(ctx context.Context, identity string, opts ..
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
