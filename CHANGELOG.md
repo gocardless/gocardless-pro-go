@@ -1,6 +1,20 @@
 <!-- This file is generated, please add to it using `knope document-change` in the client-library-templates repo -->
 # Changelog
 
+## 6.20.0 (2026-10-26)
+
+### Features
+
+#### Time out requests after 60 seconds by default
+
+Previously, unless you passed your own client with `WithClient`, requests were made with `http.DefaultClient`, which has no timeout, so a stalled connection could hang forever. The client now uses an `http.Client` with a 60 second timeout (`gocardless.DefaultTimeout`) covering the whole request, including reading the response body.
+
+Clients passed with `WithClient` are used as they are, so set `Timeout` on them to choose your own, or `0` for no timeout:
+
+```go
+config, err := gocardless.NewConfig(token, gocardless.WithClient(&http.Client{Timeout: 10 * time.Second}))
+```
+
 ## 6.19.0 (2026-10-12)
 
 ### Features
