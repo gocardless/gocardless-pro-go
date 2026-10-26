@@ -138,7 +138,7 @@ func (s *PayoutServiceImpl) List(ctx context.Context, p PayoutListParams, opts .
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -246,7 +246,7 @@ func (c *PayoutListPagingIterator) Value(ctx context.Context) (*PayoutListResult
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -347,7 +347,7 @@ func (s *PayoutServiceImpl) Get(ctx context.Context, identity string, opts ...Re
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -452,7 +452,7 @@ func (s *PayoutServiceImpl) Update(ctx context.Context, identity string, p Payou
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

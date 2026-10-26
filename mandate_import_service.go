@@ -105,7 +105,7 @@ func (s *MandateImportServiceImpl) Create(ctx context.Context, p MandateImportCr
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -195,7 +195,7 @@ func (s *MandateImportServiceImpl) Get(ctx context.Context, identity string, p M
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -310,7 +310,7 @@ func (s *MandateImportServiceImpl) Submit(ctx context.Context, identity string, 
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -420,7 +420,7 @@ func (s *MandateImportServiceImpl) Cancel(ctx context.Context, identity string, 
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

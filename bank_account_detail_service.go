@@ -82,7 +82,7 @@ func (s *BankAccountDetailServiceImpl) Get(ctx context.Context, identity string,
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

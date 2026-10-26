@@ -103,7 +103,7 @@ func (s *BlockServiceImpl) Create(ctx context.Context, p BlockCreateParams, opts
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -189,7 +189,7 @@ func (s *BlockServiceImpl) Get(ctx context.Context, identity string, opts ...Req
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -309,7 +309,7 @@ func (s *BlockServiceImpl) List(ctx context.Context, p BlockListParams, opts ...
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -417,7 +417,7 @@ func (c *BlockListPagingIterator) Value(ctx context.Context) (*BlockListResult, 
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -521,7 +521,7 @@ func (s *BlockServiceImpl) Disable(ctx context.Context, identity string, opts ..
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -612,7 +612,7 @@ func (s *BlockServiceImpl) Enable(ctx context.Context, identity string, opts ...
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -734,7 +734,7 @@ func (s *BlockServiceImpl) BlockByRef(ctx context.Context, p BlockBlockByRefPara
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

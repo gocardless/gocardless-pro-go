@@ -125,7 +125,7 @@ func (s *BankDetailsLookupServiceImpl) Create(ctx context.Context, p BankDetails
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

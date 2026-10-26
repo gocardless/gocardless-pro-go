@@ -166,7 +166,7 @@ func (s *BillingRequestFlowServiceImpl) Create(ctx context.Context, p BillingReq
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -272,7 +272,7 @@ func (s *BillingRequestFlowServiceImpl) Initialise(ctx context.Context, identity
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

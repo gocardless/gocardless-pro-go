@@ -133,7 +133,7 @@ func (s *BillingRequestTemplateServiceImpl) List(ctx context.Context, p BillingR
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -241,7 +241,7 @@ func (c *BillingRequestTemplateListPagingIterator) Value(ctx context.Context) (*
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -340,7 +340,7 @@ func (s *BillingRequestTemplateServiceImpl) Get(ctx context.Context, identity st
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -471,7 +471,7 @@ func (s *BillingRequestTemplateServiceImpl) Create(ctx context.Context, p Billin
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -605,7 +605,7 @@ func (s *BillingRequestTemplateServiceImpl) Update(ctx context.Context, identity
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

@@ -141,7 +141,7 @@ func (s *InstalmentScheduleServiceImpl) CreateWithDates(ctx context.Context, p I
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -275,7 +275,7 @@ func (s *InstalmentScheduleServiceImpl) CreateWithSchedule(ctx context.Context, 
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -396,7 +396,7 @@ func (s *InstalmentScheduleServiceImpl) List(ctx context.Context, p InstalmentSc
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -504,7 +504,7 @@ func (c *InstalmentScheduleListPagingIterator) Value(ctx context.Context) (*Inst
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -603,7 +603,7 @@ func (s *InstalmentScheduleServiceImpl) Get(ctx context.Context, identity string
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -708,7 +708,7 @@ func (s *InstalmentScheduleServiceImpl) Update(ctx context.Context, identity str
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -816,7 +816,7 @@ func (s *InstalmentScheduleServiceImpl) Cancel(ctx context.Context, identity str
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

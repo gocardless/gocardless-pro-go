@@ -164,7 +164,7 @@ func (s *MandatePdfServiceImpl) Create(ctx context.Context, p MandatePdfCreatePa
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

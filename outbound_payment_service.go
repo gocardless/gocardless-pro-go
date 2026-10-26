@@ -134,7 +134,7 @@ func (s *OutboundPaymentServiceImpl) Create(ctx context.Context, p OutboundPayme
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -244,7 +244,7 @@ func (s *OutboundPaymentServiceImpl) Withdraw(ctx context.Context, p OutboundPay
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -352,7 +352,7 @@ func (s *OutboundPaymentServiceImpl) Cancel(ctx context.Context, identity string
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -457,7 +457,7 @@ func (s *OutboundPaymentServiceImpl) Approve(ctx context.Context, identity strin
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -543,7 +543,7 @@ func (s *OutboundPaymentServiceImpl) Get(ctx context.Context, identity string, o
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -656,7 +656,7 @@ func (s *OutboundPaymentServiceImpl) List(ctx context.Context, p OutboundPayment
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -764,7 +764,7 @@ func (c *OutboundPaymentListPagingIterator) Value(ctx context.Context) (*Outboun
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -882,7 +882,7 @@ func (s *OutboundPaymentServiceImpl) Update(ctx context.Context, identity string
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -971,7 +971,7 @@ func (s *OutboundPaymentServiceImpl) Stats(ctx context.Context, p OutboundPaymen
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

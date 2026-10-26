@@ -153,7 +153,7 @@ func (s *SchemeIdentifierServiceImpl) Create(ctx context.Context, p SchemeIdenti
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -264,7 +264,7 @@ func (s *SchemeIdentifierServiceImpl) List(ctx context.Context, p SchemeIdentifi
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -372,7 +372,7 @@ func (c *SchemeIdentifierListPagingIterator) Value(ctx context.Context) (*Scheme
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -471,7 +471,7 @@ func (s *SchemeIdentifierServiceImpl) Get(ctx context.Context, identity string, 
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

@@ -107,7 +107,7 @@ func (s *CustomerNotificationServiceImpl) Handle(ctx context.Context, identity s
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

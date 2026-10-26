@@ -122,7 +122,7 @@ func (s *CustomerServiceImpl) Create(ctx context.Context, p CustomerCreateParams
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -244,7 +244,7 @@ func (s *CustomerServiceImpl) List(ctx context.Context, p CustomerListParams, op
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -352,7 +352,7 @@ func (c *CustomerListPagingIterator) Value(ctx context.Context) (*CustomerListRe
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -451,7 +451,7 @@ func (s *CustomerServiceImpl) Get(ctx context.Context, identity string, opts ...
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -572,7 +572,7 @@ func (s *CustomerServiceImpl) Update(ctx context.Context, identity string, p Cus
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -683,7 +683,7 @@ func (s *CustomerServiceImpl) Remove(ctx context.Context, identity string, p Cus
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

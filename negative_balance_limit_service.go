@@ -107,7 +107,7 @@ func (s *NegativeBalanceLimitServiceImpl) List(ctx context.Context, p NegativeBa
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -215,7 +215,7 @@ func (c *NegativeBalanceLimitListPagingIterator) Value(ctx context.Context) (*Ne
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

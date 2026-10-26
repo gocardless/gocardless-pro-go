@@ -83,7 +83,7 @@ func (s *FundsAvailabilityServiceImpl) Check(ctx context.Context, identity strin
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

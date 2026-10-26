@@ -133,7 +133,7 @@ func (s *PayerAuthorisationServiceImpl) Get(ctx context.Context, identity string
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -279,7 +279,7 @@ func (s *PayerAuthorisationServiceImpl) Create(ctx context.Context, p PayerAutho
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -433,7 +433,7 @@ func (s *PayerAuthorisationServiceImpl) Update(ctx context.Context, identity str
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -527,7 +527,7 @@ func (s *PayerAuthorisationServiceImpl) Submit(ctx context.Context, identity str
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -627,7 +627,7 @@ func (s *PayerAuthorisationServiceImpl) Confirm(ctx context.Context, identity st
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

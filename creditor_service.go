@@ -145,7 +145,7 @@ func (s *CreditorServiceImpl) Create(ctx context.Context, p CreditorCreateParams
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -263,7 +263,7 @@ func (s *CreditorServiceImpl) List(ctx context.Context, p CreditorListParams, op
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -371,7 +371,7 @@ func (c *CreditorListPagingIterator) Value(ctx context.Context) (*CreditorListRe
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -474,7 +474,7 @@ func (s *CreditorServiceImpl) Get(ctx context.Context, identity string, p Credit
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -600,7 +600,7 @@ func (s *CreditorServiceImpl) Update(ctx context.Context, identity string, p Cre
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

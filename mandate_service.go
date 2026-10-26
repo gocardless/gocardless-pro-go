@@ -137,7 +137,7 @@ func (s *MandateServiceImpl) Create(ctx context.Context, p MandateCreateParams, 
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -263,7 +263,7 @@ func (s *MandateServiceImpl) List(ctx context.Context, p MandateListParams, opts
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -371,7 +371,7 @@ func (c *MandateListPagingIterator) Value(ctx context.Context) (*MandateListResu
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -470,7 +470,7 @@ func (s *MandateServiceImpl) Get(ctx context.Context, identity string, opts ...R
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -575,7 +575,7 @@ func (s *MandateServiceImpl) Update(ctx context.Context, identity string, p Mand
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -685,7 +685,7 @@ func (s *MandateServiceImpl) Cancel(ctx context.Context, identity string, p Mand
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -800,7 +800,7 @@ func (s *MandateServiceImpl) Reinstate(ctx context.Context, identity string, p M
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
