@@ -141,7 +141,7 @@ func (s *PaymentServiceImpl) Create(ctx context.Context, p PaymentCreateParams, 
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -276,7 +276,7 @@ func (s *PaymentServiceImpl) List(ctx context.Context, p PaymentListParams, opts
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -384,7 +384,7 @@ func (c *PaymentListPagingIterator) Value(ctx context.Context) (*PaymentListResu
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -483,7 +483,7 @@ func (s *PaymentServiceImpl) Get(ctx context.Context, identity string, opts ...R
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -589,7 +589,7 @@ func (s *PaymentServiceImpl) Update(ctx context.Context, identity string, p Paym
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -699,7 +699,7 @@ func (s *PaymentServiceImpl) Cancel(ctx context.Context, identity string, p Paym
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -814,7 +814,7 @@ func (s *PaymentServiceImpl) Retry(ctx context.Context, identity string, p Payme
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

@@ -29,7 +29,7 @@ toolchain will resolve and fetch the gocardless-pro-go module automatically.
 Alternatively, you can also explicitly `go get` the package into a project:
 
 ```
-go get -u github.com/gocardless/gocardless-pro-go@v6.19.0
+go get -u github.com/gocardless/gocardless-pro-go@v6.20.0
 ```
 
 ## Initializing the client
@@ -65,7 +65,8 @@ Optionally, the client can be customised with endpoint, for ex: sandbox environm
 	}
 ```
 
-the client can also be initialised with a customised http client, for ex;
+By default requests time out after 60 seconds (`gocardless.DefaultTimeout`). The client can also be initialised
+with a customised http client to change this, for ex;
 ```go
     customHttpClient := &http.Client{
         Timeout: time.Second * 10,

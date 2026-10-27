@@ -83,7 +83,7 @@ func (s *PaymentAccountServiceImpl) Get(ctx context.Context, identity string, op
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -193,7 +193,7 @@ func (s *PaymentAccountServiceImpl) List(ctx context.Context, p PaymentAccountLi
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -301,7 +301,7 @@ func (c *PaymentAccountListPagingIterator) Value(ctx context.Context) (*PaymentA
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

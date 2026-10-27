@@ -92,7 +92,7 @@ func (s *ScenarioSimulatorServiceImpl) Run(ctx context.Context, identity string,
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

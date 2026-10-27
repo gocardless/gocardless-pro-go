@@ -442,7 +442,7 @@ func (s *BillingRequestWithActionServiceImpl) CreateWithActions(ctx context.Cont
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

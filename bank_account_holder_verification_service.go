@@ -96,7 +96,7 @@ func (s *BankAccountHolderVerificationServiceImpl) Create(ctx context.Context, p
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -182,7 +182,7 @@ func (s *BankAccountHolderVerificationServiceImpl) Get(ctx context.Context, iden
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

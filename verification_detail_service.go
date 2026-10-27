@@ -135,7 +135,7 @@ func (s *VerificationDetailServiceImpl) Create(ctx context.Context, p Verificati
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -244,7 +244,7 @@ func (s *VerificationDetailServiceImpl) List(ctx context.Context, p Verification
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -352,7 +352,7 @@ func (c *VerificationDetailListPagingIterator) Value(ctx context.Context) (*Veri
 	}
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {

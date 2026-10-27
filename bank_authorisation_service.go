@@ -102,7 +102,7 @@ func (s *BankAuthorisationServiceImpl) Create(ctx context.Context, p BankAuthori
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
@@ -188,7 +188,7 @@ func (s *BankAuthorisationServiceImpl) Get(ctx context.Context, identity string,
 
 	client := s.config.Client()
 	if client == nil {
-		client = http.DefaultClient
+		client = defaultClient
 	}
 
 	var result struct {
