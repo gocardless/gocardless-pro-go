@@ -206,6 +206,7 @@ type PaymentListParams struct {
 	Creditor      string                       `url:"creditor,omitempty" json:"creditor,omitempty"`
 	Currency      string                       `url:"currency,omitempty" json:"currency,omitempty"`
 	Customer      string                       `url:"customer,omitempty" json:"customer,omitempty"`
+	Include       []string                     `url:"include,omitempty" json:"include,omitempty"`
 	Limit         int                          `url:"limit,omitempty" json:"limit,omitempty"`
 	Mandate       string                       `url:"mandate,omitempty" json:"mandate,omitempty"`
 	Scheme        string                       `url:"scheme,omitempty" json:"scheme,omitempty"`
