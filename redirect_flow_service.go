@@ -40,8 +40,27 @@ type RedirectFlow struct {
 }
 
 type RedirectFlowService interface {
+
+	// Create is deprecated.
+	//
+	// Deprecated: Redirect Flows are legacy APIs and cannot be used by new
+	// integrators. The Billing Request flow
+	// (https://developer.gocardless.com/api-reference/#billing-requests) API
+	// should be used for your payment flows.
 	Create(ctx context.Context, p RedirectFlowCreateParams, opts ...RequestOption) (*RedirectFlow, error)
+	// Get is deprecated.
+	//
+	// Deprecated: Redirect Flows are legacy APIs and cannot be used by new
+	// integrators. The Billing Request flow
+	// (https://developer.gocardless.com/api-reference/#billing-requests) API
+	// should be used for your payment flows.
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*RedirectFlow, error)
+	// Complete is deprecated.
+	//
+	// Deprecated: Redirect Flows are legacy APIs and cannot be used by new
+	// integrators. The Billing Request flow
+	// (https://developer.gocardless.com/api-reference/#billing-requests) API
+	// should be used for your payment flows.
 	Complete(ctx context.Context, identity string, p RedirectFlowCompleteParams, opts ...RequestOption) (*RedirectFlow, error)
 }
 
@@ -86,6 +105,11 @@ type RedirectFlowCreateParams struct {
 // Create
 // Creates a redirect flow object which can then be used to redirect your
 // customer to the GoCardless hosted payment pages.
+//
+// Deprecated: Redirect Flows are legacy APIs and cannot be used by new
+// integrators. The Billing Request flow
+// (https://developer.gocardless.com/api-reference/#billing-requests) API should
+// be used for your payment flows.
 func (s *RedirectFlowServiceImpl) Create(ctx context.Context, p RedirectFlowCreateParams, opts ...RequestOption) (*RedirectFlow, error) {
 
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/redirect_flows"))
@@ -180,6 +204,11 @@ func (s *RedirectFlowServiceImpl) Create(ctx context.Context, p RedirectFlowCrea
 
 // Get
 // Returns all details about a single redirect flow
+//
+// Deprecated: Redirect Flows are legacy APIs and cannot be used by new
+// integrators. The Billing Request flow
+// (https://developer.gocardless.com/api-reference/#billing-requests) API should
+// be used for your payment flows.
 func (s *RedirectFlowServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*RedirectFlow, error) {
 
 	identity, err := escapeURLParam("identity", identity)
@@ -285,6 +314,11 @@ type RedirectFlowCompleteParams struct {
 // completed this flow. It will return a `bad_request` error if the
 // `session_token` differs to the one supplied when the redirect flow was
 // created.
+//
+// Deprecated: Redirect Flows are legacy APIs and cannot be used by new
+// integrators. The Billing Request flow
+// (https://developer.gocardless.com/api-reference/#billing-requests) API should
+// be used for your payment flows.
 func (s *RedirectFlowServiceImpl) Complete(ctx context.Context, identity string, p RedirectFlowCompleteParams, opts ...RequestOption) (*RedirectFlow, error) {
 
 	identity, err := escapeURLParam("identity", identity)
