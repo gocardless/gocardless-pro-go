@@ -157,7 +157,7 @@ type EventListResult struct {
 
 // List
 // Returns a cursor-paginated
-// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// (https://docs.gocardless.com/docs/api-reference/data-conventions#cursor-pagination)
 // list of your events.
 //
 // Important: This endpoint will no longer return events older than 18 months,

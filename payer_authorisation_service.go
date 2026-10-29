@@ -86,36 +86,36 @@ type PayerAuthorisationService interface {
 	//
 	// Deprecated: Payer Authorisation is legacy API and cannot be used by new
 	// integrators. The Billing Request
-	// (https://developer.gocardless.com/api-reference/#billing-requests) API
-	// should be used for any new integrations.
+	// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
+	// be used for any new integrations.
 	Get(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error)
 	// Create is deprecated.
 	//
 	// Deprecated: Payer Authorisation is legacy API and cannot be used by new
 	// integrators. The Billing Request
-	// (https://developer.gocardless.com/api-reference/#billing-requests) API
-	// should be used for any new integrations.
+	// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
+	// be used for any new integrations.
 	Create(ctx context.Context, p PayerAuthorisationCreateParams, opts ...RequestOption) (*PayerAuthorisation, error)
 	// Update is deprecated.
 	//
 	// Deprecated: Payer Authorisation is legacy API and cannot be used by new
 	// integrators. The Billing Request
-	// (https://developer.gocardless.com/api-reference/#billing-requests) API
-	// should be used for any new integrations.
+	// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
+	// be used for any new integrations.
 	Update(ctx context.Context, identity string, p PayerAuthorisationUpdateParams, opts ...RequestOption) (*PayerAuthorisation, error)
 	// Submit is deprecated.
 	//
 	// Deprecated: Payer Authorisation is legacy API and cannot be used by new
 	// integrators. The Billing Request
-	// (https://developer.gocardless.com/api-reference/#billing-requests) API
-	// should be used for any new integrations.
+	// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
+	// be used for any new integrations.
 	Submit(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error)
 	// Confirm is deprecated.
 	//
 	// Deprecated: Payer Authorisation is legacy API and cannot be used by new
 	// integrators. The Billing Request
-	// (https://developer.gocardless.com/api-reference/#billing-requests) API
-	// should be used for any new integrations.
+	// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
+	// be used for any new integrations.
 	Confirm(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error)
 }
 
@@ -125,7 +125,7 @@ type PayerAuthorisationService interface {
 //
 // Deprecated: Payer Authorisation is legacy API and cannot be used by new
 // integrators. The Billing Request
-// (https://developer.gocardless.com/api-reference/#billing-requests) API should
+// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
 // be used for any new integrations.
 func (s *PayerAuthorisationServiceImpl) Get(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error) {
 
@@ -268,7 +268,7 @@ type PayerAuthorisationCreateParams struct {
 //
 // Deprecated: Payer Authorisation is legacy API and cannot be used by new
 // integrators. The Billing Request
-// (https://developer.gocardless.com/api-reference/#billing-requests) API should
+// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
 // be used for any new integrations.
 func (s *PayerAuthorisationServiceImpl) Create(ctx context.Context, p PayerAuthorisationCreateParams, opts ...RequestOption) (*PayerAuthorisation, error) {
 
@@ -421,7 +421,7 @@ type PayerAuthorisationUpdateParams struct {
 //
 // Deprecated: Payer Authorisation is legacy API and cannot be used by new
 // integrators. The Billing Request
-// (https://developer.gocardless.com/api-reference/#billing-requests) API should
+// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
 // be used for any new integrations.
 func (s *PayerAuthorisationServiceImpl) Update(ctx context.Context, identity string, p PayerAuthorisationUpdateParams, opts ...RequestOption) (*PayerAuthorisation, error) {
 
@@ -529,7 +529,7 @@ func (s *PayerAuthorisationServiceImpl) Update(ctx context.Context, identity str
 //
 // Deprecated: Payer Authorisation is legacy API and cannot be used by new
 // integrators. The Billing Request
-// (https://developer.gocardless.com/api-reference/#billing-requests) API should
+// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
 // be used for any new integrations.
 func (s *PayerAuthorisationServiceImpl) Submit(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error) {
 
@@ -634,7 +634,7 @@ func (s *PayerAuthorisationServiceImpl) Submit(ctx context.Context, identity str
 //
 // Deprecated: Payer Authorisation is legacy API and cannot be used by new
 // integrators. The Billing Request
-// (https://developer.gocardless.com/api-reference/#billing-requests) API should
+// (https://docs.gocardless.com/docs/api-reference/billing-request) API should
 // be used for any new integrations.
 func (s *PayerAuthorisationServiceImpl) Confirm(ctx context.Context, identity string, opts ...RequestOption) (*PayerAuthorisation, error) {
 

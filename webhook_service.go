@@ -76,7 +76,7 @@ type WebhookListResult struct {
 
 // List
 // Returns a cursor-paginated
-// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// (https://docs.gocardless.com/docs/api-reference/data-conventions#cursor-pagination)
 // list of your webhooks.
 func (s *WebhookServiceImpl) List(ctx context.Context, p WebhookListParams, opts ...RequestOption) (*WebhookListResult, error) {
 

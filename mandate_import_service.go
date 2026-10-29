@@ -53,7 +53,7 @@ type MandateImportCreateParams struct {
 // finished
 // adding entries to an import, you should
 // submit
-// (https://developer.gocardless.com/api-reference/#mandate-imports-submit-a-mandate-import)
+// (https://docs.gocardless.com/docs/api-reference/mandate-import#submit-a-mandate-import)
 // it.
 func (s *MandateImportServiceImpl) Create(ctx context.Context, p MandateImportCreateParams, opts ...RequestOption) (*MandateImport, error) {
 

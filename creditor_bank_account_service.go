@@ -194,7 +194,7 @@ type CreditorBankAccountListResult struct {
 
 // List
 // Returns a cursor-paginated
-// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// (https://docs.gocardless.com/docs/api-reference/data-conventions#cursor-pagination)
 // list of your creditor bank accounts.
 func (s *CreditorBankAccountServiceImpl) List(ctx context.Context, p CreditorBankAccountListParams, opts ...RequestOption) (*CreditorBankAccountListResult, error) {
 

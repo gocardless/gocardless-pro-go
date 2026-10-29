@@ -63,7 +63,7 @@ type NegativeBalanceLimitListResult struct {
 
 // List
 // Returns a cursor-paginated
-// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// (https://docs.gocardless.com/docs/api-reference/data-conventions#cursor-pagination)
 // list of negative balance limits.
 func (s *NegativeBalanceLimitServiceImpl) List(ctx context.Context, p NegativeBalanceLimitListParams, opts ...RequestOption) (*NegativeBalanceLimitListResult, error) {
 
