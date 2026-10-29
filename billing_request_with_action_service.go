@@ -34,6 +34,11 @@ type BillingRequestWithActionBankAuthorisations struct {
 	Url               string                                           `url:"url,omitempty" json:"url,omitempty"`
 }
 
+type BillingRequestWithActionBillingRequestsAccountInformationRequest struct {
+	CountryCode string   `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Scopes      []string `url:"scopes,omitempty" json:"scopes,omitempty"`
+}
+
 type BillingRequestWithActionBillingRequestsActionsBankAuthorisation struct {
 	Adapter           string `url:"adapter,omitempty" json:"adapter,omitempty"`
 	AuthorisationType string `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
@@ -93,6 +98,7 @@ type BillingRequestWithActionBillingRequestsInstalmentScheduleRequest struct {
 }
 
 type BillingRequestWithActionBillingRequestsLinks struct {
+	AccountInformationRequest                   string `url:"account_information_request,omitempty" json:"account_information_request,omitempty"`
 	BankAuthorisation                           string `url:"bank_authorisation,omitempty" json:"bank_authorisation,omitempty"`
 	Creditor                                    string `url:"creditor,omitempty" json:"creditor,omitempty"`
 	Customer                                    string `url:"customer,omitempty" json:"customer,omitempty"`
@@ -237,6 +243,7 @@ type BillingRequestWithActionBillingRequestsSubscriptionRequest struct {
 }
 
 type BillingRequestWithActionBillingRequests struct {
+	AccountInformationRequest *BillingRequestWithActionBillingRequestsAccountInformationRequest `url:"account_information_request,omitempty" json:"account_information_request,omitempty"`
 	Actions                   []BillingRequestWithActionBillingRequestsActions                  `url:"actions,omitempty" json:"actions,omitempty"`
 	CreatedAt                 string                                                            `url:"created_at,omitempty" json:"created_at,omitempty"`
 	FallbackEnabled           bool                                                              `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`

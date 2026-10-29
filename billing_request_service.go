@@ -18,6 +18,11 @@ type BillingRequestServiceImpl struct {
 	config Config
 }
 
+type BillingRequestAccountInformationRequest struct {
+	CountryCode string   `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Scopes      []string `url:"scopes,omitempty" json:"scopes,omitempty"`
+}
+
 type BillingRequestActionsBankAuthorisation struct {
 	Adapter           string `url:"adapter,omitempty" json:"adapter,omitempty"`
 	AuthorisationType string `url:"authorisation_type,omitempty" json:"authorisation_type,omitempty"`
@@ -77,6 +82,7 @@ type BillingRequestInstalmentScheduleRequest struct {
 }
 
 type BillingRequestLinks struct {
+	AccountInformationRequest                   string `url:"account_information_request,omitempty" json:"account_information_request,omitempty"`
 	BankAuthorisation                           string `url:"bank_authorisation,omitempty" json:"bank_authorisation,omitempty"`
 	Creditor                                    string `url:"creditor,omitempty" json:"creditor,omitempty"`
 	Customer                                    string `url:"customer,omitempty" json:"customer,omitempty"`
@@ -222,6 +228,7 @@ type BillingRequestSubscriptionRequest struct {
 
 // BillingRequest model
 type BillingRequest struct {
+	AccountInformationRequest *BillingRequestAccountInformationRequest `url:"account_information_request,omitempty" json:"account_information_request,omitempty"`
 	Actions                   []BillingRequestActions                  `url:"actions,omitempty" json:"actions,omitempty"`
 	CreatedAt                 string                                   `url:"created_at,omitempty" json:"created_at,omitempty"`
 	FallbackEnabled           bool                                     `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
@@ -255,6 +262,11 @@ type BillingRequestService interface {
 	Fallback(ctx context.Context, identity string, p BillingRequestFallbackParams, opts ...RequestOption) (*BillingRequest, error)
 	ChooseCurrency(ctx context.Context, identity string, p BillingRequestChooseCurrencyParams, opts ...RequestOption) (*BillingRequest, error)
 	SelectInstitution(ctx context.Context, identity string, p BillingRequestSelectInstitutionParams, opts ...RequestOption) (*BillingRequest, error)
+}
+
+type BillingRequestCreateParamsAccountInformationRequest struct {
+	CountryCode string   `url:"country_code,omitempty" json:"country_code,omitempty"`
+	Scopes      []string `url:"scopes,omitempty" json:"scopes,omitempty"`
 }
 
 type BillingRequestCreateParamsInstalmentScheduleRequestInstalmentsWithDates struct {
@@ -347,6 +359,7 @@ type BillingRequestCreateParamsSubscriptionRequest struct {
 
 // BillingRequestCreateParams parameters
 type BillingRequestCreateParams struct {
+	AccountInformationRequest *BillingRequestCreateParamsAccountInformationRequest `url:"account_information_request,omitempty" json:"account_information_request,omitempty"`
 	FallbackEnabled           bool                                                 `url:"fallback_enabled,omitempty" json:"fallback_enabled,omitempty"`
 	InstalmentScheduleRequest *BillingRequestCreateParamsInstalmentScheduleRequest `url:"instalment_schedule_request,omitempty" json:"instalment_schedule_request,omitempty"`
 	Links                     *BillingRequestCreateParamsLinks                     `url:"links,omitempty" json:"links,omitempty"`
