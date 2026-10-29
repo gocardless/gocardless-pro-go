@@ -87,10 +87,9 @@ type PaymentCreateParams struct {
 // Creates a new payment object.
 //
 // This fails with a `mandate_is_inactive` error if the linked mandate
-// (https://developer.gocardless.com/api-reference/#core-endpoints-mandates) is
-// cancelled or has failed. Payments can be created against mandates with status
-// of: `pending_customer_approval`, `pending_submission`, `submitted`, and
-// `active`.
+// (https://docs.gocardless.com/docs/api-reference/mandate) is cancelled or has
+// failed. Payments can be created against mandates with status of:
+// `pending_customer_approval`, `pending_submission`, `submitted`, and `active`.
 func (s *PaymentServiceImpl) Create(ctx context.Context, p PaymentCreateParams, opts ...RequestOption) (*Payment, error) {
 
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/payments"))
@@ -233,7 +232,7 @@ type PaymentListResult struct {
 
 // List
 // Returns a cursor-paginated
-// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// (https://docs.gocardless.com/docs/api-reference/data-conventions#cursor-pagination)
 // list of your payments.
 func (s *PaymentServiceImpl) List(ctx context.Context, p PaymentListParams, opts ...RequestOption) (*PaymentListResult, error) {
 

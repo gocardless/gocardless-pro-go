@@ -216,7 +216,7 @@ type SubscriptionListResult struct {
 
 // List
 // Returns a cursor-paginated
-// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// (https://docs.gocardless.com/docs/api-reference/data-conventions#cursor-pagination)
 // list of your subscriptions. Please note if the subscriptions are related to
 // customers who have been removed, they will not be shown in the response.
 func (s *SubscriptionServiceImpl) List(ctx context.Context, p SubscriptionListParams, opts ...RequestOption) (*SubscriptionListResult, error) {
@@ -661,7 +661,7 @@ type SubscriptionPauseParams struct {
 //
 // When `pause_cycles` is omitted the subscription is paused until the resume
 // endpoint
-// (https://developer.gocardless.com/api-reference/#subscriptions-resume-a-subscription)
+// (https://docs.gocardless.com/docs/api-reference/subscription#resume-a-subscription)
 // is called.
 // If the subscription is collecting a fixed number of payments, `end_date` will
 // be set to `null`.

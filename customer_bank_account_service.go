@@ -76,16 +76,16 @@ type CustomerBankAccountCreateParams struct {
 //
 // -
 // Local details
-// (https://developer.gocardless.com/api-reference/#appendix-local-bank-details)
+// (https://docs.gocardless.com/docs/api-reference/local-bank-details)
 // -
 // IBAN
 // -
 // Customer Bank Account Tokens
-// (https://developer.gocardless.com/api-reference/#javascript-flow-create-a-customer-bank-account-token)
+// (https://docs.gocardless.com/docs/collect-payments/integration-types/javascript-drop-in-flow)
 //
 // For more information on the different fields required in each country, see
 // local bank details
-// (https://developer.gocardless.com/api-reference/#appendix-local-bank-details).
+// (https://docs.gocardless.com/docs/api-reference/local-bank-details).
 func (s *CustomerBankAccountServiceImpl) Create(ctx context.Context, p CustomerBankAccountCreateParams, opts ...RequestOption) (*CustomerBankAccount, error) {
 
 	uri, err := url.Parse(fmt.Sprintf(s.config.Endpoint() + "/customer_bank_accounts"))
@@ -212,7 +212,7 @@ type CustomerBankAccountListResult struct {
 
 // List
 // Returns a cursor-paginated
-// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// (https://docs.gocardless.com/docs/api-reference/data-conventions#cursor-pagination)
 // list of your bank accounts.
 func (s *CustomerBankAccountServiceImpl) List(ctx context.Context, p CustomerBankAccountListParams, opts ...RequestOption) (*CustomerBankAccountListResult, error) {
 

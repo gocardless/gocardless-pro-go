@@ -79,7 +79,7 @@ type OutboundPaymentImportEntryListResult struct {
 
 // List
 // Returns a cursor-paginated
-// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// (https://docs.gocardless.com/docs/api-reference/data-conventions#cursor-pagination)
 // list of the entries for a given outbound payment import.
 func (s *OutboundPaymentImportEntryServiceImpl) List(ctx context.Context, p OutboundPaymentImportEntryListParams, opts ...RequestOption) (*OutboundPaymentImportEntryListResult, error) {
 

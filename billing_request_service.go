@@ -634,7 +634,7 @@ type BillingRequestCollectBankAccountParams struct {
 // will return a 422 - validation error on account_holder_name:
 // "Account holder name does not match bank account details provided". Testing
 // instructions are here
-// (https://developer.gocardless.com/developer-tools/scenario-simulators/#payer_name_verification)
+// (https://docs.gocardless.com/docs/developer-resources/scenario-simulators#payer-name-verification)
 func (s *BillingRequestServiceImpl) CollectBankAccount(ctx context.Context, identity string, p BillingRequestCollectBankAccountParams, opts ...RequestOption) (*BillingRequest, error) {
 
 	identity, err := escapeURLParam("identity", identity)
@@ -1079,7 +1079,7 @@ type BillingRequestListResult struct {
 
 // List
 // Returns a cursor-paginated
-// (https://developer.gocardless.com/api-reference/#api-usage-cursor-pagination)
+// (https://docs.gocardless.com/docs/api-reference/data-conventions#cursor-pagination)
 // list of your billing requests.
 func (s *BillingRequestServiceImpl) List(ctx context.Context, p BillingRequestListParams, opts ...RequestOption) (*BillingRequestListResult, error) {
 
