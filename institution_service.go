@@ -31,6 +31,7 @@ type Institution struct {
 	LogoUrl     string             `url:"logo_url,omitempty" json:"logo_url,omitempty"`
 	Name        string             `url:"name,omitempty" json:"name,omitempty"`
 	Roles       []string           `url:"roles,omitempty" json:"roles,omitempty"`
+	Status      string             `url:"status,omitempty" json:"status,omitempty"`
 }
 
 type InstitutionService interface {
