@@ -215,10 +215,16 @@ type BillingRequestWithActionBillingRequestsResourcesCustomerBillingDetail struc
 	SwedishIdentityNumber string   `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
 }
 
+type BillingRequestWithActionBillingRequestsResourcesMandate struct {
+	Id        string `url:"id,omitempty" json:"id,omitempty"`
+	Reference string `url:"reference,omitempty" json:"reference,omitempty"`
+}
+
 type BillingRequestWithActionBillingRequestsResources struct {
 	Customer              *BillingRequestWithActionBillingRequestsResourcesCustomer              `url:"customer,omitempty" json:"customer,omitempty"`
 	CustomerBankAccount   *BillingRequestWithActionBillingRequestsResourcesCustomerBankAccount   `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 	CustomerBillingDetail *BillingRequestWithActionBillingRequestsResourcesCustomerBillingDetail `url:"customer_billing_detail,omitempty" json:"customer_billing_detail,omitempty"`
+	Mandate               *BillingRequestWithActionBillingRequestsResourcesMandate               `url:"mandate,omitempty" json:"mandate,omitempty"`
 }
 
 type BillingRequestWithActionBillingRequestsSubscriptionRequestLinks struct {
