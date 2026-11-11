@@ -199,10 +199,16 @@ type BillingRequestResourcesCustomerBillingDetail struct {
 	SwedishIdentityNumber string   `url:"swedish_identity_number,omitempty" json:"swedish_identity_number,omitempty"`
 }
 
+type BillingRequestResourcesMandate struct {
+	Id        string `url:"id,omitempty" json:"id,omitempty"`
+	Reference string `url:"reference,omitempty" json:"reference,omitempty"`
+}
+
 type BillingRequestResources struct {
 	Customer              *BillingRequestResourcesCustomer              `url:"customer,omitempty" json:"customer,omitempty"`
 	CustomerBankAccount   *BillingRequestResourcesCustomerBankAccount   `url:"customer_bank_account,omitempty" json:"customer_bank_account,omitempty"`
 	CustomerBillingDetail *BillingRequestResourcesCustomerBillingDetail `url:"customer_billing_detail,omitempty" json:"customer_billing_detail,omitempty"`
+	Mandate               *BillingRequestResourcesMandate               `url:"mandate,omitempty" json:"mandate,omitempty"`
 }
 
 type BillingRequestSubscriptionRequestLinks struct {
